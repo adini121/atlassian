@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module relativePaths="false" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="false">
+    <output url="file://$MODULE_DIR$/target/classes" />
+    <exclude-output />
+    <output-test url="file://$MODULE_DIR$/target/test-classes" />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/target" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module-library" exported="">
+      <library name="log4j">
+        <CLASSES>
+          <root url="jar:///home/hbarney/.m2/repository/log4j/log4j/1.2.7/log4j-1.2.7.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library name="selenium-java-client-driver">
+        <CLASSES>
+          <root url="jar:///home/hbarney/.m2/repository/org/openqa/selenium/client-drivers/selenium-java-client-driver/0.9.2/selenium-java-client-driver-0.9.2.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="junit">
+        <CLASSES>
+          <root url="jar:///home/hbarney/.m2/repository/junit/junit/3.8.1/junit-3.8.1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="selenium-core">
+        <CLASSES>
+          <root url="jar:///home/hbarney/.m2/repository/org/openqa/selenium/core/selenium-core/0.8.3/selenium-core-0.8.3.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="selenium-server-coreless">
+        <CLASSES>
+          <root url="jar:///home/hbarney/.m2/repository/org/openqa/selenium/server/selenium-server-coreless/0.9.1/selenium-server-coreless-0.9.1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="ant">
+        <CLASSES>
+          <root url="jar:///home/hbarney/.m2/repository/ant/ant/1.6.5/ant-1.6.5.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="org.mortbay.jetty">
+        <CLASSES>
+          <root url="jar:///home/hbarney/.m2/repository/jetty/org.mortbay.jetty/5.1.10/org.mortbay.jetty-5.1.10.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="commons-logging">
+        <CLASSES>
+          <root url="jar:///home/hbarney/.m2/repository/commons-logging/commons-logging/1.0.4/commons-logging-1.0.4.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="servlet-api">
+        <CLASSES>
+          <root url="jar:///home/hbarney/.m2/repository/javax/servlet/servlet-api/2.4/servlet-api-2.4.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="selenium-server">
+        <CLASSES>
+          <root url="jar:///home/hbarney/.m2/repository/org/openqa/selenium/server/selenium-server/0.9.2/selenium-server-0.9.2-standalone.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntryProperties />
+  </component>
+</module>
+
