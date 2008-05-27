@@ -4,7 +4,7 @@ import junit.framework.TestCase;
 import com.thoughtworks.selenium.Selenium;
 
 /**
- * TODO: Document this class / interface here
+ * A base class for selenium tests
  *
  * @since v3.12
  */
@@ -18,25 +18,35 @@ public abstract class SeleniumTest extends TestCase {
     public abstract SeleniumConfiguration getSeleniumConfiguration();
 
 
+    /**
+     * Calls overridden onSetup method before starting
+     * the selenium client and possibly server and initiating
+     * assertThat and interaction variables
+     */
     public final void setUp()
     {
         config = getSeleniumConfiguration();
         selenium = SeleniumStarter.getInstance().getSeleniumClient(config);
         assertThat = new SeleniumAssertions(selenium, config.getPageLoadWait());
         interactions = new SeleniumInteractions(selenium, config.getPageLoadWait(), config.getInteractionActionWait());
-        setUpTest();
+        onSetUp();
     }
 
     /**
      * To be overridden in the case of test-specific setup activities
      */
-    public void setUpTest()
+    public void onSetUp()
     {
     }
 
+    /**
+     * Calls overridden onTearDown method before shutting down
+     * the selenium client and possibly server
+     */
     public final void tearDown()
     {
 
+        onTearDown();
         if (SeleniumStarter.getInstance().isManual())
         {
             SeleniumStarter.getInstance().stop();
@@ -46,7 +56,7 @@ public abstract class SeleniumTest extends TestCase {
     /**
      * To be overridden in the case of test-specific tear-down activities
      */
-    public  void tearDownTest()
+    public  void onTearDown()
     {
 
     }

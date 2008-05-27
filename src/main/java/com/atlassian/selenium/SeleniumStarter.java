@@ -12,7 +12,7 @@ public class SeleniumStarter
 {
     private static final Logger log = Logger.getLogger(SeleniumStarter.class);
 
-    private static SeleniumStarter instance = null;
+    private static SeleniumStarter instance = new SeleniumStarter();
     private Selenium sel;
     private SeleniumServer server;
     private String userAgent;
@@ -22,12 +22,8 @@ public class SeleniumStarter
     {
     }
 
-    public synchronized static SeleniumStarter getInstance()
+    public static SeleniumStarter getInstance()
     {
-        if (instance == null)
-        {
-            instance = new SeleniumStarter();
-        }
         return instance;
     }
 

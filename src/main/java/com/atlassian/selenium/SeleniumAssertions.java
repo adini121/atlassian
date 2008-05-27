@@ -203,7 +203,7 @@ public class SeleniumAssertions extends AbstractSeleniumUtil
      * be used because browsers idiosyncratically add white space to the HTML source
      * @param html Lower case representation of HTML string that should not be present
      */
-    public void assertHtmlPresent(String html)
+    public void htmlPresent(String html)
     {
         Assert.assertTrue("Expected HTML not found in response: '" + html + "'", selenium.getHtmlSource().toLowerCase().indexOf(html) >= 0);
     }
@@ -213,7 +213,7 @@ public class SeleniumAssertions extends AbstractSeleniumUtil
      * some other method be used because browsers idiosyncratically add white space to the HTML source
      * @param html Lower case representation of HTML string that should not be present
      */
-    public void assertHtmlNotPresent(String html)
+    public void htmlNotPresent(String html)
     {
         Assert.assertFalse("Unexpected HTML found in response: '" + html + "'", selenium.getHtmlSource().toLowerCase().indexOf(html) >= 0);
     }
@@ -261,4 +261,38 @@ public class SeleniumAssertions extends AbstractSeleniumUtil
         String attributeValue = selenium.getAttribute(locator + "@" + attribute);
         Assert.assertFalse("Element with locator '" + locator + "' did not contain value '" + value + "' in attribute '" + attribute + "'", (attributeValue.indexOf(value) >= 0));
     }
+
+    /**
+     * Asserts that a link containing the given text appears on the page
+     * @param text The text that a link on the page should contain
+     */
+    public void linkPresentWithText(String text)
+    {
+        Assert.assertTrue("Expected link with text not found in response: '" + text + "'", selenium.isElementPresent("link=" + text));
+    }
+
+    /**
+     * Asserts that no link exists on the page containing the given text
+     * @param text The text that no link on the page should contain
+     */
+    public void linkNotPresentWithText(String text)
+    {
+        Assert.assertFalse("Unexpected link with text found in response: '" + text + "'", selenium.isElementPresent("link=" + text));
+    }
+
+    /**
+     * Asserts that two elements (located by selenium syntax) are vertically within deltaPixels of each other.
+     * @param locator1 Locator for element 1 given in standard selenium syntax
+     * @param locator2 Locator for element 2 given in standard selenium syntax
+     * @param deltaPixels The maximum allowable distance between the two element
+     */
+    public void elementsVerticallyAligned(String locator1, String locator2, int deltaPixels)
+    {
+        int middle1 = selenium.getElementPositionTop(locator1).intValue() + (selenium.getElementHeight(locator1).intValue() / 2);
+        int middle2 = selenium.getElementPositionTop(locator2).intValue() + (selenium.getElementHeight(locator2).intValue() / 2);
+        String message = "Vertical position of element '" + locator1 + "' (" + middle1 + ") was not within " + deltaPixels +
+            " pixels of the vertical position of element '" + locator2 + "' (" + middle2 + ")";
+        Assert.assertTrue(message, Math.abs(middle1 - middle2) < deltaPixels);
+    }
+
 }
