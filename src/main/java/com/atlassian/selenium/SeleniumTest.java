@@ -60,4 +60,14 @@ public abstract class SeleniumTest extends TestCase {
     {
 
     }
+
+    public SeleniumAssertions assertThat()
+    {
+        return assertThat;
+    }
+
+    public SeleniumInteractions interactions()
+    {
+        return interactions;
+    }
 }

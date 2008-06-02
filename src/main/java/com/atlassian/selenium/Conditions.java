@@ -29,6 +29,16 @@ public class Conditions {
         };
     }
 
+    public static Condition isPresent(final String element)
+    {
+        return new Condition() {
+            public boolean executeTest(Selenium selenium)
+            {
+                return (selenium.isElementPresent(element));
+            }
+        };
+    }
+
     public static Condition isNotPresent(final String element)
     {
         return new Condition() {

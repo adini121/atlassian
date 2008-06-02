@@ -14,6 +14,8 @@ public class SeleniumAssertions extends AbstractSeleniumUtil
 {
     private static final Logger log = Logger.getLogger(SeleniumAssertions.class);
 
+    private static final int SLEEP_DURATION = 250;
+
     public SeleniumAssertions(Selenium selenium, String pageLoadWait)
     {
         super(selenium, pageLoadWait);
@@ -29,14 +31,22 @@ public class SeleniumAssertions extends AbstractSeleniumUtil
      */
     public void visibleByTimeout(String locator, int maxMillis)
     {
-        int maxSleeps = Math.max(maxMillis, 500) / 500;
-        byTimeout(Conditions.isVisible(locator), 500, maxSleeps, "Element : " + locator + " did not become visible in " + maxMillis + " ms");
+        byTimeout(Conditions.isVisible(locator), SLEEP_DURATION, calculateMaxSleeps(maxMillis), "Element : " + locator + " did not become visible in " + maxMillis + " ms");
     }
 
     public void notVisibleByTimeout(String locator, int maxMillis)
     {
-        int maxSleeps = Math.max(maxMillis, 500) / 500;
-        byTimeout(Conditions.isNotVisible(locator), 500, maxSleeps, "Element : " + locator + " did not become invisible in " + maxMillis + " ms");
+        byTimeout(Conditions.isNotVisible(locator), SLEEP_DURATION, calculateMaxSleeps(maxMillis), "Element : " + locator + " did not become invisible in " + maxMillis + " ms");
+    }
+
+    public void elementPresentByTimeout(String locator, int maxMillis)
+    {
+        byTimeout(Conditions.isPresent(locator), SLEEP_DURATION, calculateMaxSleeps(maxMillis), "Element : " + locator + " did not become not present in " + maxMillis + " ms");
+    }
+
+    private int calculateMaxSleeps(int maxMillis)
+    {
+        return Math.max(maxMillis, SLEEP_DURATION) / SLEEP_DURATION;        
     }
 
     /**
