@@ -14,13 +14,12 @@ public class SeleniumAssertions extends AbstractSeleniumUtil
 {
     private static final Logger log = Logger.getLogger(SeleniumAssertions.class);
 
-    private static final int SLEEP_DURATION = 250;
+    private static final int SLEEP_DURATION = 100;
 
     public SeleniumAssertions(Selenium selenium, String pageLoadWait)
     {
         super(selenium, pageLoadWait);
     }
-
 
     /**
      * This will wait until an element is visible.  If it doesnt become visible in
@@ -58,8 +57,7 @@ public class SeleniumAssertions extends AbstractSeleniumUtil
      */
     public void elementNotPresentByTimeout(String locator, int maxMillis)
     {
-        int maxSleeps = Math.max(maxMillis, 500) / 500;
-        byTimeout(Conditions.isNotPresent(locator), 500, maxSleeps, "Element : " + locator + " did not become not present in " + maxMillis + " ms");
+        byTimeout(Conditions.isNotPresent(locator), SLEEP_DURATION, calculateMaxSleeps(maxMillis), "Element : " + locator + " did not become not present in " + maxMillis + " ms");
     }
 
 
@@ -74,8 +72,7 @@ public class SeleniumAssertions extends AbstractSeleniumUtil
     {
         try
         {
-            int maxSleeps = Math.max(maxMillis, 500) / 500;
-            byTimeout(Conditions.isVisible(locator), 500, maxSleeps, "Quiet wait! This failure message should not appear", true);
+            byTimeout(Conditions.isVisible(locator), SLEEP_DURATION, calculateMaxSleeps(maxMillis), "Quiet wait! This failure message should not appear", true);
         }
         catch (SeleniumException se)
         {
@@ -304,5 +301,4 @@ public class SeleniumAssertions extends AbstractSeleniumUtil
             " pixels of the vertical position of element '" + locator2 + "' (" + middle2 + ")";
         Assert.assertTrue(message, Math.abs(middle1 - middle2) < deltaPixels);
     }
-
 }

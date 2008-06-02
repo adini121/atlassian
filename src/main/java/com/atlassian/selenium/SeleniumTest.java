@@ -1,41 +1,48 @@
 package com.atlassian.selenium;
 
 import junit.framework.TestCase;
-import com.thoughtworks.selenium.Selenium;
 
 /**
  * A base class for selenium tests
  *
  * @since v3.12
  */
-public abstract class SeleniumTest extends TestCase {
-
-    protected Selenium selenium;
+public abstract class SeleniumTest extends TestCase
+{
     protected SeleniumAssertions assertThat;
-    protected SeleniumInteractions interactions;
+    protected SeleniumClient client;
     protected SeleniumConfiguration config;
 
     public abstract SeleniumConfiguration getSeleniumConfiguration();
-
 
     /**
      * Calls overridden onSetup method before starting
      * the selenium client and possibly server and initiating
      * assertThat and interaction variables
      */
-    public final void setUp()
+    public final void setUp() throws Exception
     {
+        super.setUp();
         config = getSeleniumConfiguration();
-        selenium = SeleniumStarter.getInstance().getSeleniumClient(config);
-        assertThat = new SeleniumAssertions(selenium, config.getPageLoadWait());
-        interactions = new SeleniumInteractions(selenium, config.getPageLoadWait(), config.getInteractionActionWait());
+        client = getSeleniumClient();
+        assertThat = new SeleniumAssertions(client, config.getPageLoadWait());
         onSetUp();
+    }
+
+    /**
+     * Gets the SeleniumClient. Override this method if you would like to return your
+     * own implementation of {@link SeleniumClient}.
+     * @return
+     */
+    protected SeleniumClient getSeleniumClient()
+    {
+        return SeleniumStarter.getInstance().getSeleniumClient(getSeleniumConfiguration());
     }
 
     /**
      * To be overridden in the case of test-specific setup activities
      */
-    public void onSetUp()
+    protected void onSetUp()
     {
     }
 
@@ -43,9 +50,9 @@ public abstract class SeleniumTest extends TestCase {
      * Calls overridden onTearDown method before shutting down
      * the selenium client and possibly server
      */
-    public final void tearDown()
+    public final void tearDown() throws Exception
     {
-
+        super.tearDown();
         onTearDown();
         if (SeleniumStarter.getInstance().isManual())
         {
@@ -56,18 +63,7 @@ public abstract class SeleniumTest extends TestCase {
     /**
      * To be overridden in the case of test-specific tear-down activities
      */
-    public  void onTearDown()
+    protected  void onTearDown()
     {
-
-    }
-
-    public SeleniumAssertions assertThat()
-    {
-        return assertThat;
-    }
-
-    public SeleniumInteractions interactions()
-    {
-        return interactions;
     }
 }

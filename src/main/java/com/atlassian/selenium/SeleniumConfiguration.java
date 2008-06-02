@@ -41,10 +41,10 @@ public interface SeleniumConfiguration
 
     /**
      * The time that various utility classes will wait after performing some Selenium
-     * action like the mouseOver method in the SeleniumInteractions class.
+     * action like the mouseOver method in the {@link SeleniumClient}.
      * @return
      */
-    int getInteractionActionWait();
+    int getActionWait();
 
     /**
      * The maximum time various utility clasess will wait for a page to load.

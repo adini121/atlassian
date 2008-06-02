@@ -8,11 +8,13 @@ package com.atlassian.selenium;
  */
 public abstract class AbstractSeleniumConfiguration implements SeleniumConfiguration {
 
-    public int getInteractionActionWait() {
+    public int getActionWait()
+    {
         return 400;
     }
 
-    public String getPageLoadWait() {
+    public String getPageLoadWait()
+    {
         return "50000";
     }
 }

@@ -1,7 +1,5 @@
 package com.atlassian.selenium;
 
-import com.thoughtworks.selenium.DefaultSelenium;
-import com.thoughtworks.selenium.Selenium;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.server.SeleniumServer;
 
@@ -13,7 +11,7 @@ public class SeleniumStarter
     private static final Logger log = Logger.getLogger(SeleniumStarter.class);
 
     private static SeleniumStarter instance = new SeleniumStarter();
-    private Selenium sel;
+    private SeleniumClient client;
     private SeleniumServer server;
     private String userAgent;
     private boolean manual = true;
@@ -27,14 +25,13 @@ public class SeleniumStarter
         return instance;
     }
 
-    public synchronized Selenium getSeleniumClient(SeleniumConfiguration config)
+    public synchronized SeleniumClient getSeleniumClient(SeleniumConfiguration config)
     {
-        if (sel == null)
+        if (client == null)
         {
-            sel = new DefaultSelenium(new HtmlDumpingHttpCommandProcessor(config.getServerLocation(), config.getServerPort(), config.getBrowserStartString(),
-                                      config.getBaseUrl()));
+            client = new SeleniumClient(config);
         }
-        return sel;
+        return client;
     }
 
     public synchronized SeleniumServer getSeleniumServer(SeleniumConfiguration config)
@@ -72,7 +69,7 @@ public class SeleniumStarter
             }
 
             log.info("Starting Selenium Client");
-            sel.start();
+            client.start();
             log.info("Selenium Client Started");
 
         } catch (Exception e)
@@ -85,7 +82,7 @@ public class SeleniumStarter
 
     public void stop()
     {
-        sel.stop();
+        client.stop();
         if(server != null)
         {
             server.stop();
