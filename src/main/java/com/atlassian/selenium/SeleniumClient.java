@@ -3,23 +3,27 @@ package com.atlassian.selenium;
 import com.thoughtworks.selenium.DefaultSelenium;
 
 /**
- * A utility class which collects common browser interaction tasks
+ * Extends the {@link DefaultSelenium} client to provide a more sensible implementation
+ * as well some extra utility methods such as keypress.
  */
 public class SeleniumClient extends DefaultSelenium
 {
     /**
-     * The maximum page load wait time used by Selenium. Should be used
-     * by tests whenever they wait for pages to load.
+     * The maximum page load wait time used by Selenium. This value is set with
+     * {@link SeleniumConfiguration#getPageLoadWait()}.
      */
     protected final long PAGE_LOAD_WAIT;
-    protected final long ACTION_WAIT;
 
+    /**
+     * The maximum wait time for actions that don't require page loads. This value is set with
+     * {@link SeleniumConfiguration#getActionWait()}.
+     */
+    protected final long ACTION_WAIT;
 
     public SeleniumClient(SeleniumConfiguration config)
     {
         super(new HtmlDumpingHttpCommandProcessor(config.getServerLocation(), config.getServerPort(), config.getBrowserStartString(), config.getBaseUrl()));
 
-        // todo do we need this?
         this.PAGE_LOAD_WAIT = Long.valueOf(config.getPageLoadWait());
         this.ACTION_WAIT = config.getActionWait();
     }
@@ -42,14 +46,10 @@ public class SeleniumClient extends DefaultSelenium
         super.waitForPageToLoad(String.valueOf(timeoutMillis));
     }
 
-    public void waitForCondition(String javascript, long timeoutMillis)
-    {
-        waitForCondition(javascript, Long.toString(timeoutMillis));
-    }
-
     /**
      * Executes the given Javascript in the context of the text page and waits for it to evaluate to true
      * for a maximum of {@link #ACTION_WAIT} milliseconds.
+     * @see #waitForCondition(String, long) if you would like to specify your own timeout.
      */
     public void waitForCondition(String javascript)
     {
@@ -57,42 +57,49 @@ public class SeleniumClient extends DefaultSelenium
     }
 
     /**
-     * Click the element with the given ID and optionally wait for the page to load, using the default timeout.
+     * Executes the given Javascript in the context of the text page and waits for it to evaluate to true
+     * for a maximum of timeoutMillis.
+     */
+    public void waitForCondition(String javascript, long timeoutMillis)
+    {
+        waitForCondition(javascript, Long.toString(timeoutMillis));
+    }
+
+    /**
+     * Click the element with the given locator and optionally wait for the page to load, using {@link #PAGE_LOAD_WAIT}.
      *
-     * @param target the element to click, specified using Selenium selector syntax
+     * @param locator the element to click, specified using Selenium selector syntax
      * @param waitForPageToLoad whether to wait for the page to reload. Don't use this unless the page is completely
      * reloaded.
-     * @see #click(String, boolean)
+     * @see #click(String, long) if you would like to specify your own timeout.
      */
-    public void click(String target, boolean waitForPageToLoad)
+    public void click(String locator, boolean waitForPageToLoad)
     {
-        super.click(target);
+        super.click(locator);
         if (waitForPageToLoad)
             super.waitForPageToLoad(String.valueOf(PAGE_LOAD_WAIT));
     }
 
     /**
-     * Click the element with the given ID and wait for the page to load, for a maximum of timeoutMillis.
+     * Click the element with the given locator and wait for the page to load, for a maximum of timeoutMillis.
      * <p/>
      * Do not use this method if the page does not reload.
      *
-     * @param target the element to click, specified using Selenium selector syntax
+     * @param locator the element to click, specified using Selenium selector syntax
      * @param timeoutMillis the maximum number of milliseconds to wait for the page to load. Polling takes place
      * more frequently.
-     * @see #click(String, boolean)
+     * @see #click(String, boolean) if you would like to use the default timeout
      */
-    public void click(String target, long timeoutMillis)
+    public void click(String locator, long timeoutMillis)
     {
-        super.click(target);
+        super.click(locator);
         super.waitForPageToLoad(Long.toString(timeoutMillis));
     }
 
     /**
-     * This will type into a field by sending key down / key press / key up
-     * events.
+     * This will type into a field by sending key down / key press / key up events.
      * @param locator Uses the Selenium locator syntax
      * @param key The key to be pressed
-     *
      */
     public void keyPress(String locator, String key)
     {
