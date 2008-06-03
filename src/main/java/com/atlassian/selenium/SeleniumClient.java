@@ -24,7 +24,7 @@ public class SeleniumClient extends DefaultSelenium
     {
         super(new HtmlDumpingHttpCommandProcessor(config.getServerLocation(), config.getServerPort(), config.getBrowserStartString(), config.getBaseUrl()));
 
-        this.PAGE_LOAD_WAIT = Long.valueOf(config.getPageLoadWait());
+        this.PAGE_LOAD_WAIT = config.getPageLoadWait();
         this.ACTION_WAIT = config.getActionWait();
     }
 
