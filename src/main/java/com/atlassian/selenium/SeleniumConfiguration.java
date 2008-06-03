@@ -44,12 +44,18 @@ public interface SeleniumConfiguration
      * action like the mouseOver method in the {@link SeleniumClient}.
      * @return
      */
-    int getActionWait();
+    long getActionWait();
 
     /**
      * The maximum time various utility clasess will wait for a page to load.
      * Ideally this value should be used where ever a test waits for a page to load.
      * @return
      */
-    String getPageLoadWait(); 
+    long getPageLoadWait();
+
+    /**
+     * The time in milliseconds between condition checks.
+     * @see {@link SeleniumAssertions#byTimeout(Condition)}
+     */
+    long getConditionCheckInterval();
 }

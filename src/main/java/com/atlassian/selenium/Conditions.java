@@ -16,6 +16,11 @@ public class Conditions {
             {
                 return (selenium.isElementPresent(element) && selenium.isVisible(element));
             }
+
+            public String errorMessage()
+            {
+                return "Element [" + element + "] is not present or not visible";
+            }
         };
     }
 
@@ -25,6 +30,11 @@ public class Conditions {
             public boolean executeTest(Selenium selenium)
             {
                 return (!selenium.isVisible(element));
+            }
+
+            public String errorMessage()
+            {
+                return "Element [" + element + "] is visible";
             }
         };
     }
@@ -36,6 +46,11 @@ public class Conditions {
             {
                 return (selenium.isElementPresent(element));
             }
+
+            public String errorMessage()
+            {
+                return "Element [" + element + "] is not present";
+            }
         };
     }
 
@@ -45,6 +60,11 @@ public class Conditions {
             public boolean executeTest(Selenium selenium)
             {
                 return (!selenium.isElementPresent(element));
+            }
+            
+            public String errorMessage()
+            {
+                return "Element [" + element + "] is present";
             }
         };
     }

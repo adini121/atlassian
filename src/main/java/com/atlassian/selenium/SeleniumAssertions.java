@@ -1,7 +1,6 @@
 package com.atlassian.selenium;
 
 import com.thoughtworks.selenium.Selenium;
-import com.thoughtworks.selenium.SeleniumException;
 import junit.framework.Assert;
 import org.apache.log4j.Logger;
 
@@ -13,20 +12,21 @@ import org.apache.log4j.Logger;
 public class SeleniumAssertions
 {
     private static final Logger log = Logger.getLogger(SeleniumAssertions.class);
-    private static final long DEFUALT_SLEEP_DURATION = 100;
 
     private final Selenium client;
-    private final long sleepDuration;
+    private final long conditionCheckInterval;
+    private final long defaultMaxWait;
 
-    public SeleniumAssertions(Selenium client)
-    {
-        this(client, DEFUALT_SLEEP_DURATION);
-    }
-
-    public SeleniumAssertions(Selenium client, long sleepDuration)
+    public SeleniumAssertions(Selenium client, SeleniumConfiguration config)
     {
         this.client = client;
-        this.sleepDuration = sleepDuration;
+        this.conditionCheckInterval = config.getConditionCheckInterval();
+        this.defaultMaxWait = config.getActionWait();
+    }
+
+    public void visibleByTimeout(String locator)
+    {
+        byTimeout(Conditions.isVisible(locator));
     }
 
     /**
@@ -36,24 +36,34 @@ public class SeleniumAssertions
      * @param locator   the selenium element locator
      * @param maxMillis how long to wait as most in milliseconds
      */
-    public void visibleByTimeout(String locator, int maxMillis)
+    public void visibleByTimeout(String locator, long maxMillis)
     {
-        byTimeout(Conditions.isVisible(locator), sleepDuration, calculateMaxSleeps(maxMillis), "Element : " + locator + " did not become visible in " + maxMillis + " ms");
+        byTimeout(Conditions.isVisible(locator), maxMillis);
     }
 
-    public void notVisibleByTimeout(String locator, int maxMillis)
+    public void notVisibleByTimeout(String locator)
     {
-        byTimeout(Conditions.isNotVisible(locator), sleepDuration, calculateMaxSleeps(maxMillis), "Element : " + locator + " did not become invisible in " + maxMillis + " ms");
+        byTimeout(Conditions.isNotVisible(locator));
     }
 
-    public void elementPresentByTimeout(String locator, int maxMillis)
+    public void notVisibleByTimeout(String locator, long maxMillis)
     {
-        byTimeout(Conditions.isPresent(locator), sleepDuration, calculateMaxSleeps(maxMillis), "Element : " + locator + " did not become not present in " + maxMillis + " ms");
+        byTimeout(Conditions.isNotVisible(locator), maxMillis);
     }
 
-    private long calculateMaxSleeps(int maxMillis)
+    public void elementPresentByTimeout(String locator)
     {
-        return Math.max(maxMillis, sleepDuration) / sleepDuration;
+        byTimeout(Conditions.isPresent(locator));
+    }
+
+    public void elementPresentByTimeout(String locator, long maxMillis)
+    {
+        byTimeout(Conditions.isPresent(locator), maxMillis);
+    }
+
+    public void elementNotPresentByTimeout(String locator)
+    {
+        byTimeout(Conditions.isNotPresent(locator));
     }
 
     /**
@@ -63,90 +73,39 @@ public class SeleniumAssertions
      * @param locator   the selenium element locator
      * @param maxMillis how long to wait as most in milliseconds
      */
-    public void elementNotPresentByTimeout(String locator, int maxMillis)
+    public void elementNotPresentByTimeout(String locator, long maxMillis)
     {
-        byTimeout(Conditions.isNotPresent(locator), sleepDuration, calculateMaxSleeps(maxMillis), "Element : " + locator + " did not become not present in " + maxMillis + " ms");
+        byTimeout(Conditions.isNotPresent(locator), maxMillis);
     }
 
-
-    /**
-     * This will wait until an element is visible.  If it doesnt become visible in
-     * maxMillis it will simply return
-     *
-     * @param locator   the selenium element locator
-     * @param maxMillis how long to wait as most in milliseconds
-     */
-    public void waitTillVisibleQuietly(String locator, int maxMillis)
+    public void byTimeout(Condition condition)
     {
-        try
+        byTimeout(condition, defaultMaxWait);
+    }
+
+    public void byTimeout(Condition condition, long maxWaitTime)
+    {
+        long startTime = System.currentTimeMillis();
+        while (true)
         {
-            byTimeout(Conditions.isVisible(locator), sleepDuration, calculateMaxSleeps(maxMillis), "Quiet wait! This failure message should not appear", true);
-        }
-        catch (SeleniumException se)
-        {
-            log.info("Exception thrown while waiting for element to become visible. Ignoring this error: " + se);
-        }
-    }
-
-    public void byTimeout(Condition condition, long sleep, long maxSleeps)
-    {
-        byTimeout(condition, sleep, maxSleeps, "timeout occured after '" + maxSleeps + "' sleeps of '" + sleep + "' ms long");
-    }
-
-    /**
-     * Utility method for asserting that some condition is fulfilled by (sleep X maxSleeps)
-     * @param condition The condition to be fulfilled by the timeout
-     * @param sleep The lenght of time to sleep between executions of the condition
-     * @param maxSleeps The maximum number of times the condition will be executed before an assertion is made
-     * @param failMsg The assertion message to be displayed if the condition is not fulfilled
-     */
-    public void byTimeout(Condition condition, long sleep, long maxSleeps, String failMsg)
-    {
-        byTimeout(condition, sleep, maxSleeps, failMsg, false);
-    }
-
-    /**
-     * @see{byTimeout}
-     * @param quietlyReturn boolean flag, whether an assertion should be made in the failure condition
-     */
-    private void byTimeout(Condition condition, long sleep, long maxSleeps, String failMsg, boolean quietlyReturn)
-    {
-        for (int second = 0; ; second++)
-        {
-            if (second >= maxSleeps)
+            if (System.currentTimeMillis() - startTime >= maxWaitTime)
             {
-
-                if(!quietlyReturn)
-                {
-                    log.error("Dumping HTML Source [\n\n\n" + client.getHtmlSource() + "\n\n\n]");
-                    Assert.assertTrue(failMsg, false);
-                }
-                return;
+                log.error("Page source:\n" + client.getHtmlSource());
+                throw new AssertionError("Waited " + maxWaitTime + " ms for [" + condition.errorMessage() + "], but it never became true.");
             }
+
+            if (condition.executeTest(client))
+                break;
 
             try
             {
-                if (condition.executeTest(client))
-                {
-                    break;
-                }
-            }
-            catch (Exception e)
-            {
-                // it may throw SeleniumExceptions so we catch them and wait till timeout since
-                // an exception may be ok
-                log.info("Exception thrown while waiting for condition " + e);
-            }
-            try
-            {
-                Thread.sleep(sleep);
+                Thread.sleep(conditionCheckInterval);
             }
             catch (InterruptedException e)
             {
                 throw new RuntimeException("Thread was interupted", e);
             }
         }
-
     }
 
     /**
@@ -339,5 +298,4 @@ public class SeleniumAssertions
         Assert.assertFalse("Element(s) with locator '" + locator +"' did contained text '"+ text + "'",
             client.getText(locator).indexOf(text) >= 0);
     }
-
 }

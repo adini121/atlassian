@@ -25,7 +25,7 @@ public abstract class SeleniumTest extends TestCase
         super.setUp();
         config = getSeleniumConfiguration();
         client = getSeleniumClient();
-        assertThat = new SeleniumAssertions(client);
+        assertThat = new SeleniumAssertions(client, config);
         onSetUp();
     }
 
