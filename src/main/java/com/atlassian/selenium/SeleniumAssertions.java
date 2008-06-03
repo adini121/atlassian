@@ -10,15 +10,23 @@ import org.apache.log4j.Logger;
  * mostly means waiting for events to occur (i.e. a dropdown to
  * appear after a certain timeout, etc)
  */
-public class SeleniumAssertions extends AbstractSeleniumUtil
+public class SeleniumAssertions
 {
     private static final Logger log = Logger.getLogger(SeleniumAssertions.class);
+    private static final long DEFUALT_SLEEP_DURATION = 100;
 
-    private static final int SLEEP_DURATION = 100;
+    private final Selenium client;
+    private final long sleepDuration;
 
-    public SeleniumAssertions(Selenium selenium, String pageLoadWait)
+    public SeleniumAssertions(Selenium client)
     {
-        super(selenium, pageLoadWait);
+        this(client, DEFUALT_SLEEP_DURATION);
+    }
+
+    public SeleniumAssertions(Selenium client, long sleepDuration)
+    {
+        this.client = client;
+        this.sleepDuration = sleepDuration;
     }
 
     /**
@@ -30,22 +38,22 @@ public class SeleniumAssertions extends AbstractSeleniumUtil
      */
     public void visibleByTimeout(String locator, int maxMillis)
     {
-        byTimeout(Conditions.isVisible(locator), SLEEP_DURATION, calculateMaxSleeps(maxMillis), "Element : " + locator + " did not become visible in " + maxMillis + " ms");
+        byTimeout(Conditions.isVisible(locator), sleepDuration, calculateMaxSleeps(maxMillis), "Element : " + locator + " did not become visible in " + maxMillis + " ms");
     }
 
     public void notVisibleByTimeout(String locator, int maxMillis)
     {
-        byTimeout(Conditions.isNotVisible(locator), SLEEP_DURATION, calculateMaxSleeps(maxMillis), "Element : " + locator + " did not become invisible in " + maxMillis + " ms");
+        byTimeout(Conditions.isNotVisible(locator), sleepDuration, calculateMaxSleeps(maxMillis), "Element : " + locator + " did not become invisible in " + maxMillis + " ms");
     }
 
     public void elementPresentByTimeout(String locator, int maxMillis)
     {
-        byTimeout(Conditions.isPresent(locator), SLEEP_DURATION, calculateMaxSleeps(maxMillis), "Element : " + locator + " did not become not present in " + maxMillis + " ms");
+        byTimeout(Conditions.isPresent(locator), sleepDuration, calculateMaxSleeps(maxMillis), "Element : " + locator + " did not become not present in " + maxMillis + " ms");
     }
 
-    private int calculateMaxSleeps(int maxMillis)
+    private long calculateMaxSleeps(int maxMillis)
     {
-        return Math.max(maxMillis, SLEEP_DURATION) / SLEEP_DURATION;        
+        return Math.max(maxMillis, sleepDuration) / sleepDuration;
     }
 
     /**
@@ -57,7 +65,7 @@ public class SeleniumAssertions extends AbstractSeleniumUtil
      */
     public void elementNotPresentByTimeout(String locator, int maxMillis)
     {
-        byTimeout(Conditions.isNotPresent(locator), SLEEP_DURATION, calculateMaxSleeps(maxMillis), "Element : " + locator + " did not become not present in " + maxMillis + " ms");
+        byTimeout(Conditions.isNotPresent(locator), sleepDuration, calculateMaxSleeps(maxMillis), "Element : " + locator + " did not become not present in " + maxMillis + " ms");
     }
 
 
@@ -72,7 +80,7 @@ public class SeleniumAssertions extends AbstractSeleniumUtil
     {
         try
         {
-            byTimeout(Conditions.isVisible(locator), SLEEP_DURATION, calculateMaxSleeps(maxMillis), "Quiet wait! This failure message should not appear", true);
+            byTimeout(Conditions.isVisible(locator), sleepDuration, calculateMaxSleeps(maxMillis), "Quiet wait! This failure message should not appear", true);
         }
         catch (SeleniumException se)
         {
@@ -110,7 +118,7 @@ public class SeleniumAssertions extends AbstractSeleniumUtil
 
                 if(!quietlyReturn)
                 {
-                    log.error("Dumping HTML Source [\n\n\n" + selenium.getHtmlSource() + "\n\n\n]");
+                    log.error("Dumping HTML Source [\n\n\n" + client.getHtmlSource() + "\n\n\n]");
                     Assert.assertTrue(failMsg, false);
                 }
                 return;
@@ -118,7 +126,7 @@ public class SeleniumAssertions extends AbstractSeleniumUtil
 
             try
             {
-                if (condition.executeTest(selenium))
+                if (condition.executeTest(client))
                 {
                     break;
                 }
@@ -146,7 +154,7 @@ public class SeleniumAssertions extends AbstractSeleniumUtil
      */
     public void textPresent(String text)
     {
-        Assert.assertTrue("Expected text not found in response: '" + text + "'", selenium.isTextPresent(text));
+        Assert.assertTrue("Expected text not found in response: '" + text + "'", client.isTextPresent(text));
     }
 
     /**
@@ -154,7 +162,7 @@ public class SeleniumAssertions extends AbstractSeleniumUtil
      */
     public void textNotPresent(String text)
     {
-        Assert.assertFalse("Un-expected text found in response: '" + text + "'", selenium.isTextPresent(text));
+        Assert.assertFalse("Un-expected text found in response: '" + text + "'", client.isTextPresent(text));
     }
 
     /**
@@ -164,7 +172,7 @@ public class SeleniumAssertions extends AbstractSeleniumUtil
      */
     public void formElementEquals(String locator, String value)
     {
-        Assert.assertEquals("Element with id '" + locator + "' did not have the expected value '" + value + "'", value, selenium.getValue(locator));
+        Assert.assertEquals("Element with id '" + locator + "' did not have the expected value '" + value + "'", value, client.getValue(locator));
     }
 
     /**
@@ -173,7 +181,7 @@ public class SeleniumAssertions extends AbstractSeleniumUtil
      */
     public void elementPresent(String locator)
     {
-        Assert.assertTrue("Expected element not found in response: '" + locator + "'", selenium.isElementPresent(locator));
+        Assert.assertTrue("Expected element not found in response: '" + locator + "'", client.isElementPresent(locator));
     }
 
     /**
@@ -182,7 +190,7 @@ public class SeleniumAssertions extends AbstractSeleniumUtil
      */
     public void elementNotPresent(String locator)
     {
-        Assert.assertFalse("Un-expected element found in response: '" + locator + "'", selenium.isElementPresent(locator));
+        Assert.assertFalse("Un-expected element found in response: '" + locator + "'", client.isElementPresent(locator));
     }
 
     /**
@@ -192,7 +200,7 @@ public class SeleniumAssertions extends AbstractSeleniumUtil
      */
     public void elementVisible(String locator)
     {
-        Assert.assertTrue("Expected element not visible in response: '" + locator + "'", selenium.isElementPresent(locator) && selenium.isVisible(locator));
+        Assert.assertTrue("Expected element not visible in response: '" + locator + "'", client.isElementPresent(locator) && client.isVisible(locator));
     }
 
     /**
@@ -202,7 +210,7 @@ public class SeleniumAssertions extends AbstractSeleniumUtil
      */
     public void elementNotVisible(String locator)
     {
-        Assert.assertFalse("Un-expected element visible in response: '" + locator + "'", selenium.isElementPresent(locator) && selenium.isVisible(locator));
+        Assert.assertFalse("Un-expected element visible in response: '" + locator + "'", client.isElementPresent(locator) && client.isVisible(locator));
     }
 
     /**
@@ -212,7 +220,7 @@ public class SeleniumAssertions extends AbstractSeleniumUtil
      */
     public void htmlPresent(String html)
     {
-        Assert.assertTrue("Expected HTML not found in response: '" + html + "'", selenium.getHtmlSource().toLowerCase().indexOf(html) >= 0);
+        Assert.assertTrue("Expected HTML not found in response: '" + html + "'", client.getHtmlSource().toLowerCase().indexOf(html) >= 0);
     }
 
     /**
@@ -222,7 +230,7 @@ public class SeleniumAssertions extends AbstractSeleniumUtil
      */
     public void htmlNotPresent(String html)
     {
-        Assert.assertFalse("Unexpected HTML found in response: '" + html + "'", selenium.getHtmlSource().toLowerCase().indexOf(html) >= 0);
+        Assert.assertFalse("Unexpected HTML found in response: '" + html + "'", client.getHtmlSource().toLowerCase().indexOf(html) >= 0);
     }
 
     /**
@@ -232,7 +240,7 @@ public class SeleniumAssertions extends AbstractSeleniumUtil
      */
     public void elementHasText(String locator, String text)
     {
-        Assert.assertTrue("Element(s) with locator '" + locator +"' did not contain text '"+ text + "'", (selenium.getText(locator).indexOf(text) >= 0));
+        Assert.assertTrue("Element(s) with locator '" + locator +"' did not contain text '"+ text + "'", (client.getText(locator).indexOf(text) >= 0));
     }
 
     /**
@@ -242,7 +250,7 @@ public class SeleniumAssertions extends AbstractSeleniumUtil
      */
     public void elementDoesntHaveText(String locator, String text)
     {
-        Assert.assertFalse("Element(s) with locator '" + locator +"' did contained text '"+ text + "'", (selenium.getText(locator).indexOf(text) >= 0));
+        Assert.assertFalse("Element(s) with locator '" + locator +"' did contained text '"+ text + "'", (client.getText(locator).indexOf(text) >= 0));
     }
 
     /**
@@ -253,7 +261,7 @@ public class SeleniumAssertions extends AbstractSeleniumUtil
      */
     public void attributeContainsValue(String locator, String attribute, String value)
     {
-        String attributeValue = selenium.getAttribute(locator + "@" + attribute);
+        String attributeValue = client.getAttribute(locator + "@" + attribute);
         Assert.assertTrue("Element with locator '" + locator + "' did not contain value '" + value + "' in attribute '" + attribute + "=" + attributeValue + "'", (attributeValue.indexOf(value) >= 0));
     }
 
@@ -265,17 +273,18 @@ public class SeleniumAssertions extends AbstractSeleniumUtil
      */
     public void attributeDoesntContainValue(String locator, String attribute, String value)
     {
-        String attributeValue = selenium.getAttribute(locator + "@" + attribute);
+        String attributeValue = client.getAttribute(locator + "@" + attribute);
         Assert.assertFalse("Element with locator '" + locator + "' did not contain value '" + value + "' in attribute '" + attribute + "'", (attributeValue.indexOf(value) >= 0));
     }
 
     /**
      * Asserts that a link containing the given text appears on the page
      * @param text The text that a link on the page should contain
+     * @see #linkVisibleWithText(String) also
      */
     public void linkPresentWithText(String text)
     {
-        Assert.assertTrue("Expected link with text not found in response: '" + text + "'", selenium.isElementPresent("link=" + text));
+        Assert.assertTrue("Expected link with text not found in response: '" + text + "'", client.isElementPresent("link=" + text));
     }
 
     /**
@@ -284,7 +293,17 @@ public class SeleniumAssertions extends AbstractSeleniumUtil
      */
     public void linkNotPresentWithText(String text)
     {
-        Assert.assertFalse("Unexpected link with text found in response: '" + text + "'", selenium.isElementPresent("link=" + text));
+        Assert.assertFalse("Unexpected link with text found in response: '" + text + "'", client.isElementPresent("link=" + text));
+    }
+
+    /**
+     * Asserts that a link containin the given text is present and visible.
+     * @param text The text that a link on the page should contain
+     */
+    public void linkVisibleWithText(String text)
+    {
+        linkPresentWithText(text);
+        Assert.assertTrue("Expected link with text not visible: '" + text + "'", client.isVisible("link=" + text));
     }
 
     /**
@@ -295,10 +314,30 @@ public class SeleniumAssertions extends AbstractSeleniumUtil
      */
     public void elementsVerticallyAligned(String locator1, String locator2, int deltaPixels)
     {
-        int middle1 = selenium.getElementPositionTop(locator1).intValue() + (selenium.getElementHeight(locator1).intValue() / 2);
-        int middle2 = selenium.getElementPositionTop(locator2).intValue() + (selenium.getElementHeight(locator2).intValue() / 2);
+        int middle1 = client.getElementPositionTop(locator1).intValue() + (client.getElementHeight(locator1).intValue() / 2);
+        int middle2 = client.getElementPositionTop(locator2).intValue() + (client.getElementHeight(locator2).intValue() / 2);
         String message = "Vertical position of element '" + locator1 + "' (" + middle1 + ") was not within " + deltaPixels +
             " pixels of the vertical position of element '" + locator2 + "' (" + middle2 + ")";
         Assert.assertTrue(message, Math.abs(middle1 - middle2) < deltaPixels);
     }
+
+    /**
+     * Asserts that an element contains the given text.
+     */
+    public void elementContainsText(String locator, String text)
+    {
+        String elementText = client.getText(locator);
+        Assert.assertTrue("Element(s) with locator '" + locator +"' did not contain text '"+ text + "', but contained '" + elementText + "'",
+            elementText.indexOf(text) >= 0);
+    }
+
+    /**
+     * Asserts that an element does not contain the given text.
+     */
+    public void elementDoesNotContainText(String locator, String text)
+    {
+        Assert.assertFalse("Element(s) with locator '" + locator +"' did contained text '"+ text + "'",
+            client.getText(locator).indexOf(text) >= 0);
+    }
+
 }

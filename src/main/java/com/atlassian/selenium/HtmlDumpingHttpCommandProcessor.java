@@ -20,7 +20,8 @@ public class HtmlDumpingHttpCommandProcessor extends HttpCommandProcessor
         try
         {
             return super.doCommand(s, strings);
-        } catch (RuntimeException e)
+        }
+        catch (RuntimeException e)
         {
             log.error("Error executing command [" + s + "]", e);
             log.error("---------------- HTML DUMP -------------\n\n\n");
