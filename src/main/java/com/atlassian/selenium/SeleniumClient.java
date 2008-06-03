@@ -43,6 +43,14 @@ public class SeleniumClient extends DefaultSelenium
     public void open(String url, long timeoutMillis)
     {
         super.open(url);
+        waitForPageToLoad(timeoutMillis);
+    }
+
+    /**
+     * Overloads {@link #waitForPageToLoad(String)} to take in a long.
+     */
+    public void waitForPageToLoad(long timeoutMillis)
+    {
         super.waitForPageToLoad(String.valueOf(timeoutMillis));
     }
 
