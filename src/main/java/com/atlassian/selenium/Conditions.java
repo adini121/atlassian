@@ -68,4 +68,35 @@ public class Conditions {
             }
         };
     }
+
+    public static Condition isTextPresent(final String text)
+    {
+        return new Condition() {
+            public boolean executeTest(Selenium selenium)
+            {
+                return (selenium.isElementPresent(text));
+            }
+
+            public String errorMessage()
+            {
+                return "Text [" + text + "] is not present";
+            }
+        };
+    }
+
+    public static Condition isTextNotPresent(final String text)
+    {
+        return new Condition() {
+            public boolean executeTest(Selenium selenium)
+            {
+                return (!selenium.isElementPresent(text));
+            }
+
+            public String errorMessage()
+            {
+                return "Element [" + text + "] is present";
+            }
+        };
+    }
+
 }

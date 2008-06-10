@@ -24,8 +24,27 @@ public abstract class SeleniumTest extends TestCase
     {
         super.setUp();
         config = getSeleniumConfiguration();
+
+        if (SeleniumStarter.getInstance().isManual())
+        {
+            SeleniumStarter.getInstance().start(config);
+        }
+
         client = getSeleniumClient();
+
         assertThat = new SeleniumAssertions(client, config);
+        // find user agent by running somehting on sel browser
+        String js = "var win = this.browserbot.getCurrentWindow();\n" +
+                    "(function() { " +
+                    "   if (win.opera) { return 'opera'; } \n" +
+                    "   if (document.all) { return 'ie'; } \n" +
+                    "   if (win.navigator.userAgent.indexOf('Firefox') != -1) { return 'firefox'; } \n" +
+                    "   if (win.navigator.vendor.indexOf('Apple') != -1) { return 'safari'; } \n" +
+                    "   return 'unknown' \n" +
+                    "})()";
+        
+        SeleniumStarter.getInstance().setUserAgent(client.getEval(js));
+
         onSetUp();
     }
 
