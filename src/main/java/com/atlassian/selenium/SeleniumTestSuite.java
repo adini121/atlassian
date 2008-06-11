@@ -26,7 +26,8 @@ public abstract class SeleniumTestSuite extends TestSuite
      * @param testResult Test results class to be passed to parent
      */
     public final void run(TestResult testResult){
-        SeleniumStarter.getInstance().getSeleniumClient(getSeleniumConfiguration()).start();
+        SeleniumStarter.getInstance().start(getSeleniumConfiguration());
+        SeleniumStarter.getInstance().setManual(false);
         super.run(testResult);
         SeleniumStarter.getInstance().stop();
     }

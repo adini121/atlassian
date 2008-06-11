@@ -69,7 +69,7 @@ public class SeleniumStarter
             }
 
             log.info("Starting Selenium Client");
-            client.start();
+            getSeleniumClient(config).start();
             log.info("Selenium Client Started");
 
         } catch (Exception e)

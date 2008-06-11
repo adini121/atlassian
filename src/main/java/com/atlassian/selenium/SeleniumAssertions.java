@@ -61,9 +61,54 @@ public class SeleniumAssertions
         byTimeout(Conditions.isPresent(locator), maxMillis);
     }
 
+    public void elementPresentUntilTimeout(String locator)
+    {
+        untilTimeout(Conditions.isPresent(locator));
+    }
+
+    public void elementPresentUntilTimeout(String locator, long maxMillis)
+    {
+        untilTimeout(Conditions.isPresent(locator), maxMillis);
+    }
+
     public void elementNotPresentByTimeout(String locator)
     {
         byTimeout(Conditions.isNotPresent(locator));
+    }
+
+
+
+    public void elementNotPresentUntilTimeout(String locator)
+    {
+        untilTimeout(Conditions.isNotPresent(locator));
+    }
+
+
+    public void elementNotPresentUntilTimeout(String locator, long maxMillis)
+    {
+        untilTimeout(Conditions.isNotPresent(locator), maxMillis);
+    }
+
+
+
+    public void textPresentByTimeout(String text, long maxMillis)
+    {
+        byTimeout(Conditions.isTextPresent(text), maxMillis);
+    }
+
+    public void textPresentByTimeout(String text)
+    {
+        byTimeout(Conditions.isTextPresent(text));
+    }
+
+    public void textNotPresentByTimeout(String text, long maxMillis)
+    {
+        byTimeout(Conditions.isTextNotPresent(text), maxMillis);
+    }
+
+    public void textNotPresentByTimeout(String text)
+    {
+        byTimeout(Conditions.isTextNotPresent(text));
     }
 
     /**
@@ -96,6 +141,38 @@ public class SeleniumAssertions
 
             if (condition.executeTest(client))
                 break;
+
+            try
+            {
+                Thread.sleep(conditionCheckInterval);
+            }
+            catch (InterruptedException e)
+            {
+                throw new RuntimeException("Thread was interupted", e);
+            }
+        }
+    }
+
+    public void untilTimeout(Condition condition)
+    {
+        untilTimeout(condition, defaultMaxWait);
+    }
+
+    public void untilTimeout(Condition condition, long maxWaitTime)
+    {
+        long startTime = System.currentTimeMillis();
+        while (true)
+        {
+            if (System.currentTimeMillis() - startTime >= maxWaitTime)
+            {
+                break;
+            }
+
+            if (!condition.executeTest(client))
+            {
+                log.error("Page source:\n" + client.getHtmlSource());
+                throw new AssertionError("Condition [" + condition.errorMessage() + "], became before timeout.");
+            }
 
             try
             {
@@ -277,7 +354,17 @@ public class SeleniumAssertions
         int middle2 = client.getElementPositionTop(locator2).intValue() + (client.getElementHeight(locator2).intValue() / 2);
         String message = "Vertical position of element '" + locator1 + "' (" + middle1 + ") was not within " + deltaPixels +
             " pixels of the vertical position of element '" + locator2 + "' (" + middle2 + ")";
-        Assert.assertTrue(message, Math.abs(middle1 - middle2) < deltaPixels);
+        Assert.assertTrue(message, Math.abs(middle1 - middle2) <= deltaPixels);
+    }
+
+
+    public void elementsSameHeight(final String locator1, final String locator2, final int deltaPixels)
+    {
+        int height1 = client.getElementHeight(locator1).intValue();
+        int height2 = client.getElementHeight(locator2).intValue();
+        String message = "Height of element '" + locator1 + "' (" + height1 + ") was not within " + deltaPixels +
+            " pixels of the height of element '" + locator2 + "' (" + height2 + ")";
+        Assert.assertTrue(message, Math.abs(height1 - height2) <= deltaPixels);
     }
 
     /**
