@@ -47,6 +47,14 @@ public class SeleniumClient extends DefaultSelenium
     }
 
     /**
+     * Overloads {@link #waitForPageToLoad(String)} to take in a long.
+     */
+    public void waitForPageToLoad(long timeoutMillis)
+    {
+        super.waitForPageToLoad(String.valueOf(timeoutMillis));
+    }
+
+    /**
      * Executes the given Javascript in the context of the text page and waits for it to evaluate to true
      * for a maximum of {@link #ACTION_WAIT} milliseconds.
      * @see #waitForCondition(String, long) if you would like to specify your own timeout.
@@ -81,6 +89,21 @@ public class SeleniumClient extends DefaultSelenium
     }
 
     /**
+     * Submit the named form locator and optionally wait for the page to load, using {@link #PAGE_LOAD_WAIT}.
+     *
+     * @param form to click, specified using Selenium selector syntax
+     * @param waitForPageToLoad whether to wait for the page to reload. Don't use this unless the page is completely
+     * reloaded.
+     * @see #submit(String, long) if you would like to specify your own timeout.
+     */
+    public void submit(String form, boolean waitForPageToLoad)
+    {
+        super.submit(form);
+        if (waitForPageToLoad)
+            super.waitForPageToLoad(String.valueOf(PAGE_LOAD_WAIT));
+    }
+
+    /**
      * Click the element with the given locator and wait for the page to load, for a maximum of timeoutMillis.
      * <p/>
      * Do not use this method if the page does not reload.
@@ -93,6 +116,22 @@ public class SeleniumClient extends DefaultSelenium
     public void click(String locator, long timeoutMillis)
     {
         super.click(locator);
+        super.waitForPageToLoad(Long.toString(timeoutMillis));
+    }
+
+    /**
+     * Submit the given form and wait for the page to load, for a maximum of timeoutMillis.
+     * <p/>
+     * Do not use this method if the page does not reload.
+     *
+     * @param form the form to submit
+     * @param timeoutMillis the maximum number of milliseconds to wait for the page to load. Polling takes place
+     * more frequently.
+     * @see #click(String, boolean) if you would like to use the default timeout
+     */
+    public void submit(String form, long timeoutMillis)
+    {
+        super.submit(form);
         super.waitForPageToLoad(Long.toString(timeoutMillis));
     }
 
@@ -133,13 +172,23 @@ public class SeleniumClient extends DefaultSelenium
             String key = Character.toString(aChar);
             sb.append(aChar);
 
-            keyPress(locator, key);
-
+            super.keyDown(locator, key);
             // some browser don't actually input any characters on these events
             // supposedly to prevent JS spoof attacks. So we type for them
             if (!SeleniumStarter.getInstance().getUserAgent().equals("firefox"))
             {
                 super.type(locator, sb.toString());
+            }
+
+            super.keyPress(locator, key);
+            super.keyUp(locator, key);
+            
+            try{
+                Thread.sleep(ACTION_WAIT);
+            }
+            catch(InterruptedException ie)
+            {
+                throw new RuntimeException(ie);
             }
         }
     }
