@@ -86,6 +86,9 @@ public class SeleniumStarter
         if(server != null)
         {
             server.stop();
+            // we clear the server object so that any state inside the server object is
+            // removed.  Otherwise people cant run individual tests in IDEA.
+            server = null;
         }
     }
 
