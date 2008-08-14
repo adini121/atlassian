@@ -74,7 +74,7 @@ public class Conditions {
         return new Condition() {
             public boolean executeTest(Selenium selenium)
             {
-                return (selenium.isElementPresent(text));
+                return (selenium.isTextPresent(text));
             }
 
             public String errorMessage()
@@ -89,7 +89,7 @@ public class Conditions {
         return new Condition() {
             public boolean executeTest(Selenium selenium)
             {
-                return (!selenium.isElementPresent(text));
+                return (!selenium.isTextPresent(text));
             }
 
             public String errorMessage()

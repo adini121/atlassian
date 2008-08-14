@@ -4,6 +4,8 @@ import com.thoughtworks.selenium.Selenium;
 import junit.framework.Assert;
 import org.apache.log4j.Logger;
 
+import java.util.Arrays;
+
 /**
  * This provides helper methods for selenium assertions.  This
  * mostly means waiting for events to occur (i.e. a dropdown to
@@ -384,5 +386,15 @@ public class SeleniumAssertions
     {
         Assert.assertFalse("Element(s) with locator '" + locator +"' did contained text '"+ text + "'",
             client.getText(locator).indexOf(text) >= 0);
+    }
+
+    public void windowClosed(String windowName)
+    {
+        Assert.assertFalse(Arrays.asList(client.getAllWindowNames()).contains(windowName));
+    }
+
+    public void windowOpen(String windowName)
+    {
+        Assert.assertTrue(Arrays.asList(client.getAllWindowNames()).contains(windowName));
     }
 }
