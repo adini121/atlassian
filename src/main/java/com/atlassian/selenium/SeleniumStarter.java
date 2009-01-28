@@ -2,6 +2,7 @@ package com.atlassian.selenium;
 
 import org.apache.log4j.Logger;
 import org.openqa.selenium.server.SeleniumServer;
+import org.openqa.selenium.server.RemoteControlConfiguration;
 
 /**
  * Helper class to setup the Selenium Proxy and client.
@@ -40,7 +41,9 @@ public class SeleniumStarter
         {
             try
             {
-                server = new SeleniumServer(config.getServerPort());
+                RemoteControlConfiguration rcConfig = new RemoteControlConfiguration();
+                rcConfig.setPort(config.getServerPort());
+                server = new SeleniumServer(rcConfig);
             } catch (Exception e)
             {
                 log.error("Error creating SeleniumServer!", e);
