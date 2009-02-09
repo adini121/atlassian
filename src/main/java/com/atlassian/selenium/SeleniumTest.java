@@ -61,7 +61,7 @@ public abstract class SeleniumTest extends TestCase
     /**
      * To be overridden in the case of test-specific setup activities
      */
-    protected void onSetUp()
+    protected void onSetUp() throws Exception
     {
     }
 
@@ -82,7 +82,7 @@ public abstract class SeleniumTest extends TestCase
     /**
      * To be overridden in the case of test-specific tear-down activities
      */
-    protected  void onTearDown()
+    protected  void onTearDown() throws Exception
     {
     }
 }
