@@ -157,6 +157,7 @@ public class SeleniumClient extends DefaultSelenium
      */
     public void typeWithFullKeyEvents(String locator, String string, boolean reset)
     {
+        super.focus(locator);
         if (reset)
         {
             super.type(locator, "");
@@ -174,16 +175,6 @@ public class SeleniumClient extends DefaultSelenium
 
             super.focus(locator);
             super.keyPressNative(key);
-//            super.keyDown(locator, key);
-//            // some browser don't actually input any characters on these events
-//            // supposedly to prevent JS spoof attacks. So we type for them
-//            if (!SeleniumStarter.getInstance().getUserAgent().equals("firefox"))
-//            {
-//                super.type(locator, sb.toString());
-//            }
-//
-//            super.keyPress(locator, key);
-//            super.keyUp(locator, key);
             
             try{
                 Thread.sleep(ACTION_WAIT);
