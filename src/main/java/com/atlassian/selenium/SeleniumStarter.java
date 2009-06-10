@@ -43,6 +43,7 @@ public class SeleniumStarter
             {
                 RemoteControlConfiguration rcConfig = new RemoteControlConfiguration();
                 rcConfig.setPort(config.getServerPort());
+                rcConfig.setDebugMode(true);
                 server = new SeleniumServer(rcConfig);
             } catch (Exception e)
             {
@@ -62,7 +63,6 @@ public class SeleniumStarter
             if(config.getStartSeleniumServer())
             {
                 log.info("Starting Selenium Server");
-                SeleniumServer.setDebugMode(true);
                 getSeleniumServer(config).start();
                 log.info("Selenium Server Started");
             }

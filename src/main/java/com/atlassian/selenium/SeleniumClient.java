@@ -8,6 +8,25 @@ import com.thoughtworks.selenium.DefaultSelenium;
  */
 public class SeleniumClient extends DefaultSelenium
 {
+    public enum Browser
+    {
+        IE("ie"), FIREFOX("firefox"), OPERA("opera"), SAFARI("safari"), UNKNOWN("unkown");
+
+        private final String name;
+
+        Browser(String name)
+        {
+            this.name = name;
+        }
+
+        public String getName()
+        {
+            return name;
+        }
+    }
+
+    private Browser browser;
+
     /**
      * The maximum page load wait time used by Selenium. This value is set with
      * {@link SeleniumConfiguration#getPageLoadWait()}.
@@ -26,6 +45,21 @@ public class SeleniumClient extends DefaultSelenium
 
         this.PAGE_LOAD_WAIT = config.getPageLoadWait();
         this.ACTION_WAIT = config.getActionWait();
+
+        String browserStartString = config.getBrowserStartString();
+        if(browserStartString.contains("ie"))
+            browser = Browser.IE;
+        else if(browserStartString.contains("firefox"))
+            browser = Browser.FIREFOX;
+        else if(browserStartString.contains("opera"))
+            browser = Browser.OPERA;
+        else if(browserStartString.contains("safari"))
+            browser = Browser.SAFARI;
+        else
+            browser = Browser.UNKNOWN;
+
+        SeleniumStarter.getInstance().setUserAgent(browser.getName());
+
     }
 
     /**
@@ -162,28 +196,25 @@ public class SeleniumClient extends DefaultSelenium
         {
             super.type(locator, "");
         }
-        char[] chars = string.toCharArray();
 
-        // Some browsers clear the text field when we start typing,
-        // so we need to pre-populate this string with the existing contents
-        StringBuffer sb = new StringBuffer(super.getValue(locator));
-        for (int i = 0; i < chars.length; i++)
+        // The typeKey method doesn't work properly in Firefox
+        if (Browser.FIREFOX.equals(browser))
         {
-            char aChar = chars[i];
-            String key = Character.toString(aChar);
-            sb.append(aChar);
-
-            super.focus(locator);
-            //super.keyPressNative(key);
-            keyPress(locator, "\\" + (int)aChar);
-            
-            try{
-                Thread.sleep(ACTION_WAIT);
-            }
-            catch(InterruptedException ie)
+            char[] chars = string.toCharArray();
+            for (int i = 0; i < chars.length; i++)
             {
-                throw new RuntimeException(ie);
+                char aChar = chars[i];
+                super.focus(locator);
+                //Using codes because the methhod doesn't worki n  
+                keyPress(locator, "\\" + (int)aChar);
             }
+        } else {
+            if(!reset)
+            {
+                string = super.getValue(locator) + string;
+            }
+            super.type(locator, string);
+            super.typeKeys(locator, string);
         }
     }
 
