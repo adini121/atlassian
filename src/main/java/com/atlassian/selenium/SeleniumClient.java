@@ -174,7 +174,8 @@ public class SeleniumClient extends DefaultSelenium
             sb.append(aChar);
 
             super.focus(locator);
-            super.keyPressNative(key);
+            //super.keyPressNative(key);
+            keyPress(locator, "\\" + (int)aChar);
             
             try{
                 Thread.sleep(ACTION_WAIT);
