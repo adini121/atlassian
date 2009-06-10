@@ -40,6 +40,12 @@
             <artifactId>selenium-java-client-driver</artifactId>
             <version>1.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium.server</groupId>
+            <artifactId>selenium-server</artifactId>
+            <version>1.0</version>
+            <classifier>standalone</classifier>
+        </dependency>
     </dependencies>
 
     <issueManagement>
