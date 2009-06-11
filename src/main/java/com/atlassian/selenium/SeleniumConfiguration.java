@@ -11,45 +11,38 @@ public interface SeleniumConfiguration
     /**
      * The address of the node hosting the selenium
      * server.
-     * @return
      */
     String getServerLocation();
 
     /**
      * The port the selenium server is listening on
-     * @return
      */
     int getServerPort();
 
     /**
      * The browser start string to be passed to Selenium 
-     * @return
      */
     String getBrowserStartString();
 
     /**
-     * The browser start string to be
-     * @return
+     * The starting url for the browser
      */
     String getBaseUrl();
 
     /**
      * Whether the framework should start the selenium server
-     * @return
      */
     boolean getStartSeleniumServer();
 
     /**
      * The time that various utility classes will wait after performing some Selenium
      * action like the mouseOver method in the {@link SeleniumClient}.
-     * @return
      */
     long getActionWait();
 
     /**
      * The maximum time various utility clasess will wait for a page to load.
      * Ideally this value should be used where ever a test waits for a page to load.
-     * @return
      */
     long getPageLoadWait();
 

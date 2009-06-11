@@ -78,20 +78,15 @@ public class SeleniumAssertions
         byTimeout(Conditions.isNotPresent(locator));
     }
 
-
-
     public void elementNotPresentUntilTimeout(String locator)
     {
         untilTimeout(Conditions.isNotPresent(locator));
     }
 
-
     public void elementNotPresentUntilTimeout(String locator, long maxMillis)
     {
         untilTimeout(Conditions.isNotPresent(locator), maxMillis);
     }
-
-
 
     public void textPresentByTimeout(String text, long maxMillis)
     {
@@ -249,6 +244,17 @@ public class SeleniumAssertions
     public void elementNotVisible(String locator)
     {
         Assert.assertFalse("Un-expected element visible in response: '" + locator + "'", client.isElementPresent(locator) && client.isVisible(locator));
+    }
+
+    /**
+     * Asserts that a given element is visible and also contains the given text.
+     * @param locator Locator for the element that should be visible specified in the standard selenium syntax
+     * @param text the text that the element should contain
+     */
+    public void elementVisibleContainsText(String locator, String text)
+    {
+        elementVisible(locator);
+        elementContainsText(locator, text);
     }
 
     /**

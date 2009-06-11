@@ -62,6 +62,11 @@ public class SeleniumClient extends DefaultSelenium
 
     }
 
+    public Browser getBrowser()
+    {
+        return browser;
+    }
+    
     /**
      * Unlike {@link DefaultSelenium#open}, this opens the provided URL relative to the application context path.
      * It also waits for the page to load -- a maximum of {@link #PAGE_LOAD_WAIT} before returning.
@@ -86,6 +91,14 @@ public class SeleniumClient extends DefaultSelenium
     public void waitForPageToLoad(long timeoutMillis)
     {
         super.waitForPageToLoad(String.valueOf(timeoutMillis));
+    }
+
+    /**
+     * Waits for the page to load with the default timeout configured in {@link SeleniumConfiguration}.
+     */
+    public void waitForPageToLoad()
+    {
+        waitForPageToLoad(PAGE_LOAD_WAIT);
     }
 
     /**
@@ -249,5 +262,61 @@ public class SeleniumClient extends DefaultSelenium
         {
             super.select(selectName, options[i]);
         }
+    }
+
+    /**
+     * Checks a checkbox given a name and value.
+     */
+    public void check(String name, String value)
+    {
+        check("name=" + name + " value=" + value);
+    }
+
+    public void clickLinkWithText(String text, boolean waitForPageToLoad)
+    {
+        super.click("link=" + text);
+        if (waitForPageToLoad) waitForPageToLoad();
+    }
+
+    public void clickButton(String buttonText, boolean waitForPageToLoad)
+    {
+        clickElementWithXpath("//input[@value = '" + buttonText + "']");
+        if (waitForPageToLoad) waitForPageToLoad();
+    }
+
+    public void clickButtonWithName(String buttonName, boolean waitForPageToLoad)
+    {
+        clickElementWithXpath("//input[@name = '" + buttonName + "']");
+        if (waitForPageToLoad) waitForPageToLoad();
+    }
+
+    public void clickElementWithTitle(String title)
+    {
+        super.click("xpath=//*[@title='" + title + "']");
+    }
+
+    public void clickElementWithClass(String className)
+    {
+        super.click("css=." + className);
+    }
+
+    public void clickElementWithCss(String cssSelector)
+    {
+        super.click("css=" + cssSelector);
+    }
+
+    public void clickElementWithXpath(String xpath)
+    {
+        super.click("xpath=" + xpath);
+    }
+
+    public void typeInElementWithName(String elementName, String text)
+    {
+        super.type("name=" + elementName, text);
+    }
+
+    public void typeInElementWithCss(String cssSelector, String text)
+    {
+        super.type("css=" + cssSelector, text);
     }
 }
