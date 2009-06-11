@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.atlassian.pom</groupId>
 		<artifactId>atlassian-public-pom</artifactId>
-		<version>14</version>
+		<version>18</version>
 	</parent>
 
 	<groupId>com.atlassian.selenium</groupId>
@@ -22,19 +22,21 @@
         <url>https://studio.atlassian.com/svn/SELENIUM/trunk/</url>
     </scm>
 
+    <properties>
+        <jdkLevel>1.5</jdkLevel>
+    </properties>
+
     <dependencies>
 	    <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <version>1.2.7</version>
         </dependency>
-
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>3.8.1</version>
         </dependency>
-
         <dependency>
             <groupId>org.seleniumhq.selenium.client-drivers</groupId>
             <artifactId>selenium-java-client-driver</artifactId>
@@ -55,9 +57,7 @@
     
     <ciManagement>
         <system>Bamboo</system>
-        <url>
-            http://bamboo.developer.atlassian.com/browse/ATLASSIAN_SELENIUM
-        </url>
+        <url>http://bamboo.developer.atlassian.com/browse/ATLASSIAN_SELENIUM</url>
     </ciManagement>
 
     <distributionManagement>
@@ -66,15 +66,5 @@
             <url>dav:https://docs.atlassian.com/${project.artifactId}/${project.version}</url>
         </site>
     </distributionManagement>
-
-<!--
-
-    <repositories>
-      <repository>
-        <id>selenium-releases</id>
-        <url>http://nexus.openqa.org/content/repositories/releases/</url>
-      </repository>
-    </repositories>
--->
 
 </project>

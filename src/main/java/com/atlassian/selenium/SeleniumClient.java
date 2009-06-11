@@ -197,18 +197,19 @@ public class SeleniumClient extends DefaultSelenium
             super.type(locator, "");
         }
 
-        // The typeKey method doesn't work properly in Firefox
+        // The typeKeys method doesn't work properly in Firefox
         if (Browser.FIREFOX.equals(browser))
         {
             char[] chars = string.toCharArray();
-            for (int i = 0; i < chars.length; i++)
+            for (char aChar : chars)
             {
-                char aChar = chars[i];
                 super.focus(locator);
                 //Using codes because the methhod doesn't worki n  
-                keyPress(locator, "\\" + (int)aChar);
+                keyPress(locator, "\\" + (int) aChar);
             }
-        } else {
+        }
+        else
+        {
             if(!reset)
             {
                 string = super.getValue(locator) + string;
