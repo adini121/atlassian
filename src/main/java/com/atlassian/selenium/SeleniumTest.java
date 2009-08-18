@@ -2,6 +2,11 @@ package com.atlassian.selenium;
 
 import junit.framework.TestCase;
 
+import java.io.InputStream;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
+
 /**
  * A base class for selenium tests
  *

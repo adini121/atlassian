@@ -1,6 +1,7 @@
 package com.atlassian.selenium;
 
 import com.thoughtworks.selenium.Selenium;
+import com.atlassian.selenium.pageobjects.PageElement;
 import junit.framework.Assert;
 import org.apache.log4j.Logger;
 
@@ -31,6 +32,11 @@ public class SeleniumAssertions
         byTimeout(Conditions.isVisible(locator));
     }
 
+    public void visibleByTimeout(PageElement element)
+    {
+        visibleByTimeout(element.getLocator());
+    }
+
     /**
      * This will wait until an element is visible.  If it doesnt become visible in
      * maxMillis fail.
@@ -43,9 +49,19 @@ public class SeleniumAssertions
         byTimeout(Conditions.isVisible(locator), maxMillis);
     }
 
+    public void visibleByTimeout(PageElement element, long maxMillis)
+    {
+        visibleByTimeout(element.getLocator(), maxMillis);
+    }
+
     public void notVisibleByTimeout(String locator)
     {
         byTimeout(Conditions.isNotVisible(locator));
+    }
+
+    public void notVisibleByTimeout(PageElement element)
+    {
+        notVisibleByTimeout(element.getLocator());
     }
 
     public void notVisibleByTimeout(String locator, long maxMillis)
@@ -53,9 +69,19 @@ public class SeleniumAssertions
         byTimeout(Conditions.isNotVisible(locator), maxMillis);
     }
 
+    public void notVisibleByTimeout(PageElement element, long maxMillis)
+    {
+        notVisibleByTimeout(element.getLocator(), maxMillis);
+    }
+
     public void elementPresentByTimeout(String locator)
     {
         byTimeout(Conditions.isPresent(locator));
+    }
+
+    public void elementPresentByTimeout(PageElement element)
+    {
+        elementPresentByTimeout(element.getLocator());
     }
 
     public void elementPresentByTimeout(String locator, long maxMillis)
@@ -63,9 +89,20 @@ public class SeleniumAssertions
         byTimeout(Conditions.isPresent(locator), maxMillis);
     }
 
+    public void elementPresentByTimeout(PageElement element, long maxMillis)
+    {
+        elementPresentByTimeout(element.getLocator(), maxMillis);
+    }
+
+
     public void elementPresentUntilTimeout(String locator)
     {
         untilTimeout(Conditions.isPresent(locator));
+    }
+
+    public void elementPresentUntilTimeout(PageElement element)
+    {
+        elementPresentUntilTimeout(element.getLocator());        
     }
 
     public void elementPresentUntilTimeout(String locator, long maxMillis)
@@ -73,9 +110,19 @@ public class SeleniumAssertions
         untilTimeout(Conditions.isPresent(locator), maxMillis);
     }
 
+    public void elementPresentUntilTimeout(PageElement element, long maxMillis)
+    {
+        elementPresentUntilTimeout(element.getLocator(), maxMillis);
+    }
+    
     public void elementNotPresentByTimeout(String locator)
     {
         byTimeout(Conditions.isNotPresent(locator));
+    }
+
+    public void elementNotPresentByTimeout(PageElement element)
+    {
+        elementNotPresentByTimeout(element.getLocator());
     }
 
     public void elementNotPresentUntilTimeout(String locator)
@@ -83,11 +130,21 @@ public class SeleniumAssertions
         untilTimeout(Conditions.isNotPresent(locator));
     }
 
+    public void elementNotPresentUntilTimeout(PageElement element)
+    {
+        elementNotPresentUntilTimeout(element.getLocator());
+    }
+
     public void elementNotPresentUntilTimeout(String locator, long maxMillis)
     {
         untilTimeout(Conditions.isNotPresent(locator), maxMillis);
     }
 
+    public void elementNotPresentUntilTimeout(PageElement element, long maxMillis)
+    {
+        elementNotPresentUntilTimeout(element.getLocator(), maxMillis);
+    }
+    
     public void textPresentByTimeout(String text, long maxMillis)
     {
         byTimeout(Conditions.isTextPresent(text), maxMillis);
@@ -118,6 +175,11 @@ public class SeleniumAssertions
     public void elementNotPresentByTimeout(String locator, long maxMillis)
     {
         byTimeout(Conditions.isNotPresent(locator), maxMillis);
+    }
+
+    public void elementNotPresentByTimeout(PageElement element, long maxMillis)
+    {
+        elementNotPresentByTimeout(element.getLocator(), maxMillis);
     }
 
     public void byTimeout(Condition condition)
@@ -217,6 +279,12 @@ public class SeleniumAssertions
         Assert.assertTrue("Expected element not found in response: '" + locator + "'", client.isElementPresent(locator));
     }
 
+    public void elementPresent(PageElement element)
+    {
+        elementPresent(element);
+    }
+
+
     /**
      * Asserts that a given element is not present on the current page
      * @param locator Locator for the element that should not be present given using the standard selenium locator syntax
@@ -224,6 +292,11 @@ public class SeleniumAssertions
     public void elementNotPresent(String locator)
     {
         Assert.assertFalse("Un-expected element found in response: '" + locator + "'", client.isElementPresent(locator));
+    }
+
+    public void elementNotPresent(PageElement element)
+    {
+        elementNotPresent(element.getLocator());
     }
 
     /**
@@ -236,6 +309,11 @@ public class SeleniumAssertions
         Assert.assertTrue("Expected element not visible in response: '" + locator + "'", client.isElementPresent(locator) && client.isVisible(locator));
     }
 
+
+    public void elementVisible(PageElement element)
+    {
+        elementVisible(element.getLocator());
+    }
     /**
      * Asserts that a given element is not present and visible. Calling selenium's native selenium.isVisible method on
      * an element that doesn't exist causes selenium to throw an exception
@@ -246,6 +324,11 @@ public class SeleniumAssertions
         Assert.assertFalse("Un-expected element visible in response: '" + locator + "'", client.isElementPresent(locator) && client.isVisible(locator));
     }
 
+
+    public void elementNotVisible(PageElement element)
+    {
+        elementNotVisible(element);
+    }
     /**
      * Asserts that a given element is visible and also contains the given text.
      * @param locator Locator for the element that should be visible specified in the standard selenium syntax
@@ -255,6 +338,11 @@ public class SeleniumAssertions
     {
         elementVisible(locator);
         elementContainsText(locator, text);
+    }
+
+    public void elementVisibleContainsText(PageElement element, String text)
+    {
+        elementVisibleContainsText(element.getLocator(), text);
     }
 
     /**
@@ -287,6 +375,11 @@ public class SeleniumAssertions
         Assert.assertTrue("Element(s) with locator '" + locator +"' did not contain text '"+ text + "'", (client.getText(locator).indexOf(text) >= 0));
     }
 
+    public void elementHasText(PageElement element, String text)
+    {
+        elementHasText(element.getLocator(), text);
+    }
+
     /**
      * Asserts that the element specified by the locator does not contain the specified text
      * @param locator Locator given in standard selenium syntax
@@ -295,6 +388,11 @@ public class SeleniumAssertions
     public void elementDoesntHaveText(String locator, String text)
     {
         Assert.assertFalse("Element(s) with locator '" + locator +"' did contained text '"+ text + "'", (client.getText(locator).indexOf(text) >= 0));
+    }
+
+    public void elementDoesntHaveText(PageElement element, String text)
+    {
+        elementDoesntHaveText(element.getLocator(), text);
     }
 
     /**
@@ -309,6 +407,11 @@ public class SeleniumAssertions
         Assert.assertTrue("Element with locator '" + locator + "' did not contain value '" + value + "' in attribute '" + attribute + "=" + attributeValue + "'", (attributeValue.indexOf(value) >= 0));
     }
 
+    public void attributeContainsValue(PageElement element, String attribute, String value)
+    {
+        attributeContainsValue(element.getLocator(), attribute, value);
+    }
+
     /**
      * Asserts that the element given by the locator has an attribute which does not contain the given value.
      * @param locator Locator given in standard selenium syntax
@@ -319,6 +422,11 @@ public class SeleniumAssertions
     {
         String attributeValue = client.getAttribute(locator + "@" + attribute);
         Assert.assertFalse("Element with locator '" + locator + "' did not contain value '" + value + "' in attribute '" + attribute + "'", (attributeValue.indexOf(value) >= 0));
+    }
+
+    public void attributeDoesntContainValue(PageElement element, String attribute, String value)
+    {
+        attributeDoesntContainValue(element.getLocator(), attribute, value);
     }
 
     /**
@@ -365,6 +473,10 @@ public class SeleniumAssertions
         Assert.assertTrue(message, Math.abs(middle1 - middle2) <= deltaPixels);
     }
 
+    public void elementsVerticallyAligned(PageElement element1, PageElement element2, int deltaPixels)
+    {
+        elementsVerticallyAligned(element1.getLocator(), element2.getLocator(), deltaPixels);
+    }
 
     public void elementsSameHeight(final String locator1, final String locator2, final int deltaPixels)
     {
@@ -373,6 +485,11 @@ public class SeleniumAssertions
         String message = "Height of element '" + locator1 + "' (" + height1 + ") was not within " + deltaPixels +
             " pixels of the height of element '" + locator2 + "' (" + height2 + ")";
         Assert.assertTrue(message, Math.abs(height1 - height2) <= deltaPixels);
+    }
+
+    public void elementsSameHeight(PageElement element1, PageElement element2, final int deltaPixels)
+    {
+        elementsSameHeight(element1.getLocator(), element2.getLocator(), deltaPixels);
     }
 
     /**
@@ -385,6 +502,12 @@ public class SeleniumAssertions
             elementText.indexOf(text) >= 0);
     }
 
+    public void elementContainsText(PageElement element, String text)
+    {
+        elementContainsText(element.getLocator(), text);        
+    }
+
+
     /**
      * Asserts that an element does not contain the given text.
      */
@@ -392,6 +515,11 @@ public class SeleniumAssertions
     {
         Assert.assertFalse("Element(s) with locator '" + locator +"' did contained text '"+ text + "'",
             client.getText(locator).indexOf(text) >= 0);
+    }
+
+    public void elementDoesNotContainText(PageElement element, String text)
+    {
+        elementDoesNotContainText(element.getLocator(), text);        
     }
 
     public void windowClosed(String windowName)
