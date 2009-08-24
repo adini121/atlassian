@@ -2,6 +2,12 @@ package com.atlassian.selenium;
 
 import com.thoughtworks.selenium.DefaultSelenium;
 
+import java.io.InputStreamReader;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.util.Map;
+import java.util.HashMap;
+
 /**
  * Extends the {@link DefaultSelenium} client to provide a more sensible implementation
  * as well some extra utility methods such as keypress.
@@ -10,7 +16,7 @@ public class SeleniumClient extends DefaultSelenium
 {
     public enum Browser
     {
-        IE("ie"), FIREFOX("firefox"), OPERA("opera"), SAFARI("safari"), UNKNOWN("unkown");
+        FIREFOX("firefox"), OPERA("opera"), SAFARI("safari"), UNKNOWN("unkown"), IE("ie");
 
         private final String name;
 
@@ -23,6 +29,20 @@ public class SeleniumClient extends DefaultSelenium
         {
             return name;
         }
+
+        public static Browser typeOf(String browserStartString)
+        {
+            for (Browser browser : Browser.values())
+            {
+                if(browserStartString.contains(browser.getName()))
+                {
+                    return browser;
+                }
+            }
+            return null;
+        }
+
+        
     }
 
     private Browser browser;
@@ -46,20 +66,9 @@ public class SeleniumClient extends DefaultSelenium
         this.PAGE_LOAD_WAIT = config.getPageLoadWait();
         this.ACTION_WAIT = config.getActionWait();
 
-        String browserStartString = config.getBrowserStartString();
-        if(browserStartString.contains("ie"))
-            browser = Browser.IE;
-        else if(browserStartString.contains("firefox"))
-            browser = Browser.FIREFOX;
-        else if(browserStartString.contains("opera"))
-            browser = Browser.OPERA;
-        else if(browserStartString.contains("safari"))
-            browser = Browser.SAFARI;
-        else
-            browser = Browser.UNKNOWN;
-
+        browser = Browser.typeOf(config.getBrowserStartString());
+        
         SeleniumStarter.getInstance().setUserAgent(browser.getName());
-
     }
 
     public Browser getBrowser()
@@ -74,6 +83,16 @@ public class SeleniumClient extends DefaultSelenium
     public void open(String url)
     {
         open(url, PAGE_LOAD_WAIT);
+    }
+
+    /**
+     * Wait for page to load doesn't work the case of non-HTML based resources (like images).
+     * So sometimes you really do want to open a url without waiting.
+     * @param url
+     */
+    public void openNoWait(String url)
+    {
+        super.open(url);
     }
 
     /**
@@ -319,4 +338,48 @@ public class SeleniumClient extends DefaultSelenium
     {
         super.type("css=" + cssSelector, text);
     }
+
+
+
+    private void addJqueryLocator() throws IOException
+    {
+        String jqueryImpl = readFile("jquery-1.3.1.min.js");
+        String jqueryLocStrategy = readFile("jquery-locationStrategy.js");
+        //client.setExtensionJs(jqueryImpl);
+        addScript(jqueryImpl, "jquery");
+        addLocationStrategy("jquery", jqueryLocStrategy );
+    }
+
+    private static String readFile(String file) throws IOException
+    {
+        BufferedReader reader =  new BufferedReader(new InputStreamReader(ClassLoader.getSystemClassLoader().getResourceAsStream(file)));
+
+        String line = reader.readLine();
+        StringBuffer contents = new StringBuffer();
+
+        while(line != null)
+        {
+            contents.append(line + "\n");
+            line = reader.readLine();
+        }
+
+        return contents.toString();
+    }
+
+    public void start()
+    {
+        super.start();
+        try {
+            addJqueryLocator();
+        }
+        catch (IOException ioe)
+        {
+            System.err.println("Unable to load JQuery locator strategy: " + ioe);
+            ioe.printStackTrace(System.err);
+        }
+
+    }
+
+
+
 }

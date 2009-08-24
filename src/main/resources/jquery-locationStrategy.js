@@ -11,13 +11,13 @@ if(inx != -1){
 var found = $(inDocument).find(loc);
 if(found.length == 1 ){
     if(isattr){
-        return found[0].getAttributeNode(attr);
+        return found[0].attr(attr);
     }else{
         return found[0];
     }
 } else if(found.length > 1){
     if(isattr){
-        return found.get().getAttributeNode(attr);
+        return found.get().attr(attr);
     }else{
         return found.get();
     }

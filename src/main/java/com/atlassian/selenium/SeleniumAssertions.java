@@ -281,7 +281,7 @@ public class SeleniumAssertions
 
     public void elementPresent(PageElement element)
     {
-        elementPresent(element);
+        elementPresent(element.getLocator());
     }
 
 
@@ -327,7 +327,7 @@ public class SeleniumAssertions
 
     public void elementNotVisible(PageElement element)
     {
-        elementNotVisible(element);
+        elementNotVisible(element.getLocator());
     }
     /**
      * Asserts that a given element is visible and also contains the given text.
