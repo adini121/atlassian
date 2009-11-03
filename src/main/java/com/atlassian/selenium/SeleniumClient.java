@@ -140,6 +140,23 @@ public class SeleniumClient extends DefaultSelenium
     }
 
     /**
+     * Waits for the page to finish loading ajax calls, and returns if there are no more ajax calls currently running.
+     * The method will check for a maximum of {@link #ACTION_WAIT} milliseconds
+     * @see #waitForAjaxWithJquery(long) if you would like to specify your own timeout.
+     */
+    public void waitForAjaxWithJquery() {
+        waitForAjaxWithJquery(ACTION_WAIT);
+    }
+
+    /**
+     * Waits for the page to finish loading ajax calls, and returns if there are no more ajax calls currently running.
+     * The method will check for a maximum of timeoutMillis
+     */
+    public void waitForAjaxWithJquery(long timeoutMillis) {
+        waitForCondition("selenium.browserbot.getCurrentWindow().jQuery.active == 0;", Long.toString(timeoutMillis));
+    }
+
+    /**
      * Click the element with the given locator and optionally wait for the page to load, using {@link #PAGE_LOAD_WAIT}.
      *
      * @param locator the element to click, specified using Selenium selector syntax
