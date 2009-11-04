@@ -144,7 +144,8 @@ public class SeleniumClient extends DefaultSelenium
      * The method will check for a maximum of {@link #ACTION_WAIT} milliseconds
      * @see #waitForAjaxWithJquery(long) if you would like to specify your own timeout.
      */
-    public void waitForAjaxWithJquery() {
+    public void waitForAjaxWithJquery()
+    {
         waitForAjaxWithJquery(ACTION_WAIT);
     }
 
@@ -152,7 +153,12 @@ public class SeleniumClient extends DefaultSelenium
      * Waits for the page to finish loading ajax calls, and returns if there are no more ajax calls currently running.
      * The method will check for a maximum of timeoutMillis
      */
-    public void waitForAjaxWithJquery(long timeoutMillis) {
+    public void waitForAjaxWithJquery(long timeoutMillis)
+    {
+        if (!hasJquery())
+        {
+            throw new UnsupportedOperationException("This operation requires jQuery.");
+        }
         waitForCondition("selenium.browserbot.getCurrentWindow().jQuery.active == 0;", Long.toString(timeoutMillis));
     }
 
@@ -356,7 +362,11 @@ public class SeleniumClient extends DefaultSelenium
         super.type("css=" + cssSelector, text);
     }
 
-
+    public boolean hasJquery()
+    {
+        String evalJquery = getEval("selenium.browserbot.getCurrentWindow().jQuery");
+        return evalJquery != null && !"null".equals(evalJquery) && !"undefined".equals(evalJquery);
+    }
 
     private void addJqueryLocator() throws IOException
     {
