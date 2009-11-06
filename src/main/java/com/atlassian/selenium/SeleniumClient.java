@@ -41,8 +41,6 @@ public class SeleniumClient extends DefaultSelenium
             }
             return null;
         }
-
-        
     }
 
     private Browser browser;
@@ -67,7 +65,7 @@ public class SeleniumClient extends DefaultSelenium
         this.ACTION_WAIT = config.getActionWait();
 
         browser = Browser.typeOf(config.getBrowserStartString());
-        
+
         SeleniumStarter.getInstance().setUserAgent(browser.getName());
     }
 
@@ -75,7 +73,7 @@ public class SeleniumClient extends DefaultSelenium
     {
         return browser;
     }
-    
+
     /**
      * Unlike {@link DefaultSelenium#open}, this opens the provided URL relative to the application context path.
      * It also waits for the page to load -- a maximum of {@link #PAGE_LOAD_WAIT} before returning.
@@ -209,6 +207,30 @@ public class SeleniumClient extends DefaultSelenium
     }
 
     /**
+     * Click the element with the given locator and wait for the ajax call to finish.
+     *
+     * @param locator the element to click, specified using Selenium selector syntax
+     */
+    public void clickAndWaitForAjaxWithJquery(String locator)
+    {
+        super.click(locator);
+        waitForAjaxWithJquery();
+    }
+
+    /**
+     * Click the element with the given locator and wait for the ajax call to finish.
+     *
+     * @param locator the element to click, specified using Selenium selector syntax
+     * @param timeoutMillis the maximum number of milliseconds to wait for the ajax calls to finish.
+     * @see #clickAndWaitForAjaxWithJquery(String) if you would like to use the default timeout
+     */
+    public void clickAndWaitForAjaxWithJquery(String locator, long timeoutMillis)
+    {
+        super.click(locator);
+        waitForAjaxWithJquery(timeoutMillis);
+    }
+
+    /**
      * Submit the given form and wait for the page to load, for a maximum of timeoutMillis.
      * <p/>
      * Do not use this method if the page does not reload.
@@ -259,7 +281,7 @@ public class SeleniumClient extends DefaultSelenium
             for (char aChar : chars)
             {
                 super.focus(locator);
-                //Using codes because the methhod doesn't worki n  
+                //Using codes because the methhod doesn't worki n
                 keyPress(locator, "\\" + (int) aChar);
             }
         }
@@ -286,6 +308,12 @@ public class SeleniumClient extends DefaultSelenium
         typeWithFullKeyEvents(locator, string, true);
     }
 
+    /**
+     * This will select an option from a {@code select} field.
+     *
+     * @param selectName the select field name
+     * @param label the label to select
+     */
     public void selectOption(String selectName, String label)
     {
         // In some browsers (i.e. Safari) the select items have funny padding
@@ -304,6 +332,19 @@ public class SeleniumClient extends DefaultSelenium
         {
             super.select(selectName, options[i]);
         }
+    }
+
+    /**
+     * This will select an option from a {@code select} field. If the field calls executes an ajax call onchange of
+     * the value, this method will wait for that ajax method to finish.
+     *
+     * @param selectName the select field name
+     * @param label the label to select
+     */
+    public void selectOptionAndWaitForAjaxWithJquery(String selectName, String label)
+    {
+        this.selectOption(selectName, label);
+        this.waitForAjaxWithJquery();
     }
 
     /**
@@ -326,10 +367,22 @@ public class SeleniumClient extends DefaultSelenium
         if (waitForPageToLoad) waitForPageToLoad();
     }
 
+    public void clickButtonAndWaitForAjaxWithJquery(String buttonText)
+    {
+        this.clickButton(buttonText, false);
+        waitForAjaxWithJquery();
+    }
+
     public void clickButtonWithName(String buttonName, boolean waitForPageToLoad)
     {
         clickElementWithXpath("//input[@name = '" + buttonName + "']");
         if (waitForPageToLoad) waitForPageToLoad();
+    }
+
+    public void clickButtonWithNameAndWaitForAjaxWithJquery(String buttonName)
+    {
+        this.clickButtonWithName(buttonName, false);
+        waitForAjaxWithJquery();
     }
 
     public void clickElementWithTitle(String title)
@@ -337,9 +390,21 @@ public class SeleniumClient extends DefaultSelenium
         super.click("xpath=//*[@title='" + title + "']");
     }
 
+    public void clickElementWithTitleAndWaitForAjaxWithJquery(String title)
+    {
+        this.clickElementWithTitle(title);
+        waitForAjaxWithJquery();
+    }
+
     public void clickElementWithClass(String className)
     {
         super.click("css=." + className);
+    }
+
+    public void clickElementWithClassAndWaitForAjaxWithJquery(String className)
+    {
+        this.clickElementWithClass(className);
+        waitForAjaxWithJquery();
     }
 
     public void clickElementWithCss(String cssSelector)
@@ -347,9 +412,21 @@ public class SeleniumClient extends DefaultSelenium
         super.click("css=" + cssSelector);
     }
 
+    public void clickElementWithCssAndWaitForAjaxWithJquery(String cssSelector)
+    {
+        this.clickElementWithCss(cssSelector);
+        waitForAjaxWithJquery();
+    }
+
     public void clickElementWithXpath(String xpath)
     {
         super.click("xpath=" + xpath);
+    }
+
+    public void clickElementWithXpathAndWaitForAjaxWithJquery(String xpath)
+    {
+        this.clickElementWithXpath(xpath);
+        waitForAjaxWithJquery();
     }
 
     public void typeInElementWithName(String elementName, String text)
@@ -406,7 +483,4 @@ public class SeleniumClient extends DefaultSelenium
         }
 
     }
-
-
-
 }
