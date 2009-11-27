@@ -2,18 +2,17 @@ package com.atlassian.selenium;
 
 import junit.framework.TestCase;
 
-/**
- * A base class for selenium tests
- *
- * @since v3.12
- */
-public abstract class SeleniumTest extends TestCase
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Proxy;
+import java.util.List;
+
+public abstract class SeleniumMultiTest extends TestCase
 {
+
     protected SeleniumAssertions assertThat;
     protected SeleniumClient client;
-    protected SeleniumConfiguration config;
 
-    public abstract SeleniumConfiguration getSeleniumConfiguration();
+    public abstract List<SeleniumConfiguration> getSeleniumConfigurations();
 
     /**
      * Calls overridden onSetup method before starting
@@ -23,27 +22,15 @@ public abstract class SeleniumTest extends TestCase
     public final void setUp() throws Exception
     {
         super.setUp();
-        config = getSeleniumConfiguration();
+        client = SeleniumStarter.getInstance().getSeleniumClient(getSeleniumConfigurations());
 
         if (SeleniumStarter.getInstance().isManual())
         {
-            SeleniumStarter.getInstance().start(config);
+            SeleniumStarter.getInstance().start(getSeleniumConfigurations().get(0));
         }
 
-        client = getSeleniumClient();
-
-        assertThat = new SeleniumAssertions(client, config);
+        assertThat = new SeleniumAssertions(client, getSeleniumConfigurations().get(0));
         onSetUp();
-    }
-
-    /**
-     * Gets the SeleniumClient. Override this method if you would like to return your
-     * own implementation of {@link SeleniumClient}.
-     * @return New or current selenium client
-     */
-    protected SeleniumClient getSeleniumClient()
-    {
-        return SeleniumStarter.getInstance().getSeleniumClient(getSeleniumConfiguration());
     }
 
     /**
@@ -61,10 +48,9 @@ public abstract class SeleniumTest extends TestCase
     {
         super.tearDown();
         onTearDown();
-        client.close();
         if (SeleniumStarter.getInstance().isManual())
         {
-            SeleniumStarter.getInstance().stop();
+            SeleniumStarter.getInstance().stop();            
         }
     }
 
@@ -74,4 +60,5 @@ public abstract class SeleniumTest extends TestCase
     protected  void onTearDown() throws Exception
     {
     }
+
 }

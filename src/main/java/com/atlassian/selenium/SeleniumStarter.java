@@ -4,6 +4,10 @@ import org.apache.log4j.Logger;
 import org.openqa.selenium.server.SeleniumServer;
 import org.openqa.selenium.server.RemoteControlConfiguration;
 
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Proxy;
+import java.util.List;
+
 /**
  * Helper class to setup the Selenium Proxy and client.
  */
@@ -30,9 +34,27 @@ public class SeleniumStarter
     {
         if (client == null)
         {
-            client = new SeleniumClient(config);
+            client = new SingleBrowserSeleniumClient(config);
         }
         return client;
+    }
+
+
+    /**
+     * This method will create a Multi-Browser Selenium client with a browser corresponding to
+     * each of the selenium configurations passed in in the list.
+     */
+
+    public synchronized SeleniumClient getSeleniumClient(List<SeleniumConfiguration> configs)
+    {
+        if (client == null)
+        {
+            InvocationHandler ih = new MultiBrowserSeleniumClientInvocationHandler(configs, 10000000L, true);
+            client = (SeleniumClient)Proxy.newProxyInstance(SeleniumClient.class.getClassLoader(), 
+                                                             new Class[] {SeleniumClient.class}, ih );
+        }
+        return client;
+
     }
 
     public synchronized SeleniumServer getSeleniumServer(SeleniumConfiguration config)
@@ -54,10 +76,8 @@ public class SeleniumStarter
     }
 
 
-    public void start(SeleniumConfiguration config)
+    private void startServer(SeleniumConfiguration config)
     {
-        log.info("Starting Selenium");
-
         try
         {
             if(config.getStartSeleniumServer())
@@ -71,20 +91,37 @@ public class SeleniumStarter
                 log.info("Not starting Selenium Server");
             }
 
-            log.info("Starting Selenium Client");
-            getSeleniumClient(config).start();
-            log.info("Selenium Client Started");
-
         } catch (Exception e)
         {
             log.error("Error starting SeleniumServer!", e);
         }
-        
+
+    }
+
+    public void start(SeleniumConfiguration config)
+    {
+        log.info("Starting Selenium");
+        startServer(config);
+        log.info("Starting Selenium Client");
+        getSeleniumClient(config).start();
+        log.info("Selenium Client Started");
         log.info("Selenium startup complete");
+    }
+
+    public void start(List<SeleniumConfiguration> configs)
+    {
+        log.info("Starting Selenium");
+        startServer(configs.get(0));
+        log.info("Starting Selenium Client");
+        getSeleniumClient(configs).start();
+        log.info("Selenium Client Started");
+        log.info("Selenium startup complete");
+
     }
 
     public void stop()
     {
+        client.close();
         client.stop();
         if(server != null)
         {
@@ -103,27 +140,5 @@ public class SeleniumStarter
     public void setManual(boolean manual)
     {
         this.manual = manual;
-    }
-
-    /**
-     * Returns the user agent that this test is running inside
-     *
-     * @return one of the following
-     *         <ul>
-     *         <li>opera</li>
-     *         <li>ie</li>
-     *         <li>firefox</li>
-     *         <li>safari</li>
-     *         <li>unknown</li>
-     *         </ul>
-     */
-    public String getUserAgent()
-    {
-        return userAgent;
-    }
-
-    public void setUserAgent(String userAgent)
-    {
-        this.userAgent = userAgent;
     }
 }

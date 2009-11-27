@@ -1,18 +1,13 @@
 package com.atlassian.selenium;
 
-import com.thoughtworks.selenium.DefaultSelenium;
+import com.thoughtworks.selenium.Selenium;
 
-import java.io.InputStreamReader;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.util.Map;
-import java.util.HashMap;
 
 /**
- * Extends the {@link DefaultSelenium} client to provide a more sensible implementation
+ * Extends the {@link Selenium} client to provide a more sensible implementation
  * as well some extra utility methods such as keypress.
  */
-public class SeleniumClient extends DefaultSelenium
+public interface SeleniumClient extends Selenium
 {
     public enum Browser
     {
@@ -43,122 +38,59 @@ public class SeleniumClient extends DefaultSelenium
         }
     }
 
-    private Browser browser;
-
-    /**
-     * The maximum page load wait time used by Selenium. This value is set with
-     * {@link SeleniumConfiguration#getPageLoadWait()}.
-     */
-    protected final long PAGE_LOAD_WAIT;
-
-    /**
-     * The maximum wait time for actions that don't require page loads. This value is set with
-     * {@link SeleniumConfiguration#getActionWait()}.
-     */
-    protected final long ACTION_WAIT;
-
-    public SeleniumClient(SeleniumConfiguration config)
-    {
-        super(new HtmlDumpingHttpCommandProcessor(config.getServerLocation(), config.getServerPort(), config.getBrowserStartString(), config.getBaseUrl()));
-
-        this.PAGE_LOAD_WAIT = config.getPageLoadWait();
-        this.ACTION_WAIT = config.getActionWait();
-
-        browser = Browser.typeOf(config.getBrowserStartString());
-
-        SeleniumStarter.getInstance().setUserAgent(browser.getName());
-    }
-
-    public Browser getBrowser()
-    {
-        return browser;
-    }
-
     /**
      * Unlike {@link DefaultSelenium#open}, this opens the provided URL relative to the application context path.
-     * It also waits for the page to load -- a maximum of {@link #PAGE_LOAD_WAIT} before returning.
+     * It also waits for the page to load -- a maximum of PAGE_LOAD_WAIT before returning.
      */
-    public void open(String url)
-    {
-        open(url, PAGE_LOAD_WAIT);
-    }
+    public void open(String url);
 
     /**
      * Wait for page to load doesn't work the case of non-HTML based resources (like images).
      * So sometimes you really do want to open a url without waiting.
      * @param url
      */
-    public void openNoWait(String url)
-    {
-        super.open(url);
-    }
+    public void openNoWait(String url);
 
     /**
      * Opens the given URL and waits a maximum of timeoutMillis for the page to load completely.
      */
-    public void open(String url, long timeoutMillis)
-    {
-        super.open(url);
-        super.waitForPageToLoad(String.valueOf(timeoutMillis));
-    }
+    public void open(String url, long timeoutMillis);
 
     /**
      * Overloads {@link #waitForPageToLoad(String)} to take in a long.
      */
-    public void waitForPageToLoad(long timeoutMillis)
-    {
-        super.waitForPageToLoad(String.valueOf(timeoutMillis));
-    }
+    public void waitForPageToLoad(long timeoutMillis);
 
     /**
      * Waits for the page to load with the default timeout configured in {@link SeleniumConfiguration}.
      */
-    public void waitForPageToLoad()
-    {
-        waitForPageToLoad(PAGE_LOAD_WAIT);
-    }
+    public void waitForPageToLoad();
 
     /**
      * Executes the given Javascript in the context of the text page and waits for it to evaluate to true
-     * for a maximum of {@link #ACTION_WAIT} milliseconds.
+     * for a maximum of {@link SeleniumConfiguration.getActionWait} milliseconds.
      * @see #waitForCondition(String, long) if you would like to specify your own timeout.
      */
-    public void waitForCondition(String javascript)
-    {
-        waitForCondition(javascript, ACTION_WAIT);
-    }
+    public void waitForCondition(String javascript);
 
     /**
      * Executes the given Javascript in the context of the text page and waits for it to evaluate to true
      * for a maximum of timeoutMillis.
      */
-    public void waitForCondition(String javascript, long timeoutMillis)
-    {
-        waitForCondition(javascript, Long.toString(timeoutMillis));
-    }
+    public void waitForCondition(String javascript, long timeoutMillis);
 
     /**
      * Waits for the page to finish loading ajax calls, and returns if there are no more ajax calls currently running.
      * The method will check for a maximum of {@link #ACTION_WAIT} milliseconds
      * @see #waitForAjaxWithJquery(long) if you would like to specify your own timeout.
      */
-    public void waitForAjaxWithJquery()
-    {
-        waitForAjaxWithJquery(ACTION_WAIT);
-    }
+    public void waitForAjaxWithJquery();
 
     /**
      * Waits for the page to finish loading ajax calls, and returns if there are no more ajax calls currently running.
      * The method will check for a maximum of timeoutMillis
      */
-    public void waitForAjaxWithJquery(long timeoutMillis)
-    {
-        if (!hasJquery())
-        {
-            throw new UnsupportedOperationException("This operation requires jQuery.");
-        }
-        waitForCondition("selenium.browserbot.getCurrentWindow().jQuery.active == 0;", Long.toString(timeoutMillis));
-    }
+    public void waitForAjaxWithJquery(long timeoutMillis);
 
     /**
      * Click the element with the given locator and optionally wait for the page to load, using {@link #PAGE_LOAD_WAIT}.
@@ -168,12 +100,7 @@ public class SeleniumClient extends DefaultSelenium
      * reloaded.
      * @see #click(String, long) if you would like to specify your own timeout.
      */
-    public void click(String locator, boolean waitForPageToLoad)
-    {
-        super.click(locator);
-        if (waitForPageToLoad)
-            super.waitForPageToLoad(String.valueOf(PAGE_LOAD_WAIT));
-    }
+    public void click(String locator, boolean waitForPageToLoad);
 
     /**
      * Submit the named form locator and optionally wait for the page to load, using {@link #PAGE_LOAD_WAIT}.
@@ -183,12 +110,7 @@ public class SeleniumClient extends DefaultSelenium
      * reloaded.
      * @see #submit(String, long) if you would like to specify your own timeout.
      */
-    public void submit(String form, boolean waitForPageToLoad)
-    {
-        super.submit(form);
-        if (waitForPageToLoad)
-            super.waitForPageToLoad(String.valueOf(PAGE_LOAD_WAIT));
-    }
+    public void submit(String form, boolean waitForPageToLoad);
 
     /**
      * Click the element with the given locator and wait for the page to load, for a maximum of timeoutMillis.
@@ -200,22 +122,14 @@ public class SeleniumClient extends DefaultSelenium
      * more frequently.
      * @see #click(String, boolean) if you would like to use the default timeout
      */
-    public void click(String locator, long timeoutMillis)
-    {
-        super.click(locator);
-        super.waitForPageToLoad(Long.toString(timeoutMillis));
-    }
+    public void click(String locator, long timeoutMillis);
 
     /**
      * Click the element with the given locator and wait for the ajax call to finish.
      *
      * @param locator the element to click, specified using Selenium selector syntax
      */
-    public void clickAndWaitForAjaxWithJquery(String locator)
-    {
-        super.click(locator);
-        waitForAjaxWithJquery();
-    }
+    public void clickAndWaitForAjaxWithJquery(String locator);
 
     /**
      * Click the element with the given locator and wait for the ajax call to finish.
@@ -224,11 +138,7 @@ public class SeleniumClient extends DefaultSelenium
      * @param timeoutMillis the maximum number of milliseconds to wait for the ajax calls to finish.
      * @see #clickAndWaitForAjaxWithJquery(String) if you would like to use the default timeout
      */
-    public void clickAndWaitForAjaxWithJquery(String locator, long timeoutMillis)
-    {
-        super.click(locator);
-        waitForAjaxWithJquery(timeoutMillis);
-    }
+    public void clickAndWaitForAjaxWithJquery(String locator, long timeoutMillis);
 
     /**
      * Submit the given form and wait for the page to load, for a maximum of timeoutMillis.
@@ -240,23 +150,14 @@ public class SeleniumClient extends DefaultSelenium
      * more frequently.
      * @see #click(String, boolean) if you would like to use the default timeout
      */
-    public void submit(String form, long timeoutMillis)
-    {
-        super.submit(form);
-        super.waitForPageToLoad(Long.toString(timeoutMillis));
-    }
+    public void submit(String form, long timeoutMillis);
 
     /**
      * This will type into a field by sending key down / key press / key up events.
      * @param locator Uses the Selenium locator syntax
      * @param key The key to be pressed
      */
-    public void keyPress(String locator, String key)
-    {
-        super.keyDown(locator, key);
-        super.keyPress(locator, key);
-        super.keyUp(locator, key);
-    }
+    public void keyPress(String locator, String key);
 
     /**
      * This will type into a field by first blanking it out and then sending key down / key press / key up
@@ -266,35 +167,7 @@ public class SeleniumClient extends DefaultSelenium
      * @param string  the string to type
      * @param reset   Should the field be reset first?
      */
-    public void typeWithFullKeyEvents(String locator, String string, boolean reset)
-    {
-        super.focus(locator);
-        if (reset)
-        {
-            super.type(locator, "");
-        }
-
-        // The typeKeys method doesn't work properly in Firefox
-        if (Browser.FIREFOX.equals(browser))
-        {
-            char[] chars = string.toCharArray();
-            for (char aChar : chars)
-            {
-                super.focus(locator);
-                //Using codes because the methhod doesn't worki n
-                keyPress(locator, "\\" + (int) aChar);
-            }
-        }
-        else
-        {
-            if(!reset)
-            {
-                string = super.getValue(locator) + string;
-            }
-            super.type(locator, string);
-            super.typeKeys(locator, string);
-        }
-    }
+    public void typeWithFullKeyEvents(String locator, String string, boolean reset);
 
     /**
      * This will type into a field by first blanking it out and then sending key down / key press / key up
@@ -303,10 +176,7 @@ public class SeleniumClient extends DefaultSelenium
      * @param locator - the usual Selenium locator
      * @param string  the string to type into a field
      */
-    public void typeWithFullKeyEvents(String locator, String string)
-    {
-        typeWithFullKeyEvents(locator, string, true);
-    }
+    public void typeWithFullKeyEvents(String locator, String string);
 
     /**
      * This will select an option from a {@code select} field.
@@ -314,25 +184,7 @@ public class SeleniumClient extends DefaultSelenium
      * @param selectName the select field name
      * @param label the label to select
      */
-    public void selectOption(String selectName, String label)
-    {
-        // In some browsers (i.e. Safari) the select items have funny padding
-        // so we need to use this funny method to find how the select item is
-        // padded so that it can be matched
-        String[] options = super.getSelectOptions(selectName);
-        int i = 0;
-        for(; i < options.length; i++)
-        {
-            if(options[i].trim().equals(label))
-            {
-                break;
-            }
-        }
-        if(i < options.length)
-        {
-            super.select(selectName, options[i]);
-        }
-    }
+    public void selectOption(String selectName, String label);
 
     /**
      * This will select an option from a {@code select} field. If the field calls executes an ajax call onchange of
@@ -341,146 +193,47 @@ public class SeleniumClient extends DefaultSelenium
      * @param selectName the select field name
      * @param label the label to select
      */
-    public void selectOptionAndWaitForAjaxWithJquery(String selectName, String label)
-    {
-        this.selectOption(selectName, label);
-        this.waitForAjaxWithJquery();
-    }
+    public void selectOptionAndWaitForAjaxWithJquery(String selectName, String label);
 
     /**
      * Checks a checkbox given a name and value.
      */
-    public void check(String name, String value)
-    {
-        check("name=" + name + " value=" + value);
-    }
+    public void check(String name, String value);
 
-    public void clickLinkWithText(String text, boolean waitForPageToLoad)
-    {
-        super.click("link=" + text);
-        if (waitForPageToLoad) waitForPageToLoad();
-    }
+    public void clickLinkWithText(String text, boolean waitForPageToLoad);
 
-    public void clickButton(String buttonText, boolean waitForPageToLoad)
-    {
-        clickElementWithXpath("//input[@value = '" + buttonText + "']");
-        if (waitForPageToLoad) waitForPageToLoad();
-    }
+    public void clickButton(String buttonText, boolean waitForPageToLoad);
 
-    public void clickButtonAndWaitForAjaxWithJquery(String buttonText)
-    {
-        this.clickButton(buttonText, false);
-        waitForAjaxWithJquery();
-    }
+    public void clickButtonAndWaitForAjaxWithJquery(String buttonText);
 
-    public void clickButtonWithName(String buttonName, boolean waitForPageToLoad)
-    {
-        clickElementWithXpath("//input[@name = '" + buttonName + "']");
-        if (waitForPageToLoad) waitForPageToLoad();
-    }
+    public void clickButtonWithName(String buttonName, boolean waitForPageToLoad);
 
-    public void clickButtonWithNameAndWaitForAjaxWithJquery(String buttonName)
-    {
-        this.clickButtonWithName(buttonName, false);
-        waitForAjaxWithJquery();
-    }
+    public void clickButtonWithNameAndWaitForAjaxWithJquery(String buttonName);
 
-    public void clickElementWithTitle(String title)
-    {
-        super.click("xpath=//*[@title='" + title + "']");
-    }
+    public void clickElementWithTitle(String title);
 
-    public void clickElementWithTitleAndWaitForAjaxWithJquery(String title)
-    {
-        this.clickElementWithTitle(title);
-        waitForAjaxWithJquery();
-    }
+    public void clickElementWithTitleAndWaitForAjaxWithJquery(String title);
 
-    public void clickElementWithClass(String className)
-    {
-        super.click("css=." + className);
-    }
+    public void clickElementWithClass(String className);
 
-    public void clickElementWithClassAndWaitForAjaxWithJquery(String className)
-    {
-        this.clickElementWithClass(className);
-        waitForAjaxWithJquery();
-    }
+    public void clickElementWithClassAndWaitForAjaxWithJquery(String className);
 
-    public void clickElementWithCss(String cssSelector)
-    {
-        super.click("css=" + cssSelector);
-    }
+    public void clickElementWithCss(String cssSelector);
 
-    public void clickElementWithCssAndWaitForAjaxWithJquery(String cssSelector)
-    {
-        this.clickElementWithCss(cssSelector);
-        waitForAjaxWithJquery();
-    }
+    public void clickElementWithCssAndWaitForAjaxWithJquery(String cssSelector);
 
-    public void clickElementWithXpath(String xpath)
-    {
-        super.click("xpath=" + xpath);
-    }
+    public void clickElementWithXpath(String xpath);
 
-    public void clickElementWithXpathAndWaitForAjaxWithJquery(String xpath)
-    {
-        this.clickElementWithXpath(xpath);
-        waitForAjaxWithJquery();
-    }
+    public void clickElementWithXpathAndWaitForAjaxWithJquery(String xpath);
 
-    public void typeInElementWithName(String elementName, String text)
-    {
-        super.type("name=" + elementName, text);
-    }
+    public void typeInElementWithName(String elementName, String text);
 
-    public void typeInElementWithCss(String cssSelector, String text)
-    {
-        super.type("css=" + cssSelector, text);
-    }
+    public void typeInElementWithCss(String cssSelector, String text);
 
-    public boolean hasJquery()
-    {
-        String evalJquery = getEval("selenium.browserbot.getCurrentWindow().jQuery");
-        return evalJquery != null && !"null".equals(evalJquery) && !"undefined".equals(evalJquery);
-    }
+    public boolean hasJquery();
 
-    private void addJqueryLocator() throws IOException
-    {
-        String jqueryImpl = readFile("jquery-1.3.1.min.js");
-        String jqueryLocStrategy = readFile("jquery-locationStrategy.js");
-        //client.setExtensionJs(jqueryImpl);
-        addScript(jqueryImpl, "jquery");
-        addLocationStrategy("jquery", jqueryLocStrategy );
-    }
+    public void start();
 
-    private static String readFile(String file) throws IOException
-    {
-        BufferedReader reader =  new BufferedReader(new InputStreamReader(ClassLoader.getSystemClassLoader().getResourceAsStream(file)));
+    public Browser getBrowser();
 
-        String line = reader.readLine();
-        StringBuffer contents = new StringBuffer();
-
-        while(line != null)
-        {
-            contents.append(line + "\n");
-            line = reader.readLine();
-        }
-
-        return contents.toString();
-    }
-
-    public void start()
-    {
-        super.start();
-        try {
-            addJqueryLocator();
-        }
-        catch (IOException ioe)
-        {
-            System.err.println("Unable to load JQuery locator strategy: " + ioe);
-            ioe.printStackTrace(System.err);
-        }
-
-    }
 }
