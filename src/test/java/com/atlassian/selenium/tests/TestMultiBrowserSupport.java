@@ -11,8 +11,10 @@ public class TestMultiBrowserSupport extends SeleniumMultiTest
     @Override
     public List<SeleniumConfiguration> getSeleniumConfigurations() {
         List<SeleniumConfiguration> configs = new LinkedList<SeleniumConfiguration>();
-        configs.add(new ParameterizedSeleniumConfiguration("172.16.130.128", 4444,"*iexplore", "http://www.google.com/"));
-        configs.add(new ParameterizedSeleniumConfiguration("172.16.130.128", 4444,"*firefox", "http://www.google.com/"));
+        // The three below are the spike environment
+        configs.add(new ParameterizedSeleniumConfiguration("172.20.6.110", 4444,"*iexplore", "http://www.google.com/"));
+        configs.add(new ParameterizedSeleniumConfiguration("172.20.6.202", 4444,"*firefox", "http://www.google.com/"));
+        configs.add(new ParameterizedSeleniumConfiguration("passionpop", 4444, "*safari", "http://www.google.com/"));
         return configs;
     }
 
