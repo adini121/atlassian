@@ -7,7 +7,7 @@ public class TestMultiBrowserSupportHarness
 {
      public static Test suite()
      {
-         final TestSuite suite = new TestMultiBrowserSupportSuite();
+         final TestSuite suite = new MultiBrowserSupportSuite();
          suite.addTestSuite(TestMultiBrowserSupport.class);
          suite.addTestSuite(TestMultiBrowserSupport.class);
          suite.addTestSuite(TestMultiBrowserSupport.class);

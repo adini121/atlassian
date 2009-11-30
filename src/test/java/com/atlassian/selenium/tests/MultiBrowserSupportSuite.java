@@ -6,7 +6,7 @@ import com.atlassian.selenium.SeleniumMultiTestSuite;
 import java.util.LinkedList;
 import java.util.List;
 
-public class TestMultiBrowserSupportSuite extends SeleniumMultiTestSuite
+public class MultiBrowserSupportSuite extends SeleniumMultiTestSuite
 {
     @Override
     protected List<SeleniumConfiguration> getSeleniumConfigurations() {

@@ -38,7 +38,6 @@ public class MultiBrowserSeleniumClientInvocationHandler implements InvocationHa
 
 
 
-    @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         CyclicBarrier barrier = new CyclicBarrier(clients.size() + 1);
 
