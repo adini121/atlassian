@@ -62,7 +62,6 @@ public abstract class SeleniumTest extends TestCase
         super.tearDown();
         onTearDown();
 
-        // TODO: PdZ; 20091201 - Suspected race condition, noticing that client == null on tearDown()
         if(client != null)
         {
             client.close();
