@@ -1,5 +1,6 @@
 package com.atlassian.selenium.tests;
 
+import com.atlassian.selenium.ParameterizedSeleniumConfiguration;
 import com.atlassian.selenium.SeleniumConfiguration;
 import com.atlassian.selenium.SeleniumMultiTest;
 

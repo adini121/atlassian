@@ -1,4 +1,4 @@
-package com.atlassian.selenium.tests;
+package com.atlassian.selenium;
 
 import com.atlassian.selenium.AbstractSeleniumConfiguration;
 
