@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>com.atlassian.pom</groupId>
-		<artifactId>atlassian-public-pom</artifactId>
-		<version>17</version>
-	</parent>
+    <parent>
+        <groupId>com.atlassian.pom</groupId>
+        <artifactId>atlassian-public-pom</artifactId>
+        <version>17</version>
+    </parent>
 
-	<groupId>com.atlassian.selenium</groupId>
-	<artifactId>atlassian-selenium</artifactId>
-	<version>1.7-SNAPSHOT</version>
-	<description>
-		A suite of tools to help with Selenium test harness, assertions
-		etc.
-	</description>
+    <groupId>com.atlassian.selenium</groupId>
+    <artifactId>atlassian-selenium</artifactId>
+    <version>1.7-SNAPSHOT</version>
+    <description>
+        A suite of tools to help with Selenium test harness, assertions
+        etc.
+    </description>
 
     <scm>
         <connection>scm:svn:https://studio.atlassian.com/svn/SELENIUM/trunk/</connection>
@@ -27,7 +27,7 @@
     </properties>
 
     <dependencies>
-	    <dependency>
+        <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <version>1.2.7</version>
@@ -54,7 +54,7 @@
         <system>Jira</system>
         <url>https://studio.atlassian.com/browse/SELENIUM</url>
     </issueManagement>
-    
+
     <ciManagement>
         <system>Bamboo</system>
         <url>http://bamboo.developer.atlassian.com/browse/ATLASSIAN_SELENIUM</url>
