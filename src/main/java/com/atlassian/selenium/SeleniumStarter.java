@@ -39,17 +39,20 @@ public class SeleniumStarter
         return client;
     }
 
+    public SeleniumClient getSeleniumClient(List<SeleniumConfiguration> configs) {
+        return getSeleniumClient(configs, false);
+    }
 
     /**
      * This method will create a Multi-Browser Selenium client with a browser corresponding to
      * each of the selenium configurations passed in in the list.
      */
 
-    public synchronized SeleniumClient getSeleniumClient(List<SeleniumConfiguration> configs)
+    public synchronized SeleniumClient getSeleniumClient(List<SeleniumConfiguration> configs, boolean parallel)
     {
         if (client == null)
         {
-            InvocationHandler ih = new MultiBrowserSeleniumClientInvocationHandler(configs, 10000000L, true);
+            InvocationHandler ih = new MultiBrowserSeleniumClientInvocationHandler(configs, 10000000L, true, parallel);
             client = (SeleniumClient)Proxy.newProxyInstance(SeleniumClient.class.getClassLoader(), 
                                                              new Class[] {SeleniumClient.class}, ih );
         }

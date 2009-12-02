@@ -13,37 +13,66 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 // TODO: According to Jed, this class should be refactored to use the Executor class
+
 // See this blog post or talk to Jed for more information.
 // https://extranet.atlassian.com/display/~kellingburg/2008/06/20/java.util.concurrent.*+-+how+HAMS+is+supporting+new+Confluence+Hosted+architecture?showComments=true#comments
-public class MultiBrowserSeleniumClientInvocationHandler implements InvocationHandler
-{
+public class MultiBrowserSeleniumClientInvocationHandler implements InvocationHandler {
     private List<SeleniumClient> clients;
     private final long MAX_WAIT;
     private final boolean VERIFY_RETURN_VALUES;
+    private final boolean PARALLEL;
 
     public MultiBrowserSeleniumClientInvocationHandler(List<SeleniumConfiguration> configs, long maxWait,
-                                                       boolean verifyReturnValues)
-    {
+                                                       boolean verifyReturnValues, boolean parallel) {
         clients = new LinkedList<SeleniumClient>();
 
-        for(SeleniumConfiguration config: configs)
-        {
+        for (SeleniumConfiguration config : configs) {
             SeleniumClient client = new SingleBrowserSeleniumClient(config);
             client.start();
             clients.add(client);
         }
         this.MAX_WAIT = maxWait;
         this.VERIFY_RETURN_VALUES = verifyReturnValues;
+        this.PARALLEL = parallel;
     }
 
 
-
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        Object o;
+
+        if (PARALLEL) {
+            o = parallel(proxy, method, args);
+        } else {
+            o = sequential(proxy, method, args);
+        }
+
+        return o;
+    }
+
+    private Object sequential(Object proxy, Method method, Object[] args) throws Throwable {
+        CyclicBarrier barrier = new CyclicBarrier(2);
+
+        List<MethodHandlerThread> handlers = new LinkedList<MethodHandlerThread>();
+        for (final SeleniumClient client : clients) {
+            MethodHandlerThread handler = new MethodHandlerThread(method, client, args, barrier);
+            handler.start();
+            handlers.add(handler);
+            awaitBarrier(barrier);
+        }
+
+        checkExceptions(handlers);
+        if (VERIFY_RETURN_VALUES) {
+            verifyReturnValues(handlers);
+        }
+
+        return handlers.get(0).getReturnValue();
+    }
+
+    private Object parallel(Object proxy, Method method, Object[] args) throws Throwable {
         CyclicBarrier barrier = new CyclicBarrier(clients.size() + 1);
 
         List<MethodHandlerThread> handlers = new LinkedList<MethodHandlerThread>();
-        for(final SeleniumClient client : clients)
-        {
+        for (final SeleniumClient client : clients) {
             MethodHandlerThread handler = new MethodHandlerThread(method, client, args, barrier);
             handler.start();
             handlers.add(handler);
@@ -52,8 +81,7 @@ public class MultiBrowserSeleniumClientInvocationHandler implements InvocationHa
         awaitBarrier(barrier);
 
         checkExceptions(handlers);
-        if(VERIFY_RETURN_VALUES)
-        {
+        if (VERIFY_RETURN_VALUES) {
             verifyReturnValues(handlers);
         }
 
@@ -61,13 +89,9 @@ public class MultiBrowserSeleniumClientInvocationHandler implements InvocationHa
     }
 
 
-
-    protected void checkExceptions(List<MethodHandlerThread> commands) throws Exception
-    {
-        for(MethodHandlerThread handler : commands)
-        {
-            if(handler.getException() != null)
-            {
+    protected void checkExceptions(List<MethodHandlerThread> commands) throws Exception {
+        for (MethodHandlerThread handler : commands) {
+            if (handler.getException() != null) {
                 throw new SeleniumException("Browser " + handler.getBrowser() +
                         " failed with the following exception", handler.getException());
             }
@@ -75,24 +99,16 @@ public class MultiBrowserSeleniumClientInvocationHandler implements InvocationHa
     }
 
 
-    protected void  verifyReturnValues(List<MethodHandlerThread> commands)
-    {
-        if(commands.size() > 0)
-        {
+    protected void verifyReturnValues(List<MethodHandlerThread> commands) {
+        if (commands.size() > 0) {
             MethodHandlerThread first = commands.get(0);
-            for (MethodHandlerThread handler : commands)
-            {
-                if (first.getReturnValue() == null)
-                {
-                    if(handler.getReturnValue() != null)
-                    {
-                        throw createValueMismatchException(first, handler); 
+            for (MethodHandlerThread handler : commands) {
+                if (first.getReturnValue() == null) {
+                    if (handler.getReturnValue() != null) {
+                        throw createValueMismatchException(first, handler);
                     }
-                }
-                else
-                {
-                    if(!first.getReturnValue().equals(handler.getReturnValue()))
-                    {
+                } else {
+                    if (!first.getReturnValue().equals(handler.getReturnValue())) {
                         throw createValueMismatchException(first, handler);
                     }
                 }
@@ -100,15 +116,13 @@ public class MultiBrowserSeleniumClientInvocationHandler implements InvocationHa
         }
     }
 
-    protected SeleniumReturnValueMismatch createValueMismatchException(MethodHandlerThread h1, MethodHandlerThread h2)
-    {
-          return new SeleniumReturnValueMismatch(h1.getBrowser(), h1.getReturnValue(),
-                                h2.getBrowser(), h2.getReturnValue());
+    protected SeleniumReturnValueMismatch createValueMismatchException(MethodHandlerThread h1, MethodHandlerThread h2) {
+        return new SeleniumReturnValueMismatch(h1.getBrowser(), h1.getReturnValue(),
+                h2.getBrowser(), h2.getReturnValue());
     }
 
 
-    protected void awaitBarrier(CyclicBarrier barrier)
-    {
+    protected void awaitBarrier(CyclicBarrier barrier) {
         try {
             barrier.await(MAX_WAIT, TimeUnit.MILLISECONDS);
         }
@@ -122,4 +136,6 @@ public class MultiBrowserSeleniumClientInvocationHandler implements InvocationHa
             throw new SeleniumCommandTimedOutException();
         }
     }
+
+
 }

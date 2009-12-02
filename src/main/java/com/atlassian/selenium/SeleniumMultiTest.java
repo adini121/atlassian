@@ -11,6 +11,7 @@ public abstract class SeleniumMultiTest extends TestCase
 
     protected SeleniumAssertions assertThat;
     protected SeleniumClient client;
+    protected boolean parallel;
 
     public abstract List<SeleniumConfiguration> getSeleniumConfigurations();
 
@@ -22,7 +23,7 @@ public abstract class SeleniumMultiTest extends TestCase
     public final void setUp() throws Exception
     {
         super.setUp();
-        client = SeleniumStarter.getInstance().getSeleniumClient(getSeleniumConfigurations());
+        client = SeleniumStarter.getInstance().getSeleniumClient(getSeleniumConfigurations(), parallel);
 
         if (SeleniumStarter.getInstance().isManual())
         {
@@ -48,9 +49,10 @@ public abstract class SeleniumMultiTest extends TestCase
     {
         super.tearDown();
         onTearDown();
+
         if (SeleniumStarter.getInstance().isManual())
         {
-            SeleniumStarter.getInstance().stop();            
+            SeleniumStarter.getInstance().stop();
         }
     }
 

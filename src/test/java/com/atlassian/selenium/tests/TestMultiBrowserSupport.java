@@ -9,6 +9,10 @@ import java.util.List;
 
 public class TestMultiBrowserSupport extends SeleniumMultiTest
 {
+    public TestMultiBrowserSupport() {
+        parallel = false;
+    }
+    
     @Override
     public List<SeleniumConfiguration> getSeleniumConfigurations() {
         List<SeleniumConfiguration> configs = new LinkedList<SeleniumConfiguration>();
@@ -22,7 +26,10 @@ public class TestMultiBrowserSupport extends SeleniumMultiTest
     public void testBasicFunctionality()
     {
         client.open("");
-        assertTrue(client.getTitle().equals("Google") );
+        assertNotNull(client);
+        String title = client.getTitle();
+        assertNotNull(title);
+        assertTrue(title.equals("Google"));
         System.out.println("TestMultiBrowserSupport.testBasicFunctionality");
     }
 }
