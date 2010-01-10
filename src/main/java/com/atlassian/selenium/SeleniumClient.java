@@ -259,6 +259,18 @@ public class SeleniumClient extends DefaultSelenium
     }
 
     /**
+     * Generally users should use {@link #keyPress(String, String)}, however sometimes it may be necessary to
+     * send just a keyPress using the native selenium method.
+     *
+     * @param locator Uses the Selenium locator syntax
+     * @param key The key to be pressed
+     */
+    public void seleniumKeyPress(String locator, String key)
+    {
+        super.keyPress(locator, key);
+    }
+
+    /**
      * This will type into a field by first blanking it out and then sending key down / key press / key up
      * events.
      *
