@@ -5,137 +5,94 @@ import com.thoughtworks.selenium.SeleniumException;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.BrokenBarrierException;
-import java.util.concurrent.CyclicBarrier;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
+import java.util.concurrent.*;
 
-// TODO: According to Jed, this class should be refactored to use the Executor class
-
-// See this blog post or talk to Jed for more information.
-// https://extranet.atlassian.com/display/~kellingburg/2008/06/20/java.util.concurrent.*+-+how+HAMS+is+supporting+new+Confluence+Hosted+architecture?showComments=true#comments
 public class MultiBrowserSeleniumClientInvocationHandler implements InvocationHandler {
     private List<SeleniumClient> clients;
     private final long MAX_WAIT;
     private final boolean VERIFY_RETURN_VALUES;
     private final boolean PARALLEL;
 
+    private ExecutorService executorService;
+
     public MultiBrowserSeleniumClientInvocationHandler(List<SeleniumConfiguration> configs, long maxWait,
-                                                       boolean verifyReturnValues, boolean parallel) {
+                                                       boolean verifyReturnValues, boolean parallel)
+    {
         clients = new LinkedList<SeleniumClient>();
 
-        for (SeleniumConfiguration config : configs) {
+        for (SeleniumConfiguration config : configs)
+        {
             SeleniumClient client = new SingleBrowserSeleniumClient(config);
             client.start();
             clients.add(client);
         }
-        this.MAX_WAIT = maxWait;
         this.VERIFY_RETURN_VALUES = verifyReturnValues;
         this.PARALLEL = parallel;
+
+        if(PARALLEL)
+        {
+            executorService = Executors.newFixedThreadPool(clients.size());
+            this.MAX_WAIT = maxWait;
+        }
+        else
+        {
+            // i.e. sequential execution
+            executorService = Executors.newSingleThreadExecutor();
+            this.MAX_WAIT = maxWait * clients.size();
+        }
     }
 
 
-    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+    public synchronized Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         Object o;
 
-        if (PARALLEL) {
-            o = parallel(proxy, method, args);
-        } else {
-            o = sequential(proxy, method, args);
+        List<Future<Object>> futures = new ArrayList(clients.size());
+
+        for (final SeleniumClient client : clients)
+        {
+            futures.add(executorService.submit(new MethodHandlerCallable(method, client, args)));
+        }
+        executorService.awaitTermination(MAX_WAIT, TimeUnit.MILLISECONDS);
+        if(VERIFY_RETURN_VALUES)
+        {
+            verifyReturnValues(futures);
         }
 
-        return o;
+        return futures.get(0).get();
     }
 
-    private Object sequential(Object proxy, Method method, Object[] args) throws Throwable {
-        CyclicBarrier barrier = new CyclicBarrier(2);
-
-        List<MethodHandlerThread> handlers = new LinkedList<MethodHandlerThread>();
-        for (final SeleniumClient client : clients) {
-            MethodHandlerThread handler = new MethodHandlerThread(method, client, args, barrier);
-            handler.start();
-            handlers.add(handler);
-            awaitBarrier(barrier);
-        }
-
-        checkExceptions(handlers);
-        if (VERIFY_RETURN_VALUES) {
-            verifyReturnValues(handlers);
-        }
-
-        return handlers.get(0).getReturnValue();
-    }
-
-    private Object parallel(Object proxy, Method method, Object[] args) throws Throwable {
-        CyclicBarrier barrier = new CyclicBarrier(clients.size() + 1);
-
-        List<MethodHandlerThread> handlers = new LinkedList<MethodHandlerThread>();
-        for (final SeleniumClient client : clients) {
-            MethodHandlerThread handler = new MethodHandlerThread(method, client, args, barrier);
-            handler.start();
-            handlers.add(handler);
-        }
-
-        awaitBarrier(barrier);
-
-        checkExceptions(handlers);
-        if (VERIFY_RETURN_VALUES) {
-            verifyReturnValues(handlers);
-        }
-
-        return handlers.get(0).getReturnValue();
-    }
-
-
-    protected void checkExceptions(List<MethodHandlerThread> commands) throws Exception {
-        for (MethodHandlerThread handler : commands) {
-            if (handler.getException() != null) {
-                throw new SeleniumException("Browser " + handler.getBrowser() +
-                        " failed with the following exception", handler.getException());
-            }
-        }
-    }
-
-
-    protected void verifyReturnValues(List<MethodHandlerThread> commands) {
-        if (commands.size() > 0) {
-            MethodHandlerThread first = commands.get(0);
-            for (MethodHandlerThread handler : commands) {
-                if (first.getReturnValue() == null) {
-                    if (handler.getReturnValue() != null) {
-                        throw createValueMismatchException(first, handler);
+    public void verifyReturnValues(List <Future<Object>> futures) throws Throwable
+    {
+        if (futures.size() > 0)
+        {
+            Object first = futures.get(0).get();
+            for(int i = 0; i < clients.size(); i++)
+            {
+                Object value = futures.get(i).get();
+                if (first == null)
+                {
+                    if (value != null)
+                    {
+                        throw createValueMismatchException(clients.get(0), first, clients.get(i), value);
                     }
-                } else {
-                    if (!first.getReturnValue().equals(handler.getReturnValue())) {
-                        throw createValueMismatchException(first, handler);
+                }
+                else
+                {
+                    if (!first.equals(value))
+                    {
+                        throw createValueMismatchException(clients.get(0), first, clients.get(i), value);
                     }
                 }
             }
         }
     }
 
-    protected SeleniumReturnValueMismatch createValueMismatchException(MethodHandlerThread h1, MethodHandlerThread h2) {
-        return new SeleniumReturnValueMismatch(h1.getBrowser(), h1.getReturnValue(),
-                h2.getBrowser(), h2.getReturnValue());
+    protected SeleniumReturnValueMismatch createValueMismatchException(SeleniumClient c1, Object h1,
+                                                                       SeleniumClient c2, Object h2) {
+        return new SeleniumReturnValueMismatch(c1.getBrowser(), h1, c2.getBrowser(), h2);
     }
-
-
-    protected void awaitBarrier(CyclicBarrier barrier) {
-        try {
-            barrier.await(MAX_WAIT, TimeUnit.MILLISECONDS);
-        }
-        catch (InterruptedException ex) {
-            throw new SeleniumException(ex);
-        }
-        catch (BrokenBarrierException ex) {
-            throw new SeleniumException(ex);
-        }
-        catch (TimeoutException ex) {
-            throw new SeleniumCommandTimedOutException();
-        }
-    }
-
 
 }
