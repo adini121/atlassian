@@ -51,7 +51,6 @@ public class SystemPropertySeleniumConfiguration extends AbstractSeleniumConfigu
         return (str == null) || (str.trim().length() == 0);
     }
 
-
     public String getServerLocation() {
         return serverLocation;
     }

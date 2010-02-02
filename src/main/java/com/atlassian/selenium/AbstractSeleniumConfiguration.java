@@ -22,4 +22,9 @@ public abstract class AbstractSeleniumConfiguration implements SeleniumConfigura
     {
         return 100;
     }
+
+    public String getFirefoxProfileTemplate() {
+        return null;
+    }
+    
 }

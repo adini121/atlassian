@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import org.openqa.selenium.server.SeleniumServer;
 import org.openqa.selenium.server.RemoteControlConfiguration;
 
+import java.io.File;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 import java.util.List;
@@ -69,6 +70,9 @@ public class SeleniumStarter
                 RemoteControlConfiguration rcConfig = new RemoteControlConfiguration();
                 rcConfig.setPort(config.getServerPort());
                 rcConfig.setDebugMode(true);
+                if (config.getFirefoxProfileTemplate() != null) {
+                    rcConfig.setFirefoxProfileTemplate(new File(config.getFirefoxProfileTemplate()));
+                }
                 server = new SeleniumServer(rcConfig);
             } catch (Exception e)
             {
