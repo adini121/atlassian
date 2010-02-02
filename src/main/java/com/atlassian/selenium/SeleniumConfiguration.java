@@ -25,6 +25,11 @@ public interface SeleniumConfiguration
     String getBrowserStartString();
 
     /**
+     * Gets firefox profile location
+     */
+    String getFirefoxProfileTemplate();
+
+    /**
      * The starting url for the browser
      */
     String getBaseUrl();
