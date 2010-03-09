@@ -6,15 +6,15 @@ import junit.framework.TestSuite;
 
 public class TestMultiBrowserSupportHarness
 {
-     public static Test suite()
-     {
-         final TestSuite suite = new SeleniumMultiTestSuite();
-         suite.addTestSuite(TestMultiBrowserSupport.class);
-         suite.addTestSuite(TestMultiBrowserSupport.class);
-         suite.addTestSuite(TestMultiBrowserSupport.class);
-         suite.addTestSuite(TestMultiBrowserSupport.class);
-         suite.addTestSuite(TestMultiBrowserSupport.class);
-         return suite;
-     }
+//     public static Test suite()
+//     {
+//         final TestSuite suite = new SeleniumMultiTestSuite();
+//         suite.addTestSuite(TestMultiBrowserSupport.class);
+//         suite.addTestSuite(TestMultiBrowserSupport.class);
+//         suite.addTestSuite(TestMultiBrowserSupport.class);
+//         suite.addTestSuite(TestMultiBrowserSupport.class);
+//         suite.addTestSuite(TestMultiBrowserSupport.class);
+//         return suite;
+//     }
     
 }
