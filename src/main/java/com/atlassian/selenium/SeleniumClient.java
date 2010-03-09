@@ -9,34 +9,6 @@ import com.thoughtworks.selenium.Selenium;
  */
 public interface SeleniumClient extends Selenium
 {
-    public enum Browser
-    {
-        FIREFOX("firefox"), OPERA("opera"), SAFARI("safari"), UNKNOWN("unkown"), IE("ie");
-
-        private final String name;
-
-        Browser(String name)
-        {
-            this.name = name;
-        }
-
-        public String getName()
-        {
-            return name;
-        }
-
-        public static Browser typeOf(String browserStartString)
-        {
-            for (Browser browser : Browser.values())
-            {
-                if(browserStartString.contains(browser.getName()))
-                {
-                    return browser;
-                }
-            }
-            return null;
-        }
-    }
 
     /**
      * Unlike {@link DefaultSelenium#open}, this opens the provided URL relative to the application context path.
