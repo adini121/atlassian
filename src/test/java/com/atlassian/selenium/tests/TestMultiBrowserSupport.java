@@ -24,13 +24,13 @@ public class TestMultiBrowserSupport extends SeleniumMultiTest
         return configs;
     }
 
-    public void testBasicFunctionality()
-    {
-        client.open("");
-        assertNotNull(client);
-        String title = client.getTitle();
-        assertNotNull(title);
-        assertTrue(title.equals("Google"));
-        System.out.println("TestMultiBrowserSupport.testBasicFunctionality");
-    }
+//    public void testBasicFunctionality()
+//    {
+//        client.open("");
+//        assertNotNull(client);
+//        String title = client.getTitle();
+//        assertNotNull(title);
+//        assertTrue(title.equals("Google"));
+//        System.out.println("TestMultiBrowserSupport.testBasicFunctionality");
+//    }
 }
