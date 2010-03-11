@@ -70,6 +70,7 @@ public class SeleniumStarter
                 RemoteControlConfiguration rcConfig = new RemoteControlConfiguration();
                 rcConfig.setPort(config.getServerPort());
                 rcConfig.setDebugMode(true);
+                rcConfig.setSingleWindow(true);                
                 if (config.getFirefoxProfileTemplate() != null) {
                     rcConfig.setFirefoxProfileTemplate(new File(config.getFirefoxProfileTemplate()));
                 }

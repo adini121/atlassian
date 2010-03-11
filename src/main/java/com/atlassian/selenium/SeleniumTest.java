@@ -61,11 +61,6 @@ public abstract class SeleniumTest extends TestCase
     {
         super.tearDown();
         onTearDown();
-
-        if(client != null)
-        {
-            client.close();
-        }
         
         if (SeleniumStarter.getInstance().isManual())
         {
