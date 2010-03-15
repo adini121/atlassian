@@ -56,4 +56,11 @@ public interface SeleniumConfiguration
      * @see {@link SeleniumAssertions#byTimeout(Condition)}
      */
     long getConditionCheckInterval();
+    
+    /**
+     * Only applies if Selenium Server is started by the Atlassian Selenium Framework
+     * Will run the selenium server in single browser window or split between a command
+     * window and a test window
+     */
+    boolean getSingleWindowMode();
 }

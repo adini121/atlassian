@@ -28,7 +28,7 @@ public abstract class AbstractSeleniumConfiguration implements SeleniumConfigura
         return null;
     }
     
-    public boolean getSingleWindowMode();
+    public boolean getSingleWindowMode()
     {
     	return false;
     }
