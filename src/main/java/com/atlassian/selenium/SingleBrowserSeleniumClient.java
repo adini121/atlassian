@@ -44,6 +44,10 @@ public class SingleBrowserSeleniumClient extends DefaultSelenium implements Sele
         return browser;
     }
 
+    public void seleniumKeyPress(String locator, String key) {
+        super.keyPress(locator, key);
+    }
+
     /**
      * Unlike {@link DefaultSelenium#open}, this opens the provided URL relative to the application context path.
      * It also waits for the page to load -- a maximum of {@link #PAGE_LOAD_WAIT} before returning.

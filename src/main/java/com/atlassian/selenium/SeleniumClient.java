@@ -208,4 +208,6 @@ public interface SeleniumClient extends Selenium
 
     public Browser getBrowser();
 
+    public void seleniumKeyPress(String locator, String key);
+
 }

@@ -129,8 +129,11 @@ public class SeleniumStarter
 
     public void stop()
     {
-        client.close();
-        client.stop();
+        if(client != null)
+        {
+            client.stop();
+        }
+        
         if(server != null)
         {
             server.stop();
