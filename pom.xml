@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.atlassian.pom</groupId>
         <artifactId>atlassian-public-pom</artifactId>
-        <version>17</version>
+        <version>23</version>
     </parent>
 
     <groupId>com.atlassian.selenium</groupId>
@@ -45,7 +45,7 @@
         <dependency>
             <groupId>org.seleniumhq.selenium.server</groupId>
             <artifactId>selenium-server</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.3</version>
             <classifier>standalone</classifier>
         </dependency>
     </dependencies>
