@@ -50,6 +50,10 @@ class AutoInstallConfiguration extends AbstractSeleniumConfiguration
                 {
                     setupFirefoxBrowser(seleniumDir, "linux", "Contents/MacOS/firefox-bin");
                 }
+                else if (OsValidator.isWindows())
+                {
+                    setupFirefoxBrowser(seleniumDir, "linux", "Contents/MacOS/firefox-bin");
+                }
             }
         }
         catch (IOException e)
