@@ -9,21 +9,16 @@
     </parent>
 
     <artifactId>atlassian-selenium-browsers</artifactId>
+    <name>${project.artifactId}</name>
     <description>
         A set of autoinstallable browsers
     </description>
-
-    <dependencies>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>atlassian-selenium</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>1.4</version>
-        </dependency>
-    </dependencies>
-
+    <packaging>pom</packaging>
+    
+    <modules>
+        <module>atlassian-selenium-browsers-auto</module>
+        <module>atlassian-selenium-browsers-linux</module>
+        <module>atlassian-selenium-browsers-osx</module>
+        <module>atlassian-selenium-browsers-windows</module>
+    </modules>
 </project>
