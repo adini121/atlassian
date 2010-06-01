@@ -48,11 +48,11 @@ class AutoInstallConfiguration extends AbstractSeleniumConfiguration
                 }
                 else if (OsValidator.isMac())
                 {
-                    setupFirefoxBrowser(seleniumDir, "linux", "Contents/MacOS/firefox-bin");
+                    setupFirefoxBrowser(seleniumDir, "osx", "Contents/MacOS/firefox-bin");
                 }
                 else if (OsValidator.isWindows())
                 {
-                    setupFirefoxBrowser(seleniumDir, "linux", "Contents/MacOS/firefox-bin");
+                    setupFirefoxBrowser(seleniumDir, "windows", "firefox.exe");
                 }
             }
         }
@@ -120,7 +120,7 @@ class AutoInstallConfiguration extends AbstractSeleniumConfiguration
             ZipEntry entry;
             while ((entry = zis.getNextEntry()) != null)
             {
-                System.out.println("Extracting: " + entry + " to " + targetDir.getName());
+                //System.out.println("Extracting: " + entry + " to " + targetDir.getName());
                 int count;
                 byte data[] = new byte[BUFFER];
                 // write the files to the disk
@@ -204,8 +204,7 @@ class AutoInstallConfiguration extends AbstractSeleniumConfiguration
         return firefoxProfileTemplate;
     }
 
-    private static int pickFreePort()
-
+    static int pickFreePort()
     {
         ServerSocket socket = null;
         try

@@ -1,6 +1,9 @@
 package com.atlassian.selenium.browsers;
 
+import com.atlassian.selenium.SeleniumAssertions;
+import com.atlassian.selenium.SeleniumClient;
 import com.atlassian.selenium.SeleniumConfiguration;
+import com.atlassian.selenium.SeleniumStarter;
 import com.atlassian.selenium.SingleBrowserSeleniumClient;
 
 /**
@@ -8,22 +11,31 @@ import com.atlassian.selenium.SingleBrowserSeleniumClient;
  *
  * @since 2.0
  */
-public class AutoInstallClient extends SingleBrowserSeleniumClient
+public class AutoInstallClient
 {
-    private static final AutoInstallClient CLIENT = new AutoInstallClient(AutoInstallConfiguration.getInstance());
+    private static final SeleniumClient CLIENT;
+
+    private static SeleniumAssertions assertThat;
 
     static
     {
-        CLIENT.start();
+        AutoInstallConfiguration config = AutoInstallConfiguration.getInstance();
+        if (SeleniumStarter.getInstance().isManual())
+        {
+            SeleniumStarter.getInstance().start(config);
+        }
+
+        CLIENT = SeleniumStarter.getInstance().getSeleniumClient(config);
+        assertThat = new SeleniumAssertions(CLIENT, config);
     }
 
-    private AutoInstallClient(SeleniumConfiguration config)
-    {
-        super(config);
-    }
-
-    public static AutoInstallClient seleniumClient()
+    public static SeleniumClient seleniumClient()
     {
         return CLIENT;
+    }
+
+    public static SeleniumAssertions assertThat()
+    {
+        return assertThat;
     }
 }
