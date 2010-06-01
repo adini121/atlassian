@@ -2,9 +2,9 @@ package com.atlassian.selenium.browsers;
 
 import com.atlassian.selenium.SeleniumAssertions;
 import com.atlassian.selenium.SeleniumClient;
-import com.atlassian.selenium.SeleniumConfiguration;
 import com.atlassian.selenium.SeleniumStarter;
-import com.atlassian.selenium.SingleBrowserSeleniumClient;
+
+import java.io.File;
 
 /**
  * Client that supports automatically installing the appropriate browser for the environment
@@ -13,25 +13,45 @@ import com.atlassian.selenium.SingleBrowserSeleniumClient;
  */
 public class AutoInstallClient
 {
-    private static final SeleniumClient CLIENT;
+    private static final SeleniumClient client;
+    private static boolean useXvfb = Boolean.parseBoolean(System.getProperty("xvfb.enable", "true"));
 
     private static SeleniumAssertions assertThat;
 
     static
     {
-        AutoInstallConfiguration config = AutoInstallConfiguration.getInstance();
+        File targetDir = new File("target");
+        File seleniumDir = new File(targetDir, "seleniumTmp");
+        seleniumDir.mkdirs();
+
+        /* This doesn't really work since we'd have to exec selenium server to get it to pick up the new display
+        final XvfbManager xvfb = new XvfbManager(seleniumDir);
+        if (useXvfb)
+        {
+            xvfb.start();
+            Runtime.getRuntime().addShutdownHook(new Thread()
+            {
+                @Override
+                public void run()
+                {
+                    xvfb.stop();
+                }
+            });
+        }
+        */
+        AutoInstallConfiguration config = new AutoInstallConfiguration(seleniumDir);
         if (SeleniumStarter.getInstance().isManual())
         {
             SeleniumStarter.getInstance().start(config);
         }
 
-        CLIENT = SeleniumStarter.getInstance().getSeleniumClient(config);
-        assertThat = new SeleniumAssertions(CLIENT, config);
+        client = SeleniumStarter.getInstance().getSeleniumClient(config);
+        assertThat = new SeleniumAssertions(client, config);
     }
 
     public static SeleniumClient seleniumClient()
     {
-        return CLIENT;
+        return client;
     }
 
     public static SeleniumAssertions assertThat()

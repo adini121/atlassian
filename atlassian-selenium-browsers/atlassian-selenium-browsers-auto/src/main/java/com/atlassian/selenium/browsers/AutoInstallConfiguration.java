@@ -10,6 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -28,16 +29,14 @@ class AutoInstallConfiguration extends AbstractSeleniumConfiguration
 
     private static final long MAX_WAIT_TIME = 10000;
     private static final long CONDITION_CHECK_INTERVAL = 100;
-    private static final AutoInstallConfiguration INSTANCE = new AutoInstallConfiguration();
 
     private String firefoxProfileTemplate;
     private String baseUrl;
     private String browser = BROWSER;
     private static final int BUFFER = 2048;
 
-    private AutoInstallConfiguration()
+    AutoInstallConfiguration(File seleniumDir)
     {
-        File seleniumDir = createSeleniumTmpDir();
         try
         {
             if (BROWSER.startsWith("firefox"))
@@ -85,14 +84,6 @@ class AutoInstallConfiguration extends AbstractSeleniumConfiguration
         File browserBin = new File(browserDir, binaryPath);
         browserBin.setExecutable(true);
         browser = "*chrome " + browserBin.getAbsolutePath();
-    }
-
-    private File createSeleniumTmpDir()
-    {
-        File targetDir = new File("target");
-        File seleniumDir = new File(targetDir, "seleniumTmp");
-        seleniumDir.mkdirs();
-        return seleniumDir;
     }
 
     private File extractZip(File seleniumDir, String internalPath) throws IOException
@@ -153,11 +144,6 @@ class AutoInstallConfiguration extends AbstractSeleniumConfiguration
         return targetDir;
     }
 
-    static AutoInstallConfiguration getInstance()
-    {
-        return INSTANCE;
-    }
-
     public String getServerLocation()
     {
         return LOCATION;
@@ -180,7 +166,20 @@ class AutoInstallConfiguration extends AbstractSeleniumConfiguration
 
     public boolean getStartSeleniumServer()
     {
-        return true;
+        return !isPortInUse();
+    }
+
+    private boolean isPortInUse()
+    {
+        try
+        {
+            new Socket("localhost", getServerPort());
+            return true;
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
     }
 
     public long getActionWait()
