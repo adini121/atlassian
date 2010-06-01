@@ -1,16 +1,15 @@
 package com.atlassian.selenium.browsers;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
+import org.apache.commons.io.FileUtils;
+
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.math.BigInteger;
-import java.net.ConnectException;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.Random;
 
 import static com.atlassian.selenium.browsers.ProcessRunner.runProcess;
@@ -56,7 +55,7 @@ public class XvfbManager
     /**
      * A list of additional options to pass to the Xvfb process.
      */
-    String[] options = System.getProperty("xvfb.options", "").split(",");
+    String[] options = System.getProperty("xvfb.options", "-once").split(",");
 
     /**
      * Enable logging mode.
@@ -96,7 +95,7 @@ public class XvfbManager
         System.out.println("Using display: " + display);
 
         List<String> cmd = new ArrayList<String>();
-        cmd.add(xauthExecutable);
+        cmd.add(xvfbExecutable);
         cmd.add(display);
         cmd.addAll(asList(options));
 
@@ -108,17 +107,21 @@ public class XvfbManager
             procBuilder.environment().put("XAUTHORITY", authenticationFile.getAbsolutePath());
         }
 
+        writeDisplayProperties();
         File logFile = null;
         if (logOutput)
         {
-            logFile = new File(baseTmpDir, "xfvb.log");
+            logFile = new File(baseTmpDir, "xvfb.log");
             System.out.println("Redirecting output to: " + logFile.getPath());
         }
-        xfvbProcess = runProcessInBackground(procBuilder, authenticationFile);
-        while(!isDisplayInUse(display))
+        xfvbProcess = runProcessInBackground(procBuilder, logFile);
+        System.out.println("Waiting till xvfb is up...");
+        while (!isDisplayInUse(display))
         {
             try
             {
+                System.out.println('.');
+                System.out.flush();
                 Thread.sleep(100);
             }
             catch (InterruptedException e)
@@ -126,7 +129,7 @@ public class XvfbManager
                 // ignore
             }
         }
-
+        System.out.println("xvfb is up!");
     }
 
     public File getXAuthenticationFile()
@@ -150,6 +153,26 @@ public class XvfbManager
             xfvbProcess.destroy();
         }
     }
+
+    private void writeDisplayProperties()
+    {
+        try
+        {
+            String text = "DISPLAY='" + display + "'\n";
+            // Write the xauth file so clients pick up the right perms
+            if (xauthEnabled)
+            {
+                text += "XAUTHORITY='" + authenticationFile.getCanonicalPath() + "'\n";
+            }
+            File propFile = new File(baseTmpDir, "xvfb.env.properties");
+            FileUtils.writeStringToFile(propFile, text);
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException("Unable to save display properties", e);
+        }
+    }
+
 
     /**
      * Generate a 128-bit random hexadecimal number for use with the X authority system.
@@ -175,7 +198,6 @@ public class XvfbManager
     private File setupXauthority()
     {
         File authenticationFile = new File(baseTmpDir, "Xvfb.Xauthority");
-        authenticationFile.deleteOnExit();
 
         System.out.println("Using Xauthority file: " + authenticationFile.getPath());
 
@@ -248,7 +270,6 @@ public class XvfbManager
     private boolean isDisplayInUse(String display)
     {
         int port = decodeDisplayPort(display);
-
         try
         {
             new Socket("localhost", port);

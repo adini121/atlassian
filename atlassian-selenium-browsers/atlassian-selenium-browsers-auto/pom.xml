@@ -31,6 +31,22 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <systemProperties>
+                        <property>
+                            <name>xvfb.enable</name>
+                            <value>${xvfb.enable}</value>
+                        </property>
+                    </systemProperties>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
     <profiles>
         <profile>
             <id>windows</id>
@@ -54,6 +70,9 @@
                     <family>unix</family>
                 </os>
             </activation>
+            <properties>
+                <xvfb.enable>true</xvfb.enable>
+            </properties>
             <dependencies>
                 <dependency>
                     <groupId>${project.groupId}</groupId>

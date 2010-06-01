@@ -14,7 +14,7 @@ import java.io.File;
 public class AutoInstallClient
 {
     private static final SeleniumClient client;
-    private static boolean useXvfb = Boolean.parseBoolean(System.getProperty("xvfb.enable", "true"));
+    private static boolean useXvfb = Boolean.parseBoolean(System.getProperty("xvfb.enable", "false"));
 
     private static SeleniumAssertions assertThat;
 
@@ -24,7 +24,7 @@ public class AutoInstallClient
         File seleniumDir = new File(targetDir, "seleniumTmp");
         seleniumDir.mkdirs();
 
-        /* This doesn't really work since we'd have to exec selenium server to get it to pick up the new display
+        /* This doesn't really work since we'd have to exec selenium server to get it to pick up the new display */
         final XvfbManager xvfb = new XvfbManager(seleniumDir);
         if (useXvfb)
         {
@@ -38,8 +38,8 @@ public class AutoInstallClient
                 }
             });
         }
-        */
-        AutoInstallConfiguration config = new AutoInstallConfiguration(seleniumDir);
+
+        AutoInstallConfiguration config = new AutoInstallConfiguration(seleniumDir, useXvfb);
         if (SeleniumStarter.getInstance().isManual())
         {
             SeleniumStarter.getInstance().start(config);

@@ -1,7 +1,9 @@
 package com.atlassian.selenium.browsers;
 
 import com.atlassian.selenium.AbstractSeleniumConfiguration;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.openqa.selenium.server.browserlaunchers.UnixUtils;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -35,7 +37,7 @@ class AutoInstallConfiguration extends AbstractSeleniumConfiguration
     private String browser = BROWSER;
     private static final int BUFFER = 2048;
 
-    AutoInstallConfiguration(File seleniumDir)
+    AutoInstallConfiguration(final File seleniumDir, boolean xvfbEnabled)
     {
         try
         {
@@ -43,7 +45,32 @@ class AutoInstallConfiguration extends AbstractSeleniumConfiguration
             {
                 if (OsValidator.isUnix())
                 {
-                    setupFirefoxBrowser(seleniumDir, "linux", "firefox-bin");
+                    // To make it work with xvfb, which requires firefox to be started on a different display, we
+                    // use a shell script that sets the display env variable, fires up firefox, then records its
+                    // pid in a file, so we can kill it afterwards.
+                    setupFirefoxBrowser(seleniumDir, "linux", "run-firefox-with-xvfb.sh");
+                    if (!xvfbEnabled)
+                    {
+                        Runtime.getRuntime().addShutdownHook(new Thread()
+                        {
+                            @Override
+                            public void run()
+                            {
+                                try
+                                {
+                                    String pid = FileUtils.readFileToString(new File(seleniumDir, "firefox.pid"));
+                                    pid.trim();
+                                    pid = pid.substring(0, pid.length() - 1);
+                                    System.out.println("Killing firefox pid: " + pid);
+                                    UnixUtils.kill9(Integer.parseInt(pid));
+                                }
+                                catch (IOException e)
+                                {
+                                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                                }
+                            }
+                        });
+                    }
                 }
                 else if (OsValidator.isMac())
                 {
