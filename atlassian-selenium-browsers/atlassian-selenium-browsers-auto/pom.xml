@@ -75,7 +75,8 @@
                 </os>
             </activation>
             <properties>
-                <xvfb.enable>false</xvfb.enable>
+                <xvfb.enable>true</xvfb.enable>
+                <xvfb.display>:20</xvfb.display>
             </properties>
             <dependencies>
                 <dependency>
