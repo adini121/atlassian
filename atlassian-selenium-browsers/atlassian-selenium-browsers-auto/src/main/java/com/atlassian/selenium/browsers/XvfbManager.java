@@ -30,7 +30,7 @@ public class XvfbManager
      * Use 'xauth' to setup permissions for the Xvfb server.  This requires 'xauth' be installed
      * and may be required when an X server is already running.
      */
-    boolean xauthEnabled = Boolean.parseBoolean(System.getProperty("xvfb.xauth.enable", "false"));
+    boolean xauthEnabled = Boolean.parseBoolean(System.getProperty("xvfb.xauth.enable", "true"));
 
     /**
      * The 'xauth' command to execute.
