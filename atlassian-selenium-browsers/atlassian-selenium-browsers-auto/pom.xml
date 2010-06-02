@@ -41,6 +41,10 @@
                             <name>xvfb.enable</name>
                             <value>${xvfb.enable}</value>
                         </property>
+                        <property>
+                            <name>xvfb.display</name>
+                            <value>${xvfb.display}</value>
+                        </property>
                     </systemProperties>
                 </configuration>
             </plugin>
