@@ -3,6 +3,8 @@ package com.atlassian.selenium.browsers;
 import com.atlassian.selenium.AbstractSeleniumConfiguration;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.taskdefs.ExecTask;
 import org.openqa.selenium.server.browserlaunchers.UnixUtils;
 
 import java.io.BufferedInputStream;
@@ -15,6 +17,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+
+import static com.atlassian.selenium.browsers.ProcessRunner.runProcess;
 
 /**
  * Configures Selenium by detecting if installation of a browser is required, and if so, installs it for this session.
@@ -109,7 +113,7 @@ class AutoInstallConfiguration extends AbstractSeleniumConfiguration
         File profileDir = extractZip(seleniumDir, "/" + osDirName + "/" + profileName + ".zip");
         firefoxProfileTemplate = profileDir.getAbsolutePath();
         File browserBin = new File(browserDir, binaryPath);
-        browserBin.setExecutable(true);
+        make755(browserBin);
         browser = "*chrome " + browserBin.getAbsolutePath();
     }
 
@@ -228,6 +232,12 @@ class AutoInstallConfiguration extends AbstractSeleniumConfiguration
     public String getFirefoxProfileTemplate()
     {
         return firefoxProfileTemplate;
+    }
+
+    /** runs "chmod 755 " on the specified File */
+    public static void make755(File file) throws IOException
+    {
+        runProcess(new ProcessBuilder("chmod", "755", file.getCanonicalPath()));
     }
 
     static int pickFreePort()
