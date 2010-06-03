@@ -2,6 +2,7 @@ package com.atlassian.selenium.browsers;
 
 import com.atlassian.selenium.SeleniumAssertions;
 import com.atlassian.selenium.SeleniumClient;
+import com.atlassian.selenium.SeleniumConfiguration;
 import com.atlassian.selenium.SeleniumStarter;
 
 import java.io.File;
@@ -17,6 +18,7 @@ public class AutoInstallClient
     private static boolean useXvfb = Boolean.parseBoolean(System.getProperty("xvfb.enable", "false"));
 
     private static SeleniumAssertions assertThat;
+    private static AutoInstallConfiguration config;
 
     static
     {
@@ -39,7 +41,7 @@ public class AutoInstallClient
             });
         }
 
-        AutoInstallConfiguration config = new AutoInstallConfiguration(seleniumDir, useXvfb);
+        config = new AutoInstallConfiguration(seleniumDir, useXvfb);
         if (SeleniumStarter.getInstance().isManual())
         {
             SeleniumStarter.getInstance().start(config);
@@ -57,5 +59,10 @@ public class AutoInstallClient
     public static SeleniumAssertions assertThat()
     {
         return assertThat;
+    }
+
+    public static SeleniumConfiguration seleniumConfiguration()
+    {
+        return config;
     }
 }
