@@ -229,9 +229,7 @@ public class XvfbManager
     private String detectUsableDisplay()
     {
         boolean found = false;
-        int n = DEFAULT_DISPLAY_NUMBER;
-
-        while (!found && (n <= DEFAULT_DISPLAY_NUMBER + 10))
+        for (int n = DEFAULT_DISPLAY_NUMBER; n < DEFAULT_DISPLAY_NUMBER + 10; n++)
         {
             String d = ":" + n;
 
@@ -239,12 +237,7 @@ public class XvfbManager
             {
                 return d;
             }
-            else
-            {
-                n++;
-            }
         }
-
         throw new RuntimeException("Count not find a usable display");
     }
 
