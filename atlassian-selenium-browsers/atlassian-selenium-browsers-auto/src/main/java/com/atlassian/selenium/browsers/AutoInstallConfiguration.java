@@ -1,10 +1,12 @@
 package com.atlassian.selenium.browsers;
 
 import com.atlassian.selenium.AbstractSeleniumConfiguration;
+import com.atlassian.selenium.browsers.firefox.DisplayAwareFirefoxChromeLauncher;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.ExecTask;
+import org.openqa.selenium.server.browserlaunchers.BrowserLauncherFactory;
 import org.openqa.selenium.server.browserlaunchers.UnixUtils;
 
 import java.io.BufferedInputStream;
@@ -40,8 +42,9 @@ class AutoInstallConfiguration extends AbstractSeleniumConfiguration
     private String baseUrl;
     private String browser = BROWSER;
     private static final int BUFFER = 2048;
+    public static final String CHROME_XVFB = "chromeXvfb";
 
-    AutoInstallConfiguration(final File seleniumDir, boolean xvfbEnabled)
+    AutoInstallConfiguration(final File seleniumDir, String display)
     {
         try
         {
@@ -49,32 +52,13 @@ class AutoInstallConfiguration extends AbstractSeleniumConfiguration
             {
                 if (OsValidator.isUnix())
                 {
-                    // To make it work with xvfb, which requires firefox to be started on a different display, we
-                    // use a shell script that sets the display env variable, fires up firefox, then records its
-                    // pid in a file, so we can kill it afterwards.
-                    setupFirefoxBrowser(seleniumDir, "linux", "run-firefox-with-xvfb.sh");
-                    if (!xvfbEnabled)
+                    // We use a custom browser launcher that sets the display env variable
+                    if (display != null)
                     {
-                        Runtime.getRuntime().addShutdownHook(new Thread()
-                        {
-                            @Override
-                            public void run()
-                            {
-                                try
-                                {
-                                    String pid = FileUtils.readFileToString(new File(seleniumDir, "firefox.pid"));
-                                    pid.trim();
-                                    pid = pid.substring(0, pid.length() - 1);
-                                    System.out.println("Killing firefox pid: " + pid);
-                                    UnixUtils.kill9(Integer.parseInt(pid));
-                                }
-                                catch (IOException e)
-                                {
-                                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                                }
-                            }
-                        });
+                        System.setProperty("DISPLAY", display);
                     }
+                    BrowserLauncherFactory.addBrowserLauncher(CHROME_XVFB, DisplayAwareFirefoxChromeLauncher.class);
+                    setupFirefoxBrowser(seleniumDir, "linux", "firefox-bin");
                 }
                 else if (OsValidator.isMac())
                 {
@@ -114,7 +98,7 @@ class AutoInstallConfiguration extends AbstractSeleniumConfiguration
         firefoxProfileTemplate = profileDir.getAbsolutePath();
         File browserBin = new File(browserDir, binaryPath);
         make755(browserBin);
-        browser = "*chrome " + browserBin.getAbsolutePath();
+        browser = "*" + CHROME_XVFB + " " + browserBin.getAbsolutePath();
     }
 
     private File extractZip(File seleniumDir, String internalPath) throws IOException

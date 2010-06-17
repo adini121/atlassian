@@ -26,11 +26,19 @@ public class AutoInstallClient
         File seleniumDir = new File(targetDir, "seleniumTmp");
         seleniumDir.mkdirs();
 
-        /* This doesn't really work since we'd have to exec selenium server to get it to pick up the new display */
         final XvfbManager xvfb = new XvfbManager(seleniumDir);
         if (useXvfb)
         {
             xvfb.start();
+            try
+            {
+                // TODO: Probably could add a more intelligent polling bit here
+                Thread.sleep(1000);
+            }
+            catch (InterruptedException e)
+            {
+                // ignore
+            }
             Runtime.getRuntime().addShutdownHook(new Thread()
             {
                 @Override
@@ -41,7 +49,7 @@ public class AutoInstallClient
             });
         }
 
-        config = new AutoInstallConfiguration(seleniumDir, useXvfb);
+        config = new AutoInstallConfiguration(seleniumDir, xvfb.getDisplay());
         if (SeleniumStarter.getInstance().isManual())
         {
             SeleniumStarter.getInstance().start(config);
