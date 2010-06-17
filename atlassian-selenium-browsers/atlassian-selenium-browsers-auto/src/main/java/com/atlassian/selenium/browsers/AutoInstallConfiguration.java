@@ -50,6 +50,7 @@ class AutoInstallConfiguration extends AbstractSeleniumConfiguration
         {
             if (BROWSER.startsWith("firefox"))
             {
+                BrowserLauncherFactory.addBrowserLauncher(CHROME_XVFB, DisplayAwareFirefoxChromeLauncher.class);
                 if (OsValidator.isUnix())
                 {
                     // We use a custom browser launcher that sets the display env variable
@@ -57,7 +58,6 @@ class AutoInstallConfiguration extends AbstractSeleniumConfiguration
                     {
                         System.setProperty("DISPLAY", display);
                     }
-                    BrowserLauncherFactory.addBrowserLauncher(CHROME_XVFB, DisplayAwareFirefoxChromeLauncher.class);
                     setupFirefoxBrowser(seleniumDir, "linux", "firefox-bin");
                 }
                 else if (OsValidator.isMac())
