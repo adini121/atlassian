@@ -53,7 +53,7 @@ class AutoInstallConfiguration extends AbstractSeleniumConfiguration
                     // use a shell script that sets the display env variable, fires up firefox, then records its
                     // pid in a file, so we can kill it afterwards.
                     setupFirefoxBrowser(seleniumDir, "linux", "run-firefox-with-xvfb.sh");
-                    /*if (!xvfbEnabled)
+                    if (!xvfbEnabled)
                     {
                         Runtime.getRuntime().addShutdownHook(new Thread()
                         {
@@ -75,7 +75,6 @@ class AutoInstallConfiguration extends AbstractSeleniumConfiguration
                             }
                         });
                     }
-                    */
                 }
                 else if (OsValidator.isMac())
                 {
