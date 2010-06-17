@@ -27,7 +27,7 @@ public class AutoInstallClient
         seleniumDir.mkdirs();
 
         final XvfbManager xvfb = new XvfbManager(seleniumDir);
-        if (useXvfb)
+        if (useXvfb && OsValidator.isUnix())
         {
             xvfb.start();
             try
