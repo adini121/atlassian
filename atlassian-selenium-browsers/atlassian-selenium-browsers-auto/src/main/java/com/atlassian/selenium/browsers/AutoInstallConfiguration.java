@@ -34,11 +34,12 @@ class AutoInstallConfiguration extends AbstractSeleniumConfiguration
     private static final int PORT = Integer.getInteger("selenium.port", pickFreePort());
     private static final String BROWSER = System.getProperty("selenium.browser", "firefox-3.5");
     private static final String BASE_URL = System.getProperty("baseurl", "http://localhost:8080/");
+    private static final String BROWSER_PROFILE = System.getProperty("selenium.browser.profile");
 
     private static final long MAX_WAIT_TIME = 10000;
     private static final long CONDITION_CHECK_INTERVAL = 100;
 
-    private String firefoxProfileTemplate;
+    private String firefoxProfileTemplate = BROWSER_PROFILE;
     private String baseUrl;
     private String browser = BROWSER;
     private static final int BUFFER = 2048;
@@ -48,9 +49,10 @@ class AutoInstallConfiguration extends AbstractSeleniumConfiguration
     {
         try
         {
+            BrowserLauncherFactory.addBrowserLauncher(CHROME_XVFB, DisplayAwareFirefoxChromeLauncher.class);
             if (BROWSER.startsWith("firefox"))
             {
-                BrowserLauncherFactory.addBrowserLauncher(CHROME_XVFB, DisplayAwareFirefoxChromeLauncher.class);
+
                 if (OsValidator.isUnix())
                 {
                     // We use a custom browser launcher that sets the display env variable

@@ -21,6 +21,7 @@ import org.openqa.selenium.server.BrowserConfigurationOptions;
 import org.openqa.selenium.server.RemoteControlConfiguration;
 import org.openqa.selenium.server.browserlaunchers.BrowserInstallation;
 import org.openqa.selenium.server.browserlaunchers.BrowserLauncher;
+import org.openqa.selenium.server.browserlaunchers.FirefoxChromeLauncher;
 import org.openqa.selenium.server.browserlaunchers.FirefoxCustomProfileLauncher;
 import org.openqa.selenium.server.browserlaunchers.InvalidBrowserExecutableException;
 import org.openqa.selenium.server.browserlaunchers.ProxyInjectionFirefoxCustomProfileLauncher;
@@ -62,7 +63,7 @@ public class DisplayAwareFirefoxLauncher implements BrowserLauncher
             realLauncher = new DisplayAwareFirefoxChromeLauncher(browserOptions, configuration, sessionId, installation);
             return;
         }
-
+        
         boolean proxyInjectionMode = browserOptions.is("proxyInjectionMode") || "proxyInjection".equals(mode);
 
         // You can't just individually configure a browser for PI mode; it's a server-level configuration parameter
