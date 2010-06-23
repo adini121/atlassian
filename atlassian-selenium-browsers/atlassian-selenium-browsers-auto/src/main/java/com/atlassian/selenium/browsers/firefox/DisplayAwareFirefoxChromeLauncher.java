@@ -80,7 +80,7 @@ public class DisplayAwareFirefoxChromeLauncher extends AbstractBrowserLauncher
     // http://blog.dojotoolkit.org/2005/12/01/running-multiple-versions-of-firefox-side-by-side
     shell.setEnvironmentVariable("MOZ_NO_REMOTE", "1");
     if (System.getProperty("DISPLAY") != null){
-      shell.setEnvironmentVariable("DISPLAY", System.getProperty("DISPLAYc"));
+      shell.setEnvironmentVariable("DISPLAY", System.getProperty("DISPLAY"));
     }
   }
 
