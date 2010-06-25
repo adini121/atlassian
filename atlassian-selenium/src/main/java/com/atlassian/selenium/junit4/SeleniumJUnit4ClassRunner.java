@@ -1,12 +1,17 @@
-package com.atlassian.selenium;
+package com.atlassian.selenium.junit4;
 
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.InitializationError;
 
 /**
- * A test runner that registers a listener {@link it.com.atlassian.applinks.CaptureScreenshotListener}
- * to capture screenshots if a test fails.
+ * A JUNIT 4 test runner that registers the {@link it.com.atlassian.applinks.CaptureScreenshotListener} before executing a test.
+ * This test runner can be applied by using the {@link org.junit.runner.RunWith} annotation on the test class.
+ *
+ * Example:
+ *
+ *    @RunWith(SeleniumJUnit4ClassRunner.class)
+ *    public class MySeleniumTest
  *
  * @since 2.0
  */
