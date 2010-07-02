@@ -1,7 +1,7 @@
 package webdriver.browsers;
 
 import com.atlassian.browsers.BrowserConfiguration;
-import com.atlassian.browsers.browser.BrowserVersion;
+import com.atlassian.browsers.BrowserVersion;
 
 import java.io.File;
 

@@ -1,14 +1,11 @@
 package com.atlassian.browsers;
 
-import com.atlassian.browsers.browser.BrowserInstaller;
 import org.apache.commons.lang.Validate;
 
 import java.io.File;
 
 /**
- * TODO: Document this class / interface here
  *
- * @since v4.2
  */
 public class BrowserAutoInstaller
 {
@@ -17,24 +14,28 @@ public class BrowserAutoInstaller
     public static final String CHROME_XVFB = "chromeXvfb";
 
     private BrowserConfiguration browserConfiguration;
-    private InstallConfigurator installConfigurator;
+    private DefaultBrowserInstallConfigurator installConfigurator;
 
-    public BrowserAutoInstaller(Class<? extends BrowserConfiguration> clazz, InstallConfigurator configurator) {
+    /**
+     * Takes a browserConfiration which defines specifics for each client and a InstallConfigurator which
+     * allows post setup tasks to be executed specific for each client.
+     * @param browserConfiguration
+     * @param configurator
+     */
+    public BrowserAutoInstaller(BrowserConfiguration browserConfiguration, InstallConfigurator configurator) {
 
-        Validate.notNull(clazz, "Browser Configuration class can not be null.");
+        Validate.notNull(browserConfiguration, "Browser Configuration can not be null.");
         Validate.notNull(configurator, "The Install configurator cannot be null.");
 
-        try {
-            browserConfiguration = clazz.newInstance();
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException(e);
-        }
-
-        this.installConfigurator = configurator;
+        this.browserConfiguration = browserConfiguration;
+        this.installConfigurator = new DefaultBrowserInstallConfigurator(configurator);
     }
 
+    /**
+     * Setups the temporary directy to install the browser into as well as setting the dsiplay if required for
+     * Unix operating systems.
+     * The browser installer then installs the browser into the temporary directory.
+     */
     public void setupBrowser()
     {
         File tmpDir = browserConfiguration.getTmpDir();
@@ -57,6 +58,10 @@ public class BrowserAutoInstaller
 
     }
 
+    /**
+     * Creates the xvfbManager if required.
+     * @param tmpDir
+     */
     private void createXvfbManager(File tmpDir)
     {
         final XvfbManager xvfb = new XvfbManager(tmpDir);

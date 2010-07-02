@@ -1,13 +1,9 @@
 package com.atlassian.browsers;
 
-import com.atlassian.browsers.browser.BrowserConfig;
-
-import java.io.File;
-
 /**
- * TODO: Document this class / interface here
- *
- * @since v4.2
+ * An abstract class which needs to be passed to the BrowserAutoInstaller.
+ * For each browser type there is a setup*Browser* method which is called by the BrowserAutoInstaller
+ * and takes the browserConfig and performs additional setup tasks.
  */
 public abstract class InstallConfigurator
 {

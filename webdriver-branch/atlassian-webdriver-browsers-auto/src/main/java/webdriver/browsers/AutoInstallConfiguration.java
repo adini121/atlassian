@@ -2,7 +2,7 @@ package webdriver.browsers;
 
 import com.atlassian.browsers.InstallConfigurator;
 import com.atlassian.browsers.BrowserAutoInstaller;
-import com.atlassian.browsers.browser.BrowserConfig;
+import com.atlassian.browsers.BrowserConfig;
 
 
 /**
@@ -17,7 +17,7 @@ public class AutoInstallConfiguration
     public AutoInstallConfiguration()
     {
 
-        BrowserAutoInstaller browserAutoInstaller = new BrowserAutoInstaller(WebDriverBrowserConfiguration.class,
+        BrowserAutoInstaller browserAutoInstaller = new BrowserAutoInstaller(new WebDriverBrowserConfiguration(),
             new InstallConfigurator() {
 
                 @Override

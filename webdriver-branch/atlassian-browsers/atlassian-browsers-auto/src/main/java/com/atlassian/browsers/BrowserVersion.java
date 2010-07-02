@@ -1,9 +1,7 @@
-package com.atlassian.browsers.browser;
+package com.atlassian.browsers;
 
 /**
- * TODO: Document this class / interface here
- *
- * @since v4.2
+ * Defines the available browser versions.
  */
 public enum BrowserVersion
 {
@@ -23,6 +21,11 @@ public enum BrowserVersion
         return browserName;
     }
 
+    /**
+     * Determines the browser version based on the browser string passed in.
+     * @param browserStr The browser string to check
+     * @return The BrowserVersion enum or null if it's not found.
+     */
     public static BrowserVersion typeOf(String browserStr)
     {
         for (BrowserVersion browser : BrowserVersion.values())

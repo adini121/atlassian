@@ -2,7 +2,7 @@ package com.atlassian.selenium.browsers;
 
 import com.atlassian.browsers.InstallConfigurator;
 import com.atlassian.browsers.BrowserAutoInstaller;
-import com.atlassian.browsers.browser.BrowserConfig;
+import com.atlassian.browsers.BrowserConfig;
 import com.atlassian.selenium.AbstractSeleniumConfiguration;
 import com.atlassian.selenium.browsers.firefox.DisplayAwareFirefoxChromeLauncher;
 import org.openqa.selenium.server.browserlaunchers.BrowserLauncherFactory;
@@ -40,7 +40,7 @@ class AutoInstallConfiguration extends AbstractSeleniumConfiguration
     AutoInstallConfiguration()
     {
 
-        BrowserAutoInstaller browserInstaller = new BrowserAutoInstaller(SeleniumBrowserConfiguration.class,
+        BrowserAutoInstaller browserInstaller = new BrowserAutoInstaller(new SeleniumBrowserConfiguration(),
             new InstallConfigurator() {
                 public void setupFirefoxBrowser(BrowserConfig browserConfig)
                 {

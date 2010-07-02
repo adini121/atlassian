@@ -1,23 +1,17 @@
-package com.atlassian.browsers.browser;
-
-import com.atlassian.browsers.InstallConfigurator;
-import com.atlassian.browsers.OS;
-import com.atlassian.browsers.Utils;
+package com.atlassian.browsers;
 
 import java.io.File;
 import java.io.IOException;
 
 /**
- * TODO: Document this file here
+ * Defaines the browser version, OS and the executable path for each browser version.
  */
-public enum BrowserInstaller
+enum BrowserInstaller
 {
     FIREFOX_WINDOWS_3_5(BrowserVersion.FIREFOX_3_5, OS.WINDOWS, "firefox.exe"),
     FIREFOX_LINUX_3_5(BrowserVersion.FIREFOX_3_5, OS.LINUX, "firefox-bin"),
     FIREFOX_OSX_3_5(BrowserVersion.FIREFOX_3_5, OS.OSX, "Contents/MacOS/firefox-bin"),
     FIREFOX_OSX_3_6(BrowserVersion.FIREFOX_3_6, OS.OSX, "Contents/MacOS/firefox-bin"),
-//    CHROME_WINDOWS_5(BrowserVersion.CHROME_5, "windows", "chrome.exe"),
-//    CHROME_LINUX_5("linux", "chrome-bin"),
     CHROME_MAC_5(BrowserVersion.CHROME_5, OS.OSX, "Contents/MacOS/chrome-bin");
 
     private final BrowserVersion browser;
@@ -51,6 +45,11 @@ public enum BrowserInstaller
         return binaryPath;
     }
 
+    /**
+     * Determins the BrowserInstaller based on the browserStr passed and the current OS.
+     * @param browserStr the browserStr that defines the BrowserInstaller that is needed.
+     * @return The browser installer if it exists otherwise null.
+     */
     public static BrowserInstaller typeOf(String browserStr)
     {
         OS os = OS.getType();
@@ -67,7 +66,15 @@ public enum BrowserInstaller
         return null;
     }
 
-    public void install(File tmpDir, InstallConfigurator installConfigurator)
+    /**
+     * Installs the current browser into the destination directory specified by
+     * extracting the browser zip file.
+     * If there is a profile zip for the browser it will also extract this.
+     * Then the correct permissions are applied to the required files.
+     * @param destDir The location to extract the browser into. This is the parent directory for the browser.
+     * @param installConfigurator 
+     */
+    public void install(File destDir, DefaultBrowserInstallConfigurator installConfigurator)
     {
         String browserName = browser.getBrowserName();
         String binaryPath = getBinaryPath();
@@ -80,39 +87,20 @@ public enum BrowserInstaller
         File browserProfile = null;
 
         try {
-            File browserDir = Utils.extractZip(tmpDir, browserResource);
+            File browserDir = Utils.extractZip(destDir, browserResource);
 
             if (Utils.resourceExists(profileResource))
             {
-                browserProfile = Utils.extractZip(tmpDir, profileResource);
+                browserProfile = Utils.extractZip(destDir, profileResource);
             }
 
             File browserBinary = new File(browserDir, binaryPath);
 
-            if (this.equals(CHROME_MAC_5))
-            {
-                Utils.make755(new File(browserDir, "Contents/Versions/5.0.375.70/Google Chrome Helper.app/Contents/MacOS/Google Chrome Helper"));
-            }
-
             Utils.make755(browserBinary);
 
-            BrowserConfig browserConfig = new BrowserConfig(browserBinary, browserProfile);
+            BrowserConfig browserConfig = new BrowserConfig(browserDir, browserBinary, browserProfile);
 
-
-            switch (browser)
-            {
-                case FIREFOX_3_5:
-                case FIREFOX_3_6:
-                    installConfigurator.setupFirefoxBrowser(browserConfig);
-                    break;
-                case CHROME_5:
-                    installConfigurator.setupChromeBrowser(browserConfig);
-                    break;
-
-                default:
-                    throw new RuntimeException("BrowserInstaller does not handle browser: " + browserName);
-            }
-
+            installConfigurator.setupBrowser(browser, browserConfig);
 
         } catch(IOException e)
         {

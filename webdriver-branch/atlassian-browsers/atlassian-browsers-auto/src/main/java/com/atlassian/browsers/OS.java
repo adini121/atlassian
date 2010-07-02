@@ -1,9 +1,9 @@
 package com.atlassian.browsers;
 
 /**
- * TODO: Document this file here
+ * An enumeration for the Operating Systems.
  */
-public enum OS
+enum OS
 {
     WINDOWS("windows"),
     OSX("osx"),
@@ -21,6 +21,11 @@ public enum OS
         return name;
     }
 
+    /**
+     * Determines the OS type based on the result from OsValidator.
+     * @return The OS
+     * @see com.atlassian.browsers.OsValidator
+     */
     public static OS getType()
     {
         if (OsValidator.isMac())

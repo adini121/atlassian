@@ -17,7 +17,7 @@ import static java.util.Arrays.asList;
 /**
  *
  */
-public class XvfbManager
+class XvfbManager
 {
     /**
      * The 'Xvfb' command to execute.

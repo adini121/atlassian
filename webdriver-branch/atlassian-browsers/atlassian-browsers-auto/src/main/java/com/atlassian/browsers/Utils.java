@@ -5,7 +5,9 @@ import org.apache.commons.io.IOUtils;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.zip.ZipEntry;
@@ -14,9 +16,7 @@ import java.util.zip.ZipInputStream;
 import static com.atlassian.browsers.ProcessRunner.runProcess;
 
 /**
- * TODO: Document this class / interface here
- *
- * @since v4.2
+ * Utilities used by the BrowserAutoInstaller
  */
 public class Utils
 {
@@ -31,6 +31,61 @@ public class Utils
         runProcess(new ProcessBuilder("chmod", "755", file.getCanonicalPath()));
     }
 
+    /**
+     * Recursively searches for a file in a given path.
+     * @param in the path to look in
+     * @param file the file name to look for
+     * @param exactMatch whether the filename must equal or contain the file name you are looking for
+     * @return
+     * @throws IOException
+     */
+    public static File findFile(File in, final String file, final boolean exactMatch) throws IOException
+    {
+        File[] files = in.listFiles(new FilenameFilter() {
+            public boolean accept(File dir, String name) {
+
+                boolean isDir = new File(dir, name).isDirectory();
+
+                if (exactMatch)
+                {
+                    return !isDir && name.equals(file);
+                }
+                else
+                {
+                    return !isDir && name.contains(file);
+                }
+            }
+        });
+
+        if (files.length > 0)
+        {
+            return files[0];
+        }
+
+        File[] dirs = in.listFiles(new FileFilter() {
+            public boolean accept(final File pathname)
+            {
+                return pathname.isDirectory();
+            }
+        });
+
+        for(File dir : dirs)
+        {
+            File f = findFile(dir, file, exactMatch);
+            if (f != null)
+            {
+                return f;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Checks that a resource exists for the given path.
+     * @param path the path to check
+     * @return true if the resource at the given path exists
+     */
     public static boolean resourceExists(String path)
     {
         InputStream internalStream = Utils.class.getResourceAsStream(path);
@@ -42,11 +97,18 @@ public class Utils
         return true;
     }
 
-    public static File extractZip(File tmpDir, String internalPath) throws IOException
+    /**
+     * Will extract a zip file given by the internal path into the destination dir given
+     * @param destDir The File indicating the directory to unzip the file into. This will become the parent directory.
+     * @param internalPath The path to the zip file.
+     * @return The directory that the zip file was extracted into.
+     * @throws IOException
+     */
+    public static File extractZip(File destDir, String internalPath) throws IOException
     {
         InputStream internalStream = null;
 
-        File targetDir = new File(tmpDir, internalPath.substring(internalPath.lastIndexOf('/'), internalPath.length() - ".zip".length()));
+        File targetDir = new File(destDir, internalPath.substring(internalPath.lastIndexOf('/'), internalPath.length() - ".zip".length()));
         if (targetDir.exists())
         {
             return targetDir;

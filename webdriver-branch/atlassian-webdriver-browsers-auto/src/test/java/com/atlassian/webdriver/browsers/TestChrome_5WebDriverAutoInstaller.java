@@ -10,9 +10,7 @@ import webdriver.browsers.WebdriverBrowserAutoInstall;
 import static org.testng.Assert.assertEquals;
 
 /**
- * TODO: Document this class / interface here
- *
- * @since v4.2
+ * 
  */
 public class TestChrome_5WebDriverAutoInstaller extends WebDriverAutoInstallerTest
 {

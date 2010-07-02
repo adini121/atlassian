@@ -10,9 +10,7 @@ import webdriver.browsers.WebdriverBrowserAutoInstall;
 import static org.testng.Assert.assertEquals;
 
 /**
- * TODO: Document this class / interface here
- *
- * @since v4.2
+ * 
  */
 public class TestFirefox3_6WebDriverAutoInstaller extends WebDriverAutoInstallerTest
 {
@@ -28,6 +26,7 @@ public class TestFirefox3_6WebDriverAutoInstaller extends WebDriverAutoInstaller
         AtlassianWebDriver.waitUntil(new VisibilityOfElementLocated(By.tagName("h1")));
         assertEquals(driver.findElement(By.tagName("h1")).getText(), "Hello");
         AtlassianWebDriver.quitDriver();
+
     }
 
 }

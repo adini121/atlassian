@@ -5,7 +5,7 @@ package com.atlassian.browsers;
  *
  * @since 2.0
  */
-public class OsValidator
+class OsValidator
 {
     private static String os = System.getProperty("os.name").toLowerCase();
 
