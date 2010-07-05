@@ -3,9 +3,7 @@ package com.atlassian.webdriver.page.jira;
 import org.openqa.selenium.WebDriver;
 
 /**
- * TODO: Document this class / interface here
- *
- * @since v4.2
+ * Page object implementation for the Logout page in JIRA. 
  */
 public class LogoutPage extends JiraWebDriverPage
 {

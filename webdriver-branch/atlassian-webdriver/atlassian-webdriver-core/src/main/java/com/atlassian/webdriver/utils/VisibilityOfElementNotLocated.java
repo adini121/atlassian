@@ -6,9 +6,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 
 /**
- * TODO: Document this class / interface here
- *
- * @since v4.2
+ * Continues to execute until a particular element is no longer located.
  */
 public class VisibilityOfElementNotLocated implements ExpectedCondition<Boolean>
 {

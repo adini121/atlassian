@@ -7,9 +7,7 @@ import java.util.Set;
 
 
 /**
- * TODO: Document this class / interface here
- *
- * @since v4.2
+ * A class that represents a User in JIRA.
  */
 public class User
 {

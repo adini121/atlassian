@@ -1,9 +1,7 @@
 package com.atlassian.webdriver.component.jira.group;
 
 /**
- * TODO: Document this class / interface here
- *
- * @since v4.2
+ * A class for that represents a Group object in JIRA.
  */
 public class Group
 {

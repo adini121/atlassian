@@ -5,9 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 /**
- * TODO: Document this class / interface here
- *
- * @since v4.2
+ * JavaScript Utilities for executing specific javascript events.
  */
 public class JavaScriptUtils
 {
@@ -19,14 +17,20 @@ public class JavaScriptUtils
         return execute("return arguments[0].innerHTML", driver, element);
     }
 
-    public static void dispatchEvent(String event, WebElement el, WebDriver driver)
+    /**
+     * Dispatches a javascript mouse event in the browser on a specified element
+     * @param event The name of the event to dispatch. eg. load.
+     * @param el The element to fire the event on.
+     * @param driver the webdriver instance that executes the javascript event.
+     */
+    public static void dispatchMouseEvent(String event, WebElement el, WebDriver driver)
     {
 
         // TODO: move this to a real js file and import the file if needed.
         String js = "if ( document.createEvent ) {"
                 + "var eventObj = document.createEvent('MouseEvents');"
                 + "eventObj.initEvent('" + event + "', true, true);"
-                + "arguments[0].dispatchEvent(eventObj)"
+                + "arguments[0].dispatchMouseEvent(eventObj)"
                 + "} else if ( document.createEventObject ) {"
                 + "arguments[0].fireEvent('on" + event + "');"
                 + "}";

@@ -5,23 +5,33 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 /**
- * TODO: Document this class / interface here
- *
- * @since v4.2
+ * Implements mouse events that are not handled correctly in WebDriver atm.
  */
 public class MouseEvents
 {
 
     private MouseEvents() {}
 
+    /**
+     * Fires a mouse over event on an element that matches the By
+     * @param by the element matcher to apply the hover to.
+     * @param driver
+     * @return
+     */
     public static WebElement hover(By by, WebDriver driver)
     {
         return hover(driver.findElement(by), driver);
     }
 
+    /**
+     * Fires a mouse over event on the specified element.
+     * @param el The element to fire the hover event on.
+     * @param driver
+     * @return
+     */
     public static WebElement hover(WebElement el, WebDriver driver)
     {
-        JavaScriptUtils.dispatchEvent("mouseover", el, driver);
+        JavaScriptUtils.dispatchMouseEvent("mouseover", el, driver);
 
         return el;
     }

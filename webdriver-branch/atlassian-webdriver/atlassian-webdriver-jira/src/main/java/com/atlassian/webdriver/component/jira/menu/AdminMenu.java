@@ -10,9 +10,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 /**
- * TODO: Document this class / interface here
- *
- * @since v4.2
+ * Object for interacting with the Admin menu in the JIRA header.
+ * TODO: extend for all available links.
  */
 public class AdminMenu extends DropdownMenu
 {

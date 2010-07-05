@@ -8,15 +8,21 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * TODO: Document this class / interface here
- *
- * @since v4.2
+ * Search utilties
  */
 public class Search
 {
 
     private Search() {}
 
+    /**
+     * Searches for an element that contains a specific child element.
+     * This is useful when multiple elements on a page are the same but a child node is unqiue.
+     * @param searchElements the parent elements to look for the child element within.
+     * @param childFind The child to look for.
+     * @param driver
+     * @return The parent web element that contains the child element.
+     */
     public static WebElement findElementWithChildElement(By searchElements, By childFind, WebDriver driver)
     {
 

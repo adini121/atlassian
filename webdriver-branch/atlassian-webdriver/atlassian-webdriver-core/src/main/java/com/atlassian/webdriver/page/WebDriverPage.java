@@ -8,9 +8,8 @@ import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 /**
- * TODO: Document this class / interface here
- *
- * @since v4.2
+ * The base class that a PageObject should extend.
+ * It contains helper methods for interacting with a page.
  */
 public abstract class WebDriverPage implements PageObject
 {
@@ -43,12 +42,12 @@ public abstract class WebDriverPage implements PageObject
         }
     }
 
-    public boolean at(String uri)
+    protected boolean at(String uri)
     {
         return driver.getCurrentUrl().equals(baseUrl + uri);
     }
 
-    public void goTo(String uri)
+    protected void goTo(String uri)
     {
         driver.get(baseUrl + uri);
     }

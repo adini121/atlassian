@@ -7,9 +7,8 @@ import org.openqa.selenium.WebElement;
 import java.util.List;
 
 /**
- * TODO: Document this class / interface here
- *
- * @since v4.2
+ * GadgetView is an implentation of the internal view for a gadget and just extends a
+ * WebElement so all the normal methods that WebDriver exposes on web elements is available.
  */
 public class GadgetView implements WebElement
 {
@@ -20,6 +19,10 @@ public class GadgetView implements WebElement
         this.view = view;
     }
 
+    /**
+     * Closes the Gadget view and returns the WebDriver context back to the default content
+     * Which is usually the Dashboard content.
+     */
     public void close()
     {
         AtlassianWebDriver.getDriver().switchTo().defaultContent();

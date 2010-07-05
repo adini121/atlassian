@@ -6,9 +6,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 
 /**
- * TODO: Document this class / interface here
- *
- * @since v4.2
+ * Implements an ExpectedCondition that looks for the visiblity of another element.
+ * The apply command will continue to execute until the element is visible.
  */
 public class VisibilityOfElementLocated implements ExpectedCondition<Boolean>
 {

@@ -6,7 +6,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 /**
- * Simple implementation for a DashboardPage view TODO: extend to handle more operations like addGadget.
+ * Page object implementation for the Dashbaord page in JIRA.
+ * TODO: extend to handle more operations like addGadget.
  */
 public class DashboardPage extends JiraWebDriverPage
 {

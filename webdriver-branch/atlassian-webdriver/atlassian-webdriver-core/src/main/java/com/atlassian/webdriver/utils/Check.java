@@ -7,20 +7,29 @@ import org.openqa.selenium.WebElement;
 
 
 /**
- * TODO: Document this class / interface here
- *
- * @since v4.2
+ * Utilities for doing simple checks on a page.
  */
 public class Check
 {
 
     private Check() {}
 
+    /**
+     * Checks that an element that matches the by exists.
+     * @param by
+     * @return
+     */
     public static boolean elementExists(By by)
     {
         return elementExists(by, null);
     }
 
+    /**
+     * Checks that an element that matches the by param exists within another element.
+     * @param by
+     * @param el
+     * @return
+     */
     public static boolean elementExists(By by, WebElement el)
     {
 
@@ -44,6 +53,12 @@ public class Check
 
     }
 
+    /**
+     * Checks to see if a specified element contains a specific class of not.
+     * @param className
+     * @param el
+     * @return
+     */
     public static boolean hasClass(String className, WebElement el)
     {
 
@@ -68,6 +83,12 @@ public class Check
         return false;
     }
 
+    /**
+     * Checks to see if the given text is found on the page or not.
+     * This is done by checking the page source.
+     * @param text
+     * @return
+     */
     public static boolean pageContains(String text)
     {
         return AtlassianWebDriver.getDriver().getPageSource().contains(text);

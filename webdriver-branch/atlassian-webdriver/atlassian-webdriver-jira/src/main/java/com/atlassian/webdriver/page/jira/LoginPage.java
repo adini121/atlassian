@@ -6,9 +6,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 /**
- * TODO: Document this class / interface here
- *
- * @since v4.2
+ * Page object implementation for the LoginPage in JIRA.
  */
 public class LoginPage extends JiraWebDriverPage
 {

@@ -8,9 +8,8 @@ import org.junit.BeforeClass;
 import org.openqa.selenium.WebDriver;
 
 /**
- * TODO: Document this class / interface here
- *
- * @since v4.2
+ * The base class that a Test should extend inorder to ensure that
+ * WebDriver is started up and stopped correctly.
  */
 abstract public class WebDriverTest
 {

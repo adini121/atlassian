@@ -7,9 +7,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 /**
- * TODO: Document this class / interface here
- *
- * @since v4.2
+ * Object for interacting with the User Menu in the JIRA Header.
+ * TODO: extend with full list of available links.
  */
 public class UserMenu extends DropdownMenu
 {

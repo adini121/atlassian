@@ -12,9 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * TODO: Document this class / interface here
- *
- * @since v4.2
+ * Page object implementation for the License details page in JIRA.
  */
 public class LicenseDetailsPage extends JiraWebDriverPage
 {

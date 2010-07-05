@@ -1,9 +1,7 @@
 package com.atlassian.webdriver.page;
 
 /**
- * TODO: Document this class / interface here
- *
- * @since v4.2
+ * The implemenation for a PageObject
  */
 public interface PageObject
 {

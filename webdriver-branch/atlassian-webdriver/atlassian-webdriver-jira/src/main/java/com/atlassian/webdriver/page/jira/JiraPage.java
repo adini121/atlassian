@@ -7,7 +7,9 @@ import org.openqa.selenium.WebDriver;
 
 
 /**
- * TODO: Document this file here
+ * Provides a enum of all the pages that are available in JIRA.
+ * Using the get method a object of the page class will be returned.
+ * eg. JiraPage.LOGIN.get(webdriver) will return an instance of the LoginPage object.
  */
 public enum JiraPage implements Page
 {

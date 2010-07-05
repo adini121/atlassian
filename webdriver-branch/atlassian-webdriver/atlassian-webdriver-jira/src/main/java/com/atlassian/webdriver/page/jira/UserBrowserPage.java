@@ -14,6 +14,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 /**
+ * Page object implementation for the User browser page in JIRA.
  * TODO: Handle pagination when there are more users
  */
 public class UserBrowserPage extends JiraWebDriverPage

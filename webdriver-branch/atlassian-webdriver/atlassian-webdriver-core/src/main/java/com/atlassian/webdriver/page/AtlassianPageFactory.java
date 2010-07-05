@@ -6,9 +6,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
 
 /**
- * TODO: Document this class / interface here
- *
- * @since v4.2
+ * 
  */
 public class AtlassianPageFactory
 {

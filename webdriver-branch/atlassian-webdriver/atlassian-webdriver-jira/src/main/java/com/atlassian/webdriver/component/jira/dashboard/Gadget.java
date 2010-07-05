@@ -9,9 +9,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 /**
- * TODO: Document this class / interface here
- *
- * @since v4.2
+ * Implements a object for interacting with a JIRA Dashboard Gadget.
  */
 public class Gadget
 {
@@ -42,7 +40,7 @@ public class Gadget
     }
 
     /**
-     * Switches to the gadget iframe and returns a GadgetView
+     * Switches to the gadget iframe and returns a GadgetView which is the html page for the gadget.
      * @return
      */
     public GadgetView view()
