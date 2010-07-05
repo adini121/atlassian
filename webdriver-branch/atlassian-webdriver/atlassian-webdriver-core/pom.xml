@@ -11,6 +11,8 @@
 
     <artifactId>atlassian-webdriver-core</artifactId>
 
+    <name>${project.artifactId}</name>
+
     <repositories>
         <repository>
               <id>selenium-repository</id>

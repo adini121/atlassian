@@ -18,6 +18,7 @@ import java.util.Set;
  */
 public class UserBrowserPage extends JiraWebDriverPage
 {
+    private static final String URI = "/secure/admin/user/UserBrowser.jspa";
 
     private String MAX = "1000000";
     private String TEN = "10";
@@ -43,12 +44,9 @@ public class UserBrowserPage extends JiraWebDriverPage
         users = new HashSet<User>();
     }
 
-    public UserBrowserPage get()
+    public UserBrowserPage get(boolean activated)
     {
-        if (!at("/secure/admin/user/UserBrowser.jspa"))
-        {
-            goTo("/secure/admin/user/UserBrowser.jspa");
-        }
+        get(URI, activated);
 
         filterSubmit = driver.findElement(By.cssSelector("form[name=\"jiraform\"] input[type=\"submit\"]"));
 
@@ -74,7 +72,7 @@ public class UserBrowserPage extends JiraWebDriverPage
         driver.findElement(By.name("userNameFilter")).sendKeys(username);
         filterSubmit.click();
 
-        return JiraPage.USERBROWSER.get(driver);
+        return JiraPage.USERBROWSER.get(driver, true);
     }
 
     private void setUserFilterToShowAllUsers()

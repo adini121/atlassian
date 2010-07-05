@@ -41,6 +41,10 @@ public class Gadget
         this.chrome = driver.findElement(By.id(chromeId));
     }
 
+    /**
+     * Switches to the gadget iframe and returns a GadgetView
+     * @return
+     */
     public GadgetView view()
     {
         driver.switchTo().frame(frameId);

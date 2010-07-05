@@ -14,19 +14,20 @@ import org.openqa.selenium.WebDriver;
  */
 abstract public class WebDriverTest
 {
-    protected WebDriver driver;
+    protected static WebDriver driver;
 
     @BeforeClass
-    protected void startWebDriver()
+    public static void startWebDriver()
     {
         driver = AtlassianWebDriver.getDriver();
     }
 
 
     @AfterClass
-    protected void closeSession()
+    public static void closeSession()
     {
         AtlassianWebDriver.quitDriver();
+        driver = null;
     }
 
 }

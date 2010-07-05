@@ -1,44 +1,43 @@
 package com.atlassian.webdriver.page.jira;
 
-
+import com.atlassian.webdriver.page.AtlassianPageFactory;
 import com.atlassian.webdriver.page.Page;
+import com.atlassian.webdriver.page.PageObject;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.PageFactory;
+
 
 /**
  * TODO: Document this file here
  */
-public enum JiraPage
+public enum JiraPage implements Page
 {
-    LOGIN("com.atlassian.hosted.webdriver.jira.page.LoginPage"),
-    LOGOUT("com.atlassian.hosted.webdriver.jira.page.LogoutPage"),
-    DASHBOARD("com.atlassian.hosted.webdriver.jira.page.DashboardPage"),
-    PLUGINS("com.atlassian.hosted.webdriver.jira.page.PluginsPage"),
-    LICENSEDETAILS("com.atlassian.hosted.webdriver.jira.page.LicenseDetailsPage"),
-    USERBROWSER("com.atlassian.hosted.webdriver.jira.page.UserBrowserPage");
+    LOGIN(LoginPage.class),
+    LOGOUT(LogoutPage.class),
+    DASHBOARD(DashboardPage.class),
+    PLUGINS(PluginsPage.class),
+    LICENSEDETAILS(LicenseDetailsPage.class),
+    USERBROWSER(UserBrowserPage.class);
 
-    String className;
+    Class clazz;
 
-    JiraPage(String className)
+    JiraPage(Class clazz)
     {
-        this.className = className;
+        this.clazz = clazz;
     }
 
-    @SuppressWarnings ("unchecked")
-    public <T extends Page> T get(WebDriver driver)
+    public Class getPageClass()
     {
+        return this.clazz;
+    }
 
-        Class c;
-        try
-        {
-            c = Class.forName(this.className);
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException(e);
-        }
+    public <T extends PageObject> T get(WebDriver driver)
+    {
+        return (T) this.get(driver, false);
+    }
 
-        return (T) ((T) PageFactory.initElements(driver, c)).get();
+    public <T extends PageObject> T get(WebDriver driver, boolean activated)
+    {
+        return (T) AtlassianPageFactory.get(driver, this, activated);
     }
 
 }

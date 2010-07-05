@@ -24,30 +24,24 @@ public class AdminMenu extends DropdownMenu
 
     public PluginsPage gotoPluginsPage()
     {
-        open();
+        open().click("plugins_lnk");
 
-        menuItem.findElement(By.id("plugins")).click();
-
-        return JiraPage.PLUGINS.get(getDriver());
+        return JiraPage.PLUGINS.get(getDriver(), true);
 
     }
 
     public LicenseDetailsPage gotoLicenseDetailsPage()
     {
-        open();
+        open().click("license_details_lnk");
 
-        menuItem.findElement(By.id("license_details")).click();
-
-        return JiraPage.LICENSEDETAILS.get(getDriver());
+        return JiraPage.LICENSEDETAILS.get(getDriver(), true);
     }
 
     public UserBrowserPage gotoUserBrowserPage()
     {
-        open();
+        open().click("user_browser_lnk");
 
-        menuItem.findElement(By.id("user_browser_lnk")).click();
-
-        return JiraPage.USERBROWSER.get(getDriver());
+        return JiraPage.USERBROWSER.get(getDriver(), true);
     }
 
 }

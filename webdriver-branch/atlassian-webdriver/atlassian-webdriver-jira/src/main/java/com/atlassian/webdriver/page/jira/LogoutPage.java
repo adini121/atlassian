@@ -9,18 +9,18 @@ import org.openqa.selenium.WebDriver;
  */
 public class LogoutPage extends JiraWebDriverPage
 {
+
+    private static final String URI = "/secure/Logout!default.jspa";
+
     public LogoutPage(WebDriver driver)
     {
         super(driver);
     }
 
-    public LogoutPage get()
+    public LogoutPage get(boolean activated)
     {
 
-        if (!at("/secure/Logout!default.jspa"))
-        {
-            goTo("/secure/Logout!default.jspa");
-        }
+        get(URI, activated);
 
         return this;
 

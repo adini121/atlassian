@@ -12,6 +12,8 @@
     <artifactId>atlassian-webdriver</artifactId>
     <packaging>pom</packaging>
 
+    <name>${project.artifactId}</name>
+
     <modules>
         <module>atlassian-webdriver-core</module>
         <module>atlassian-webdriver-jira</module>

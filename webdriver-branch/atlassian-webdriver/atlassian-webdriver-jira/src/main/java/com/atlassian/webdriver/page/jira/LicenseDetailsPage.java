@@ -19,6 +19,8 @@ import java.util.regex.Pattern;
 public class LicenseDetailsPage extends JiraWebDriverPage
 {
 
+    private static final String URI = "/secure/admin/jira/ViewLicense!default.jspa";
+
     @FindBy (id = "license_table")
     WebElement licenseTable;
 
@@ -33,12 +35,9 @@ public class LicenseDetailsPage extends JiraWebDriverPage
         super(driver);
     }
 
-    public LicenseDetailsPage get()
+    public LicenseDetailsPage get(boolean activated)
     {
-        if (!at("/secure/admin/jira/ViewLicense!default.jspa"))
-        {
-            goTo("/secure/admin/jira/ViewLicense!default.jspa");
-        }
+        get(URI, activated);
 
         waitUntilLocated(By.id("license_table"));
 
@@ -120,7 +119,7 @@ public class LicenseDetailsPage extends JiraWebDriverPage
 
         addLicenseButton.click();
 
-        return JiraPage.LICENSEDETAILS.get(driver);
+        return JiraPage.LICENSEDETAILS.get(driver, true);
     }
 
 

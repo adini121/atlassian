@@ -12,6 +12,7 @@ import org.openqa.selenium.support.FindBy;
  */
 public class LoginPage extends JiraWebDriverPage
 {
+    private static final String URI = "/login.jsp";
 
     @FindBy (id = "usernameinput")
     private WebElement usernameField;
@@ -30,9 +31,10 @@ public class LoginPage extends JiraWebDriverPage
         super(driver);
     }
 
-    public LoginPage get()
+    public LoginPage get(boolean activated)
     {
-        goTo("/login.jsp");
+        get(URI, activated);
+        
         return this;
     }
 
@@ -53,7 +55,7 @@ public class LoginPage extends JiraWebDriverPage
 
         loginButton.click();
 
-        return JiraPage.DASHBOARD.get(driver);
+        return JiraPage.DASHBOARD.get(driver, true);
     }
 
 

@@ -10,20 +10,16 @@ import org.openqa.selenium.WebDriver;
  */
 public class DashboardPage extends JiraWebDriverPage
 {
+    private static final String URI = "/secure/Dashboard.jspa";
 
     public DashboardPage(WebDriver driver)
     {
         super(driver);
     }
 
-    public DashboardPage get()
+    public DashboardPage get(boolean activated)
     {
-
-        if (!at("/secure/Dashboard.jspa"))
-        {
-            goTo("/secure/Dashboard.jspa");
-        }
-
+        get(URI, activated);
         waitUntilLocated(By.className("layout"));
 
         return this;

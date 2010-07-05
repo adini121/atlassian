@@ -15,7 +15,7 @@ import org.openqa.selenium.WebElement;
 public class DropdownMenu extends Menu
 {
 
-    protected WebElement menuItem;
+    private WebElement menuItem;
 
 
     public DropdownMenu(By by, WebDriver driver)
@@ -30,12 +30,12 @@ public class DropdownMenu extends Menu
         this.menuItem = menuItem;
     }
 
-    protected boolean isOpen()
+    private boolean isOpen()
     {
         return Check.hasClass("active", menuItem);
     }
 
-    protected void open()
+    public DropdownMenu open()
     {
         if (!isOpen())
         {
@@ -45,9 +45,16 @@ public class DropdownMenu extends Menu
         // Wait until the menu has finished loading items
         AtlassianWebDriver.waitUntil(new VisibilityOfElementNotLocated(By.className("loading"), menuItem));
 
+        return this;
+
     }
 
-    protected void close()
+    public void click(String itemId)
+    {
+        menuItem.findElement(By.id(itemId)).click();
+    }
+
+    public void close()
     {
         if (isOpen())
         {

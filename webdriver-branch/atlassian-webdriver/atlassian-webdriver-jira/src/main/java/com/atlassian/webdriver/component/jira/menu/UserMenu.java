@@ -21,11 +21,9 @@ public class UserMenu extends DropdownMenu
 
     public LogoutPage logout()
     {
-        open();
+        open().click("log_out");
 
-        menuItem.findElement(By.id("log_out")).click();
-
-        return JiraPage.LOGOUT.get(getDriver());
+        return JiraPage.LOGOUT.get(getDriver(), true);
     }
 
 }

@@ -18,7 +18,7 @@ public class JiraWebDriverTest extends WebDriverTest
 
     public DashboardPage login(User user)
     {
-        LoginPage loginPage = JiraPage.LOGIN.get(this.driver);
+        LoginPage loginPage = JiraPage.LOGIN.get(driver);
         DashboardPage dashboard = loginPage.login(user);
 
         assertTrue("User: " + user.getUsername() + " failed to login", dashboard.isLoggedInAsUser(user));

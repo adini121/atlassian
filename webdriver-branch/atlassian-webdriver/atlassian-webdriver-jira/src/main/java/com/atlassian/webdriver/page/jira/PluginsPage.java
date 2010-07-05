@@ -19,6 +19,8 @@ import java.util.Set;
  */
 public class PluginsPage extends JiraWebDriverPage
 {
+    private final static String URI = "/secure/admin/jira/ViewPlugins!default.jspa";
+
     private static final String PLUGIN_KEY = "pluginKey=";
     private final Map<String, WebElement> loadedPlugins;
     private String activePluginKey;
@@ -32,12 +34,9 @@ public class PluginsPage extends JiraWebDriverPage
         this.pluginsWithErrors = new HashSet<String>();
     }
 
-    public PluginsPage get()
+    public PluginsPage get(boolean activated)
     {
-        if (!at("/secure/admin/jira/ViewPlugins!default.jspa"))
-        {
-            goTo("/secure/admin/jira/ViewPlugins!default.jspa");
-        }
+        get(URI, activated);
 
         getLoadedPlugins();
 
@@ -59,7 +58,7 @@ public class PluginsPage extends JiraWebDriverPage
         if (pluginIsLoaded(pluginKey))
         {
             loadedPlugins.get(pluginKey).click();
-            return JiraPage.PLUGINS.get(driver);
+            return JiraPage.PLUGINS.get(driver, true);
         }
 
         return null;
