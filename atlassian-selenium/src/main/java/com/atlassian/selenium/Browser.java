@@ -2,7 +2,7 @@ package com.atlassian.selenium;
 
 
 public enum Browser {
-    FIREFOX("firefox"), OPERA("opera"), SAFARI("safari"), UNKNOWN("unkown"), IE("ie");
+    FIREFOX("firefox"), OPERA("opera"), SAFARI("safari"), UNKNOWN("unkown"), IE("ie"), GOOGLE_CHROME("googlechrome");
 
     private final String name;
 
@@ -25,7 +25,7 @@ public enum Browser {
                 return browser;
             }
         }
-        return null;
+        return UNKNOWN;
     }
 
 }
