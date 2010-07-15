@@ -1,0 +1,119 @@
+package com.atlassian.webdriver.page.confluence;
+
+
+import com.atlassian.webdriver.utils.ByJquery;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+/**
+ * TODO: Document this class / interface here
+ *
+ * @since v4.2
+ */
+public class PluginsPage extends ConfluenceWebDriverPage
+{
+    private static final String PLUGIN_KEY = "pluginKey=";
+    private static final String URI = "/viewplugins.action";
+    private final Map<String, WebElement> loadedPlugins;
+    private String activePluginKey;
+    private final Set<String> pluginsWithErrors;
+    private final Set<String> disabledPlugins;
+
+    public PluginsPage(WebDriver driver)
+    {
+        super(driver);
+        loadedPlugins = new HashMap<String, WebElement>();
+        pluginsWithErrors = new HashSet<String>();
+        disabledPlugins = new HashSet<String>();
+    }
+
+    public PluginsPage get(final boolean activated)
+    {
+        get(URI, activated);
+
+        waitForLoadedPlugins();
+
+        return this;
+    }
+
+    public PluginsPage selectPlugin(String pluginKey)
+    {
+        if (pluginIsLoaded(pluginKey))
+        {
+            loadedPlugins.get(pluginKey).click();
+            return ConfluencePage.PLUGINSPAGE.get(driver, true);
+        }
+
+        return null;
+    }
+
+    public boolean pluginIsLoaded(String pluginKey)
+    {
+        return loadedPlugins.containsKey(pluginKey);
+    }
+
+    public Set<String> getPluginsWithLoadingErrors()
+    {
+        return pluginsWithErrors;
+    }
+
+    public Set<String> getDisabledPlugins()
+    {
+        return disabledPlugins;
+    }
+
+    public String getActivePluginKey()
+    {
+        return activePluginKey;
+    }
+
+    private void waitForLoadedPlugins()
+    {
+
+        WebElement table = driver.findElement(ByJquery.$("td.pagebody table table > tbody"));
+
+        List<WebElement> pluginAnchors = table.findElements(ByJquery.$("tr td a[href^=viewplugins]"));
+        List<WebElement> pluginAnchorsWithErrors = table.findElements(ByJquery.$("tr td:contains(Errors loading plugin) a"));
+        List<WebElement> disabledPluginAnchors = table.findElements(ByJquery.$("tr td:contains(Plugin disabled) a"));
+
+        WebElement activePluginAnchor = table.findElement(ByJquery.$("tr td > strong > a"));
+        String activePluginUrl = activePluginAnchor.getAttribute("href");
+        int activePluginKeyIndex = activePluginUrl.indexOf(PLUGIN_KEY);
+        this.activePluginKey = activePluginUrl.substring(activePluginKeyIndex + PLUGIN_KEY.length());
+
+        for (WebElement pluginAnchor : pluginAnchors)
+        {
+            String pluginUrl = pluginAnchor.getAttribute("href");
+            int pluginKeyIndex = pluginUrl.indexOf(PLUGIN_KEY);
+            String pluginKey = pluginUrl.substring(pluginKeyIndex + PLUGIN_KEY.length());
+
+            loadedPlugins.put(pluginKey, pluginAnchor);
+        }
+
+        for (WebElement pluginAnchor : pluginAnchorsWithErrors)
+        {
+            String pluginUrl = pluginAnchor.getAttribute("href");
+            int pluginKeyIndex = pluginUrl.indexOf(PLUGIN_KEY);
+            String pluginKey = pluginUrl.substring(pluginKeyIndex + PLUGIN_KEY.length());
+
+            pluginsWithErrors.add(pluginKey);
+        }
+
+        for (WebElement pluginAnchor : disabledPluginAnchors)
+        {
+            String pluginUrl = pluginAnchor.getAttribute("href");
+            int pluginKeyIndex = pluginUrl.indexOf(PLUGIN_KEY);
+            String pluginKey = pluginUrl.substring(pluginKeyIndex + PLUGIN_KEY.length());
+
+            disabledPlugins.add(pluginKey);
+        }
+
+    }
+
+}
