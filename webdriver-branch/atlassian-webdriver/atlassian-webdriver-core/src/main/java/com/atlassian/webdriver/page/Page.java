@@ -7,7 +7,26 @@ import org.openqa.selenium.WebDriver;
  *
  * @since v4.2
  */
-public interface Page
+public class Page<T extends PageObject>
 {
-    public Class getPageClass();
+
+    private Class clazz;
+
+    public Page(Class clazz)
+    {
+        this.clazz = clazz;
+    }
+
+    @SuppressWarnings("unchecked")
+    public T get(WebDriver driver)
+    {
+        return (T) this.get(driver, false);
+    }
+
+    @SuppressWarnings("unchecked")
+    public T get(WebDriver driver, boolean activated)
+    {
+        return (T) AtlassianPageFactory.get(driver, clazz, activated);
+    }
+
 }

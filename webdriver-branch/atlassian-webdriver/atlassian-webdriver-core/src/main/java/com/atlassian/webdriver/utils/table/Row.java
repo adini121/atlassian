@@ -47,95 +47,79 @@ public class Row implements WebElement
         if (columns.size() <= 0)
         {
             List<WebElement> cols = row.findElements(By.tagName("td"));
-            Iterator<WebElement> iter = cols.iterator();
-
-            while (iter.hasNext())
+            for (WebElement col : cols)
             {
-                columns.add(new Column(iter.next()));
+                columns.add(new Column(col));
             }
         }
 
     }
 
-    @Override
     public void click()
     {
         row.click();
     }
 
-    @Override
     public void submit()
     {
         row.submit();
     }
 
-    @Override
     public String getValue()
     {
         return row.getValue();
     }
 
-    @Override
     public void sendKeys(final CharSequence... charSequences)
     {
         row.sendKeys(charSequences);
     }
 
-    @Override
     public void clear()
     {
         row.clear();
     }
 
-    @Override
     public String getTagName()
     {
         return row.getTagName();
     }
 
-    @Override
     public String getAttribute(final String s)
     {
         return row.getAttribute(s);
     }
 
-    @Override
     public boolean toggle()
     {
         return row.toggle();
     }
 
-    @Override
     public boolean isSelected()
     {
         return row.isSelected();
     }
 
-    @Override
     public void setSelected()
     {
         row.setSelected();
     }
 
-    @Override
     public boolean isEnabled()
     {
         return row.isEnabled();
     }
 
-    @Override
     public String getText()
     {
         return row.getText();
     }
 
-    @Override
     public List<WebElement> findElements(final By by)
     {
         return row.findElements(by);
     }
 
-    @Override
     public WebElement findElement(final By by)
     {
         return row.findElement(by);

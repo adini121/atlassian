@@ -1,8 +1,8 @@
 package com.atlassian.webdriver.browsers;
 
-import junit.framework.TestCase;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 /**
  * TODO: Document this class / interface here
@@ -11,11 +11,11 @@ import org.testng.annotations.BeforeClass;
  */
 public class WebDriverAutoInstallerTest
 {
-    HelloServer server;
-    String TEST_URL;
+    static HelloServer server;
+    static String TEST_URL;
 
     @BeforeClass
-    protected void startServer() throws Exception
+    public static void startServer() throws Exception
     {
         server = new HelloServer();
         server.startServer();
@@ -24,7 +24,7 @@ public class WebDriverAutoInstallerTest
     }
 
     @AfterClass
-    protected void stopServer() throws Exception
+    public static void stopServer() throws Exception
     {
         server.stopServer();
     }

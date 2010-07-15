@@ -24,10 +24,10 @@ public class Table implements WebElement
 
     public Table(By at, WebDriver driver)
     {
-        this(at, driver, null);
+        this(at, null, driver);
     }
 
-    public Table(By at, WebDriver driver, By rowMatcher)
+    public Table(By at, By rowMatcher, WebDriver driver)
     {
         this.table = driver.findElement(at);
         this.rowMatch = rowMatcher;
@@ -59,11 +59,8 @@ public class Table implements WebElement
         if (tableRows.size() <= 0)
         {
             List<WebElement> rows = table.findElements(By.tagName("tr"));
-            Iterator<WebElement> iter = rows.iterator();
-
-            while (iter.hasNext())
+            for(WebElement el : rows)
             {
-                WebElement el = iter.next();
                 // Only add the row element if there is no rowMatch, or the
                 // row matcher finds a match
                 if (rowMatch == null || Check.elementExists(rowMatch, el))
@@ -75,85 +72,71 @@ public class Table implements WebElement
 
     }
 
-    @Override
     public void click()
     {
         table.click();
     }
 
-    @Override
     public void submit()
     {
         table.submit();
     }
 
-    @Override
     public String getValue()
     {
         return table.getValue();
     }
 
-    @Override
     public void sendKeys(final CharSequence... charSequences)
     {
         table.sendKeys(charSequences);
     }
 
-    @Override
     public void clear()
     {
         table.clear();
     }
 
-    @Override
     public String getTagName()
     {
         return table.getTagName();
     }
 
-    @Override
     public String getAttribute(final String s)
     {
         return table.getAttribute(s);
     }
 
-    @Override
     public boolean toggle()
     {
         return table.toggle();
     }
 
-    @Override
     public boolean isSelected()
     {
         return table.isSelected();
     }
 
-    @Override
     public void setSelected()
     {
         table.setSelected();
     }
 
-    @Override
     public boolean isEnabled()
     {
         return table.isEnabled();
     }
 
-    @Override
     public String getText()
     {
         return table.getText();
     }
 
-    @Override
     public List<WebElement> findElements(final By by)
     {
         return table.findElements(by);
     }
 
-    @Override
     public WebElement findElement(final By by)
     {
         return table.findElement(by);

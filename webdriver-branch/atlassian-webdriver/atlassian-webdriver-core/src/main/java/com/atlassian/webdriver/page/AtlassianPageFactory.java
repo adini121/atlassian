@@ -13,16 +13,13 @@ public class AtlassianPageFactory
 
     private AtlassianPageFactory() {}
 
-    @SuppressWarnings ("unchecked")
-    public static <T extends PageObject> T get(WebDriver driver, Page page)
+    public static PageObject get(WebDriver driver, Class clazz)
     {
-        return (T) get(driver, page, false);
+        return get(driver, clazz, false);
     }
 
-    @SuppressWarnings ("unchecked")
-    public static <T extends PageObject> T get(WebDriver driver, Page page, boolean activated)
+    public static <T extends PageObject> T get(WebDriver driver, Class clazz, boolean activated)
     {
-        return (T) ((T) PageFactory.initElements(driver, page.getPageClass())).get(activated);
+        return (T) ((T) PageFactory.initElements(driver, clazz)).get(activated);
     }
-
 }

@@ -21,7 +21,6 @@ abstract public class WebDriverTest
         driver = AtlassianWebDriver.getDriver();
     }
 
-
     @AfterClass
     public static void closeSession()
     {

@@ -3,6 +3,7 @@ package com.atlassian.webdriver.utils;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.RenderedWebElement;
 import org.openqa.selenium.WebElement;
 
 
@@ -21,7 +22,7 @@ public class Check
      */
     public static boolean elementExists(By by)
     {
-        return elementExists(by, null);
+        return elementExists(by, AtlassianWebDriver.getBody());
     }
 
     /**
@@ -35,14 +36,7 @@ public class Check
 
         try
         {
-            if (el == null)
-            {
-                AtlassianWebDriver.getDriver().findElement(by);
-            }
-            else
-            {
-                el.findElement(by);
-            }
+            el.findElement(by);
         }
         catch (NoSuchElementException e)
         {
@@ -51,6 +45,24 @@ public class Check
 
         return true;
 
+    }
+
+    public static boolean elementIsVisible(By by)
+    {
+        return elementIsVisible(by, AtlassianWebDriver.getBody());
+    }
+
+    public static boolean elementIsVisible(By by, WebElement el)
+    {
+        try
+        {
+            WebElement lookFor = el.findElement(by);
+            return ((RenderedWebElement) lookFor).isDisplayed();
+        }
+        catch (NoSuchElementException e)
+        {
+            return false;
+        }
     }
 
     /**

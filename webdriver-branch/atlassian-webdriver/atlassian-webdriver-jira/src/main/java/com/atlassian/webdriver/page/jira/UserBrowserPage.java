@@ -1,7 +1,7 @@
 package com.atlassian.webdriver.page.jira;
 
-import com.atlassian.webdriver.component.jira.group.Group;
-import com.atlassian.webdriver.component.jira.user.User;
+import com.atlassian.webdriver.component.group.Group;
+import com.atlassian.webdriver.component.user.User;
 import com.atlassian.webdriver.utils.table.Row;
 import com.atlassian.webdriver.utils.table.Table;
 import org.openqa.selenium.By;
@@ -73,7 +73,7 @@ public class UserBrowserPage extends JiraWebDriverPage
         driver.findElement(By.name("userNameFilter")).sendKeys(username);
         filterSubmit.click();
 
-        return JiraPage.USERBROWSER.get(driver, true);
+        return JiraPage.USERBROWSERPAGE.get(driver, true);
     }
 
     private void setUserFilterToShowAllUsers()

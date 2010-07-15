@@ -36,4 +36,14 @@ public class MouseEvents
         return el;
     }
 
+    public static void mouseout(By by, WebDriver driver)
+    {
+        mouseout(driver.findElement(by), driver);
+    }
+
+    public static void mouseout(WebElement el, WebDriver driver)
+    {
+        JavaScriptUtils.dispatchMouseEvent("mouseout", el, driver);
+    }
+
 }

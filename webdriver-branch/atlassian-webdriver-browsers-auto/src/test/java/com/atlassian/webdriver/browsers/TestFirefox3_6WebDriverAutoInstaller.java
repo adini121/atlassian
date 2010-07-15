@@ -1,13 +1,14 @@
 package com.atlassian.webdriver.browsers;
 
 import com.atlassian.webdriver.AtlassianWebDriver;
-import com.atlassian.webdriver.utils.VisibilityOfElementLocated;
+import com.atlassian.webdriver.utils.element.ElementLocated;
+import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.testng.annotations.Test;
+
 import webdriver.browsers.WebdriverBrowserAutoInstall;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 /**
  * 
@@ -23,7 +24,7 @@ public class TestFirefox3_6WebDriverAutoInstaller extends WebDriverAutoInstaller
         WebDriver driver = WebdriverBrowserAutoInstall.getDriver();
 
         driver.get(TEST_URL);
-        AtlassianWebDriver.waitUntil(new VisibilityOfElementLocated(By.tagName("h1")));
+        AtlassianWebDriver.waitUntil(new ElementLocated(By.tagName("h1")));
         assertEquals(driver.findElement(By.tagName("h1")).getText(), "Hello");
         AtlassianWebDriver.quitDriver();
 

@@ -25,8 +25,12 @@ public class Search
      */
     public static WebElement findElementWithChildElement(By searchElements, By childFind, WebDriver driver)
     {
+        return findElementWithChildElement(searchElements, childFind, driver.findElement(By.tagName("body")));
+    }
 
-        List<WebElement> elements = driver.findElements(searchElements);
+    public static WebElement findElementWithChildElement(By searchElements, By childFind, WebElement context)
+    {
+        List<WebElement> elements = context.findElements(searchElements);
         Iterator<WebElement> iter = elements.iterator();
 
         while (iter.hasNext())
@@ -39,7 +43,28 @@ public class Search
         }
 
         return null;
+    }
 
+    public static WebElement findElementWithText(By searchElements, String textValue, WebDriver driver)
+    {
+        return findElementWithText(searchElements, textValue,  driver.findElement(By.tagName("body")));
+    }
+
+    public static WebElement findElementWithText(By searchElements, String textValue, WebElement context)
+    {
+        List<WebElement> elements = context.findElements(searchElements);
+        Iterator<WebElement> iter = elements.iterator();
+
+        while (iter.hasNext())
+        {
+            WebElement el = iter.next();
+            if (el.getText().equals(textValue))
+            {
+                return el;
+            }
+        }
+
+        return null;
     }
 
 

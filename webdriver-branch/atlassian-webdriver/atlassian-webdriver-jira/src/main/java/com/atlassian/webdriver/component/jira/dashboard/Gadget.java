@@ -2,8 +2,8 @@ package com.atlassian.webdriver.component.jira.dashboard;
 
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.utils.Check;
+import com.atlassian.webdriver.utils.element.ElementLocated;
 import com.atlassian.webdriver.utils.MouseEvents;
-import com.atlassian.webdriver.utils.VisibilityOfElementLocated;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -35,7 +35,7 @@ public class Gadget
             throw new IllegalStateException("Gadget with id: " + id + " not found on page.");
         }
 
-        AtlassianWebDriver.waitUntil(new VisibilityOfElementLocated(By.id(frameId)));
+        AtlassianWebDriver.waitUntil(new ElementLocated(By.id(frameId)));
         this.chrome = driver.findElement(By.id(chromeId));
     }
 
@@ -46,7 +46,7 @@ public class Gadget
     public GadgetView view()
     {
         driver.switchTo().frame(frameId);
-        AtlassianWebDriver.waitUntil(new VisibilityOfElementLocated(By.className("view")));
+        AtlassianWebDriver.waitUntil(new ElementLocated(By.className("view")));
 
         return new GadgetView(driver.findElement(By.className("view")));
     }

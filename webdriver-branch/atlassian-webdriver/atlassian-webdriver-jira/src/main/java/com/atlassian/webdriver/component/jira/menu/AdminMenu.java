@@ -1,6 +1,6 @@
 package com.atlassian.webdriver.component.jira.menu;
 
-import com.atlassian.webdriver.component.menu.DropdownMenu;
+import com.atlassian.webdriver.component.menu.AuiDropdownMenu;
 import com.atlassian.webdriver.page.jira.JiraPage;
 import com.atlassian.webdriver.page.jira.LicenseDetailsPage;
 import com.atlassian.webdriver.page.jira.PluginsPage;
@@ -13,7 +13,7 @@ import org.openqa.selenium.WebDriver;
  * Object for interacting with the Admin menu in the JIRA header.
  * TODO: extend for all available links.
  */
-public class AdminMenu extends DropdownMenu
+public class AdminMenu extends AuiDropdownMenu
 {
 
     public AdminMenu(WebDriver driver)
@@ -23,24 +23,24 @@ public class AdminMenu extends DropdownMenu
 
     public PluginsPage gotoPluginsPage()
     {
-        open().click("plugins_lnk");
+        activate("plugins_lnk");
 
-        return JiraPage.PLUGINS.get(getDriver(), true);
+        return JiraPage.PLUGINSPAGE.get(getDriver(), true);
 
     }
 
     public LicenseDetailsPage gotoLicenseDetailsPage()
     {
-        open().click("license_details_lnk");
+        activate("license_details_lnk");
 
-        return JiraPage.LICENSEDETAILS.get(getDriver(), true);
+        return JiraPage.LICENSEDETAILSPAGE.get(getDriver(), true);
     }
 
     public UserBrowserPage gotoUserBrowserPage()
     {
-        open().click("user_browser_lnk");
+        activate("user_browser_lnk");
 
-        return JiraPage.USERBROWSER.get(getDriver(), true);
+        return JiraPage.USERBROWSERPAGE.get(getDriver(), true);
     }
 
 }

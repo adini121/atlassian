@@ -117,7 +117,7 @@ public class LicenseDetailsPage extends JiraWebDriverPage
 
         addLicenseButton.click();
 
-        return JiraPage.LICENSEDETAILS.get(driver, true);
+        return JiraPage.LICENSEDETAILSPAGE.get(driver, true);
     }
 
 

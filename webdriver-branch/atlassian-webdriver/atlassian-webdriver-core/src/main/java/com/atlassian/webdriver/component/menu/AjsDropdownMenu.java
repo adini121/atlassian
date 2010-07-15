@@ -2,7 +2,8 @@ package com.atlassian.webdriver.component.menu;
 
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.utils.Check;
-import com.atlassian.webdriver.utils.VisibilityOfElementNotLocated;
+import com.atlassian.webdriver.utils.element.ElementIsVisible;
+import com.atlassian.webdriver.utils.MouseEvents;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -12,18 +13,16 @@ import org.openqa.selenium.WebElement;
  *
  * @since v4.2
  */
-public class DropdownMenu extends Menu
+public class AjsDropdownMenu extends Menu
 {
-
     private WebElement menuItem;
 
-
-    public DropdownMenu(By by, WebDriver driver)
+    public AjsDropdownMenu(By by, WebDriver driver)
     {
         this(driver.findElement(by), driver);
     }
 
-    public DropdownMenu(WebElement menuItem, WebDriver driver)
+    public AjsDropdownMenu(WebElement menuItem, WebDriver driver)
     {
         super(driver);
 
@@ -32,25 +31,26 @@ public class DropdownMenu extends Menu
 
     private boolean isOpen()
     {
-        return Check.hasClass("active", menuItem);
+        return Check.hasClass("opened", menuItem);
     }
 
-    public DropdownMenu open()
+    private AjsDropdownMenu open()
     {
         if (!isOpen())
         {
-            menuItem.findElement(By.cssSelector("a.drop")).click();
+            MouseEvents.hover(menuItem, getDriver());
         }
 
         // Wait until the menu has finished loading items
-        AtlassianWebDriver.waitUntil(new VisibilityOfElementNotLocated(By.className("loading"), menuItem));
+        AtlassianWebDriver.waitUntil(new ElementIsVisible(By.className("ajs-drop-down"), menuItem));
 
         return this;
 
     }
 
-    public void click(String itemId)
+    public void activate(String itemId)
     {
+        open();
         menuItem.findElement(By.id(itemId)).click();
     }
 
@@ -58,7 +58,7 @@ public class DropdownMenu extends Menu
     {
         if (isOpen())
         {
-            menuItem.findElement(By.cssSelector("a.drop")).click();
+            MouseEvents.mouseout(menuItem.findElement(By.cssSelector("a.ajs-menu-title")), getDriver());
         }
     }
 

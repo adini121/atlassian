@@ -56,7 +56,7 @@ public class PluginsPage extends JiraWebDriverPage
         if (pluginIsLoaded(pluginKey))
         {
             loadedPlugins.get(pluginKey).click();
-            return JiraPage.PLUGINS.get(driver, true);
+            return JiraPage.PLUGINSPAGE.get(driver, true);
         }
 
         return null;
@@ -67,10 +67,13 @@ public class PluginsPage extends JiraWebDriverPage
         return activePluginKey;
     }
 
+    /**
+     * TODO: redo using jquery selectors
+     */
     private void getLoadedPlugins()
     {
-        // Match rows that only have two columns
-        Table pluginsTable = new Table(By.cssSelector("table table table table"), driver, By.cssSelector("td a"));
+        // Match rows that have a column with an anchor tag
+        Table pluginsTable = new Table(By.cssSelector("table table table table"), By.cssSelector("td a"), driver);
 
         for (int i = 0; i < pluginsTable.numRows(); i++)
         {

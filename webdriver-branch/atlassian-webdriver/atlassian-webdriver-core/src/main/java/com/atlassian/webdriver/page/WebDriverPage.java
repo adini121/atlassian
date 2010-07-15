@@ -1,6 +1,7 @@
 package com.atlassian.webdriver.page;
 
-import com.atlassian.webdriver.utils.VisibilityOfElementLocated;
+import com.atlassian.webdriver.component.user.User;
+import com.atlassian.webdriver.utils.element.ElementLocated;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -31,7 +32,7 @@ public abstract class WebDriverPage implements PageObject
 
     public void waitUntilLocated(By by, WebElement el)
     {
-        wait.until(new VisibilityOfElementLocated(by, el));
+        wait.until(new ElementLocated(by, el));
     }
 
     public void get(String uri, boolean activated)
@@ -44,7 +45,7 @@ public abstract class WebDriverPage implements PageObject
 
     protected boolean at(String uri)
     {
-        return driver.getCurrentUrl().equals(baseUrl + uri);
+        return driver.getCurrentUrl().startsWith(baseUrl + uri);
     }
 
     protected void goTo(String uri)
@@ -56,5 +57,15 @@ public abstract class WebDriverPage implements PageObject
     {
         return driver;
     }
+
+    public String getPageSource()
+    {
+        return driver.getPageSource();
+    }
+
+    abstract public boolean isLoggedIn();
+    abstract public boolean isLoggedInAsUser(User user);
+    abstract public boolean isAdmin();
+
 
 }

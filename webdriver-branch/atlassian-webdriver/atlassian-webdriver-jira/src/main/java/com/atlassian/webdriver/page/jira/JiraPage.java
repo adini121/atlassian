@@ -1,45 +1,22 @@
 package com.atlassian.webdriver.page.jira;
 
-import com.atlassian.webdriver.page.AtlassianPageFactory;
 import com.atlassian.webdriver.page.Page;
-import com.atlassian.webdriver.page.PageObject;
-import org.openqa.selenium.WebDriver;
+
 
 
 /**
- * Provides a enum of all the pages that are available in JIRA.
- * Using the get method a object of the page class will be returned.
- * eg. JiraPage.LOGIN.get(webdriver) will return an instance of the LoginPage object.
+ * Provides a helper class of all the pages that are available in JIRA.
+ * eg. JiraPage.LOGINPAGE will return an instance of the LoginPage object.
+ * TODO: implement all pages
  */
-public enum JiraPage implements Page
+public class JiraPage
 {
-    LOGIN(LoginPage.class),
-    LOGOUT(LogoutPage.class),
-    DASHBOARD(DashboardPage.class),
-    PLUGINS(PluginsPage.class),
-    LICENSEDETAILS(LicenseDetailsPage.class),
-    USERBROWSER(UserBrowserPage.class);
+    public static final Page<LoginPage> LOGINPAGE = new Page<LoginPage>(LoginPage.class);
+    public static final Page<LogoutPage> LOGOUTPAGE = new Page<LogoutPage>(LogoutPage.class);
+    public static final Page<DashboardPage> DASHBOARDPAGE = new Page<DashboardPage>(DashboardPage.class);
+    public static final Page<PluginsPage> PLUGINSPAGE = new Page<PluginsPage>(PluginsPage.class);
+    public static final Page<LicenseDetailsPage> LICENSEDETAILSPAGE = new Page<LicenseDetailsPage>(LicenseDetailsPage.class);
+    public static final Page<UserBrowserPage> USERBROWSERPAGE = new Page<UserBrowserPage>(UserBrowserPage.class);
 
-    Class clazz;
-
-    JiraPage(Class clazz)
-    {
-        this.clazz = clazz;
-    }
-
-    public Class getPageClass()
-    {
-        return this.clazz;
-    }
-
-    public <T extends PageObject> T get(WebDriver driver)
-    {
-        return (T) this.get(driver, false);
-    }
-
-    public <T extends PageObject> T get(WebDriver driver, boolean activated)
-    {
-        return (T) AtlassianPageFactory.get(driver, this, activated);
-    }
-
+    private JiraPage() {}
 }

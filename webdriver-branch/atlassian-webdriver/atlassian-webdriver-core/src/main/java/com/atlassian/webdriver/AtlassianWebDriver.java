@@ -1,7 +1,10 @@
 package com.atlassian.webdriver;
 
+import com.atlassian.webdriver.utils.ByJquery;
 import com.google.common.base.Function;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -27,9 +30,15 @@ public class AtlassianWebDriver
         if (driver == null)
         {
             driver = WebDriverFactory.getDriver();
+            ByJquery.init(driver);
         }
 
         return driver;
+    }
+
+    public static WebElement getBody()
+    {
+        return driver.findElement(By.tagName("body"));
     }
 
     /**

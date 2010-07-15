@@ -1,6 +1,6 @@
 package com.atlassian.webdriver.page.jira;
 
-import com.atlassian.webdriver.component.jira.user.User;
+import com.atlassian.webdriver.component.user.User;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -53,7 +53,7 @@ public class LoginPage extends JiraWebDriverPage
 
         loginButton.click();
 
-        return JiraPage.DASHBOARD.get(driver, true);
+        return JiraPage.DASHBOARDPAGE.get(driver, true);
     }
 
 

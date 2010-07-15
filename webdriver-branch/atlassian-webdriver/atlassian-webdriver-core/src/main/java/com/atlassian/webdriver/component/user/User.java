@@ -1,6 +1,6 @@
-package com.atlassian.webdriver.component.jira.user;
+package com.atlassian.webdriver.component.user;
 
-import com.atlassian.webdriver.component.jira.group.Group;
+import com.atlassian.webdriver.component.group.Group;
 
 import java.util.HashSet;
 import java.util.Set;

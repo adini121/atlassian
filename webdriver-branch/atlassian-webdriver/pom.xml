@@ -17,6 +17,7 @@
     <modules>
         <module>atlassian-webdriver-core</module>
         <module>atlassian-webdriver-jira</module>
+        <module>atlassian-webdriver-confluence</module>
     </modules>
 
 
