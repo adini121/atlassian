@@ -1,11 +1,10 @@
 package com.atlassian.webdriver.page.jira;
 
 
-import com.atlassian.webdriver.component.jira.menu.UserMenu;
-import com.atlassian.webdriver.component.user.User;
 import com.atlassian.webdriver.component.jira.menu.AdminMenu;
+import com.atlassian.webdriver.component.jira.menu.UserMenu;
 import com.atlassian.webdriver.component.menu.DashboardMenu;
-import com.atlassian.webdriver.page.PageObject;
+import com.atlassian.webdriver.component.user.User;
 import com.atlassian.webdriver.page.WebDriverPage;
 import com.atlassian.webdriver.utils.Check;
 import org.openqa.selenium.By;

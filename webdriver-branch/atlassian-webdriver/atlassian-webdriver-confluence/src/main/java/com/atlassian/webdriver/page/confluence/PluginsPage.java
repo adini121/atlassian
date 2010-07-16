@@ -2,6 +2,7 @@ package com.atlassian.webdriver.page.confluence;
 
 
 import com.atlassian.webdriver.utils.ByJquery;
+import com.google.common.collect.ImmutableSet;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -58,14 +59,24 @@ public class PluginsPage extends ConfluenceWebDriverPage
         return loadedPlugins.containsKey(pluginKey);
     }
 
+    public boolean pluginIsDisabled(String pluginKey)
+    {
+        return disabledPlugins.contains(pluginKey);
+    }
+
+    public boolean pluginHasErrors(String pluginKey)
+    {
+        return pluginsWithErrors.contains(pluginKey);
+    }
+
     public Set<String> getPluginsWithLoadingErrors()
     {
-        return pluginsWithErrors;
+        return ImmutableSet.copyOf(pluginsWithErrors);
     }
 
     public Set<String> getDisabledPlugins()
     {
-        return disabledPlugins;
+        return ImmutableSet.copyOf(disabledPlugins);
     }
 
     public String getActivePluginKey()

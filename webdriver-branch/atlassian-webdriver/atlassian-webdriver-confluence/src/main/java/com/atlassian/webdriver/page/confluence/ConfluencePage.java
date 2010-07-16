@@ -16,6 +16,7 @@ public class ConfluencePage
     public static final Page<AdministratorAccessPage> ADMINACCESSPAGE = new Page<AdministratorAccessPage>(AdministratorAccessPage.class);
     public static final Page<PluginsPage> PLUGINSPAGE = new Page<PluginsPage>(PluginsPage.class);
     public static final Page<PeopleDirectoryPage> PEOPLE_DIRECTORY_PAGE = new Page<PeopleDirectoryPage>(PeopleDirectoryPage.class);
+    public static final Page<LicenseDetailsPage> LICENSE_DETAILS_PAGE = new Page<LicenseDetailsPage>(LicenseDetailsPage.class);
 
     private ConfluencePage() {}
 }

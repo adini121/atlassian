@@ -1,7 +1,5 @@
 package com.atlassian.webdriver.page;
 
-import com.atlassian.webdriver.page.Page;
-import com.atlassian.webdriver.page.PageObject;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
 

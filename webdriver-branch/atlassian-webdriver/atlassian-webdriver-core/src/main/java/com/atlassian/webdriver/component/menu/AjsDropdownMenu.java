@@ -2,8 +2,8 @@ package com.atlassian.webdriver.component.menu;
 
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.utils.Check;
-import com.atlassian.webdriver.utils.element.ElementIsVisible;
 import com.atlassian.webdriver.utils.MouseEvents;
+import com.atlassian.webdriver.utils.element.ElementIsVisible;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;

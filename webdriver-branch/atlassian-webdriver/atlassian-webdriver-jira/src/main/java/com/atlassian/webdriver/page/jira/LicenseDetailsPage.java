@@ -89,7 +89,6 @@ public class LicenseDetailsPage extends JiraWebDriverPage
     }
 
     //TODO: handle unlimited.
-
     public int getUserLimit()
     {
         return Integer.valueOf(licenseTable.findElement(By.cssSelector("tr:nth-child(6) td:nth-child(2) b")).getText());

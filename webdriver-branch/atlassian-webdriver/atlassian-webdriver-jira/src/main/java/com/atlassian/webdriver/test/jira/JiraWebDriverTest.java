@@ -3,7 +3,6 @@ package com.atlassian.webdriver.test.jira;
 import com.atlassian.webdriver.component.user.User;
 import com.atlassian.webdriver.page.jira.DashboardPage;
 import com.atlassian.webdriver.page.jira.JiraPage;
-import com.atlassian.webdriver.page.jira.LoginPage;
 import com.atlassian.webdriver.page.jira.LogoutPage;
 import com.atlassian.webdriver.test.WebDriverTest;
 

@@ -5,8 +5,6 @@ import com.atlassian.webdriver.page.confluence.AdministrationPage;
 import com.atlassian.webdriver.page.confluence.ConfluencePage;
 import com.atlassian.webdriver.page.confluence.PeopleDirectoryPage;
 import com.atlassian.webdriver.utils.ByJquery;
-import com.atlassian.webdriver.utils.Search;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 /**

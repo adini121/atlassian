@@ -1,6 +1,5 @@
 package com.atlassian.webdriver.page.confluence;
 
-import com.atlassian.webdriver.page.PageObject;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -16,6 +15,9 @@ public class AdministrationPage extends ConfluenceWebDriverPage
 
     @FindBy (linkText = "Plugins")
     private WebElement pluginsLink;
+
+    @FindBy (linkText = "License Details")
+    private WebElement licenseDetailsLink;
 
     public AdministrationPage(WebDriver driver)
     {
@@ -34,5 +36,12 @@ public class AdministrationPage extends ConfluenceWebDriverPage
         pluginsLink.click();
 
         return ConfluencePage.PLUGINSPAGE.get(driver, true);
+    }
+
+    public LicenseDetailsPage gotoLicenseDetailsPage()
+    {
+        licenseDetailsLink.click();
+
+        return ConfluencePage.LICENSE_DETAILS_PAGE.get(driver, true);
     }
 }

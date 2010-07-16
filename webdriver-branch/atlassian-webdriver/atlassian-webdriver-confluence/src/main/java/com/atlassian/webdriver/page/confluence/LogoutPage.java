@@ -1,6 +1,5 @@
 package com.atlassian.webdriver.page.confluence;
 
-import com.atlassian.webdriver.page.PageObject;
 import org.openqa.selenium.WebDriver;
 
 /**

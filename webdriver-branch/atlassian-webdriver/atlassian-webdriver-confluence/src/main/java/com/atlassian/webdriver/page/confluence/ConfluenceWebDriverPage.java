@@ -6,10 +6,8 @@ import com.atlassian.webdriver.component.user.User;
 import com.atlassian.webdriver.page.WebDriverPage;
 import com.atlassian.webdriver.test.confluence.ConfluenceWebDriverTest;
 import com.atlassian.webdriver.utils.Check;
-import com.atlassian.webdriver.utils.Search;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 /**
  * TODO: Document this class / interface here
