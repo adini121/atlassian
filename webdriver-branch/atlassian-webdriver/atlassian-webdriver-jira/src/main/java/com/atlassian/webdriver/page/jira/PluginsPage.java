@@ -1,14 +1,13 @@
 package com.atlassian.webdriver.page.jira;
 
-import com.atlassian.webdriver.utils.table.Column;
-import com.atlassian.webdriver.utils.table.Row;
-import com.atlassian.webdriver.utils.table.Table;
-import org.openqa.selenium.By;
+import com.atlassian.webdriver.utils.ByJquery;
+import com.google.common.collect.ImmutableSet;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -23,32 +22,24 @@ public class PluginsPage extends JiraWebDriverPage
     private final Map<String, WebElement> loadedPlugins;
     private String activePluginKey;
     private final Set<String> pluginsWithErrors;
+    private final Set<String> disabledPlugins;
 
     public PluginsPage(WebDriver driver)
     {
         super(driver);
 
-        this.loadedPlugins = new HashMap<String, WebElement>();
-        this.pluginsWithErrors = new HashSet<String>();
+        loadedPlugins = new HashMap<String, WebElement>();
+        pluginsWithErrors = new HashSet<String>();
+        disabledPlugins = new HashSet<String>();
     }
 
     public PluginsPage get(boolean activated)
     {
         get(URI, activated);
 
-        getLoadedPlugins();
+        waitForLoadedPlugins();
 
         return this;
-    }
-
-    public boolean pluginIsLoaded(String pluginKey)
-    {
-        return loadedPlugins.containsKey(pluginKey);
-    }
-
-    public Set<String> getPluginsWithLoadingErrors()
-    {
-        return pluginsWithErrors;
     }
 
     public PluginsPage selectPlugin(String pluginKey)
@@ -62,40 +53,74 @@ public class PluginsPage extends JiraWebDriverPage
         return null;
     }
 
+    public boolean pluginIsLoaded(String pluginKey)
+    {
+        return loadedPlugins.containsKey(pluginKey);
+    }
+
+    public boolean pluginIsDisabled(String pluginKey)
+    {
+        return disabledPlugins.contains(pluginKey);
+    }
+
+    public boolean pluginHasErrors(String pluginKey)
+    {
+        return pluginsWithErrors.contains(pluginKey);
+    }
+
+    public Set<String> getPluginsWithLoadingErrors()
+    {
+        return ImmutableSet.copyOf(pluginsWithErrors);
+    }
+
+    public Set<String> getDisabledPlugins()
+    {
+        return ImmutableSet.copyOf(disabledPlugins);
+    }
+
     public String getActivePluginKey()
     {
         return activePluginKey;
     }
 
-    /**
-     * TODO: redo using jquery selectors
-     */
-    private void getLoadedPlugins()
+    private void waitForLoadedPlugins()
     {
-        // Match rows that have a column with an anchor tag
-        Table pluginsTable = new Table(By.cssSelector("table table table table"), By.cssSelector("td a"), driver);
+        WebElement table = driver.findElement(ByJquery.$("table table table table"));
 
-        for (int i = 0; i < pluginsTable.numRows(); i++)
+        List<WebElement> pluginAnchors = table.findElements(ByJquery.$("tr td a[href^=ViewPlugins.jspa]"));
+        List<WebElement> pluginAnchorsWithErrors = table.findElements(ByJquery.$("tr td:contains(Errors loading plugin) a"));
+        List<WebElement> disabledPluginAnchors = table.findElements(ByJquery.$("tr td:contains(Plugin currently disabled) a"));
+
+        WebElement activePluginAnchor = table.findElement(ByJquery.$("tr td > div > b > a"));
+        String activePluginUrl = activePluginAnchor.getAttribute("href");
+        int activePluginKeyIndex = activePluginUrl.indexOf(PLUGIN_KEY);
+        this.activePluginKey = activePluginUrl.substring(activePluginKeyIndex + PLUGIN_KEY.length());
+
+        for (WebElement pluginAnchor : pluginAnchors)
         {
-            Row row = pluginsTable.getRow(i);
-            Column col = row.getColumn(row.numColumns() - 1);
-
-            WebElement pluginLink = col.findElement(By.cssSelector("a"));
-            String pluginUrl = pluginLink.getAttribute("href");
+            String pluginUrl = pluginAnchor.getAttribute("href");
             int pluginKeyIndex = pluginUrl.indexOf(PLUGIN_KEY);
             String pluginKey = pluginUrl.substring(pluginKeyIndex + PLUGIN_KEY.length());
 
-            if (col.getText().contains("Errors loading plugin"))
-            {
-                this.pluginsWithErrors.add(pluginKey);
-            }
+            loadedPlugins.put(pluginKey, pluginAnchor);
+        }
 
-            if (row.numColumns() == 1)
-            {
-                this.activePluginKey = pluginKey;
-            }
+        for (WebElement pluginAnchor : pluginAnchorsWithErrors)
+        {
+            String pluginUrl = pluginAnchor.getAttribute("href");
+            int pluginKeyIndex = pluginUrl.indexOf(PLUGIN_KEY);
+            String pluginKey = pluginUrl.substring(pluginKeyIndex + PLUGIN_KEY.length());
 
-            loadedPlugins.put(pluginKey, pluginLink);
+            pluginsWithErrors.add(pluginKey);
+        }
+
+        for (WebElement pluginAnchor : disabledPluginAnchors)
+        {
+            String pluginUrl = pluginAnchor.getAttribute("href");
+            int pluginKeyIndex = pluginUrl.indexOf(PLUGIN_KEY);
+            String pluginKey = pluginUrl.substring(pluginKeyIndex + PLUGIN_KEY.length());
+
+            disabledPlugins.add(pluginKey);
         }
 
     }

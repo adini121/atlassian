@@ -2,6 +2,7 @@ package com.atlassian.webdriver.utils.element;
 
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.utils.Check;
+import org.apache.commons.lang.Validate;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -31,6 +32,9 @@ class ElementLocationCondition implements ExpectedCondition<Boolean>
 
     ElementLocationCondition(By findCondition, WebElement at, Locatable locatable)
     {
+        Validate.notNull(findCondition, "find condition cannot be null.");
+        Validate.notNull(at, "element location condition 'at' cannot be null.");
+
         this.findCondition = findCondition;
         this.at = at;
         this.locatable = locatable;

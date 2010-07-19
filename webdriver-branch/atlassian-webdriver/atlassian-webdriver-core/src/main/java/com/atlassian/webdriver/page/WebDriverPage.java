@@ -27,7 +27,7 @@ public abstract class WebDriverPage implements PageObject
 
     public void waitUntilLocated(By by)
     {
-        waitUntilLocated(by, null);
+        wait.until(new ElementLocated(by));
     }
 
     public void waitUntilLocated(By by, WebElement el)

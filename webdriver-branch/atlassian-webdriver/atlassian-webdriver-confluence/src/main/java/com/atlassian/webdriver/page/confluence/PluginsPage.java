@@ -13,9 +13,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * TODO: Document this class / interface here
- *
- * @since v4.2
+ * Page object implementation for the Plugins page for Confluence.
  */
 public class PluginsPage extends ConfluenceWebDriverPage
 {
