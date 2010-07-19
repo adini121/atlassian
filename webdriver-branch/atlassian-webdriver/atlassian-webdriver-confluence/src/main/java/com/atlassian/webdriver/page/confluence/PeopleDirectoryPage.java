@@ -3,6 +3,8 @@ package com.atlassian.webdriver.page.confluence;
 import com.atlassian.webdriver.component.confluence.macro.UserMacro;
 import com.atlassian.webdriver.utils.ByJquery;
 import com.atlassian.webdriver.utils.Check;
+import com.google.common.collect.ImmutableSet;
+import org.apache.commons.collections.set.UnmodifiableSet;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -10,6 +12,7 @@ import org.openqa.selenium.support.FindBy;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * TODO: Document this class / interface here
@@ -49,6 +52,14 @@ public class PeopleDirectoryPage extends ConfluenceWebDriverPage
             UserMacro userMacro = new UserMacro(profile.findElement(By.className("vcard")));
             users.put(userMacro.getUsername(), userMacro);
         }
+    }
+
+    /**
+     * @return a set which contains all the usernames on the page.
+     */
+    public Set<String> getAllUsernames()
+    {
+        return users.keySet();
     }
 
     public PeopleDirectoryPage showAllPeople()
