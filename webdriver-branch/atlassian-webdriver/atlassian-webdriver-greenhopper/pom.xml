@@ -3,23 +3,22 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>atlassian-selenium-parent</artifactId>
+        <artifactId>atlassian-webdriver</artifactId>
         <groupId>com.atlassian.selenium</groupId>
         <version>2.0-webdriver-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>atlassian-webdriver</artifactId>
-    <packaging>pom</packaging>
+    <artifactId>atlassian-webdriver-greenhopper</artifactId>
 
     <name>${project.artifactId}</name>
 
-    <modules>
-        <module>atlassian-webdriver-core</module>
-        <module>atlassian-webdriver-jira</module>
-        <module>atlassian-webdriver-confluence</module>
-        <module>atlassian-webdriver-greenhopper</module>
-    </modules>
-
+    <dependencies>
+        <dependency>
+            <groupId>com.atlassian.selenium</groupId>
+            <artifactId>atlassian-webdriver-jira</artifactId>
+            <version>2.0-webdriver-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 
 </project>
