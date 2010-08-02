@@ -29,4 +29,10 @@ public class Page<T extends PageObject>
         return (T) AtlassianPageFactory.get(driver, clazz, activated);
     }
 
+    public Class getPageClass()
+    {
+        return clazz;
+    }
+
+
 }
