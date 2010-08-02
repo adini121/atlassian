@@ -1,7 +1,7 @@
 package com.atlassian.webdriver.component.jira.menu;
 
 import com.atlassian.webdriver.component.menu.AuiDropdownMenu;
-import com.atlassian.webdriver.page.jira.JiraPage;
+import com.atlassian.webdriver.page.jira.JiraPages;
 import com.atlassian.webdriver.page.jira.LicenseDetailsPage;
 import com.atlassian.webdriver.page.jira.PluginsPage;
 import com.atlassian.webdriver.page.jira.UserBrowserPage;
@@ -25,7 +25,7 @@ public class AdminMenu extends AuiDropdownMenu
     {
         activate("plugins_lnk");
 
-        return JiraPage.PLUGINSPAGE.get(getDriver(), true);
+        return JiraPages.PLUGINSPAGE.get(getDriver(), true);
 
     }
 
@@ -33,14 +33,14 @@ public class AdminMenu extends AuiDropdownMenu
     {
         activate("license_details_lnk");
 
-        return JiraPage.LICENSEDETAILSPAGE.get(getDriver(), true);
+        return JiraPages.LICENSEDETAILSPAGE.get(getDriver(), true);
     }
 
     public UserBrowserPage gotoUserBrowserPage()
     {
         activate("user_browser_lnk");
 
-        return JiraPage.USERBROWSERPAGE.get(getDriver(), true);
+        return JiraPages.USERBROWSERPAGE.get(getDriver(), true);
     }
 
 }

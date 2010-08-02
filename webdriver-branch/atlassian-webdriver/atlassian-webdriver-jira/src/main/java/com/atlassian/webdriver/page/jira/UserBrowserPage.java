@@ -2,22 +2,20 @@ package com.atlassian.webdriver.page.jira;
 
 import com.atlassian.webdriver.component.group.Group;
 import com.atlassian.webdriver.component.user.User;
-import com.atlassian.webdriver.utils.table.Row;
-import com.atlassian.webdriver.utils.table.Table;
+import com.atlassian.webdriver.utils.Check;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.HashSet;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 /**
- * Page object implementation for the User browser page in JIRA.
- * TODO: Handle pagination when there are more users
+ * Page object implementation for the User browser page in JIRA. TODO: Handle pagination when there are more users
  */
-public class UserBrowserPage extends JiraWebDriverPage
+public class UserBrowserPage extends JiraAdminWebDriverPage
 {
     private static final String URI = "/secure/admin/user/UserBrowser.jspa";
 
@@ -73,12 +71,12 @@ public class UserBrowserPage extends JiraWebDriverPage
         driver.findElement(By.name("userNameFilter")).sendKeys(username);
         filterSubmit.click();
 
-        return JiraPage.USERBROWSERPAGE.get(driver, true);
+        return JiraPages.USERBROWSERPAGE.get(driver, true);
     }
 
     private void setUserFilterToShowAllUsers()
     {
-        usersPerPageDropdown.findElement(By.cssSelector("option[value=\""+ MAX +"\"]")).setSelected();
+        usersPerPageDropdown.findElement(By.cssSelector("option[value=\"" + MAX + "\"]")).setSelected();
         filterSubmit.click();
     }
 
@@ -87,31 +85,30 @@ public class UserBrowserPage extends JiraWebDriverPage
 
         users.removeAll(users);
 
-        Table userTable = new Table(By.id("user_browser_table"), driver);
+        WebElement userTable = driver.findElement(By.id("user_browser_table"));
 
-        Iterator<Row> iter = userTable.iterator();
+        List<WebElement> rows = userTable.findElements(By.tagName("tr"));
 
-        // Skip over the table headings
-        iter.next();
-
-        while (iter.hasNext())
+        for (WebElement row : rows)
         {
-
-            Row row = iter.next();
-            String username = row.getColumn(0).findElement(By.tagName("span")).getText();
-            String email = row.getColumn(1).findElement(By.tagName("span")).getText();
-            String fullName = row.getColumn(2).findElement(By.tagName("span")).getText();
-
-            Set<Group> groups = new HashSet<Group>();
-            Iterator<WebElement> groupIter = row.getColumn(4).findElements(By.tagName("a")).iterator();
-
-            while (groupIter.hasNext())
+            // Check it's not the headings (th) tags.
+            if (Check.elementExists(By.tagName("td"), row))
             {
-                groups.add(new Group(groupIter.next().getText()));
+                List<WebElement> cols = row.findElements(By.tagName("td"));
+
+                String username = cols.get(0).getText();
+                String email = cols.get(1).getText();
+                String fullName = cols.get(2).getText();
+
+                Set<Group> groups = new HashSet<Group>();
+
+                for (WebElement group : cols.get(4).findElements(By.tagName("a")))
+                {
+                    groups.add(new Group(group.getText()));
+                }
+
+                users.add(new User(username, fullName, email, groups));
             }
-
-            users.add(new User(username, fullName, email, groups));
-
         }
 
     }

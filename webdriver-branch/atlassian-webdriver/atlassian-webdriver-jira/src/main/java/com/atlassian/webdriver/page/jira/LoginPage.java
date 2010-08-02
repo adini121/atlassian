@@ -53,7 +53,7 @@ public class LoginPage extends JiraWebDriverPage
 
         loginButton.click();
 
-        return JiraPage.DASHBOARDPAGE.get(driver, true);
+        return JiraPages.DASHBOARDPAGE.get(driver, true);
     }
 
 

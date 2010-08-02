@@ -2,7 +2,7 @@ package com.atlassian.webdriver.test.jira;
 
 import com.atlassian.webdriver.component.user.User;
 import com.atlassian.webdriver.page.jira.DashboardPage;
-import com.atlassian.webdriver.page.jira.JiraPage;
+import com.atlassian.webdriver.page.jira.JiraPages;
 import com.atlassian.webdriver.page.jira.LogoutPage;
 import com.atlassian.webdriver.test.WebDriverTest;
 
@@ -23,7 +23,7 @@ public class JiraWebDriverTest extends WebDriverTest
      */
     public DashboardPage login(User user)
     {
-        DashboardPage dashboard = JiraPage.LOGINPAGE.get(driver).login(user);
+        DashboardPage dashboard = JiraPages.LOGINPAGE.get(driver).login(user);
 
         assertTrue("User: " + user.getUsername() + " failed to login", dashboard.isLoggedInAsUser(user));
 
@@ -32,7 +32,7 @@ public class JiraWebDriverTest extends WebDriverTest
 
     public LogoutPage logout()
     {
-        return JiraPage.LOGOUTPAGE.get(driver);
+        return JiraPages.LOGOUTPAGE.get(driver);
     }
 
 }

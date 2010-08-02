@@ -1,7 +1,7 @@
 package com.atlassian.webdriver.component.jira.menu;
 
 import com.atlassian.webdriver.component.menu.AuiDropdownMenu;
-import com.atlassian.webdriver.page.jira.JiraPage;
+import com.atlassian.webdriver.page.jira.JiraPages;
 import com.atlassian.webdriver.page.jira.LogoutPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -22,7 +22,7 @@ public class UserMenu extends AuiDropdownMenu
     {
         activate("log_out");
 
-        return JiraPage.LOGOUTPAGE.get(getDriver(), true);
+        return JiraPages.LOGOUTPAGE.get(getDriver(), true);
     }
 
 }

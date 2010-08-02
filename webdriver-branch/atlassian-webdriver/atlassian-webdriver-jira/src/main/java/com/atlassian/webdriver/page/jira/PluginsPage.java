@@ -13,8 +13,9 @@ import java.util.Set;
 
 /**
  * Page object implementation for the Plugins page for JIRA.
+ * TODO: add plugin details method, which also returns loaded modules per plugin
  */
-public class PluginsPage extends JiraWebDriverPage
+public class PluginsPage extends JiraAdminWebDriverPage
 {
     private final static String URI = "/secure/admin/jira/ViewPlugins!default.jspa";
 
@@ -47,7 +48,7 @@ public class PluginsPage extends JiraWebDriverPage
         if (pluginIsLoaded(pluginKey))
         {
             loadedPlugins.get(pluginKey).click();
-            return JiraPage.PLUGINSPAGE.get(driver, true);
+            return JiraPages.PLUGINSPAGE.get(driver, true);
         }
 
         return null;
