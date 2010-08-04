@@ -18,6 +18,7 @@ public class JiraPages
     public static final Page<LicenseDetailsPage> LICENSEDETAILSPAGE = new Page<LicenseDetailsPage>(LicenseDetailsPage.class);
     public static final Page<UserBrowserPage> USERBROWSERPAGE = new Page<UserBrowserPage>(UserBrowserPage.class);
     public static final Page<ProjectsViewPage> PROJECTS_VIEW_PAGE = new Page<ProjectsViewPage>(ProjectsViewPage.class);
+    public static final Page<ViewAttachmentsSettingsPage> ATTACHMENTS_SETTINGS_VIEW_PAGE = new Page<ViewAttachmentsSettingsPage>(ViewAttachmentsSettingsPage.class);
 
     private JiraPages() {}
 }

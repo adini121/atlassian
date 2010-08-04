@@ -16,6 +16,7 @@ public class AdminSideMenuPageLinks
 
     static {
         pageLinks.put(AdminSideMenuLinks.PROJECTS_LINK, JiraPages.PROJECTS_VIEW_PAGE);
+        pageLinks.put(AdminSideMenuLinks.ATTACHMENTS_LINK, JiraPages.ATTACHMENTS_SETTINGS_VIEW_PAGE);
     }
 
     public static Map<Link, Page> getPageLinks()
