@@ -1,8 +1,8 @@
-package com.atlassian.webdriver.component.greenhopper.link;
+package com.atlassian.webdriver.greenhopper.component.link;
 
 import com.atlassian.webdriver.component.link.Link;
+import com.atlassian.webdriver.greenhopper.page.GreenHopperPage;
 import com.atlassian.webdriver.page.Page;
-import com.atlassian.webdriver.page.greenhopper.GreenHopperPage;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,7 +1,7 @@
-package com.atlassian.webdriver.component.greenhopper.link;
+package com.atlassian.webdriver.greenhopper.component.link;
 
 import com.atlassian.webdriver.component.link.Link;
-import com.atlassian.webdriver.page.greenhopper.license.GreenHopperLicenseDetailsPage;
+import com.atlassian.webdriver.greenhopper.page.license.GreenHopperLicenseDetailsPage;
 import org.openqa.selenium.By;
 
 /**

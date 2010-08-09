@@ -1,7 +1,7 @@
-package com.atlassian.webdriver.page.greenhopper;
+package com.atlassian.webdriver.greenhopper.page;
 
+import com.atlassian.webdriver.greenhopper.page.license.GreenHopperLicenseDetailsPage;
 import com.atlassian.webdriver.page.Page;
-import com.atlassian.webdriver.page.greenhopper.license.GreenHopperLicenseDetailsPage;
 
 /**
  * TODO: Document this class / interface here

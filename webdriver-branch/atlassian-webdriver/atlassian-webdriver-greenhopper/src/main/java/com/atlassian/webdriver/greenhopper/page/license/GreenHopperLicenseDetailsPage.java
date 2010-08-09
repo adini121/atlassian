@@ -1,7 +1,7 @@
-package com.atlassian.webdriver.page.greenhopper.license;
+package com.atlassian.webdriver.greenhopper.page.license;
 
-import com.atlassian.webdriver.page.greenhopper.GreenHopperPage;
-import com.atlassian.webdriver.page.jira.JiraAdminWebDriverPage;
+import com.atlassian.webdriver.jira.page.JiraAdminWebDriverPage;
+import com.atlassian.webdriver.greenhopper.page.GreenHopperPage;
 import com.atlassian.webdriver.utils.ByJquery;
 import com.atlassian.webdriver.utils.Check;
 import org.apache.commons.lang.StringUtils;
