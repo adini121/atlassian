@@ -1,10 +1,8 @@
-package com.atlassian.webdriver.page.confluence;
+package com.atlassian.webdriver.confluence.page;
 
-import com.atlassian.webdriver.component.confluence.macro.UserMacro;
+import com.atlassian.webdriver.confluence.component.macro.UserMacro;
 import com.atlassian.webdriver.utils.ByJquery;
 import com.atlassian.webdriver.utils.Check;
-import com.google.common.collect.ImmutableSet;
-import org.apache.commons.collections.set.UnmodifiableSet;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;

@@ -1,4 +1,4 @@
-package com.atlassian.webdriver.component.confluence.macro;
+package com.atlassian.webdriver.confluence.component.macro;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;

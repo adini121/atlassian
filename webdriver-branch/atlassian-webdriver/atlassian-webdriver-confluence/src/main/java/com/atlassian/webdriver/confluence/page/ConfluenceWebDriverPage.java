@@ -1,10 +1,10 @@
-package com.atlassian.webdriver.page.confluence;
+package com.atlassian.webdriver.confluence.page;
 
-import com.atlassian.webdriver.component.confluence.menu.BrowseMenu;
-import com.atlassian.webdriver.component.confluence.menu.UserMenu;
+import com.atlassian.webdriver.confluence.component.menu.BrowseMenu;
+import com.atlassian.webdriver.confluence.component.menu.UserMenu;
 import com.atlassian.webdriver.component.user.User;
 import com.atlassian.webdriver.page.WebDriverPage;
-import com.atlassian.webdriver.test.confluence.ConfluenceWebDriverTest;
+import com.atlassian.webdriver.confluence.test.ConfluenceWebDriverTest;
 import com.atlassian.webdriver.utils.Check;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;

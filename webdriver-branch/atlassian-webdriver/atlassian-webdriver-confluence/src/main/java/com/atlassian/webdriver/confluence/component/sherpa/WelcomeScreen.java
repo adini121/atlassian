@@ -1,4 +1,4 @@
-package com.atlassian.webdriver.component.confluence.sherpa;
+package com.atlassian.webdriver.confluence.component.sherpa;
 
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.utils.Search;

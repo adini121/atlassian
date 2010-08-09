@@ -1,9 +1,9 @@
-package com.atlassian.webdriver.test.confluence;
+package com.atlassian.webdriver.confluence.test;
 
 import com.atlassian.webdriver.component.user.User;
-import com.atlassian.webdriver.page.confluence.ConfluencePage;
-import com.atlassian.webdriver.page.confluence.DashboardPage;
-import com.atlassian.webdriver.page.confluence.LogoutPage;
+import com.atlassian.webdriver.confluence.page.DashboardPage;
+import com.atlassian.webdriver.confluence.page.ConfluencePage;
+import com.atlassian.webdriver.confluence.page.LogoutPage;
 import com.atlassian.webdriver.test.WebDriverTest;
 
 import static org.junit.Assert.assertTrue;

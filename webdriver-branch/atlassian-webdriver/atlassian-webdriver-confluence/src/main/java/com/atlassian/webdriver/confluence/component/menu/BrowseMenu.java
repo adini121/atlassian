@@ -1,9 +1,9 @@
-package com.atlassian.webdriver.component.confluence.menu;
+package com.atlassian.webdriver.confluence.component.menu;
 
 import com.atlassian.webdriver.component.menu.AjsDropdownMenu;
-import com.atlassian.webdriver.page.confluence.AdministrationPage;
-import com.atlassian.webdriver.page.confluence.ConfluencePage;
-import com.atlassian.webdriver.page.confluence.PeopleDirectoryPage;
+import com.atlassian.webdriver.confluence.page.AdministrationPage;
+import com.atlassian.webdriver.confluence.page.ConfluencePage;
+import com.atlassian.webdriver.confluence.page.PeopleDirectoryPage;
 import com.atlassian.webdriver.utils.ByJquery;
 import org.openqa.selenium.WebDriver;
 

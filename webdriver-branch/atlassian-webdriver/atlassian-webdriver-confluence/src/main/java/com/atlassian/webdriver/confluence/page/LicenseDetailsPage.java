@@ -1,4 +1,4 @@
-package com.atlassian.webdriver.page.confluence;
+package com.atlassian.webdriver.confluence.page;
 
 import com.atlassian.webdriver.utils.ByJquery;
 import org.openqa.selenium.WebDriver;
