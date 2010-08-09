@@ -1,6 +1,6 @@
-package com.atlassian.webdriver.page.jira;
+package com.atlassian.webdriver.jira.page;
 
-import com.atlassian.webdriver.component.jira.project.ProjectSummary;
+import com.atlassian.webdriver.jira.component.project.ProjectSummary;
 import com.atlassian.webdriver.page.PageObject;
 import com.atlassian.webdriver.utils.ByJquery;
 import com.atlassian.webdriver.utils.Check;

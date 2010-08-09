@@ -1,8 +1,8 @@
-package com.atlassian.webdriver.page.jira;
+package com.atlassian.webdriver.jira.page;
 
 
-import com.atlassian.webdriver.component.jira.menu.AdminMenu;
-import com.atlassian.webdriver.component.jira.menu.UserMenu;
+import com.atlassian.webdriver.jira.component.menu.AdminMenu;
+import com.atlassian.webdriver.jira.component.menu.UserMenu;
 import com.atlassian.webdriver.component.menu.DashboardMenu;
 import com.atlassian.webdriver.component.user.User;
 import com.atlassian.webdriver.page.WebDriverPage;

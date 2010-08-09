@@ -1,4 +1,4 @@
-package com.atlassian.webdriver.page.jira;
+package com.atlassian.webdriver.jira.page;
 
 import com.atlassian.webdriver.utils.ByJquery;
 import org.openqa.selenium.By;

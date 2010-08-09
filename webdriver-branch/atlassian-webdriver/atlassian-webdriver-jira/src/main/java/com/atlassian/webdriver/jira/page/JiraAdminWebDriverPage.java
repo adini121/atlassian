@@ -1,6 +1,6 @@
-package com.atlassian.webdriver.page.jira;
+package com.atlassian.webdriver.jira.page;
 
-import com.atlassian.webdriver.component.jira.menu.AdminSideMenu;
+import com.atlassian.webdriver.jira.component.menu.AdminSideMenu;
 import org.openqa.selenium.WebDriver;
 
 import java.util.HashSet;

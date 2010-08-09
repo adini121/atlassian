@@ -1,9 +1,9 @@
-package com.atlassian.webdriver.test.jira;
+package com.atlassian.webdriver.jira.test;
 
 import com.atlassian.webdriver.component.user.User;
-import com.atlassian.webdriver.page.jira.DashboardPage;
-import com.atlassian.webdriver.page.jira.JiraPages;
-import com.atlassian.webdriver.page.jira.LogoutPage;
+import com.atlassian.webdriver.jira.page.DashboardPage;
+import com.atlassian.webdriver.jira.page.LogoutPage;
+import com.atlassian.webdriver.jira.page.JiraPages;
 import com.atlassian.webdriver.test.WebDriverTest;
 
 import static org.junit.Assert.assertTrue;

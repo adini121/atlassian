@@ -1,7 +1,7 @@
-package com.atlassian.webdriver.page.jira;
+package com.atlassian.webdriver.jira.page;
 
 
-import com.atlassian.webdriver.component.jira.dashboard.Gadget;
+import com.atlassian.webdriver.jira.component.dashboard.Gadget;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 

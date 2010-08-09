@@ -1,4 +1,4 @@
-package com.atlassian.webdriver.page.jira;
+package com.atlassian.webdriver.jira.page;
 
 import com.atlassian.webdriver.component.user.User;
 import org.openqa.selenium.WebDriver;
