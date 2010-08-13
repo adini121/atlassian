@@ -1,5 +1,6 @@
 package com.atlassian.webdriver.page;
 
+import com.atlassian.webdriver.utils.QueryString;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -17,16 +18,26 @@ public class Page<T extends PageObject>
         this.clazz = clazz;
     }
 
-    @SuppressWarnings("unchecked")
     public T get(WebDriver driver)
     {
-        return (T) this.get(driver, false);
+        return get(driver, new QueryString(), false);
     }
 
-    @SuppressWarnings("unchecked")
+
     public T get(WebDriver driver, boolean activated)
     {
-        return (T) AtlassianPageFactory.get(driver, clazz, activated);
+        return get(driver, new QueryString(), activated);
+    }
+
+    public T get(WebDriver driver, QueryString queryString)
+    {
+        return get(driver, queryString, false);
+    }
+    
+    @SuppressWarnings("unchecked")
+    public T get(WebDriver driver, QueryString queryString, boolean activated)
+    {
+        return (T) AtlassianPageFactory.get(driver, clazz, queryString, activated);
     }
 
     public Class getPageClass()
