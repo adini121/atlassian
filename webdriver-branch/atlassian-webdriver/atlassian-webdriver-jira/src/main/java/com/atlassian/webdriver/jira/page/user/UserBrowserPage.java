@@ -1,7 +1,10 @@
-package com.atlassian.webdriver.jira.page;
+package com.atlassian.webdriver.jira.page.user;
 
 import com.atlassian.webdriver.component.group.Group;
 import com.atlassian.webdriver.component.user.User;
+import com.atlassian.webdriver.jira.page.JiraAdminWebDriverPage;
+import com.atlassian.webdriver.jira.page.JiraPages;
+import com.atlassian.webdriver.utils.ByJquery;
 import com.atlassian.webdriver.utils.Check;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -13,7 +16,8 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Page object implementation for the User browser page in JIRA. TODO: Handle pagination when there are more users
+ * Page object implementation for the User browser page in JIRA.
+ * TODO: Handle pagination when there are more users
  */
 public class UserBrowserPage extends JiraAdminWebDriverPage
 {
@@ -29,13 +33,13 @@ public class UserBrowserPage extends JiraAdminWebDriverPage
     private WebElement filterSubmit;
 
     @FindBy (id = "add_user")
-    WebElement addUserLink;
+    private WebElement addUserLink;
 
     @FindBy (xpath = "/html/body/table/tbody/tr/td[3]/table/tbody/tr/td/form/table/tbody/tr[2]/td/p[3]/strong[3]")
-    WebElement numUsers;
+    private WebElement numUsers;
 
     @FindBy (name = "max")
-    WebElement usersPerPageDropdown;
+    private WebElement usersPerPageDropdown;
 
     public UserBrowserPage(WebDriver driver)
     {
@@ -61,6 +65,21 @@ public class UserBrowserPage extends JiraAdminWebDriverPage
         return users.contains(user);
     }
 
+    public ViewUserPage gotoViewUserPage(User user)
+    {
+        if (hasUser(user))
+        {
+            WebElement userLink = driver.findElement(By.id(user.getUsername()));
+            userLink.click();
+
+            return JiraPages.VIEW_USER_PAGE.get(driver, true);
+        }
+        else
+        {
+            throw new IllegalStateException("The user: " + user + " was not found on the page");
+        }
+    }
+
     public int getNumberOfUsers()
     {
         return Integer.valueOf(numUsers.getText());
@@ -72,6 +91,37 @@ public class UserBrowserPage extends JiraAdminWebDriverPage
         filterSubmit.click();
 
         return JiraPages.USERBROWSERPAGE.get(driver, true);
+    }
+
+    /**
+     * navigates to the addUserPage by activating the add User link
+     * @return
+     */
+    public AddUserPage gotoAddUserPage()
+    {
+        addUserLink.click();
+
+        return JiraPages.ADD_USER_PAGE.get(driver, true);
+    }
+
+    /**
+     * Takes User object and fills out the addUserPage form and creates the user.
+     * @param user the user to create
+     * @param sendPasswordEmail sets the send email tick box to on or off
+     * @return the user browser page which should have the new user added to the count.
+     */
+    public ViewUserPage addUser(User user, boolean sendPasswordEmail)
+    {
+
+        AddUserPage addUserPage = gotoAddUserPage();
+
+        return addUserPage.setUsername(user.getUsername())
+                .setPassword(user.getPassword())
+                .setConfirmPassword(user.getPassword())
+                .setFullname(user.getFullName())
+                .setEmail(user.getEmail())
+                .sendPasswordEmail(sendPasswordEmail)
+                .createUser();
     }
 
     private void setUserFilterToShowAllUsers()

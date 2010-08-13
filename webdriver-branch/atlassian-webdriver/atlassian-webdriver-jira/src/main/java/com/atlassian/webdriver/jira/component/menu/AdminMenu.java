@@ -4,9 +4,8 @@ import com.atlassian.webdriver.component.menu.AuiDropdownMenu;
 import com.atlassian.webdriver.jira.page.JiraPages;
 import com.atlassian.webdriver.jira.page.LicenseDetailsPage;
 import com.atlassian.webdriver.jira.page.PluginsPage;
-import com.atlassian.webdriver.jira.page.UserBrowserPage;
-import com.atlassian.webdriver.utils.Search;
-import org.openqa.selenium.By;
+import com.atlassian.webdriver.jira.page.user.UserBrowserPage;
+import com.atlassian.webdriver.utils.ByJquery;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -18,7 +17,7 @@ public class AdminMenu extends AuiDropdownMenu
 
     public AdminMenu(WebDriver driver)
     {
-        super(Search.findElementWithChildElement(By.cssSelector("#main-nav li"), By.id("admin_link"), driver), driver);
+        super(ByJquery.$("('#admin_link').parent('li')"), driver);
     }
 
     public PluginsPage gotoPluginsPage()
