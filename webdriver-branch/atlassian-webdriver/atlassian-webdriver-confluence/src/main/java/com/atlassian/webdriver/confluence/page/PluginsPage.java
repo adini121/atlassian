@@ -19,7 +19,7 @@ import java.util.Set;
 public class PluginsPage extends ConfluenceWebDriverPage
 {
     private static final String PLUGIN_KEY = "pluginKey=";
-    private static final String URI = "/viewplugins.action";
+    private static final String URI = "/admin/viewplugins.action";
     private final Map<String, WebElement> loadedPlugins;
     private String activePluginKey;
     private final Set<String> pluginsWithErrors;

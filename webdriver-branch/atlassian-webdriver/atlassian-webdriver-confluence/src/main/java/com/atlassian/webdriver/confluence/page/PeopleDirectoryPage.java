@@ -19,7 +19,7 @@ import java.util.Set;
  */
 public class PeopleDirectoryPage extends ConfluenceWebDriverPage
 {
-    private static final String URI = "/peopledirectory.action";
+    private static final String URI = "/browsepeople.action";
 
     @FindBy (linkText = "All People")
     private WebElement allPeopleLink;

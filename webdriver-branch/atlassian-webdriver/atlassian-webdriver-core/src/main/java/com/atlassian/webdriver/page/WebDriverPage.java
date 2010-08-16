@@ -5,13 +5,10 @@ import com.atlassian.webdriver.utils.QueryString;
 import com.atlassian.webdriver.utils.element.ElementLocated;
 import org.apache.commons.lang.Validate;
 import org.openqa.selenium.By;
-import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.io.File;
 
 /**
  * The base class that a PageObject should extend.
@@ -54,12 +51,6 @@ public abstract class WebDriverPage implements PageObject
         wait.until(new ElementLocated(by, el));
     }
 
-    public void screenshot()
-    {
-        File f = new File("");
-        ((TakesScreenshot) driver).getScreenshotAs()
-    }
-
     public void get(String uri, boolean activated)
     {
         if (!activated && !at(uri))
@@ -95,6 +86,11 @@ public abstract class WebDriverPage implements PageObject
     public WebDriver driver()
     {
         return driver;
+    }
+
+    public String getBaseUrl()
+    {
+        return baseUrl;
     }
 
     public String getPageSource()

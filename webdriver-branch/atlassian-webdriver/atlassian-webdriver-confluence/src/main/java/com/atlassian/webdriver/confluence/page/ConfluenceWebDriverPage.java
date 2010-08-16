@@ -1,5 +1,6 @@
 package com.atlassian.webdriver.confluence.page;
 
+import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.confluence.component.menu.BrowseMenu;
 import com.atlassian.webdriver.confluence.component.menu.UserMenu;
 import com.atlassian.webdriver.component.user.User;
@@ -75,22 +76,30 @@ public abstract class ConfluenceWebDriverPage extends WebDriverPage
 
     /**
      * Must override the WebDriverPage version as need to handle the Administrator Access
-     * page.
-     * @param URI
+     * page. (WebSudo)
+     * @param uri
      * @param activated
      */
     @Override
-    public void get(String URI, boolean activated)
+    public void get(String uri, boolean activated)
     {
-        super.get(URI, activated);
+        if (!activated && !at(uri))
+        {
+            goTo(uri);
+        }
 
         //Check whether we are on the admin access page and it wasn't requested.
         //If this is the case log in the user automatically.
-        if (!URI.equals(AdministratorAccessPage.URI) && at(AdministratorAccessPage.URI))
+        if (!uri.equals(AdministratorAccessPage.URI) && at(AdministratorAccessPage.URI))
         {
             ConfluencePage.ADMINACCESSPAGE.get(driver, true).login(ConfluenceWebDriverTest.getLoggedInUser());
         }
 
+
+        if (activated && !at(uri))
+        {
+            throw new IllegalStateException("Expected to be at uri: " + (getBaseUrl() + uri) + ", instead at: " + driver.getCurrentUrl());
+        }
 
     }
 
