@@ -4,8 +4,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 /**
- * Implements an ExpectedCondition that looks for the visiblity of another element.
- * The apply command will continue to execute until the element is visible.
+ * Implements an ExpectedCondition that looks for the visiblity of another element. The apply
+ * command will continue to execute until the element is visible.
  */
 public class ElementLocated extends ElementLocationCondition
 {

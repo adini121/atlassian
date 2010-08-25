@@ -17,8 +17,6 @@ public class Check
 
     /**
      * Checks that an element that matches the by exists.
-     * @param by
-     * @return
      */
     public static boolean elementExists(By by)
     {
@@ -27,9 +25,6 @@ public class Check
 
     /**
      * Checks that an element that matches the by param exists within another element.
-     * @param by
-     * @param el
-     * @return
      */
     public static boolean elementExists(By by, WebElement el)
     {
@@ -67,9 +62,6 @@ public class Check
 
     /**
      * Checks to see if a specified element contains a specific class of not.
-     * @param className
-     * @param el
-     * @return
      */
     public static boolean hasClass(String className, WebElement el)
     {
@@ -96,10 +88,8 @@ public class Check
     }
 
     /**
-     * Checks to see if the given text is found on the page or not.
-     * This is done by checking the page source.
-     * @param text
-     * @return
+     * Checks to see if the given text is found on the page or not. This is done by checking the
+     * page source.
      */
     public static boolean pageContains(String text)
     {

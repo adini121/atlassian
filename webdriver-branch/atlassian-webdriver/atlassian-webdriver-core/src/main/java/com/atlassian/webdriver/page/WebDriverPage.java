@@ -1,5 +1,6 @@
 package com.atlassian.webdriver.page;
 
+import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.component.user.User;
 import com.atlassian.webdriver.utils.QueryString;
 import com.atlassian.webdriver.utils.element.ElementLocated;
@@ -11,11 +12,13 @@ import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 /**
- * The base class that a PageObject should extend.
- * It contains helper methods for interacting with a page.
+ * The base class that a PageObject should extend. It contains helper methods for interacting with a
+ * page.
  */
 public abstract class WebDriverPage implements PageObject
 {
+    private static final long CHROME_HACK_SLEEP = 100;
+
     protected final WebDriver driver;
     protected final Wait<WebDriver> wait;
     protected QueryString queryString;
@@ -30,9 +33,8 @@ public abstract class WebDriverPage implements PageObject
     }
 
     /**
-     * Query string can only be set once per page.
-     * If you try to set it twice the second time then an exception will be thrown.
-     * @param queryString
+     * Query string can only be set once per page. If you try to set it twice the second time then
+     * an exception will be thrown.
      */
     final public void setQueryString(QueryString queryString)
     {
@@ -53,6 +55,7 @@ public abstract class WebDriverPage implements PageObject
 
     public void get(String uri, boolean activated)
     {
+
         if (!activated && !at(uri))
         {
             goTo(uri);
@@ -65,10 +68,18 @@ public abstract class WebDriverPage implements PageObject
 
     }
 
+    // TODO: take into account the query String
+
     protected boolean at(String uri)
     {
-        // TODO: take into account the query String
-        return driver.getCurrentUrl().startsWith(baseUrl + uri);
+        //TODO: remove at some point (Chrome hack).
+        AtlassianWebDriver.waitFor(CHROME_HACK_SLEEP);
+
+        String currentUrl = driver.getCurrentUrl();
+        String updatedCurrentUrl = currentUrl.replace("!default", "");
+        String urlToCheck = baseUrl + uri;
+
+        return currentUrl.startsWith(urlToCheck) || updatedCurrentUrl.startsWith(urlToCheck);
     }
 
     protected void goTo(String uri)
@@ -99,7 +110,9 @@ public abstract class WebDriverPage implements PageObject
     }
 
     abstract public boolean isLoggedIn();
+
     abstract public boolean isLoggedInAsUser(User user);
+
     abstract public boolean isAdmin();
 
 

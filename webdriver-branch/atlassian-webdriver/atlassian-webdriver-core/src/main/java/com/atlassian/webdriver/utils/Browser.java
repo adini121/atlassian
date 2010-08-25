@@ -21,7 +21,7 @@ public enum Browser
     {
         for (Browser browser : Browser.values())
         {
-            if(browserStartString.contains(browser.getName()))
+            if (browserStartString.contains(browser.getName()))
             {
                 return browser;
             }

@@ -7,8 +7,8 @@ import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 
 /**
- * Checks the Sytem property webdriver.browser to see what browser driver to return.
- * Defaults to firefox-3.5.
+ * Checks the Sytem property webdriver.browser to see what browser driver to return. Defaults to
+ * firefox-3.5.
  */
 public class WebDriverFactory
 {

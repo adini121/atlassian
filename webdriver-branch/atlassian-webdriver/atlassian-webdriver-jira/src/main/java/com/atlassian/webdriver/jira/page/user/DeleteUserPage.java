@@ -2,11 +2,15 @@ package com.atlassian.webdriver.jira.page.user;
 
 import com.atlassian.webdriver.jira.page.JiraAdminWebDriverPage;
 import com.atlassian.webdriver.jira.page.JiraPages;
-import com.atlassian.webdriver.page.PageObject;
 import com.atlassian.webdriver.utils.ByJquery;
+import com.atlassian.webdriver.utils.Check;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * TODO: Document this class / interface here
@@ -15,7 +19,9 @@ import org.openqa.selenium.support.FindBy;
  */
 public class DeleteUserPage extends JiraAdminWebDriverPage
 {
-    private static String URI = "/secure/admin/user/DeleteUser!default.jspa";
+    private static String URI = "/secure/admin/user/DeleteUser.jspa";
+
+    private static String ERROR_SELECTOR = ".formErrors ul li";
 
     @FindBy (id = "numberOfFilters")
     private WebElement numberOfSharedFiltersElement;
@@ -38,6 +44,8 @@ public class DeleteUserPage extends JiraAdminWebDriverPage
     private WebElement numberOfAssignedIssuesElement;
     private WebElement numberOfReportedIssuesElement;
 
+    private Set<String> errors = new HashSet <String>();
+
     public DeleteUserPage(final WebDriver driver)
     {
         super(driver);
@@ -47,15 +55,34 @@ public class DeleteUserPage extends JiraAdminWebDriverPage
     {
         get(URI, activated);
 
-        parseIssues();
+        parsePage();
 
         return this;
     }
 
-    private void parseIssues()
+    private void parsePage()
     {
+        //Check for errors on the page
+        if (Check.elementExists(ByJquery.$(ERROR_SELECTOR)))
+        {
+            for (WebElement el : driver.findElements(ByJquery.$(ERROR_SELECTOR)))
+            {
+                errors.add(el.getText());
+            }
+        }
+
         numberOfAssignedIssuesElement = driver.findElement(ByJquery.$("('td.fieldLabelArea:contains(Assigned Issues)').siblings('td').get(0)"));
         numberOfReportedIssuesElement = driver.findElement(ByJquery.$("('td.fieldLabelArea:contains(Reported Issues)').siblings('td').get(0)"));
+    }
+
+    public boolean hasErrors()
+    {
+        return !errors.isEmpty();
+    }
+
+    public boolean hasError(String errorString)
+    {
+        return errors.contains(errorString);
     }
 
     public UserBrowserPage deleteUser()
@@ -63,6 +90,13 @@ public class DeleteUserPage extends JiraAdminWebDriverPage
         deleteUserButton.click();
 
         return JiraPages.USERBROWSERPAGE.get(driver, true);
+    }
+
+    public DeleteUserPage deleteUserExpectingError()
+    {
+        deleteUserButton.click();
+
+        return JiraPages.DELETE_USER_PAGE.get(driver, true);
     }
 
     public int getNumberOfSharedFiltersElement()

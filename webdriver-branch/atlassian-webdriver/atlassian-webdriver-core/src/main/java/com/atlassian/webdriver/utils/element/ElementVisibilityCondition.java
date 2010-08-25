@@ -33,13 +33,13 @@ abstract class ElementVisibilityCondition implements ExpectedCondition<Boolean>
 
     ElementVisibilityCondition(By by, WebElement el, Visibility visibility)
     {
-        Validate.notNull(el,"WebElement cannot be null");
+        Validate.notNull(el, "WebElement cannot be null");
 
         this.findCondition = by;
         this.at = el;
         this.visibility = visibility;
     }
-    
+
     final public Boolean apply(WebDriver driver)
     {
         if (visibility.equals(Visibility.VISIBLE))

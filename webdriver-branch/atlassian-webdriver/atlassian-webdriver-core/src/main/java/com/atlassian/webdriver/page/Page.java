@@ -33,8 +33,8 @@ public class Page<T extends PageObject>
     {
         return get(driver, queryString, false);
     }
-    
-    @SuppressWarnings("unchecked")
+
+    @SuppressWarnings ("unchecked")
     public T get(WebDriver driver, QueryString queryString, boolean activated)
     {
         return (T) AtlassianPageFactory.get(driver, clazz, queryString, activated);

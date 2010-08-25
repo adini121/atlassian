@@ -41,6 +41,9 @@ public class UserBrowserPage extends JiraAdminWebDriverPage
     @FindBy (name = "max")
     private WebElement usersPerPageDropdown;
 
+    @FindBy (id = "user_browser_table")
+    private WebElement userTable;
+
     public UserBrowserPage(WebDriver driver)
     {
         super(driver);
@@ -63,6 +66,51 @@ public class UserBrowserPage extends JiraAdminWebDriverPage
     public boolean hasUser(User user)
     {
         return users.contains(user);
+    }
+
+    /**
+     * When editing a users groups from this page, EditUserGroups always returns back to
+     * UserBrowser unless there was an error.
+     * @param user
+     * @return
+     */
+    public EditUserGroupsPage editUserGroups(User user)
+    {
+
+        if (hasUser(user))
+        {
+            String editGroupsId = "editgroups_" + user.getUsername();
+
+            driver.findElement(By.id(editGroupsId)).click();
+
+            return JiraPages.EDIT_USER_GROUPS_PAGE.get(driver, true);
+        }
+        else
+        {
+            throw new IllegalStateException("User: " + user.getUsername() + " was not found.");
+        }
+
+    }
+
+    public Set<String> getUsersGroups(User user)
+    {
+
+        if (hasUser(user))
+        {
+            Set<String> groups = new HashSet<String>();
+            WebElement groupCol = userTable.findElements(ByJquery.$("('#enterprise-hosted-support').parents('tr.vcard').find('td')[4]")).get(0);
+
+            for (WebElement groupEl : groupCol.findElements(By.tagName("a")))
+            {
+                groups.add(groupEl.getText());
+            }
+
+            return groups;
+        }
+        else
+        {
+            throw new IllegalStateException("User: " + user.getUsername() + " was not found.");
+        }
     }
 
     public ViewUserPage gotoViewUserPage(User user)
@@ -134,8 +182,6 @@ public class UserBrowserPage extends JiraAdminWebDriverPage
     {
 
         users.removeAll(users);
-
-        WebElement userTable = driver.findElement(By.id("user_browser_table"));
 
         List<WebElement> rows = userTable.findElements(By.tagName("tr"));
 

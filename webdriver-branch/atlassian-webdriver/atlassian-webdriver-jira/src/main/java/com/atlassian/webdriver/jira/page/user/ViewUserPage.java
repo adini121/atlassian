@@ -47,6 +47,9 @@ public class ViewUserPage extends JiraAdminWebDriverPage
     @FindBy (id ="deleteuser_link")
     WebElement deleteUserLink;
 
+    @FindBy (id = "editgroups_link")
+    WebElement editUserLink;
+
     // TODO: groups are currently image bullets, don't handle them. Make JIRA change to <ul>.
 
     public ViewUserPage(WebDriver driver)
@@ -83,9 +86,11 @@ public class ViewUserPage extends JiraAdminWebDriverPage
         throw new UnsupportedOperationException("View project roles on ViewUSerPage is not supported");
     }
 
-    public PageObject editGroups()
+    public EditUserGroupsPage editGroups()
     {
-        throw new UnsupportedOperationException("Edit groups on the ViewUserPage is not supported");
+        editUserLink.click();
+
+        return JiraPages.EDIT_USER_GROUPS_PAGE.get(driver, true);
     }
 
     public PageObject editProperties()

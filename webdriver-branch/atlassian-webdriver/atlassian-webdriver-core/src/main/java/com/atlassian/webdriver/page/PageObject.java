@@ -8,5 +8,6 @@ import com.atlassian.webdriver.utils.QueryString;
 public interface PageObject
 {
     PageObject get(boolean activated);
+
     void setQueryString(QueryString queryString);
 }

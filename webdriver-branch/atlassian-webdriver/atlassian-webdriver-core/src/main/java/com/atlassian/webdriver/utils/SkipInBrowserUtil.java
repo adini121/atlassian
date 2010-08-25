@@ -11,7 +11,7 @@ public class SkipInBrowserUtil
         for (Class<?> c : list)
         {
             //Only added to the list if its not marked as to being to skip
-            if(!skip(browser, c))
+            if (!skip(browser, c))
             {
                 filteredList.add(c);
             }
@@ -27,8 +27,9 @@ public class SkipInBrowserUtil
 
     static boolean arrayContains(Browser[] browsers, Browser searchBrowser)
     {
-        for (Browser browser : browsers) {
-            if(searchBrowser == browser)
+        for (Browser browser : browsers)
+        {
+            if (searchBrowser == browser)
             {
                 return true;
             }

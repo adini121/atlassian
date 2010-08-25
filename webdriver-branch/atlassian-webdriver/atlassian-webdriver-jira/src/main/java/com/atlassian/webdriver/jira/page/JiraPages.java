@@ -2,6 +2,7 @@ package com.atlassian.webdriver.jira.page;
 
 import com.atlassian.webdriver.jira.page.user.AddUserPage;
 import com.atlassian.webdriver.jira.page.user.DeleteUserPage;
+import com.atlassian.webdriver.jira.page.user.EditUserGroupsPage;
 import com.atlassian.webdriver.jira.page.user.UserBrowserPage;
 import com.atlassian.webdriver.jira.page.user.ViewUserPage;
 import com.atlassian.webdriver.page.Page;
@@ -27,6 +28,7 @@ public class JiraPages
     public static final Page<AddUserPage> ADD_USER_PAGE = new Page<AddUserPage>(AddUserPage.class);
     public static final Page<ViewUserPage> VIEW_USER_PAGE = new Page<ViewUserPage>(ViewUserPage.class);
     public static final Page<DeleteUserPage> DELETE_USER_PAGE = new Page<DeleteUserPage>(DeleteUserPage.class);
+    public static final Page<EditUserGroupsPage> EDIT_USER_GROUPS_PAGE = new Page<EditUserGroupsPage>(EditUserGroupsPage.class);
 
     private JiraPages() {}
 }

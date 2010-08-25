@@ -9,18 +9,15 @@ import org.openqa.selenium.WebElement;
 import java.util.List;
 
 /**
- * Provides an extension to By so that jQuery selectors can be used.
- * By calling the ByJquery.$ method will ensure that jQuery get's loaded into the page.
- * It is namespaced away within the javascript so that it doens't override another version of jQuery on the page.
- * This allows the ByJquery locator to be dependent on it's own version of jQuery.
- *
- * same usages of ByJquery include:
- * <code>
- * ByJquery.$("div.className li");
- * ByJQuery.$("('div.className li a').parent('div')");
- *</code>
- * It accepts simple searches like the first example that don't need to be wrapped in brackets, but
- * if you want to call another jQuery method like <em>.parent</em> the first selector needs to be wrapped in brakcets.
+ * Provides an extension to By so that jQuery selectors can be used. By calling the ByJquery.$
+ * method will ensure that jQuery get's loaded into the page. It is namespaced away within the
+ * javascript so that it doens't override another version of jQuery on the page. This allows the
+ * ByJquery locator to be dependent on it's own version of jQuery.
+ * <p/>
+ * same usages of ByJquery include: <code> ByJquery.$("div.className li");
+ * ByJQuery.$("('div.className li a').parent('div')"); </code> It accepts simple searches like the
+ * first example that don't need to be wrapped in brackets, but if you want to call another jQuery
+ * method like <em>.parent</em> the first selector needs to be wrapped in brakcets.
  */
 public abstract class ByJquery extends By
 {
@@ -52,13 +49,13 @@ public abstract class ByJquery extends By
 
                 if (context instanceof WebElement)
                 {
-                    Object[] args = {"WD.byJquery.$(context).find" + realSelector,(WebElement)context};
+                    Object[] args = { "WD.byJquery.$(context).find" + realSelector, (WebElement) context };
                     return JavaScriptUtils.execute("return WD.byJquery.execute(arguments[0],arguments[1])", driver, args);
                 }
                 else
                 {
-                    Object[] args = {"WD.byJquery.$" + realSelector};
-                    return  JavaScriptUtils.execute("return WD.byJquery.execute(arguments[0])", driver, args);
+                    Object[] args = { "WD.byJquery.$" + realSelector };
+                    return JavaScriptUtils.execute("return WD.byJquery.execute(arguments[0])", driver, args);
                 }
             }
 
@@ -68,12 +65,12 @@ public abstract class ByJquery extends By
 
                 if (context instanceof WebElement)
                 {
-                    Object[] args = {"WD.byJquery.$(context).find" + realSelector,(WebElement)context};
+                    Object[] args = { "WD.byJquery.$(context).find" + realSelector, (WebElement) context };
                     return JavaScriptUtils.execute("return WD.byJquery.executeOne(arguments[0],arguments[1])", driver, args);
                 }
                 else
                 {
-                    Object[] args = {"WD.byJquery.$" + realSelector};
+                    Object[] args = { "WD.byJquery.$" + realSelector };
                     return JavaScriptUtils.execute("return WD.byJquery.executeOne(arguments[0])", driver, args);
                 }
             }
@@ -89,18 +86,22 @@ public abstract class ByJquery extends By
 
     private static String fixSelector(String selector)
     {
-        return !selector.startsWith("('") ? "('" + selector + "')" : selector ;
+        return !selector.startsWith("('") ? "('" + selector + "')" : selector;
     }
 
     /**
      * Find a single element. Override this method if necessary.
+     *
      * @param context A context to use to find the element
      * @return The WebElement that matches the selector
      */
-    public WebElement findElement(SearchContext context) {
+    public WebElement findElement(SearchContext context)
+    {
         List<WebElement> allElements = findElements(context);
         if (allElements == null || allElements.size() == 0)
+        {
             throw new NoSuchElementException("Cannot locate an element using " + toString());
+        }
         return allElements.get(0);
     }
 
@@ -123,9 +124,16 @@ public abstract class ByJquery extends By
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    public boolean equals(Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass())
+        {
+            return false;
+        }
 
         By by = (By) o;
 
@@ -133,7 +141,8 @@ public abstract class ByJquery extends By
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         return toString().hashCode();
     }
 

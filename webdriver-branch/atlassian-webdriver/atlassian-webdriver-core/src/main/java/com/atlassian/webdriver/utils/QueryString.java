@@ -1,10 +1,7 @@
 package com.atlassian.webdriver.utils;
 
-import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang.Validate;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,19 +16,19 @@ public class QueryString
     private final Map<String, String> params = new HashMap<String, String>();
 
 
-    public QueryString(String...params)
+    public QueryString(String... params)
     {
         Validate.isTrue(params.length % 2 == 0, "Must be an even number of parameters");
 
         for (int i = 0; i < params.length; i += 2)
         {
-            this.params.put(params[i], params[i+1]);
+            this.params.put(params[i], params[i + 1]);
         }
     }
 
     public void add(String key, String value)
     {
-        params.put(key,value);
+        params.put(key, value);
     }
 
     public int size()

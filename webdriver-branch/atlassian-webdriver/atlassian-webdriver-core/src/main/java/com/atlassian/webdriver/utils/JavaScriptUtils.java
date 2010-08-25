@@ -23,6 +23,7 @@ public class JavaScriptUtils
 
     /**
      * Dispatches a javascript mouse event in the browser on a specified element
+     *
      * @param event The name of the event to dispatch. eg. load.
      * @param el The element to fire the event on.
      * @param driver the webdriver instance that executes the javascript event.
@@ -44,7 +45,8 @@ public class JavaScriptUtils
 
     public static void loadScript(String jsScriptName, WebDriver driver)
     {
-        try{
+        try
+        {
             String lineSep = System.getProperty("line.separator");
             BufferedReader br = new BufferedReader(new InputStreamReader(ClassLoader.getSystemClassLoader().getResourceAsStream(jsScriptName)));
             String nextLine = "";
@@ -63,11 +65,11 @@ public class JavaScriptUtils
 
             JavaScriptUtils.execute(jsSource, driver);
 
-        } catch (IOException e)
+        }
+        catch (IOException e)
         {
             throw new RuntimeException("Unable to load the javascript file: " + jsScriptName, e);
         }
-
 
 
     }

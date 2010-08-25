@@ -14,9 +14,8 @@ public class MouseEvents
 
     /**
      * Fires a mouse over event on an element that matches the By
+     *
      * @param by the element matcher to apply the hover to.
-     * @param driver
-     * @return
      */
     public static WebElement hover(By by, WebDriver driver)
     {
@@ -25,9 +24,8 @@ public class MouseEvents
 
     /**
      * Fires a mouse over event on the specified element.
+     *
      * @param el The element to fire the hover event on.
-     * @param driver
-     * @return
      */
     public static WebElement hover(WebElement el, WebDriver driver)
     {

@@ -21,6 +21,6 @@ public abstract class LinkNavigator
     {
         return link.activate(driver);
     }
-    
+
 
 }

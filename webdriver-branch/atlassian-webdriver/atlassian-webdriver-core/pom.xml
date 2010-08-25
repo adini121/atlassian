@@ -15,8 +15,8 @@
 
     <repositories>
         <repository>
-              <id>selenium-repository</id>
-              <url>http://selenium.googlecode.com/svn/repository/</url>
+            <id>selenium-repository</id>
+            <url>http://selenium.googlecode.com/svn/repository/</url>
         </repository>
     </repositories>
 
@@ -29,7 +29,7 @@
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium</artifactId>
-            <version>2.0a4</version>
+            <version>2.0a5</version>
         </dependency>
     </dependencies>
 

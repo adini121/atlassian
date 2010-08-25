@@ -19,9 +19,10 @@ public class AtlassianWebDriver
     public static int WAIT_TIME = 60;
 
     /**
-     * Will return an instance of the current driver.
-     * At the moment there is only one instance of a driver at a time.
-     * Once the getDriver command has returned a driver it will continue to return the same one until quitDriver is called.
+     * Will return an instance of the current driver. At the moment there is only one instance of a
+     * driver at a time. Once the getDriver command has returned a driver it will continue to return
+     * the same one until quitDriver is called.
+     *
      * @return a WebDriver instance.
      * @see AtlassianWebDriver#quitDriver()
      */
@@ -44,7 +45,8 @@ public class AtlassianWebDriver
     /**
      * Quits the current WebDriver instance if there is one.
      */
-    public static void quitDriver() {
+    public static void quitDriver()
+    {
 
         if (driver != null)
         {
@@ -56,7 +58,6 @@ public class AtlassianWebDriver
 
     /**
      * Returns an instance of a Wait object.
-     * @return
      */
     private static Wait<WebDriver> getWait()
     {
@@ -69,10 +70,25 @@ public class AtlassianWebDriver
 
     /**
      * Utility for making WebDriver wait until the given function specifies to stop waiting.
+     *
      * @param func the function to run to check whether to return from the Wait or not.
      */
     public static void waitUntil(Function func)
     {
         getWait().until(func);
+    }
+
+    public static void waitFor(long timeout)
+    {
+
+        try
+        {
+            Thread.sleep(timeout);
+        }
+        catch (InterruptedException e)
+        {
+            // Do nothing.
+        }
+
     }
 }
