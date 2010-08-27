@@ -9,7 +9,7 @@ import org.junit.Test;
  *
  * @since v4.2
  */
-public class WebDriverAutoInstallerTest
+public abstract class WebDriverAutoInstallerTest
 {
     static HelloServer server;
     static String TEST_URL;

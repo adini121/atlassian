@@ -28,6 +28,7 @@
         <jdkLevel>1.5</jdkLevel>
     </properties>
 
+
     <modules>
         <module>atlassian-selenium</module>
         <module>atlassian-selenium-browsers</module>
@@ -35,6 +36,8 @@
         <module>atlassian-browsers</module>
         <module>atlassian-webdriver-browsers-auto</module>
     </modules>
+
+    
 
     <issueManagement>
         <system>Jira</system>

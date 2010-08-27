@@ -10,7 +10,78 @@
 
     <artifactId>atlassian-selenium-browsers-auto</artifactId>
     <name>${project.artifactId}</name>
-
+    <profiles>
+        <profile>
+            <id>windows</id>
+            <activation>
+                <os>
+                    <family>windows</family>
+                </os>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>atlassian-browsers-windows</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>linux</id>
+            <activation>
+                <os>
+                    <family>unix</family>
+                </os>
+            </activation>
+            <properties>
+                <xvfb.enable>true</xvfb.enable>
+                <xvfb.display>:20</xvfb.display>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>atlassian-browsers-linux</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>osx</id>
+            <activation>
+                <os>
+                    <family>mac</family>
+                </os>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>atlassian-browsers-osx</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
+    <build>
+      <pluginManagement>
+        <plugins>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <systemProperties>
+                        <property>
+                            <name>xvfb.enable</name>
+                            <value>${xvfb.enable}</value>
+                        </property>
+                        <property>
+                            <name>xvfb.display</name>
+                            <value>${xvfb.display}</value>
+                        </property>
+                    </systemProperties>
+                </configuration>
+            </plugin>
+        </plugins>
+      </pluginManagement>
+    </build>
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>

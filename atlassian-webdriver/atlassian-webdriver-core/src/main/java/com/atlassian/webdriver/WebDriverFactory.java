@@ -2,6 +2,7 @@ package com.atlassian.webdriver;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
@@ -21,7 +22,11 @@ public class WebDriverFactory
 
         if (BROWSER.startsWith("firefox"))
         {
-            return new FirefoxDriver();
+            FirefoxBinary firefox = new FirefoxBinary();
+            if (System.getProperty("DISPLAY") != null){
+                firefox.setEnvironmentProperty("DISPLAY", System.getProperty("DISPLAY"));
+            }
+            return new FirefoxDriver(firefox, null);
         }
         else if (BROWSER.startsWith("chrome"))
         {
