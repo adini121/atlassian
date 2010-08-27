@@ -15,41 +15,13 @@ import java.io.File;
 public class AutoInstallClient
 {
     private static final SeleniumClient client;
-    private static boolean useXvfb = Boolean.parseBoolean(System.getProperty("xvfb.enable", "false"));
 
     private static SeleniumAssertions assertThat;
     private static AutoInstallConfiguration config;
 
     static
     {
-        File targetDir = new File("target");
-        File seleniumDir = new File(targetDir, "seleniumTmp");
-        seleniumDir.mkdirs();
-
-        final XvfbManager xvfb = new XvfbManager(seleniumDir);
-        if (useXvfb && OsValidator.isUnix())
-        {
-            xvfb.start();
-            try
-            {
-                // TODO: Probably could add a more intelligent polling bit here
-                Thread.sleep(1000);
-            }
-            catch (InterruptedException e)
-            {
-                // ignore
-            }
-            Runtime.getRuntime().addShutdownHook(new Thread()
-            {
-                @Override
-                public void run()
-                {
-                    xvfb.stop();
-                }
-            });
-        }
-
-        config = new AutoInstallConfiguration(seleniumDir, xvfb.getDisplay());
+        config = new AutoInstallConfiguration();
         if (SeleniumStarter.getInstance().isManual())
         {
             SeleniumStarter.getInstance().start(config);
