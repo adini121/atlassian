@@ -2,7 +2,6 @@ package com.atlassian.webdriver.browsers;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Test;
 
 /**
  * TODO: Document this class / interface here
