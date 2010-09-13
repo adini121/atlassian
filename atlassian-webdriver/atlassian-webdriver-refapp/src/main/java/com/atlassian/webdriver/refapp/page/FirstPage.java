@@ -15,7 +15,7 @@ public class FirstPage extends RefappWebDriverPage
 
     public PageObject get(boolean activated)
     {
-        super.get(URI, false);
+        super.get(URI, activated);
         waitUntilLocated(By.className("refapp-footer"));
         return this;
     }
