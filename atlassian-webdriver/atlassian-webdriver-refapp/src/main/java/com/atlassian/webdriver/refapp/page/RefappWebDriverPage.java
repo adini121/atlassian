@@ -24,7 +24,7 @@ public abstract class RefappWebDriverPage extends WebDriverPage
     @Override
     public boolean isLoggedInAsUser(User user)
     {
-        return isLoggedIn() && !driver.findElement(By.id("user")).getText().contains("(Sysadmin)");
+        return isLoggedIn() && driver.findElement(By.id("user")).getText().contains(user.getFullName());
     }
 
     @Override
