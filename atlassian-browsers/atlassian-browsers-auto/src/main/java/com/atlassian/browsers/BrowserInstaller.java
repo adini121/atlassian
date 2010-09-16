@@ -96,7 +96,7 @@ enum BrowserInstaller
 
             File browserBinary = new File(browserDir, binaryPath);
 
-            if (OsValidator.isUnix())
+            if (!OsValidator.isWindows())
             {
                 Utils.make755(browserBinary);
             }
