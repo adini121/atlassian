@@ -10,6 +10,35 @@
     <artifactId>atlassian-webdriver-browsers-auto</artifactId>
     <name>${project.artifactId}</name>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>atlassian-browsers</groupId>
+                <artifactId>atlassian-browsers-auto</artifactId>
+                <version>${atlassian-browsers-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>atlassian-browsers</groupId>
+                <artifactId>atlassian-browsers-linux</artifactId>
+                <version>${atlassian-browsers-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>atlassian-browsers</groupId>
+                <artifactId>atlassian-browsers-osx</artifactId>
+                <version>${atlassian-browsers-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>atlassian-browsers</groupId>
+                <artifactId>atlassian-browsers-windows</artifactId>
+                <version>${atlassian-browsers-version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <properties>
+        <atlassian-browsers-version>1.0</atlassian-browsers-version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -17,9 +46,8 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>atlassian-browsers</groupId>
             <artifactId>atlassian-browsers-auto</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.mortbay.jetty</groupId>
@@ -52,10 +80,6 @@
                             <name>xvfb.enable</name>
                             <value>${xvfb.enable}</value>
                         </property>
-                        <!--property>
-                            <name>xvfb.display</name>
-                            <value>${xvfb.display}</value>
-                        </property-->
                     </systemProperties>
                 </configuration>
             </plugin>
@@ -72,9 +96,8 @@
             </activation>
             <dependencies>
                 <dependency>
-                    <groupId>${project.groupId}</groupId>
+                    <groupId>atlassian-browsers</groupId>
                     <artifactId>atlassian-browsers-windows</artifactId>
-                    <version>${project.version}</version>
                 </dependency>
             </dependencies>
             <!-- TODO: Take this out when we have a chrome windows binary -->
@@ -105,9 +128,8 @@
             </properties>
             <dependencies>
                 <dependency>
-                    <groupId>${project.groupId}</groupId>
+                    <groupId>atlassian-browsers</groupId>
                     <artifactId>atlassian-browsers-linux</artifactId>
-                    <version>${project.version}</version>
                 </dependency>
             </dependencies>
             <build>
@@ -133,9 +155,8 @@
             </activation>
             <dependencies>
                 <dependency>
-                    <groupId>${project.groupId}</groupId>
+                    <groupId>atlassian-browsers</groupId>
                     <artifactId>atlassian-browsers-osx</artifactId>
-                    <version>${project.version}</version>
                 </dependency>
             </dependencies>
         </profile>

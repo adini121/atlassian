@@ -18,4 +18,5 @@
     <modules>
         <module>atlassian-selenium-browsers-auto</module>
     </modules>
+
 </project>

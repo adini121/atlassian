@@ -53,7 +53,6 @@ public class AtlassianWebDriver
             driver.quit();
             driver = null;
         }
-
     }
 
     /**

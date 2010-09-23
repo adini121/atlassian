@@ -10,6 +10,36 @@
 
     <artifactId>atlassian-selenium-browsers-auto</artifactId>
     <name>${project.artifactId}</name>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>atlassian-browsers</groupId>
+                <artifactId>atlassian-browsers-auto</artifactId>
+                <version>${atlassian-browsers-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>atlassian-browsers</groupId>
+                <artifactId>atlassian-browsers-linux</artifactId>
+                <version>${atlassian-browsers-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>atlassian-browsers</groupId>
+                <artifactId>atlassian-browsers-osx</artifactId>
+                <version>${atlassian-browsers-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>atlassian-browsers</groupId>
+                <artifactId>atlassian-browsers-windows</artifactId>
+                <version>${atlassian-browsers-version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <properties>
+        <atlassian-browsers-version>1.0</atlassian-browsers-version>
+    </properties>
+
     <profiles>
         <profile>
             <id>windows</id>
@@ -20,9 +50,8 @@
             </activation>
             <dependencies>
                 <dependency>
-                    <groupId>${project.groupId}</groupId>
+                    <groupId>atlassian-browsers</groupId>
                     <artifactId>atlassian-browsers-windows</artifactId>
-                    <version>${project.version}</version>
                 </dependency>
             </dependencies>
         </profile>
@@ -39,9 +68,8 @@
             </properties>
             <dependencies>
                 <dependency>
-                    <groupId>${project.groupId}</groupId>
+                    <groupId>atlassian-browsers</groupId>
                     <artifactId>atlassian-browsers-linux</artifactId>
-                    <version>${project.version}</version>
                 </dependency>
             </dependencies>
         </profile>
@@ -54,9 +82,8 @@
             </activation>
             <dependencies>
                 <dependency>
-                    <groupId>${project.groupId}</groupId>
+                    <groupId>atlassian-browsers</groupId>
                     <artifactId>atlassian-browsers-osx</artifactId>
-                    <version>${project.version}</version>
                 </dependency>
             </dependencies>
         </profile>
@@ -72,10 +99,6 @@
                             <name>xvfb.enable</name>
                             <value>${xvfb.enable}</value>
                         </property>
-                        <!--property>
-                            <name>xvfb.display</name>
-                            <value>${xvfb.display}</value>
-                        </property-->
                     </systemProperties>
                 </configuration>
             </plugin>
@@ -89,9 +112,8 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>atlassian-browsers</groupId>
             <artifactId>atlassian-browsers-auto</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.mortbay.jetty</groupId>
