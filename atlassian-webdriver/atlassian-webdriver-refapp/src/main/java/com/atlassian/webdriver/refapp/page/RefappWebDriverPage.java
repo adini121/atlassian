@@ -8,7 +8,8 @@ import org.openqa.selenium.WebDriver;
 
 public abstract class RefappWebDriverPage extends WebDriverPage
 {
-    public static final String BASE_URL = System.getProperty("refapp-base-url", "http://localhost:5990/refapp");
+    public static final String BASE_URL = System.getProperty("refapp-base-url",
+                                            System.getProperty("baseurl", "http://localhost:5990/refapp"));
 
     public RefappWebDriverPage(WebDriver driver)
     {
