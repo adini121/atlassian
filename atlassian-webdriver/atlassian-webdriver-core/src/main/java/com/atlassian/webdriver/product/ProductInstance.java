@@ -1,4 +1,4 @@
-package com.atlassian.webdriver.ng;
+package com.atlassian.webdriver.product;
 
 import com.atlassian.webdriver.ng.product.RefappTestedProduct;
 

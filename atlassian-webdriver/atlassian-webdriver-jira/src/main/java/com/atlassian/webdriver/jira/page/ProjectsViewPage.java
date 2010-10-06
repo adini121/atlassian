@@ -18,7 +18,7 @@ import java.util.List;
  *
  * @since v4.2
  */
-public class ProjectsViewPage extends JiraAdminWebDriverPage
+public class ProjectsViewPage extends JiraAdminAbstractPage
 {
 
     @FindBy (id = "add_project")

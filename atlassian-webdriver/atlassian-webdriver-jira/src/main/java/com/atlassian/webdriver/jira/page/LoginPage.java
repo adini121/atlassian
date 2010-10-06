@@ -8,7 +8,7 @@ import org.openqa.selenium.support.FindBy;
 /**
  * Page object implementation for the LoginPage in JIRA.
  */
-public class LoginPage extends JiraWebDriverPage
+public class LoginPage extends JiraAbstractPage
 {
     private static final String URI = "/login.jsp";
 

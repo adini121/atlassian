@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 /**
  * Page object implementation for the License details page in JIRA.
  */
-public class LicenseDetailsPage extends JiraAdminWebDriverPage
+public class LicenseDetailsPage extends JiraAdminAbstractPage
 {
 
     private static final String URI = "/secure/admin/jira/ViewLicense!default.jspa";

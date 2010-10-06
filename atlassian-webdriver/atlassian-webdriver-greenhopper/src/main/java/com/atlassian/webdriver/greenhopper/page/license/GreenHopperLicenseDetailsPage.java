@@ -1,6 +1,6 @@
 package com.atlassian.webdriver.greenhopper.page.license;
 
-import com.atlassian.webdriver.jira.page.JiraAdminWebDriverPage;
+import com.atlassian.webdriver.jira.page.JiraAdminAbstractPage;
 import com.atlassian.webdriver.greenhopper.page.GreenHopperPage;
 import com.atlassian.webdriver.utils.ByJquery;
 import com.atlassian.webdriver.utils.Check;
@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
  *
  * @since v4.2
  */
-public class GreenHopperLicenseDetailsPage extends JiraAdminWebDriverPage
+public class GreenHopperLicenseDetailsPage extends JiraAdminAbstractPage
 {
 
     private static final String URI = "/secure/GHLicense.jspa?decorator=admin";

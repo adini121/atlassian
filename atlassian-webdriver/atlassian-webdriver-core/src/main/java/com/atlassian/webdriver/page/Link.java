@@ -1,18 +1,15 @@
-package com.atlassian.webdriver.ng;
+package com.atlassian.webdriver.page;
 
 import com.atlassian.webdriver.AtlassianWebDriver;
-import com.atlassian.webdriver.component.link.PageLinkFactory;
-import com.atlassian.webdriver.ng.page.AbstractPage;
-import com.atlassian.webdriver.page.PageObject;
+import com.atlassian.webdriver.product.PageFactory;
 import com.atlassian.webdriver.utils.Check;
 import org.openqa.selenium.By;
 import org.openqa.selenium.ElementNotVisibleException;
-import org.openqa.selenium.WebDriver;
 
 /**
  *
  */
-public class Link<T extends AbstractPage>
+public class Link<T extends PageObject>
 {
     private final By locator;
     private final Class<T> pageObjectClass;

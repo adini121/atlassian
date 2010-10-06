@@ -15,7 +15,7 @@ import java.util.Set;
  * Page object implementation for the Plugins page for JIRA.
  * TODO: add plugin details method, which also returns loaded modules per plugin
  */
-public class PluginsPage extends JiraAdminWebDriverPage
+public class PluginsPage extends JiraAdminAbstractPage
 {
     private final static String URI = "/secure/admin/jira/ViewPlugins!default.jspa";
 

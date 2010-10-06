@@ -8,7 +8,7 @@ import org.openqa.selenium.support.FindBy;
 /**
  * Page object implementation for the LoginPage in Confluence.
  */
-public class LoginPage extends ConfluenceWebDriverPage
+public class LoginPage extends ConfluenceAbstractPage
 {
     private static final String URI = "/login.action";
 

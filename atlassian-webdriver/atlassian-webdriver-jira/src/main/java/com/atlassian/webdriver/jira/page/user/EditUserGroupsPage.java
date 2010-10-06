@@ -1,12 +1,11 @@
 package com.atlassian.webdriver.jira.page.user;
 
-import com.atlassian.webdriver.jira.page.JiraAdminWebDriverPage;
+import com.atlassian.webdriver.jira.page.JiraAdminAbstractPage;
 import com.atlassian.webdriver.jira.page.JiraPages;
 import com.atlassian.webdriver.page.Page;
 import com.atlassian.webdriver.page.PageObject;
 import com.atlassian.webdriver.utils.ByJquery;
 import com.atlassian.webdriver.utils.Check;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -19,7 +18,7 @@ import java.util.Set;
  *
  * @since v1.0
  */
-public class  EditUserGroupsPage extends JiraAdminWebDriverPage
+public class  EditUserGroupsPage extends JiraAdminAbstractPage
 {
 
     private static final String URI = "/secure/admin/user/EditUserGroups.jspa";

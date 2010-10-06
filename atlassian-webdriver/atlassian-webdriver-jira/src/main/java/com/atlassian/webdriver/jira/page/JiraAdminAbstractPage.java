@@ -9,13 +9,13 @@ import java.util.Set;
 /**
  * 
  */
-public abstract class JiraAdminWebDriverPage extends JiraWebDriverPage
+public abstract class JiraAdminAbstractPage extends JiraAbstractPage
 {
 
     // Set of admin links
     private static Set<Object> obs = new HashSet<Object>();
 
-    public JiraAdminWebDriverPage(WebDriver driver)
+    public JiraAdminAbstractPage(WebDriver driver)
     {
         super(driver);
     }

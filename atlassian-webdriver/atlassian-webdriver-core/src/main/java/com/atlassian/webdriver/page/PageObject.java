@@ -1,13 +1,19 @@
 package com.atlassian.webdriver.page;
 
+import com.atlassian.webdriver.product.ProductInstance;
+import com.atlassian.webdriver.product.TestedProduct;
 import com.atlassian.webdriver.utils.QueryString;
 
 /**
- * The implemenation for a PageObject
+ * The implementation for a PageObject
  */
-public interface PageObject
+public interface PageObject<TP extends TestedProduct, P extends PageObject>
 {
-    PageObject get(boolean activated);
+    P get(boolean activated);
+
+    TP getTestedProduct();
+
+    <T extends PageObject> T gotoPage(Link<T> link);
 
     void setQueryString(QueryString queryString);
 }

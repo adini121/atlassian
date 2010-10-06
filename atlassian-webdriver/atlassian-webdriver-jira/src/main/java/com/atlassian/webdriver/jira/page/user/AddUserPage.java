@@ -1,10 +1,7 @@
 package com.atlassian.webdriver.jira.page.user;
 
-import com.atlassian.webdriver.component.user.User;
-import com.atlassian.webdriver.jira.page.JiraAdminWebDriverPage;
+import com.atlassian.webdriver.jira.page.JiraAdminAbstractPage;
 import com.atlassian.webdriver.jira.page.JiraPages;
-import com.atlassian.webdriver.page.PageObject;
-import com.atlassian.webdriver.utils.ByJquery;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -19,7 +16,7 @@ import java.util.Set;
  *
  * @since v1.0
  */
-public class AddUserPage extends JiraAdminWebDriverPage
+public class AddUserPage extends JiraAdminAbstractPage
 {
     private static String URI = "/secure/admin/user/AddUser!default.jspa";
 

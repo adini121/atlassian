@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
  *
  * @since v4.2
  */
-public class LicenseDetailsPage extends ConfluenceWebDriverPage
+public class LicenseDetailsPage extends ConfluenceAbstractPage
 {
 
     private static String URI = "/admin/license.action";

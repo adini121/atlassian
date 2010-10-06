@@ -1,7 +1,7 @@
-package com.atlassian.webdriver.ng;
+package com.atlassian.webdriver.product;
 
-import com.atlassian.webdriver.ng.page.AbstractPage;
-import org.openqa.selenium.WebDriver;
+import com.atlassian.webdriver.page.PageObject;
+import com.atlassian.webdriver.product.TestedProduct;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -18,7 +18,7 @@ public class PageFactory
         this.testedProduct = testedProduct;
     }
 
-    public <T extends AbstractPage> T create(Class<T> pageClass)
+    public <T extends PageObject> T create(Class<T> pageClass)
     {
         try
         {

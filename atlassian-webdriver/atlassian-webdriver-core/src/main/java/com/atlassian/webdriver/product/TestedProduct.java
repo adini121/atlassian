@@ -1,8 +1,8 @@
-package com.atlassian.webdriver.ng;
+package com.atlassian.webdriver.product;
 
-import com.atlassian.webdriver.ng.page.AdminHomePage;
-import com.atlassian.webdriver.ng.page.HomePage;
-import com.atlassian.webdriver.ng.page.LoginPage;
+import com.atlassian.webdriver.page.AdminHomePage;
+import com.atlassian.webdriver.page.HomePage;
+import com.atlassian.webdriver.page.LoginPage;
 import org.openqa.selenium.WebDriver;
 
 /**

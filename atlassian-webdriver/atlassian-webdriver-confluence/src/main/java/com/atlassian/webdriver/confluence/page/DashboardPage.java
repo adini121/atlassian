@@ -6,7 +6,7 @@ import org.openqa.selenium.WebDriver;
  * Page object implementation for the Dashbaord page in Confluence.
  * TODO: extend to handle more the page properly.
  */
-public class DashboardPage extends ConfluenceWebDriverPage
+public class DashboardPage extends ConfluenceAbstractPage
 {
     private static String URI = "/dashboard.action";
 

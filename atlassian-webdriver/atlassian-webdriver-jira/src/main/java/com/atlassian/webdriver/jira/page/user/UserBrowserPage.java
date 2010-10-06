@@ -2,7 +2,7 @@ package com.atlassian.webdriver.jira.page.user;
 
 import com.atlassian.webdriver.component.group.Group;
 import com.atlassian.webdriver.component.user.User;
-import com.atlassian.webdriver.jira.page.JiraAdminWebDriverPage;
+import com.atlassian.webdriver.jira.page.JiraAdminAbstractPage;
 import com.atlassian.webdriver.jira.page.JiraPages;
 import com.atlassian.webdriver.utils.ByJquery;
 import com.atlassian.webdriver.utils.Check;
@@ -19,7 +19,7 @@ import java.util.Set;
  * Page object implementation for the User browser page in JIRA.
  * TODO: Handle pagination when there are more users
  */
-public class UserBrowserPage extends JiraAdminWebDriverPage
+public class UserBrowserPage extends JiraAdminAbstractPage
 {
     private static final String URI = "/secure/admin/user/UserBrowser.jspa";
 

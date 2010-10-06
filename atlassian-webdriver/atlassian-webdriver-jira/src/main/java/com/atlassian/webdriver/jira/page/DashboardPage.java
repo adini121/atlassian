@@ -9,7 +9,7 @@ import org.openqa.selenium.WebDriver;
  * Page object implementation for the Dashbaord page in JIRA.
  * TODO: extend to handle more operations like addGadget.
  */
-public class DashboardPage extends JiraWebDriverPage
+public class DashboardPage extends JiraAbstractPage
 {
     private static final String URI = "/secure/Dashboard.jspa";
 

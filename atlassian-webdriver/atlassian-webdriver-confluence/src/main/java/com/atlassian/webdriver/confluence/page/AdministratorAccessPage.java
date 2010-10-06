@@ -10,7 +10,7 @@ import org.openqa.selenium.support.FindBy;
  *
  * @since v4.2
  */
-public class AdministratorAccessPage extends ConfluenceWebDriverPage
+public class AdministratorAccessPage extends ConfluenceAbstractPage
 {
     public static final String URI = "/authenticate.action";
 

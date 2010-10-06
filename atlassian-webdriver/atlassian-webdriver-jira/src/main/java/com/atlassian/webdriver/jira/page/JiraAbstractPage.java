@@ -5,7 +5,7 @@ import com.atlassian.webdriver.jira.component.menu.AdminMenu;
 import com.atlassian.webdriver.jira.component.menu.UserMenu;
 import com.atlassian.webdriver.component.menu.DashboardMenu;
 import com.atlassian.webdriver.component.user.User;
-import com.atlassian.webdriver.page.WebDriverPage;
+import com.atlassian.webdriver.page.AbstractPage;
 import com.atlassian.webdriver.utils.Check;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -15,12 +15,12 @@ import org.openqa.selenium.WebDriver;
  * Such as getting the admin menu.
  * Sets the base url for the WebDrivePage class to use which is defined in the jira-base-url system property.
  */
-public abstract class JiraWebDriverPage extends WebDriverPage
+public abstract class JiraAbstractPage extends AbstractPage
 {
 
     public static final String BASE_URL = System.getProperty("jira-base-url", "http://localhost:2990/jira");
 
-    public JiraWebDriverPage(WebDriver driver)
+    public JiraAbstractPage(WebDriver driver)
     {
         super(driver, BASE_URL);
     }

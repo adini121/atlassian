@@ -7,7 +7,7 @@ import org.openqa.selenium.WebDriver;
  *
  * @since v4.2
  */
-public class LogoutPage extends ConfluenceWebDriverPage
+public class LogoutPage extends ConfluenceAbstractPage
 {
     private static final String URI = "/logout.action";
 

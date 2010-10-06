@@ -1,10 +1,9 @@
 package com.atlassian.webdriver.confluence.page;
 
-import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.confluence.component.menu.BrowseMenu;
 import com.atlassian.webdriver.confluence.component.menu.UserMenu;
 import com.atlassian.webdriver.component.user.User;
-import com.atlassian.webdriver.page.WebDriverPage;
+import com.atlassian.webdriver.page.AbstractPage;
 import com.atlassian.webdriver.confluence.test.ConfluenceWebDriverTest;
 import com.atlassian.webdriver.utils.Check;
 import org.openqa.selenium.By;
@@ -15,12 +14,12 @@ import org.openqa.selenium.WebDriver;
  *
  * @since v4.2
  */
-public abstract class ConfluenceWebDriverPage extends WebDriverPage
+public abstract class ConfluenceAbstractPage extends AbstractPage
 {
 
     public static final String BASE_URL = System.getProperty("confluence-base-url", "http://localhost:1990/wiki");
 
-    public ConfluenceWebDriverPage(WebDriver driver)
+    public ConfluenceAbstractPage(WebDriver driver)
     {
         super(driver, BASE_URL);
     }
@@ -75,7 +74,7 @@ public abstract class ConfluenceWebDriverPage extends WebDriverPage
     }
 
     /**
-     * Must override the WebDriverPage version as need to handle the Administrator Access
+     * Must override the AbstractPage version as need to handle the Administrator Access
      * page. (WebSudo)
      * @param uri
      * @param activated

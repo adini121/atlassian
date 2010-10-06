@@ -16,7 +16,7 @@ import java.util.Set;
  * Page object implementation for the Plugins page for Confluence.
  * TODO: add plugin details method, which also returns loaded modules per plugin
  */
-public class PluginsPage extends ConfluenceWebDriverPage
+public class PluginsPage extends ConfluenceAbstractPage
 {
     private static final String PLUGIN_KEY = "pluginKey=";
     private static final String URI = "/admin/viewplugins.action";

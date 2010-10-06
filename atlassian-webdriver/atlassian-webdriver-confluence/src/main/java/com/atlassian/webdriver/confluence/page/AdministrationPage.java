@@ -9,7 +9,7 @@ import org.openqa.selenium.support.FindBy;
  *
  * @since v4.2
  */
-public class AdministrationPage extends ConfluenceWebDriverPage
+public class AdministrationPage extends ConfluenceAbstractPage
 {
     private static final String URI = "/admin/console.action";
 

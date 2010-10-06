@@ -1,14 +1,11 @@
-package com.atlassian.webdriver.ng;
+package com.atlassian.webdriver.product;
 
 import com.atlassian.webdriver.AtlassianWebDriver;
-import com.atlassian.webdriver.component.user.User;
-import com.atlassian.webdriver.ng.page.AbstractPage;
-import com.atlassian.webdriver.ng.page.AdminHomePage;
-import com.atlassian.webdriver.ng.page.LoginPage;
 import com.atlassian.webdriver.ng.product.RefappAdminHomePage;
-import com.atlassian.webdriver.ng.product.RefappHomePage;
 import com.atlassian.webdriver.ng.product.RefappLoginPage;
 import com.atlassian.webdriver.ng.product.RefappTestedProduct;
+import com.atlassian.webdriver.page.AbstractPage;
+import com.atlassian.webdriver.page.Link;
 import com.atlassian.webdriver.page.PageObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -54,24 +51,6 @@ public class TestedProductFactory
         protected MyPage(TestedProduct testedProduct)
         {
             super(testedProduct);
-        }
-
-        @Override
-        public boolean isLoggedIn()
-        {
-            return false;
-        }
-
-        @Override
-        public boolean isLoggedInAsUser(User user)
-        {
-            return false;
-        }
-
-        @Override
-        public boolean isAdmin()
-        {
-            return false;
         }
 
         public PageObject get(boolean activated)

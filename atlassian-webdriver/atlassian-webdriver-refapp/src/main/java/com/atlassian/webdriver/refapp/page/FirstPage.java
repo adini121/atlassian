@@ -4,7 +4,7 @@ import com.atlassian.webdriver.page.PageObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-public class FirstPage extends RefappWebDriverPage
+public class FirstPage extends RefappAbstractPage
 {
     private static final String URI = "";
 

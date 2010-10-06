@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 /**
  * 
  */
-public class ViewAttachmentsSettingsPage extends JiraAdminWebDriverPage
+public class ViewAttachmentsSettingsPage extends JiraAdminAbstractPage
 {
 
     private static final String URI = "/secure/admin/jira/ViewAttachmentSettings.jspa";

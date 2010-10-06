@@ -1,6 +1,6 @@
 package com.atlassian.webdriver.jira.page.user;
 
-import com.atlassian.webdriver.jira.page.JiraAdminWebDriverPage;
+import com.atlassian.webdriver.jira.page.JiraAdminAbstractPage;
 import com.atlassian.webdriver.jira.page.JiraPages;
 import com.atlassian.webdriver.page.PageObject;
 import org.openqa.selenium.WebDriver;
@@ -12,7 +12,7 @@ import org.openqa.selenium.support.FindBy;
  *
  * @since v1.0
  */
-public class ViewUserPage extends JiraAdminWebDriverPage
+public class ViewUserPage extends JiraAdminAbstractPage
 {
     
     private static final String URI = "/secure/admin/user/ViewUser.jspa";

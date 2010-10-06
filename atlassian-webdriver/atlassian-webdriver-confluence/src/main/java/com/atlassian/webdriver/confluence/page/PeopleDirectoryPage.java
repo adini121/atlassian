@@ -17,7 +17,7 @@ import java.util.Set;
  *
  * @since v4.2
  */
-public class PeopleDirectoryPage extends ConfluenceWebDriverPage
+public class PeopleDirectoryPage extends ConfluenceAbstractPage
 {
     private static final String URI = "/browsepeople.action";
 

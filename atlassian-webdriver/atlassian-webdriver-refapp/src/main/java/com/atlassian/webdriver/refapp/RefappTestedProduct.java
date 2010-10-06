@@ -1,11 +1,10 @@
-package com.atlassian.webdriver.ng.product;
+package com.atlassian.webdriver.refapp;
 
-import com.atlassian.webdriver.ng.AbstractTestedProduct;
-import com.atlassian.webdriver.ng.ProductInstance;
-import com.atlassian.webdriver.ng.TestedProduct;
-import com.atlassian.webdriver.ng.page.AdminHomePage;
-import com.atlassian.webdriver.ng.page.HomePage;
-import com.atlassian.webdriver.ng.page.LoginPage;
+import com.atlassian.webdriver.refapp.page.RefappAdminHomePage;
+import com.atlassian.webdriver.refapp.page.RefappHomePage;
+import com.atlassian.webdriver.refapp.page.RefappLoginPage;
+import com.atlassian.webdriver.product.AbstractTestedProduct;
+import com.atlassian.webdriver.product.ProductInstance;
 import org.openqa.selenium.WebDriver;
 
 /**
