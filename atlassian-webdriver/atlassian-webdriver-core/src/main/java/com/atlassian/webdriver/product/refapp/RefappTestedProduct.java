@@ -1,8 +1,8 @@
-package com.atlassian.webdriver.refapp;
+package com.atlassian.webdriver.product.refapp;
 
-import com.atlassian.webdriver.refapp.page.RefappAdminHomePage;
-import com.atlassian.webdriver.refapp.page.RefappHomePage;
-import com.atlassian.webdriver.refapp.page.RefappLoginPage;
+import com.atlassian.webdriver.product.refapp.page.RefappAdminHomePage;
+import com.atlassian.webdriver.product.refapp.page.RefappHomePage;
+import com.atlassian.webdriver.product.refapp.page.RefappLoginPage;
 import com.atlassian.webdriver.product.AbstractTestedProduct;
 import com.atlassian.webdriver.product.ProductInstance;
 import org.openqa.selenium.WebDriver;

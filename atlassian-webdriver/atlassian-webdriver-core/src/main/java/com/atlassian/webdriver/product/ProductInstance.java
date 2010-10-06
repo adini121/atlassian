@@ -1,6 +1,7 @@
 package com.atlassian.webdriver.product;
 
-import com.atlassian.webdriver.ng.product.RefappTestedProduct;
+
+import com.atlassian.webdriver.product.refapp.RefappTestedProduct;
 
 import java.net.InetAddress;
 

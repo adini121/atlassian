@@ -1,6 +1,8 @@
 package com.atlassian.webdriver.page;
 
 import com.atlassian.webdriver.AtlassianWebDriver;
+import com.atlassian.webdriver.Link;
+import com.atlassian.webdriver.PageObject;
 import com.atlassian.webdriver.product.ProductInstance;
 import com.atlassian.webdriver.product.TestedProduct;
 import com.atlassian.webdriver.utils.QueryString;

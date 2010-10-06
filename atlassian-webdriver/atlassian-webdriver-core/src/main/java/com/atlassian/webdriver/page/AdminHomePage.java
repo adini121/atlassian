@@ -1,7 +1,7 @@
 package com.atlassian.webdriver.page;
 
+import com.atlassian.webdriver.PageObject;
 import com.atlassian.webdriver.product.TestedProduct;
-import com.atlassian.webdriver.page.AbstractPage;
 
 /**
  *

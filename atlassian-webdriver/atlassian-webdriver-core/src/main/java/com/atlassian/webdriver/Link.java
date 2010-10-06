@@ -1,6 +1,5 @@
-package com.atlassian.webdriver.page;
+package com.atlassian.webdriver;
 
-import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.product.PageFactory;
 import com.atlassian.webdriver.utils.Check;
 import org.openqa.selenium.By;

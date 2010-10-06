@@ -1,13 +1,11 @@
-package com.atlassian.webdriver.refapp.page;
+package com.atlassian.webdriver.product.refapp.page;
 
 import com.atlassian.webdriver.component.user.User;
 import com.atlassian.webdriver.page.AbstractPage;
-import com.atlassian.webdriver.page.PageObject;
+import com.atlassian.webdriver.PageObject;
 import com.atlassian.webdriver.page.UserDiscoverable;
-import com.atlassian.webdriver.product.TestedProduct;
-import com.atlassian.webdriver.refapp.RefappTestedProduct;
+import com.atlassian.webdriver.product.refapp.RefappTestedProduct;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 
 public abstract class RefappAbstractPage<P extends PageObject> extends AbstractPage<RefappTestedProduct, P>
     implements UserDiscoverable

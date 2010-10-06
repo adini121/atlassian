@@ -1,12 +1,7 @@
-package com.atlassian.webdriver.refapp.page;
+package com.atlassian.webdriver.product.refapp.page;
 
-import com.atlassian.webdriver.component.user.User;
-import com.atlassian.webdriver.page.HomePage;
 import com.atlassian.webdriver.page.LoginPage;
-import com.atlassian.webdriver.product.TestedProduct;
-import com.atlassian.webdriver.page.PageObject;
-import com.atlassian.webdriver.refapp.RefappTestedProduct;
-import com.atlassian.webdriver.refapp.page.RefappHomePage;
+import com.atlassian.webdriver.product.refapp.RefappTestedProduct;
 import org.openqa.selenium.By;
 
 /**

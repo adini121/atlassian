@@ -1,6 +1,6 @@
 package com.atlassian.webdriver.component.link;
 
-import com.atlassian.webdriver.page.PageObject;
+import com.atlassian.webdriver.PageObject;
 import org.openqa.selenium.WebDriver;
 
 /**

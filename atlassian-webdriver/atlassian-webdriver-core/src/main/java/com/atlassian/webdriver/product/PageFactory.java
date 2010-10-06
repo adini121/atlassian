@@ -1,7 +1,6 @@
 package com.atlassian.webdriver.product;
 
-import com.atlassian.webdriver.page.PageObject;
-import com.atlassian.webdriver.product.TestedProduct;
+import com.atlassian.webdriver.PageObject;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

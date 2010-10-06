@@ -3,7 +3,7 @@ package com.atlassian.webdriver.jira.page.user;
 import com.atlassian.webdriver.jira.page.JiraAdminAbstractPage;
 import com.atlassian.webdriver.jira.page.JiraPages;
 import com.atlassian.webdriver.page.Page;
-import com.atlassian.webdriver.page.PageObject;
+import com.atlassian.webdriver.PageObject;
 import com.atlassian.webdriver.utils.ByJquery;
 import com.atlassian.webdriver.utils.Check;
 import org.openqa.selenium.WebDriver;

@@ -1,12 +1,13 @@
 package com.atlassian.webdriver.product;
 
 import com.atlassian.webdriver.AtlassianWebDriver;
-import com.atlassian.webdriver.ng.product.RefappAdminHomePage;
-import com.atlassian.webdriver.ng.product.RefappLoginPage;
-import com.atlassian.webdriver.ng.product.RefappTestedProduct;
+import com.atlassian.webdriver.Link;
 import com.atlassian.webdriver.page.AbstractPage;
-import com.atlassian.webdriver.page.Link;
-import com.atlassian.webdriver.page.PageObject;
+import com.atlassian.webdriver.PageObject;
+import com.atlassian.webdriver.product.refapp.RefappTestedProduct;
+import com.atlassian.webdriver.product.refapp.page.RefappAbstractPage;
+import com.atlassian.webdriver.product.refapp.page.RefappAdminHomePage;
+import com.atlassian.webdriver.product.refapp.page.RefappLoginPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
@@ -46,16 +47,13 @@ public class TestedProductFactory
         }
     }
 
-    public static class MyPage extends AbstractPage
+    public static class MyPage extends RefappAbstractPage<MyPage>
     {
-        protected MyPage(TestedProduct testedProduct)
+        protected MyPage(RefappTestedProduct testedProduct)
         {
-            super(testedProduct);
+            super(testedProduct, "/mypage");
         }
 
-        public PageObject get(boolean activated)
-        {
-            return null;
-        }
+
     }
 }

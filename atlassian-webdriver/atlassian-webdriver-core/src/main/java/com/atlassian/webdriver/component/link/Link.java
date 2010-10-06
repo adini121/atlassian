@@ -1,7 +1,7 @@
 package com.atlassian.webdriver.component.link;
 
 import com.atlassian.webdriver.AtlassianWebDriver;
-import com.atlassian.webdriver.page.PageObject;
+import com.atlassian.webdriver.PageObject;
 import com.atlassian.webdriver.utils.Check;
 import org.openqa.selenium.By;
 import org.openqa.selenium.ElementNotVisibleException;
