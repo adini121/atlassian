@@ -1,7 +1,7 @@
-package com.atlassian.webdriver.product.refapp.page;
+package com.atlassian.webdriver.refapp.page;
 
 import com.atlassian.webdriver.page.AdminHomePage;
-import com.atlassian.webdriver.product.refapp.RefappTestedProduct;
+import com.atlassian.webdriver.refapp.RefappTestedProduct;
 
 /**
  *

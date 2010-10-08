@@ -1,5 +1,6 @@
 package com.atlassian.webdriver.jira.page;
 
+import com.atlassian.webdriver.jira.JiraTestedProduct;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -14,7 +15,7 @@ import java.util.regex.Pattern;
 /**
  * Page object implementation for the License details page in JIRA.
  */
-public class LicenseDetailsPage extends JiraAdminAbstractPage
+public class LicenseDetailsPage extends JiraAdminAbstractPage<LicenseDetailsPage>
 {
 
     private static final String URI = "/secure/admin/jira/ViewLicense!default.jspa";
@@ -28,9 +29,9 @@ public class LicenseDetailsPage extends JiraAdminAbstractPage
     @FindBy (id = "add_submit")
     WebElement addLicenseButton;
 
-    public LicenseDetailsPage(WebDriver driver)
+    public LicenseDetailsPage(JiraTestedProduct testedProduct)
     {
-        super(driver);
+        super(testedProduct, URI);
     }
 
     public LicenseDetailsPage get(boolean activated)
@@ -116,8 +117,6 @@ public class LicenseDetailsPage extends JiraAdminAbstractPage
 
         addLicenseButton.click();
 
-        return JiraPages.LICENSEDETAILSPAGE.get(driver, true);
+        return new LicenseDetailsPage(getTestedProduct()).get(true);
     }
-
-
 }

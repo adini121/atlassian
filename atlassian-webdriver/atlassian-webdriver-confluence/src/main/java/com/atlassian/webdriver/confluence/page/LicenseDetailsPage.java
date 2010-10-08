@@ -1,5 +1,6 @@
 package com.atlassian.webdriver.confluence.page;
 
+import com.atlassian.webdriver.confluence.ConfluenceTestedProduct;
 import com.atlassian.webdriver.utils.ByJquery;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -16,7 +17,7 @@ import java.util.regex.Pattern;
  *
  * @since v4.2
  */
-public class LicenseDetailsPage extends ConfluenceAbstractPage
+public class LicenseDetailsPage extends ConfluenceAbstractPage<LicenseDetailsPage>
 {
 
     private static String URI = "/admin/license.action";
@@ -30,16 +31,9 @@ public class LicenseDetailsPage extends ConfluenceAbstractPage
     @FindBy (name = "update")
     WebElement submitLicenseButton;
 
-    public LicenseDetailsPage(WebDriver driver)
+    public LicenseDetailsPage(ConfluenceTestedProduct testedProduct)
     {
-        super(driver);
-    }
-
-    public LicenseDetailsPage get(boolean active)
-    {
-        get(URI, active);
-
-        return this;
+        super(testedProduct, URI);
     }
 
     public String getOrganisation()
@@ -113,8 +107,7 @@ public class LicenseDetailsPage extends ConfluenceAbstractPage
         updateLicenseTextArea.sendKeys(license);
         submitLicenseButton.click();
 
-        return ConfluencePage.LICENSE_DETAILS_PAGE.get(driver, true);
-
+        return new LicenseDetailsPage(getTestedProduct()).get(true);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.atlassian.webdriver.jira.page;
 
+import com.atlassian.webdriver.jira.JiraTestedProduct;
 import com.atlassian.webdriver.jira.component.project.ProjectSummary;
 import com.atlassian.webdriver.PageObject;
 import com.atlassian.webdriver.utils.ByJquery;
@@ -18,7 +19,7 @@ import java.util.List;
  *
  * @since v4.2
  */
-public class ProjectsViewPage extends JiraAdminAbstractPage
+public class ProjectsViewPage extends JiraAdminAbstractPage<ProjectsViewPage>
 {
 
     @FindBy (id = "add_project")
@@ -28,9 +29,9 @@ public class ProjectsViewPage extends JiraAdminAbstractPage
     
     private final static String URI = "/secure/project/ViewProjects.jspa";
 
-    public ProjectsViewPage(WebDriver driver)
+    public ProjectsViewPage(JiraTestedProduct jiraTestedProduct)
     {
-        super(driver);
+        super(jiraTestedProduct, URI);
         projects = new ArrayList<ProjectSummary>();
     }
 
@@ -47,7 +48,7 @@ public class ProjectsViewPage extends JiraAdminAbstractPage
     private void loadProjects()
     {
 
-        WebElement projectsTable = driver.findElement(ByJquery.$("table.grid"));
+        WebElement projectsTable = getDriver().findElement(ByJquery.$("table.grid"));
 
         for(WebElement row : projectsTable.findElements(ByJquery.$("> tbody > tr")))
         {

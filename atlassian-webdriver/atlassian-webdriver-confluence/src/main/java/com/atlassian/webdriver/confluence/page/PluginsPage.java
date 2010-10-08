@@ -1,6 +1,7 @@
 package com.atlassian.webdriver.confluence.page;
 
 
+import com.atlassian.webdriver.confluence.ConfluenceTestedProduct;
 import com.atlassian.webdriver.utils.ByJquery;
 import com.google.common.collect.ImmutableSet;
 import org.openqa.selenium.WebDriver;
@@ -16,7 +17,7 @@ import java.util.Set;
  * Page object implementation for the Plugins page for Confluence.
  * TODO: add plugin details method, which also returns loaded modules per plugin
  */
-public class PluginsPage extends ConfluenceAbstractPage
+public class PluginsPage extends ConfluenceAbstractPage<PluginsPage>
 {
     private static final String PLUGIN_KEY = "pluginKey=";
     private static final String URI = "/admin/viewplugins.action";
@@ -25,9 +26,9 @@ public class PluginsPage extends ConfluenceAbstractPage
     private final Set<String> pluginsWithErrors;
     private final Set<String> disabledPlugins;
 
-    public PluginsPage(WebDriver driver)
+    public PluginsPage(ConfluenceTestedProduct testedProduct)
     {
-        super(driver);
+        super(testedProduct, URI);
         loadedPlugins = new HashMap<String, WebElement>();
         pluginsWithErrors = new HashSet<String>();
         disabledPlugins = new HashSet<String>();
@@ -47,7 +48,7 @@ public class PluginsPage extends ConfluenceAbstractPage
         if (pluginIsLoaded(pluginKey))
         {
             loadedPlugins.get(pluginKey).click();
-            return ConfluencePage.PLUGINSPAGE.get(driver, true);
+            return new PluginsPage(getTestedProduct()).get(true);
         }
 
         return null;
@@ -86,7 +87,7 @@ public class PluginsPage extends ConfluenceAbstractPage
     private void waitForLoadedPlugins()
     {
 
-        WebElement table = driver.findElement(ByJquery.$("td.pagebody table table > tbody"));
+        WebElement table = getDriver().findElement(ByJquery.$("td.pagebody table table > tbody"));
 
         List<WebElement> pluginAnchors = table.findElements(ByJquery.$("tr td a[href^=viewplugins]"));
         List<WebElement> pluginAnchorsWithErrors = table.findElements(ByJquery.$("tr td:contains(Errors loading plugin) a"));

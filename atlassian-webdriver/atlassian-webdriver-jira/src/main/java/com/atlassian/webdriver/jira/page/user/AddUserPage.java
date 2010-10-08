@@ -1,7 +1,7 @@
 package com.atlassian.webdriver.jira.page.user;
 
+import com.atlassian.webdriver.jira.JiraTestedProduct;
 import com.atlassian.webdriver.jira.page.JiraAdminAbstractPage;
-import com.atlassian.webdriver.jira.page.JiraPages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -16,7 +16,7 @@ import java.util.Set;
  *
  * @since v1.0
  */
-public class AddUserPage extends JiraAdminAbstractPage
+public class AddUserPage extends JiraAdminAbstractPage<AddUserPage>
 {
     private static String URI = "/secure/admin/user/AddUser!default.jspa";
 
@@ -46,9 +46,9 @@ public class AddUserPage extends JiraAdminAbstractPage
 
     private Set<String> errors = new HashSet<String>();
 
-    public AddUserPage(WebDriver driver)
+    public AddUserPage(JiraTestedProduct jiraTestedProduct)
     {
-        super(driver);
+        super(jiraTestedProduct, URI);
     }
 
     public AddUserPage get(final boolean activated)
@@ -62,7 +62,7 @@ public class AddUserPage extends JiraAdminAbstractPage
 
     private void checkForErrors()
     {
-        List<WebElement> errorElements = driver.findElements(By.className(".errMsg"));
+        List<WebElement> errorElements = getDriver().findElements(By.className(".errMsg"));
 
         for (WebElement errEl : errorElements)
         {
@@ -125,21 +125,21 @@ public class AddUserPage extends JiraAdminAbstractPage
     {
         createButton.click();
 
-        return JiraPages.VIEW_USER_PAGE.get(driver, true);
+        return new ViewUserPage(getTestedProduct()).get(true);
     }
 
     public AddUserPage createUserExpectingError()
     {
         createButton.click();
 
-        return JiraPages.ADD_USER_PAGE.get(driver, true);
+        return new AddUserPage(getTestedProduct()).get(true);
     }
 
     public UserBrowserPage cancelCreateUser()
     {
         cancelButton.click();
 
-        return JiraPages.USERBROWSERPAGE.get(driver, true);
+        return new UserBrowserPage(getTestedProduct()).get(true);
     }
 
     public boolean hasError()

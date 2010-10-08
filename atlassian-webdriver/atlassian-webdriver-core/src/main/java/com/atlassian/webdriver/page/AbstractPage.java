@@ -39,9 +39,14 @@ public abstract class AbstractPage<TP extends TestedProduct, P extends PageObjec
         return testedProduct.getProductInstance();
     }
 
+    public WebDriver getDriver()
+    {
+        return testedProduct.getDriver();
+    }
+
     public <T extends PageObject> T gotoPage(Link<T> link)
     {
-        return link.activate(testedProduct.getPageFactory());
+        return link.activate(testedProduct);
     }
 
 

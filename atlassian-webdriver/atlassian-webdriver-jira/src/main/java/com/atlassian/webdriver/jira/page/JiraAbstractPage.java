@@ -1,11 +1,14 @@
 package com.atlassian.webdriver.jira.page;
 
 
+import com.atlassian.webdriver.PageObject;
+import com.atlassian.webdriver.jira.JiraTestedProduct;
 import com.atlassian.webdriver.jira.component.menu.AdminMenu;
 import com.atlassian.webdriver.jira.component.menu.UserMenu;
 import com.atlassian.webdriver.component.menu.DashboardMenu;
 import com.atlassian.webdriver.component.user.User;
 import com.atlassian.webdriver.page.AbstractPage;
+import com.atlassian.webdriver.page.UserDiscoverable;
 import com.atlassian.webdriver.utils.Check;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -15,65 +18,53 @@ import org.openqa.selenium.WebDriver;
  * Such as getting the admin menu.
  * Sets the base url for the WebDrivePage class to use which is defined in the jira-base-url system property.
  */
-public abstract class JiraAbstractPage extends AbstractPage
+public abstract class JiraAbstractPage<P extends PageObject> extends AbstractPage<JiraTestedProduct, P> implements UserDiscoverable
 {
+    private final String uri;
 
-    public static final String BASE_URL = System.getProperty("jira-base-url", "http://localhost:2990/jira");
-
-    public JiraAbstractPage(WebDriver driver)
+    public JiraAbstractPage(JiraTestedProduct testedProduct, String uri)
     {
-        super(driver, BASE_URL);
+        super(testedProduct);
+        this.uri = uri;
     }
 
-    /**
-     * Returns a boolean indicating whether the user is logged in or not.
-     * @return Whether the user is logged in or not.
-     */
     public boolean isLoggedIn()
     {
-        return !driver.findElement(By.id("header-details-user"))
-                .findElement(By.tagName("a"))
-                .getText()
-                .equals("Log In");
+        return !getDriver().findElement(By.id("header-details-user")).findElement(By.tagName("a")).getText().equals("Log In");
     }
 
-    /**
-     * Checks whether a specific user is logged in and returns a boolean indicating the result.
-     * @param user the user to check whether they are logged in or not.
-     * @return whether the specified user is logged in.
-     */
     public boolean isLoggedInAsUser(User user)
     {
-        return driver.findElement(By.id("header-details-user"))
-                .findElement(By.tagName("a"))
-                .getText()
-                .equals(user.getFullName());
+        return getDriver().findElement(By.id("header-details-user")).findElement(By.tagName("a")).getText().equals(user.getFullName());
     }
 
-    /**
-     * Checks if the admin menu is available and if it is
-     * assumes the user is an admin user.
-     * @return
-     */
     public boolean isAdmin()
     {
         return Check.elementExists(By.cssSelector("#header #menu a#admin_link"));
     }
 
+    public P get(boolean activated)
+    {
+        super.get(uri, activated);
+        waitUntilLocated(By.className("jira-footer"));
+        return (P) this;
+    }
+
+
     public DashboardMenu getDashboardMenu()
     {
-        return new DashboardMenu(driver);
+        return new DashboardMenu<JiraTestedProduct>(getTestedProduct());
     }
 
     public AdminMenu getAdminMenu()
     {
         if (isAdmin())
         {
-            return new AdminMenu(driver);
+            return new AdminMenu(testedProduct);
         }
         else
         {
-             throw new RuntimeException("Tried to get the admin menu but the current user does not have access to it.");
+            throw new RuntimeException("Tried to get the admin menu but the current user does not have access to it.");
         }
     }
 
@@ -81,7 +72,7 @@ public abstract class JiraAbstractPage extends AbstractPage
     {
         if (isLoggedIn())
         {
-            return new UserMenu(driver);
+            return new UserMenu(getTestedProduct());
         }
         else
         {

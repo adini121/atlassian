@@ -2,8 +2,8 @@ package com.atlassian.webdriver.jira.page.user;
 
 import com.atlassian.webdriver.component.group.Group;
 import com.atlassian.webdriver.component.user.User;
+import com.atlassian.webdriver.jira.JiraTestedProduct;
 import com.atlassian.webdriver.jira.page.JiraAdminAbstractPage;
-import com.atlassian.webdriver.jira.page.JiraPages;
 import com.atlassian.webdriver.utils.ByJquery;
 import com.atlassian.webdriver.utils.Check;
 import org.openqa.selenium.By;
@@ -19,7 +19,7 @@ import java.util.Set;
  * Page object implementation for the User browser page in JIRA.
  * TODO: Handle pagination when there are more users
  */
-public class UserBrowserPage extends JiraAdminAbstractPage
+public class UserBrowserPage extends JiraAdminAbstractPage<UserBrowserPage>
 {
     private static final String URI = "/secure/admin/user/UserBrowser.jspa";
 
@@ -44,9 +44,9 @@ public class UserBrowserPage extends JiraAdminAbstractPage
     @FindBy (id = "user_browser_table")
     private WebElement userTable;
 
-    public UserBrowserPage(WebDriver driver)
+    public UserBrowserPage(JiraTestedProduct jiraTestedProduct)
     {
-        super(driver);
+        super(jiraTestedProduct, URI);
         users = new HashSet<User>();
     }
 
@@ -54,7 +54,7 @@ public class UserBrowserPage extends JiraAdminAbstractPage
     {
         get(URI, activated);
 
-        filterSubmit = driver.findElement(By.cssSelector("form[name=\"jiraform\"] input[type=\"submit\"]"));
+        filterSubmit = getDriver().findElement(By.cssSelector("form[name=\"jiraform\"] input[type=\"submit\"]"));
 
         setUserFilterToShowAllUsers();
 
@@ -81,9 +81,9 @@ public class UserBrowserPage extends JiraAdminAbstractPage
         {
             String editGroupsId = "editgroups_" + user.getUsername();
 
-            driver.findElement(By.id(editGroupsId)).click();
+            getDriver().findElement(By.id(editGroupsId)).click();
 
-            return JiraPages.EDIT_USER_GROUPS_PAGE.get(driver, true);
+            return new EditUserGroupsPage(getTestedProduct()).get(true);
         }
         else
         {
@@ -117,10 +117,10 @@ public class UserBrowserPage extends JiraAdminAbstractPage
     {
         if (hasUser(user))
         {
-            WebElement userLink = driver.findElement(By.id(user.getUsername()));
+            WebElement userLink = getDriver().findElement(By.id(user.getUsername()));
             userLink.click();
 
-            return JiraPages.VIEW_USER_PAGE.get(driver, true);
+            return new ViewUserPage(getTestedProduct()).get(true);
         }
         else
         {
@@ -135,10 +135,10 @@ public class UserBrowserPage extends JiraAdminAbstractPage
 
     public UserBrowserPage filterByUserName(String username)
     {
-        driver.findElement(By.name("userNameFilter")).sendKeys(username);
+        getDriver().findElement(By.name("userNameFilter")).sendKeys(username);
         filterSubmit.click();
 
-        return JiraPages.USERBROWSERPAGE.get(driver, true);
+        return new UserBrowserPage(getTestedProduct()).get(true);
     }
 
     /**
@@ -149,7 +149,7 @@ public class UserBrowserPage extends JiraAdminAbstractPage
     {
         addUserLink.click();
 
-        return JiraPages.ADD_USER_PAGE.get(driver, true);
+        return new AddUserPage(getTestedProduct()).get(true);
     }
 
     /**

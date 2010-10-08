@@ -1,10 +1,12 @@
 package com.atlassian.webdriver.confluence.page;
 
+import com.atlassian.webdriver.PageObject;
+import com.atlassian.webdriver.confluence.ConfluenceTestedProduct;
 import com.atlassian.webdriver.confluence.component.menu.BrowseMenu;
 import com.atlassian.webdriver.confluence.component.menu.UserMenu;
 import com.atlassian.webdriver.component.user.User;
 import com.atlassian.webdriver.page.AbstractPage;
-import com.atlassian.webdriver.confluence.test.ConfluenceWebDriverTest;
+import com.atlassian.webdriver.page.UserDiscoverable;
 import com.atlassian.webdriver.utils.Check;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -14,34 +16,34 @@ import org.openqa.selenium.WebDriver;
  *
  * @since v4.2
  */
-public abstract class ConfluenceAbstractPage extends AbstractPage
+public abstract class ConfluenceAbstractPage<P extends PageObject> extends AbstractPage<ConfluenceTestedProduct, P>
+    implements UserDiscoverable
 {
+    private final String uri;
 
-    public static final String BASE_URL = System.getProperty("confluence-base-url", "http://localhost:1990/wiki");
-
-    public ConfluenceAbstractPage(WebDriver driver)
+    public ConfluenceAbstractPage(ConfluenceTestedProduct testedProduct, String uri)
     {
-        super(driver, BASE_URL);
+        super(testedProduct);
+        this.uri = uri;
     }
 
-    @Override
+
+
     public boolean isAdmin()
     {
         return Check.elementExists(By.id("administration-link"));
     }
 
-    @Override
     public boolean isLoggedIn()
     {
         return Check.elementExists(By.id("user-menu-link"));
     }
 
-    @Override
     public boolean isLoggedInAsUser(final User user)
     {
         if (isLoggedIn())
         {
-            return driver.findElement(By.id("user-menu-link"))
+            return getDriver().findElement(By.id("user-menu-link"))
                     .getText()
                     .equals(user.getFullName());
         }
@@ -53,7 +55,7 @@ public abstract class ConfluenceAbstractPage extends AbstractPage
     {
         if (isLoggedIn())
         {
-            return new BrowseMenu(driver);
+            return new BrowseMenu(getTestedProduct());
         }
         else
         {
@@ -65,7 +67,7 @@ public abstract class ConfluenceAbstractPage extends AbstractPage
     {
         if (isLoggedIn())
         {
-            return new UserMenu(driver);
+            return new UserMenu(getTestedProduct());
         }
         else
         {
@@ -76,11 +78,9 @@ public abstract class ConfluenceAbstractPage extends AbstractPage
     /**
      * Must override the AbstractPage version as need to handle the Administrator Access
      * page. (WebSudo)
-     * @param uri
      * @param activated
      */
-    @Override
-    public void get(String uri, boolean activated)
+    public P get(boolean activated)
     {
         if (!activated && !at(uri))
         {
@@ -91,14 +91,16 @@ public abstract class ConfluenceAbstractPage extends AbstractPage
         //If this is the case log in the user automatically.
         if (!uri.equals(AdministratorAccessPage.URI) && at(AdministratorAccessPage.URI))
         {
-            ConfluencePage.ADMINACCESSPAGE.get(driver, true).login(ConfluenceWebDriverTest.getLoggedInUser());
+            new AdministratorAccessPage(getTestedProduct()).get(true).login(getTestedProduct().getLoggedInUser());
         }
 
 
         if (activated && !at(uri))
         {
-            throw new IllegalStateException("Expected to be at uri: " + (getBaseUrl() + uri) + ", instead at: " + driver.getCurrentUrl());
+            throw new IllegalStateException("Expected to be at uri: " + (getBaseUrl() + uri) + ", instead at: " + getDriver().getCurrentUrl());
         }
+
+        return (P) this;
 
     }
 

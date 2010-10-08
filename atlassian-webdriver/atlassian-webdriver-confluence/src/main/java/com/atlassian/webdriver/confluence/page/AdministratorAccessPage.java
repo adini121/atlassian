@@ -1,6 +1,7 @@
 package com.atlassian.webdriver.confluence.page;
 
 import com.atlassian.webdriver.component.user.User;
+import com.atlassian.webdriver.confluence.ConfluenceTestedProduct;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -10,7 +11,7 @@ import org.openqa.selenium.support.FindBy;
  *
  * @since v4.2
  */
-public class AdministratorAccessPage extends ConfluenceAbstractPage
+public class AdministratorAccessPage extends ConfluenceAbstractPage<AdministratorAccessPage>
 {
     public static final String URI = "/authenticate.action";
 
@@ -20,16 +21,9 @@ public class AdministratorAccessPage extends ConfluenceAbstractPage
     @FindBy (name="authenticateform")
     private WebElement authenticationForm;
 
-    public AdministratorAccessPage(WebDriver driver)
+    public AdministratorAccessPage(ConfluenceTestedProduct confluenceTestedProduct)
     {
-        super(driver);
-    }
-
-    public AdministratorAccessPage get(final boolean activated)
-    {
-        get(URI, activated);
-
-        return this;
+        super(confluenceTestedProduct, URI);
     }
 
     public void login(User user)

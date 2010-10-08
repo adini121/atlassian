@@ -1,5 +1,6 @@
 package com.atlassian.webdriver.jira.page;
 
+import com.atlassian.webdriver.jira.JiraTestedProduct;
 import com.atlassian.webdriver.utils.ByJquery;
 import com.google.common.collect.ImmutableSet;
 import org.openqa.selenium.WebDriver;
@@ -15,7 +16,7 @@ import java.util.Set;
  * Page object implementation for the Plugins page for JIRA.
  * TODO: add plugin details method, which also returns loaded modules per plugin
  */
-public class PluginsPage extends JiraAdminAbstractPage
+public class PluginsPage extends JiraAdminAbstractPage<PluginsPage>
 {
     private final static String URI = "/secure/admin/jira/ViewPlugins!default.jspa";
 
@@ -25,9 +26,9 @@ public class PluginsPage extends JiraAdminAbstractPage
     private final Set<String> pluginsWithErrors;
     private final Set<String> disabledPlugins;
 
-    public PluginsPage(WebDriver driver)
+    public PluginsPage(JiraTestedProduct jiraTestedProduct)
     {
-        super(driver);
+        super(jiraTestedProduct, URI);
 
         loadedPlugins = new HashMap<String, WebElement>();
         pluginsWithErrors = new HashSet<String>();
@@ -48,7 +49,7 @@ public class PluginsPage extends JiraAdminAbstractPage
         if (pluginIsLoaded(pluginKey))
         {
             loadedPlugins.get(pluginKey).click();
-            return JiraPages.PLUGINSPAGE.get(driver, true);
+            return new PluginsPage(getTestedProduct()).get(true);
         }
 
         return null;
@@ -86,7 +87,7 @@ public class PluginsPage extends JiraAdminAbstractPage
 
     private void waitForLoadedPlugins()
     {
-        WebElement table = driver.findElement(ByJquery.$("table table table table"));
+        WebElement table = getDriver().findElement(ByJquery.$("table table table table"));
 
         List<WebElement> pluginAnchors = table.findElements(ByJquery.$("tr td a[href^=ViewPlugins.jspa]"));
         List<WebElement> pluginAnchorsWithErrors = table.findElements(ByJquery.$("tr td:contains(Errors loading plugin) a"));

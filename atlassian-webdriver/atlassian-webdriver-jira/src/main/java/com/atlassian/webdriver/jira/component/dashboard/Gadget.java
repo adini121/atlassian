@@ -1,6 +1,7 @@
 package com.atlassian.webdriver.jira.component.dashboard;
 
 import com.atlassian.webdriver.AtlassianWebDriver;
+import com.atlassian.webdriver.jira.JiraTestedProduct;
 import com.atlassian.webdriver.utils.Check;
 import com.atlassian.webdriver.utils.MouseEvents;
 import com.atlassian.webdriver.utils.element.ElementLocated;
@@ -17,12 +18,13 @@ public class Gadget
     private final String titleId;
     private final String frameId;
     private final WebElement chrome;
-
     private final WebDriver driver;
+    private final JiraTestedProduct jiraTestedProduct;
 
-    public Gadget(String gadgetId, WebDriver driver)
+    public Gadget(String gadgetId, JiraTestedProduct jiraTestedProduct)
     {
-        this.driver = driver;
+        this.jiraTestedProduct = jiraTestedProduct;
+        this.driver = jiraTestedProduct.getDriver();
         this.id = gadgetId;
         this.frameId = "gadget-" + id;
         this.titleId = frameId + "-title";
@@ -48,7 +50,7 @@ public class Gadget
         driver.switchTo().frame(frameId);
         AtlassianWebDriver.waitUntil(new ElementLocated(By.className("view")));
 
-        return new GadgetView(driver.findElement(By.className("view")));
+        return new GadgetView(driver.findElement(By.className("view")), jiraTestedProduct);
     }
 
     public void minimize()
@@ -98,7 +100,7 @@ public class Gadget
 
     public String getGadgetTitle()
     {
-        return AtlassianWebDriver.getDriver().findElement(By.id(titleId)).getText();
+        return driver.findElement(By.id(titleId)).getText();
     }
 
     private WebElement openDropdown()

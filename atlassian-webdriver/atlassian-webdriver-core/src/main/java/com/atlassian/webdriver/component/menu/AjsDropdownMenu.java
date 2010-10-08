@@ -1,6 +1,7 @@
 package com.atlassian.webdriver.component.menu;
 
 import com.atlassian.webdriver.AtlassianWebDriver;
+import com.atlassian.webdriver.product.TestedProduct;
 import com.atlassian.webdriver.utils.Check;
 import com.atlassian.webdriver.utils.MouseEvents;
 import com.atlassian.webdriver.utils.element.ElementIsVisible;
@@ -13,18 +14,18 @@ import org.openqa.selenium.WebElement;
  *
  * @since v4.2
  */
-public class AjsDropdownMenu extends Menu
+public class AjsDropdownMenu<T extends TestedProduct> extends Menu<T>
 {
     private WebElement menuItem;
 
-    public AjsDropdownMenu(By by, WebDriver driver)
+    public AjsDropdownMenu(By by, T testedProduct)
     {
-        this(driver.findElement(by), driver);
+        this(testedProduct.getDriver().findElement(by), testedProduct);
     }
 
-    public AjsDropdownMenu(WebElement menuItem, WebDriver driver)
+    public AjsDropdownMenu(WebElement menuItem, T testedProduct)
     {
-        super(driver);
+        super(testedProduct);
 
         this.menuItem = menuItem;
     }
@@ -38,7 +39,7 @@ public class AjsDropdownMenu extends Menu
     {
         if (!isOpen())
         {
-            MouseEvents.hover(menuItem, getDriver());
+            MouseEvents.hover(menuItem, getTestedProduct().getDriver());
         }
 
         // Wait until the menu has finished loading items
@@ -58,7 +59,7 @@ public class AjsDropdownMenu extends Menu
     {
         if (isOpen())
         {
-            MouseEvents.mouseout(menuItem.findElement(By.cssSelector("a.ajs-menu-title")), getDriver());
+            MouseEvents.mouseout(menuItem.findElement(By.cssSelector("a.ajs-menu-title")), getTestedProduct().getDriver());
         }
     }
 

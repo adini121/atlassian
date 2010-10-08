@@ -1,34 +1,24 @@
 package com.atlassian.webdriver.jira.component.menu;
 
-import com.atlassian.webdriver.jira.component.link.AdminSideMenuPageLinks;
-import com.atlassian.webdriver.component.link.Link;
-import com.atlassian.webdriver.component.link.LinkNavigator;
-import com.atlassian.webdriver.component.link.PageLinkFactory;
-import com.atlassian.webdriver.page.Page;
-import org.openqa.selenium.WebDriver;
-
-import java.util.Map;
+import com.atlassian.webdriver.Linkable;
+import com.atlassian.webdriver.PageObject;
+import com.atlassian.webdriver.jira.JiraTestedProduct;
+import com.atlassian.webdriver.product.TestedProduct;
 
 
 /**
  *
  */
-public class AdminSideMenu extends LinkNavigator
+public class AdminSideMenu implements Linkable
 {
-    static
+    private final JiraTestedProduct testedProduct;
+
+    public AdminSideMenu(JiraTestedProduct testedProduct)
     {
-        AdminSideMenu.addPageLinks(AdminSideMenuPageLinks.getPageLinks());
+        this.testedProduct = testedProduct;
     }
 
-    public AdminSideMenu(WebDriver driver)
-    {
-        super(driver);
+    public <T extends PageObject> T gotoPage(com.atlassian.webdriver.Link<T> link) {
+        return link.activate(testedProduct);
     }
-
-    public static void addPageLinks(Map<Link, Page> pageLinks)
-    {
-        PageLinkFactory.add(pageLinks);
-    }
-
-
 }

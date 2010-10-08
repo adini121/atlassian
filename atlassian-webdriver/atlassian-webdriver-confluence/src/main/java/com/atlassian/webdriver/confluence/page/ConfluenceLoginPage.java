@@ -1,6 +1,8 @@
 package com.atlassian.webdriver.confluence.page;
 
 import com.atlassian.webdriver.component.user.User;
+import com.atlassian.webdriver.confluence.ConfluenceTestedProduct;
+import com.atlassian.webdriver.page.LoginPage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -8,7 +10,8 @@ import org.openqa.selenium.support.FindBy;
 /**
  * Page object implementation for the LoginPage in Confluence.
  */
-public class LoginPage extends ConfluenceAbstractPage
+public class ConfluenceLoginPage extends ConfluenceAbstractPage<ConfluenceLoginPage>
+    implements LoginPage<ConfluenceTestedProduct, ConfluenceLoginPage, DashboardPage>
 {
     private static final String URI = "/login.action";
 
@@ -24,16 +27,9 @@ public class LoginPage extends ConfluenceAbstractPage
     @FindBy (name = "loginform")
     private WebElement loginForm;
 
-    public LoginPage(WebDriver driver)
+    public ConfluenceLoginPage(ConfluenceTestedProduct testedProduct)
     {
-        super(driver);
-    }
-
-    public LoginPage get(boolean activated)
-    {
-        get(URI, activated);
-
-        return this;
+        super(testedProduct, URI);
     }
 
     public DashboardPage login(User user)
@@ -52,7 +48,18 @@ public class LoginPage extends ConfluenceAbstractPage
         }      
 
         loginForm.submit();
+        getTestedProduct().setLoggedInUser(user);
 
-        return ConfluencePage.DASHBOARDPAGE.get(driver, true);
+        return new DashboardPage(getTestedProduct()).get(true);
+    }
+
+    public DashboardPage login(String username, String password)
+    {
+        return login(new User(username, password, null));
+    }
+
+    public DashboardPage loginAsAdmin()
+    {
+        return login("admin", "admin");
     }
 }

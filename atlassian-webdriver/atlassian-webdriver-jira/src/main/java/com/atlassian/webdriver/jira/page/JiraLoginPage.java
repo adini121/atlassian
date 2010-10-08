@@ -1,6 +1,8 @@
 package com.atlassian.webdriver.jira.page;
 
 import com.atlassian.webdriver.component.user.User;
+import com.atlassian.webdriver.jira.JiraTestedProduct;
+import com.atlassian.webdriver.page.LoginPage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -8,7 +10,7 @@ import org.openqa.selenium.support.FindBy;
 /**
  * Page object implementation for the LoginPage in JIRA.
  */
-public class LoginPage extends JiraAbstractPage
+public class JiraLoginPage extends JiraAbstractPage<JiraLoginPage> implements LoginPage<JiraTestedProduct, JiraLoginPage, DashboardPage>
 {
     private static final String URI = "/login.jsp";
 
@@ -24,16 +26,18 @@ public class LoginPage extends JiraAbstractPage
     @FindBy (id = "login")
     private WebElement loginButton;
 
-    public LoginPage(WebDriver driver)
+    public JiraLoginPage(JiraTestedProduct driver)
     {
-        super(driver);
+        super(driver, URI);
     }
 
-    public LoginPage get(boolean activated)
-    {
-        get(URI, activated);
-        
-        return this;
+    public DashboardPage loginAsAdmin() {
+        return login(new User("admin", "admin", ""));
+    }
+
+
+    public DashboardPage login(String username, String password) {
+        return login(new User(username, password, ""));
     }
 
     public DashboardPage login(User user)
@@ -53,7 +57,7 @@ public class LoginPage extends JiraAbstractPage
 
         loginButton.click();
 
-        return JiraPages.DASHBOARDPAGE.get(driver, true);
+        return (DashboardPage) testedProduct.gotoPage(DashboardPage.class);
     }
 
 

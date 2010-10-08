@@ -1,59 +1,77 @@
 package com.atlassian.webdriver.product;
 
 import com.atlassian.webdriver.AtlassianWebDriver;
-import com.atlassian.webdriver.Link;
-import com.atlassian.webdriver.page.AbstractPage;
-import com.atlassian.webdriver.PageObject;
-import com.atlassian.webdriver.product.refapp.RefappTestedProduct;
-import com.atlassian.webdriver.product.refapp.page.RefappAbstractPage;
-import com.atlassian.webdriver.product.refapp.page.RefappAdminHomePage;
-import com.atlassian.webdriver.product.refapp.page.RefappLoginPage;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.net.InetAddress;
 
 /**
  *
  */
 public class TestedProductFactory
 {
-    public static <P extends TestedProduct> P create(ProductInstance<P> instance)
+    public static <P extends TestedProduct> P create(Class<P> testedProductClass, String instanceId)
     {
-        return create(instance, AtlassianWebDriver.getDriver());
+        return create(testedProductClass, instanceId, AtlassianWebDriver.getDriver());
     }
 
-    public static <P extends TestedProduct> P create(ProductInstance<P> instance, WebDriver webDriver)
+    public static <P extends TestedProduct> P create(Class<P> testedProductClass, String instanceId, WebDriver webDriver)
     {
-        switch (instance.getProductType())
+        final String contextPath, baseUrl;
+        final int httpPort;
+
+        final String ampsBaseUrl = System.getProperty("baseurl." + instanceId);
+        final ProductInstance instance;
+        if (ampsBaseUrl != null)    // running within an AMPS IntegrationTestMojo invocation - read sys props for env vars
         {
-            case REFAPP: return (P) new RefappTestedProduct(webDriver, instance);
-            default : throw new RuntimeException();
+            httpPort = Integer.getInteger("http." + instanceId + ".port");
+            contextPath = System.getProperty("context." + instanceId + ".path");
+            baseUrl = ampsBaseUrl;
         }
-    }
-
-    public static final void main(String[] args)
-    {
-        RefappTestedProduct product = TestedProductFactory.create(ProductInstance.REFAPP);
-        RefappLoginPage login = product.gotoLoginPage();
-        login.loginAsAdmin();
-        RefappAdminHomePage admin = product.gotoAdminHomePage();
-        MyPage page = admin.gotoPage(new MyLink());
-    }
-
-    public static class MyLink extends Link<MyPage>
-    {
-        public MyLink()
+        else
         {
-            super(By.id("my-link-id"), MyPage.class);
+            Defaults defaults = testedProductClass.getAnnotation(Defaults.class);
+            httpPort = defaults.httpPort();
+            contextPath = defaults.contextPath();
+            baseUrl = "http://" + getLocalHostName() + ":" + httpPort + contextPath;
         }
+        instance = new ProductInstance(instanceId, httpPort, contextPath, baseUrl);
+        return create(testedProductClass, instance, webDriver);
     }
 
-    public static class MyPage extends RefappAbstractPage<MyPage>
-    {
-        protected MyPage(RefappTestedProduct testedProduct)
+    private static <P extends TestedProduct> P create(Class<P> testedProductClass, ProductInstance instance, WebDriver webDriver) {
+        try
         {
-            super(testedProduct, "/mypage");
+            Constructor<P> c = testedProductClass.getConstructor(ProductInstance.class, WebDriver.class);
+            return c.newInstance(instance, webDriver);
         }
+        catch (NoSuchMethodException e)
+        {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        catch (InvocationTargetException e)
+        {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        catch (InstantiationException e)
+        {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        catch (IllegalAccessException e)
+        {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        throw new RuntimeException();
+    }
 
-
+    public static String getLocalHostName()
+    {
+        try {
+            return InetAddress.getLocalHost().getHostName();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -1,7 +1,7 @@
 package com.atlassian.webdriver.jira.page.user;
 
+import com.atlassian.webdriver.jira.JiraTestedProduct;
 import com.atlassian.webdriver.jira.page.JiraAdminAbstractPage;
-import com.atlassian.webdriver.jira.page.JiraPages;
 import com.atlassian.webdriver.utils.ByJquery;
 import com.atlassian.webdriver.utils.Check;
 import org.openqa.selenium.WebDriver;
@@ -16,7 +16,7 @@ import java.util.Set;
  *
  * @since v1.0
  */
-public class DeleteUserPage extends JiraAdminAbstractPage
+public class DeleteUserPage extends JiraAdminAbstractPage<DeleteUserPage>
 {
     private static String URI = "/secure/admin/user/DeleteUser.jspa";
 
@@ -45,9 +45,9 @@ public class DeleteUserPage extends JiraAdminAbstractPage
 
     private Set<String> errors = new HashSet <String>();
 
-    public DeleteUserPage(final WebDriver driver)
+    public DeleteUserPage(final JiraTestedProduct jiraTestedProduct)
     {
-        super(driver);
+        super(jiraTestedProduct, URI);
     }
 
     public DeleteUserPage get(final boolean activated)
@@ -64,14 +64,14 @@ public class DeleteUserPage extends JiraAdminAbstractPage
         //Check for errors on the page
         if (Check.elementExists(ByJquery.$(ERROR_SELECTOR)))
         {
-            for (WebElement el : driver.findElements(ByJquery.$(ERROR_SELECTOR)))
+            for (WebElement el : getDriver().findElements(ByJquery.$(ERROR_SELECTOR)))
             {
                 errors.add(el.getText());
             }
         }
 
-        numberOfAssignedIssuesElement = driver.findElement(ByJquery.$("('td.fieldLabelArea:contains(Assigned Issues)').siblings('td').get(0)"));
-        numberOfReportedIssuesElement = driver.findElement(ByJquery.$("('td.fieldLabelArea:contains(Reported Issues)').siblings('td').get(0)"));
+        numberOfAssignedIssuesElement = getDriver().findElement(ByJquery.$("('td.fieldLabelArea:contains(Assigned Issues)').siblings('td').get(0)"));
+        numberOfReportedIssuesElement = getDriver().findElement(ByJquery.$("('td.fieldLabelArea:contains(Reported Issues)').siblings('td').get(0)"));
     }
 
     public boolean hasErrors()
@@ -88,14 +88,14 @@ public class DeleteUserPage extends JiraAdminAbstractPage
     {
         deleteUserButton.click();
 
-        return JiraPages.USERBROWSERPAGE.get(driver, true);
+        return new UserBrowserPage(getTestedProduct()).get(true);
     }
 
     public DeleteUserPage deleteUserExpectingError()
     {
         deleteUserButton.click();
 
-        return JiraPages.DELETE_USER_PAGE.get(driver, true);
+        return new DeleteUserPage(getTestedProduct()).get(true);
     }
 
     public int getNumberOfSharedFiltersElement()

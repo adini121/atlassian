@@ -1,5 +1,6 @@
 package com.atlassian.webdriver.jira.page;
 
+import com.atlassian.webdriver.jira.JiraTestedProduct;
 import com.atlassian.webdriver.utils.ByJquery;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -13,7 +14,7 @@ import java.util.regex.Pattern;
 /**
  * 
  */
-public class ViewAttachmentsSettingsPage extends JiraAdminAbstractPage
+public class ViewAttachmentsSettingsPage extends JiraAdminAbstractPage<ViewAttachmentsSettingsPage>
 {
 
     private static final String URI = "/secure/admin/jira/ViewAttachmentSettings.jspa";
@@ -30,9 +31,9 @@ public class ViewAttachmentsSettingsPage extends JiraAdminAbstractPage
     private String attachmentPath;
     private String attachmentSize;
 
-    public ViewAttachmentsSettingsPage(WebDriver driver)
+    public ViewAttachmentsSettingsPage(JiraTestedProduct jiraTestedProduct)
     {
-        super(driver);
+        super(jiraTestedProduct, URI);
     }
 
     public ViewAttachmentsSettingsPage get(final boolean activated)

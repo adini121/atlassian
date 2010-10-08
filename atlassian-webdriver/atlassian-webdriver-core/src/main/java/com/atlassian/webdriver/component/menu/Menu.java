@@ -1,5 +1,9 @@
 package com.atlassian.webdriver.component.menu;
 
+import com.atlassian.webdriver.Link;
+import com.atlassian.webdriver.Linkable;
+import com.atlassian.webdriver.PageObject;
+import com.atlassian.webdriver.product.TestedProduct;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -7,19 +11,26 @@ import org.openqa.selenium.WebDriver;
  *
  * @since v4.2
  */
-public class Menu
+public class Menu<T extends TestedProduct> implements Linkable
 {
 
-    final WebDriver driver;
+    private final T testedProduct;
 
-    public Menu(WebDriver driver)
+    public Menu(T testedProduct)
     {
-        this.driver = driver;
+        this.testedProduct = testedProduct;
     }
 
-    public final WebDriver getDriver()
-    {
-        return driver;
+    public <T extends PageObject> T gotoPage(Link<T> link) {
+        return link.activate(testedProduct);
     }
 
+    public T getTestedProduct() {
+        return testedProduct;
+    }
+
+    public WebDriver getDriver()
+    {
+        return getTestedProduct().getDriver();
+    }
 }
