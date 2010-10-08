@@ -9,7 +9,7 @@ import org.openqa.selenium.By;
  *
  * @since v4.2
  */
-public class GreenHopperAdminSideMenuLink extends Link
+public class GreenHopperAdminSideMenuLink extends Link<GreenHopperLicenseDetailsPage>
 {
     public GreenHopperAdminSideMenuLink()
     {

@@ -3,7 +3,6 @@ package com.atlassian.webdriver.confluence.component.menu;
 import com.atlassian.webdriver.confluence.ConfluenceTestedProduct;
 import com.atlassian.webdriver.confluence.component.sherpa.WelcomeScreen;
 import com.atlassian.webdriver.component.menu.AjsDropdownMenu;
-import com.atlassian.webdriver.confluence.page.ConfluencePage;
 import com.atlassian.webdriver.confluence.page.LogoutPage;
 import com.atlassian.webdriver.utils.ByJquery;
 import org.openqa.selenium.WebDriver;
