@@ -53,13 +53,8 @@ public class ConfluenceLoginPage extends ConfluenceAbstractPage<ConfluenceLoginP
         return new DashboardPage(getTestedProduct()).get(true);
     }
 
-    public DashboardPage login(String username, String password)
-    {
-        return login(new User(username, password, null));
-    }
-
     public DashboardPage loginAsAdmin()
     {
-        return login("admin", "admin");
+        return login(new User("admin", "admin", "fullname", "email"));
     }
 }

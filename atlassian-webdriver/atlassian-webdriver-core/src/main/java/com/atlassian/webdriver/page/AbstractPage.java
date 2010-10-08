@@ -11,6 +11,7 @@ import org.apache.commons.lang.Validate;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -31,6 +32,7 @@ public abstract class AbstractPage<TP extends TestedProduct, P extends PageObjec
     public AbstractPage(TP testedProduct)
     {
         this.testedProduct = testedProduct;
+        this.queryString = new QueryString();
         this.wait = new WebDriverWait(testedProduct.getDriver(), 60);
     }
 
@@ -87,7 +89,7 @@ public abstract class AbstractPage<TP extends TestedProduct, P extends PageObjec
         {
             throw new IllegalStateException("Expected to be at uri: " + (testedProduct.getProductInstance().getBaseUrl() + uri) + ", instead at: " + testedProduct.getDriver().getCurrentUrl());
         }
-
+        PageFactory.initElements(getDriver(), this);
     }
 
     // TODO: take into account the query String

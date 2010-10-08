@@ -16,7 +16,7 @@
             <plugin>
                 <groupId>com.atlassian.maven.plugins</groupId>
                 <artifactId>maven-confluence-plugin</artifactId>
-                <version>3.3-m2</version>
+                <version>3.3-m1</version>
                 <executions>
                     <execution>
                         <goals>
@@ -27,6 +27,14 @@
                 </executions>
                 <configuration>
                     <productVersion>3.3</productVersion>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>it/**/*.java</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
         </plugins>

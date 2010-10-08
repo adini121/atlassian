@@ -20,4 +20,6 @@ public interface TestedProduct<H extends HomePage, A extends AdminHomePage, L ex
 
     ProductInstance getProductInstance();
     WebDriver getDriver();
+
+    <P extends PageObject> P gotoPage(Class<P> pageClass, boolean activate);
 }

@@ -10,6 +10,7 @@ import com.atlassian.webdriver.page.UserDiscoverable;
 import com.atlassian.webdriver.utils.Check;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.PageFactory;
 
 /**
  * TODO: Document this class / interface here
@@ -99,6 +100,7 @@ public abstract class ConfluenceAbstractPage<P extends PageObject> extends Abstr
         {
             throw new IllegalStateException("Expected to be at uri: " + (getBaseUrl() + uri) + ", instead at: " + getDriver().getCurrentUrl());
         }
+        PageFactory.initElements(getDriver(), this);
 
         return (P) this;
 

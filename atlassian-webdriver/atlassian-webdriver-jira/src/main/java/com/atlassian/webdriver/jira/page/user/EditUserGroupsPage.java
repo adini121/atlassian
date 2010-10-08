@@ -100,7 +100,7 @@ public class  EditUserGroupsPage extends JiraAdminAbstractPage<EditUserGroupsPag
 
         joinButton.click();
 
-        return testedProduct.gotoPage(pageClass);
+        return testedProduct.gotoPage(pageClass, true);
     }
 
     public EditUserGroupsPage addToGroupsExpectingError(String ... groups)
@@ -118,7 +118,7 @@ public class  EditUserGroupsPage extends JiraAdminAbstractPage<EditUserGroupsPag
 
         leaveButton.click();
 
-        return getTestedProduct().gotoPage(pageClass);
+        return getTestedProduct().gotoPage(pageClass, true);
     }
 
     public EditUserGroupsPage removeFromGroupsExpectingError(String ... groups)

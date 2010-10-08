@@ -32,12 +32,7 @@ public class JiraLoginPage extends JiraAbstractPage<JiraLoginPage> implements Lo
     }
 
     public DashboardPage loginAsAdmin() {
-        return login(new User("admin", "admin", ""));
-    }
-
-
-    public DashboardPage login(String username, String password) {
-        return login(new User(username, password, ""));
+        return login(new User("admin", "admin", "fullname", "email"));
     }
 
     public DashboardPage login(User user)
@@ -57,7 +52,7 @@ public class JiraLoginPage extends JiraAbstractPage<JiraLoginPage> implements Lo
 
         loginButton.click();
 
-        return (DashboardPage) testedProduct.gotoPage(DashboardPage.class);
+        return new DashboardPage(getTestedProduct()).get(true);
     }
 
 

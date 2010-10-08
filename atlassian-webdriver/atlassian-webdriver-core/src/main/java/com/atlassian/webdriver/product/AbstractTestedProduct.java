@@ -42,7 +42,11 @@ public abstract class AbstractTestedProduct<H extends HomePage, A extends AdminH
         pageOverrides.put(oldClass, newClass);
     }
 
-    public <P extends PageObject> P gotoPage(Class<P> pageClass) {
+    public <P extends PageObject> P gotoPage(Class<P> pageClass) 
+    {
+        return gotoPage(pageClass, false);
+    }
+    public <P extends PageObject> P gotoPage(Class<P> pageClass, boolean activate) {
         try
         {
             Class<P> actualPageClass = (Class<P>) pageOverrides.get(pageClass);
@@ -50,9 +54,9 @@ public abstract class AbstractTestedProduct<H extends HomePage, A extends AdminH
             {
                 actualPageClass = pageClass;
             }
-            Constructor<P> c = actualPageClass.getConstructor(TestedProduct.class);
+            Constructor<P> c = actualPageClass.getConstructor(getClass());
             P page = c.newInstance(this);
-            page.get(true);
+            page.get(activate);
             return page;
         }
         catch (NoSuchMethodException e)

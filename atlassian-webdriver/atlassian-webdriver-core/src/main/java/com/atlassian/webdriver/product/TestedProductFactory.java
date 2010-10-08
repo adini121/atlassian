@@ -44,8 +44,8 @@ public class TestedProductFactory
     private static <P extends TestedProduct> P create(Class<P> testedProductClass, ProductInstance instance, WebDriver webDriver) {
         try
         {
-            Constructor<P> c = testedProductClass.getConstructor(ProductInstance.class, WebDriver.class);
-            return c.newInstance(instance, webDriver);
+            Constructor<P> c = testedProductClass.getConstructor(WebDriver.class, ProductInstance.class);
+            return c.newInstance(webDriver, instance);
         }
         catch (NoSuchMethodException e)
         {
