@@ -15,6 +15,14 @@ public class WebDriverBrowserAutoInstall
     static
     {
         AutoInstallConfiguration config = new AutoInstallConfiguration();
+        Runtime.getRuntime().addShutdownHook(new Thread()
+        {
+            @Override
+            public void run()
+            {
+                AtlassianWebDriver.quitDriver();
+            }
+        });
     }
 
     public static WebDriver getDriver()
