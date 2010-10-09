@@ -1,8 +1,8 @@
 package com.atlassian.webdriver.confluence.component.menu;
 
+import com.atlassian.webdriver.confluence.ConfluenceTestedProduct;
 import com.atlassian.webdriver.confluence.component.sherpa.WelcomeScreen;
 import com.atlassian.webdriver.component.menu.AjsDropdownMenu;
-import com.atlassian.webdriver.confluence.page.ConfluencePage;
 import com.atlassian.webdriver.confluence.page.LogoutPage;
 import com.atlassian.webdriver.utils.ByJquery;
 import org.openqa.selenium.WebDriver;
@@ -12,19 +12,19 @@ import org.openqa.selenium.WebDriver;
  *
  * @since v4.2
  */
-public class UserMenu extends AjsDropdownMenu
+public class UserMenu extends AjsDropdownMenu<ConfluenceTestedProduct>
 {
 
-    public UserMenu(WebDriver driver)
+    public UserMenu(ConfluenceTestedProduct testedProduct)
     {
-        super(ByJquery.$("('#user-menu-link').parent('li')"), driver);
+        super(ByJquery.$("('#user-menu-link').parent('li')"), testedProduct);
     }
 
     public LogoutPage logout()
     {
         activate("logout-link");
 
-        return ConfluencePage.LOGOUTPAGE.get(getDriver(), true);
+        return new LogoutPage(getTestedProduct()).get(true);
     }
 
     public WelcomeScreen showWelcomeScreen()

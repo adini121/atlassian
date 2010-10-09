@@ -1,5 +1,6 @@
 package com.atlassian.webdriver.confluence.page;
 
+import com.atlassian.webdriver.confluence.ConfluenceTestedProduct;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -7,19 +8,12 @@ import org.openqa.selenium.WebDriver;
  *
  * @since v4.2
  */
-public class LogoutPage extends ConfluenceWebDriverPage
+public class LogoutPage extends ConfluenceAbstractPage<LogoutPage>
 {
     private static final String URI = "/logout.action";
 
-    public LogoutPage(WebDriver driver)
+    public LogoutPage(ConfluenceTestedProduct testedProduct)
     {
-        super(driver);
-    }
-
-    public LogoutPage get(final boolean activated)
-    {
-        get(URI, activated);
-
-        return this;
+        super(testedProduct, URI);
     }
 }

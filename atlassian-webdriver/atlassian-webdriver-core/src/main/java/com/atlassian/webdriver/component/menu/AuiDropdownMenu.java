@@ -1,6 +1,7 @@
 package com.atlassian.webdriver.component.menu;
 
 import com.atlassian.webdriver.AtlassianWebDriver;
+import com.atlassian.webdriver.product.TestedProduct;
 import com.atlassian.webdriver.utils.Check;
 import com.atlassian.webdriver.utils.element.ElementLocated;
 import com.atlassian.webdriver.utils.element.ElementNotLocated;
@@ -13,20 +14,20 @@ import org.openqa.selenium.WebElement;
  *
  * @since v4.2
  */
-public class AuiDropdownMenu extends Menu
+public class AuiDropdownMenu<T extends TestedProduct> extends Menu<T>
 {
 
     private WebElement menuItem;
 
 
-    public AuiDropdownMenu(By by, WebDriver driver)
+    public AuiDropdownMenu(By by, T testedProduct)
     {
-        this(driver.findElement(by), driver);
+        this(testedProduct.getDriver().findElement(by), testedProduct);
     }
 
-    public AuiDropdownMenu(WebElement menuItem, WebDriver driver)
+    public AuiDropdownMenu(WebElement menuItem, T testedProduct)
     {
-        super(driver);
+        super(testedProduct);
 
         this.menuItem = menuItem;
     }

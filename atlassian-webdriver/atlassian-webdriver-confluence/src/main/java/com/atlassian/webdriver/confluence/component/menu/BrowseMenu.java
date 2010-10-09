@@ -1,8 +1,8 @@
 package com.atlassian.webdriver.confluence.component.menu;
 
 import com.atlassian.webdriver.component.menu.AjsDropdownMenu;
-import com.atlassian.webdriver.confluence.page.AdministrationPage;
-import com.atlassian.webdriver.confluence.page.ConfluencePage;
+import com.atlassian.webdriver.confluence.ConfluenceTestedProduct;
+import com.atlassian.webdriver.confluence.page.ConfluenceAdminHomePage;
 import com.atlassian.webdriver.confluence.page.PeopleDirectoryPage;
 import com.atlassian.webdriver.utils.ByJquery;
 import org.openqa.selenium.WebDriver;
@@ -12,26 +12,26 @@ import org.openqa.selenium.WebDriver;
  *
  * @since v4.2
  */
-public class BrowseMenu extends AjsDropdownMenu
+public class BrowseMenu extends AjsDropdownMenu<ConfluenceTestedProduct>
 {
 
-    public BrowseMenu(WebDriver driver)
+    public BrowseMenu(ConfluenceTestedProduct testedProduct)
     {
-        super(ByJquery.$("('#browse-menu-link').parent('li')"),driver);
+        super(ByJquery.$("('#browse-menu-link').parent('li')"), testedProduct);
     }
 
-    public AdministrationPage gotoAdminPage()
+    public ConfluenceAdminHomePage gotoAdminPage()
     {
         activate("administration-link");
 
-        return ConfluencePage.ADMINPAGE.get(getDriver(), true);
+        return new ConfluenceAdminHomePage(getTestedProduct()).get(true);
     }
 
     public PeopleDirectoryPage gotoPeopleDirectoryPage()
     {
         activate("people-directory-link");
 
-        return ConfluencePage.PEOPLE_DIRECTORY_PAGE.get(getDriver(), true);
+        return new PeopleDirectoryPage(getTestedProduct()).get(true);
     }
 
 }

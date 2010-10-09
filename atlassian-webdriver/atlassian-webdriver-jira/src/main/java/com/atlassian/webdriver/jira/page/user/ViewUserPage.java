@@ -1,8 +1,8 @@
 package com.atlassian.webdriver.jira.page.user;
 
-import com.atlassian.webdriver.jira.page.JiraAdminWebDriverPage;
-import com.atlassian.webdriver.jira.page.JiraPages;
-import com.atlassian.webdriver.page.PageObject;
+import com.atlassian.webdriver.PageObject;
+import com.atlassian.webdriver.jira.JiraTestedProduct;
+import com.atlassian.webdriver.jira.page.JiraAdminAbstractPage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -12,7 +12,7 @@ import org.openqa.selenium.support.FindBy;
  *
  * @since v1.0
  */
-public class ViewUserPage extends JiraAdminWebDriverPage
+public class ViewUserPage extends JiraAdminAbstractPage<ViewUserPage>
 {
     
     private static final String URI = "/secure/admin/user/ViewUser.jspa";
@@ -52,23 +52,16 @@ public class ViewUserPage extends JiraAdminWebDriverPage
 
     // TODO: groups are currently image bullets, don't handle them. Make JIRA change to <ul>.
 
-    public ViewUserPage(WebDriver driver)
+    public ViewUserPage(JiraTestedProduct jiraTestedProduct)
     {
-        super(driver);
-    }
-
-    public ViewUserPage get(final boolean activated)
-    {
-        get(URI, activated);
-
-        return this;
+        super(jiraTestedProduct, URI);
     }
 
     public DeleteUserPage gotoDeleteUserPage()
     {
         deleteUserLink.click();
 
-        return JiraPages.DELETE_USER_PAGE.get(driver, true);
+        return new DeleteUserPage(getTestedProduct()).get(true);
     }
 
     public PageObject setPassword()
@@ -90,7 +83,7 @@ public class ViewUserPage extends JiraAdminWebDriverPage
     {
         editUserLink.click();
 
-        return JiraPages.EDIT_USER_GROUPS_PAGE.get(driver, true);
+        return new EditUserGroupsPage(getTestedProduct()).get(true);
     }
 
     public PageObject editProperties()

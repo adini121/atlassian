@@ -1,5 +1,6 @@
 package com.atlassian.webdriver.confluence.page;
 
+import com.atlassian.webdriver.confluence.ConfluenceTestedProduct;
 import com.atlassian.webdriver.confluence.component.macro.UserMacro;
 import com.atlassian.webdriver.utils.ByJquery;
 import com.atlassian.webdriver.utils.Check;
@@ -17,7 +18,7 @@ import java.util.Set;
  *
  * @since v4.2
  */
-public class PeopleDirectoryPage extends ConfluenceWebDriverPage
+public class PeopleDirectoryPage extends ConfluenceAbstractPage<PeopleDirectoryPage>
 {
     private static final String URI = "/browsepeople.action";
 
@@ -29,9 +30,9 @@ public class PeopleDirectoryPage extends ConfluenceWebDriverPage
 
     private Map<String, UserMacro> users = new HashMap<String, UserMacro>();
 
-    public PeopleDirectoryPage(WebDriver driver)
+    public PeopleDirectoryPage(ConfluenceTestedProduct testedProduct)
     {
-        super(driver);
+        super(testedProduct, URI);
     }
 
     public PeopleDirectoryPage get(final boolean activated)
@@ -45,7 +46,7 @@ public class PeopleDirectoryPage extends ConfluenceWebDriverPage
 
     private void parseUsers()
     {
-        for (WebElement profile : driver.findElements(By.className("profile-macro")))
+        for (WebElement profile : getDriver().findElements(By.className("profile-macro")))
         {
             UserMacro userMacro = new UserMacro(profile.findElement(By.className("vcard")));
             users.put(userMacro.getUsername(), userMacro);
@@ -67,7 +68,7 @@ public class PeopleDirectoryPage extends ConfluenceWebDriverPage
             allPeopleLink.click();
         }
 
-        return ConfluencePage.PEOPLE_DIRECTORY_PAGE.get(driver, true);
+        return new PeopleDirectoryPage(getTestedProduct()).get(true);
     }
 
     public PeopleDirectoryPage showAllPeopleWithPersonalSpaces()
@@ -78,7 +79,7 @@ public class PeopleDirectoryPage extends ConfluenceWebDriverPage
             peopleWithPersonalSpacesLink.click();
         }
 
-        return ConfluencePage.PEOPLE_DIRECTORY_PAGE.get(driver, true);
+        return new PeopleDirectoryPage(getTestedProduct()).get(true);
 
     }
 

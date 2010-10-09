@@ -1,12 +1,10 @@
 package com.atlassian.webdriver.jira.page.user;
 
-import com.atlassian.webdriver.jira.page.JiraAdminWebDriverPage;
-import com.atlassian.webdriver.jira.page.JiraPages;
-import com.atlassian.webdriver.page.Page;
-import com.atlassian.webdriver.page.PageObject;
+import com.atlassian.webdriver.jira.JiraTestedProduct;
+import com.atlassian.webdriver.jira.page.JiraAdminAbstractPage;
+import com.atlassian.webdriver.PageObject;
 import com.atlassian.webdriver.utils.ByJquery;
 import com.atlassian.webdriver.utils.Check;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -19,7 +17,7 @@ import java.util.Set;
  *
  * @since v1.0
  */
-public class  EditUserGroupsPage extends JiraAdminWebDriverPage
+public class  EditUserGroupsPage extends JiraAdminAbstractPage<EditUserGroupsPage>
 {
 
     private static final String URI = "/secure/admin/user/EditUserGroups.jspa";
@@ -45,9 +43,9 @@ public class  EditUserGroupsPage extends JiraAdminWebDriverPage
     @FindBy (name = "jiraform")
     private WebElement editGroupsForm;
 
-    public EditUserGroupsPage(final WebDriver driver)
+    public EditUserGroupsPage(final JiraTestedProduct jiraTestedProduct)
     {
-        super(driver);
+        super(jiraTestedProduct, URI);
     }
 
     public EditUserGroupsPage get(final boolean activated)
@@ -64,7 +62,7 @@ public class  EditUserGroupsPage extends JiraAdminWebDriverPage
 
         if (Check.elementExists(ByJquery.$(ERROR_SELECTOR)))
         {
-            for (WebElement el : driver.findElements(ByJquery.$(ERROR_SELECTOR)))
+            for (WebElement el : getDriver().findElements(ByJquery.$(ERROR_SELECTOR)))
             {
                 errors.add(el.getText());
             }
@@ -87,7 +85,7 @@ public class  EditUserGroupsPage extends JiraAdminWebDriverPage
     {
         returnLink.click();
 
-        return JiraPages.VIEW_USER_PAGE.get(driver, true);
+        return new ViewUserPage(getTestedProduct()).get(true);
     }
 
     /**
@@ -96,13 +94,13 @@ public class  EditUserGroupsPage extends JiraAdminWebDriverPage
      * @param groups
      * @return
      */
-    public <T extends PageObject> T addToGroupsAndReturnToPage(Page<T> page, String ... groups)
+    public <T extends PageObject> T addToGroupsAndReturnToPage(Class<T> pageClass, String ... groups)
     {
         selectGroups(groupsToJoinSelect, groups);
 
         joinButton.click();
 
-        return page.get(driver, true);
+        return testedProduct.gotoPage(pageClass, true);
     }
 
     public EditUserGroupsPage addToGroupsExpectingError(String ... groups)
@@ -111,16 +109,16 @@ public class  EditUserGroupsPage extends JiraAdminWebDriverPage
 
         leaveButton.click();
 
-        return JiraPages.EDIT_USER_GROUPS_PAGE.get(driver, true);
+        return new EditUserGroupsPage(getTestedProduct()).get(true);
     }
 
-    public <T extends PageObject> T removeFromGroupsAndReturnToPage(Page<T> page, String ... groups)
+    public <T extends PageObject> T removeFromGroupsAndReturnToPage(Class<T> pageClass, String ... groups)
     {
         selectGroups(groupsToLeaveSelect, groups);
 
         leaveButton.click();
 
-        return page.get(driver, true);
+        return getTestedProduct().gotoPage(pageClass, true);
     }
 
     public EditUserGroupsPage removeFromGroupsExpectingError(String ... groups)
@@ -129,7 +127,7 @@ public class  EditUserGroupsPage extends JiraAdminWebDriverPage
 
         leaveButton.click();
 
-        return JiraPages.EDIT_USER_GROUPS_PAGE.get(driver, true);
+        return new EditUserGroupsPage(getTestedProduct()).get(true);
     }
 
     private void selectGroups(WebElement select, String ... groups)

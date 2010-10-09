@@ -1,7 +1,7 @@
 package com.atlassian.webdriver.jira.component.menu;
 
 import com.atlassian.webdriver.component.menu.AuiDropdownMenu;
-import com.atlassian.webdriver.jira.page.JiraPages;
+import com.atlassian.webdriver.jira.JiraTestedProduct;
 import com.atlassian.webdriver.jira.page.LicenseDetailsPage;
 import com.atlassian.webdriver.jira.page.PluginsPage;
 import com.atlassian.webdriver.jira.page.user.UserBrowserPage;
@@ -12,19 +12,19 @@ import org.openqa.selenium.WebDriver;
  * Object for interacting with the Admin menu in the JIRA header.
  * TODO: extend for all available links.
  */
-public class AdminMenu extends AuiDropdownMenu
+public class AdminMenu extends AuiDropdownMenu<JiraTestedProduct>
 {
 
-    public AdminMenu(WebDriver driver)
+    public AdminMenu(JiraTestedProduct jiraTestedProduct)
     {
-        super(ByJquery.$("('#admin_link').parent('li')"), driver);
+        super(ByJquery.$("('#admin_link').parent('li')"), jiraTestedProduct);
     }
 
     public PluginsPage gotoPluginsPage()
     {
         activate("plugins_lnk");
 
-        return JiraPages.PLUGINSPAGE.get(getDriver(), true);
+        return new PluginsPage(getTestedProduct()).get(true);
 
     }
 
@@ -32,14 +32,14 @@ public class AdminMenu extends AuiDropdownMenu
     {
         activate("license_details_lnk");
 
-        return JiraPages.LICENSEDETAILSPAGE.get(getDriver(), true);
+        return new LicenseDetailsPage(getTestedProduct()).get(true);
     }
 
     public UserBrowserPage gotoUserBrowserPage()
     {
         activate("user_browser_lnk");
 
-        return JiraPages.USERBROWSERPAGE.get(getDriver(), true);
+        return new UserBrowserPage(getTestedProduct()).get(true);
     }
 
 }

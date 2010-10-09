@@ -1,7 +1,7 @@
 package com.atlassian.webdriver.greenhopper.page.license;
 
-import com.atlassian.webdriver.jira.page.JiraAdminWebDriverPage;
-import com.atlassian.webdriver.greenhopper.page.GreenHopperPage;
+import com.atlassian.webdriver.jira.JiraTestedProduct;
+import com.atlassian.webdriver.jira.page.JiraAdminAbstractPage;
 import com.atlassian.webdriver.utils.ByJquery;
 import com.atlassian.webdriver.utils.Check;
 import org.apache.commons.lang.StringUtils;
@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
  *
  * @since v4.2
  */
-public class GreenHopperLicenseDetailsPage extends JiraAdminWebDriverPage
+public class GreenHopperLicenseDetailsPage extends JiraAdminAbstractPage<GreenHopperLicenseDetailsPage>
 {
 
     private static final String URI = "/secure/GHLicense.jspa?decorator=admin";
@@ -49,9 +49,9 @@ public class GreenHopperLicenseDetailsPage extends JiraAdminWebDriverPage
     private boolean licenseIsLoaded = false;
     
 
-    public GreenHopperLicenseDetailsPage(WebDriver driver)
+    public GreenHopperLicenseDetailsPage(JiraTestedProduct testedProduct)
     {
-        super(driver);
+        super(testedProduct, URI);
     }
 
     public GreenHopperLicenseDetailsPage get(final boolean activated)
@@ -186,6 +186,6 @@ public class GreenHopperLicenseDetailsPage extends JiraAdminWebDriverPage
         updateLicenseTextArea.sendKeys(license);
         updateLicenseForm.submit();
 
-        return GreenHopperPage.LICENSE_DETAILS_PAGE.get(driver, true);
+        return new GreenHopperLicenseDetailsPage(getTestedProduct()).get(true);
     }
 }
