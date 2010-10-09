@@ -21,5 +21,10 @@
         <module>atlassian-webdriver-refapp</module>
     </modules>
 
+     <properties>
+        <xvfb.enable>true</xvfb.enable>
+        <xvfb.display>:20</xvfb.display>
+    </properties>
+
 
 </project>

@@ -17,7 +17,7 @@ public class TestDashboard
     @Test
     public void testDashboard()
     {
-        ConfluenceTestedProduct conf = TestedProductFactory.create(ConfluenceTestedProduct.class, "confluence");
+        ConfluenceTestedProduct conf = TestedProductFactory.create(ConfluenceTestedProduct.class, "confluence", webdriver.browsers.WebdriverBrowserAutoInstall.getDriver());
         ConfluenceLoginPage login = conf.gotoLoginPage();
         login.loginAsAdmin();
         DashboardPage dashboard = conf.gotoHomePage();
