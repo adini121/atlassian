@@ -5,7 +5,7 @@ import com.atlassian.webdriver.utils.element.ElementLocated;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import webdriver.browsers.WebdriverBrowserAutoInstall;
+import webdriver.browsers.WebDriverBrowserAutoInstall;
 
 import static org.junit.Assert.assertEquals;
 
@@ -19,7 +19,7 @@ public class TestChrome_5WebDriverAutoInstaller extends WebDriverAutoInstallerTe
     {
         System.setProperty("webdriver.browser", "chrome-5");
 
-        WebDriver driver = WebdriverBrowserAutoInstall.getDriver();
+        WebDriver driver = WebDriverBrowserAutoInstall.getDriver();
 
         driver.get(TEST_URL);
 

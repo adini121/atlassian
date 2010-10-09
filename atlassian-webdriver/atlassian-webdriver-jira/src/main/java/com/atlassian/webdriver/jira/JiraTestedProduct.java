@@ -15,7 +15,7 @@ import org.openqa.selenium.WebDriver;
 /**
  *
  */
-@Defaults(contextPath = "/jira", httpPort = 2990)
+@Defaults(instanceId = "jira", contextPath = "/jira", httpPort = 2990)
 public class JiraTestedProduct extends AbstractTestedProduct<DashboardPage, JiraAdminHomePage, JiraLoginPage>
 {
     public JiraTestedProduct(WebDriver webDriver, ProductInstance productInstance)

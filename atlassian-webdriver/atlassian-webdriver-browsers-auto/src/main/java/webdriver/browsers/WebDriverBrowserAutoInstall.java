@@ -9,7 +9,7 @@ import java.io.File;
  * Client that supports automatically installing the appropriate browser for the environment
  *
  */
-public class WebdriverBrowserAutoInstall
+public class WebDriverBrowserAutoInstall
 {
 
     static

@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-import webdriver.browsers.WebdriverBrowserAutoInstall;
+import webdriver.browsers.WebDriverBrowserAutoInstall;
 
 import static org.junit.Assert.assertEquals;
 
@@ -20,7 +20,7 @@ public class TestFirefox3_5WebDriverAutoInstaller extends WebDriverAutoInstaller
     {
         System.setProperty("webdriver.browser", "firefox-3.5");
 
-        WebDriver driver = WebdriverBrowserAutoInstall.getDriver();
+        WebDriver driver = WebDriverBrowserAutoInstall.getDriver();
 
         driver.get(TEST_URL);
         AtlassianWebDriver.waitUntil(new ElementLocated(By.tagName("h1")));

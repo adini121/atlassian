@@ -16,7 +16,7 @@ import org.openqa.selenium.WebDriver;
 /**
  *
  */
-@Defaults(contextPath = "/confluence", httpPort = 1990)
+@Defaults(instanceId = "confluence", contextPath = "/confluence", httpPort = 1990)
 public class ConfluenceTestedProduct extends AbstractTestedProduct<DashboardPage, ConfluenceAdminHomePage, ConfluenceLoginPage>
 {
     private User loggedInUser;

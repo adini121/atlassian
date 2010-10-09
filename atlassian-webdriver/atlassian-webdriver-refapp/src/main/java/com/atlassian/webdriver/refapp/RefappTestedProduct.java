@@ -15,7 +15,7 @@ import org.openqa.selenium.WebDriver;
 /**
  *
  */
-@Defaults(contextPath = "/refapp", httpPort = 5990)
+@Defaults(instanceId = "refapp", contextPath = "/refapp", httpPort = 5990)
 public class RefappTestedProduct extends AbstractTestedProduct<RefappHomePage, RefappAdminHomePage, RefappLoginPage>
 {
     public RefappTestedProduct(WebDriver webDriver, ProductInstance productInstance)
