@@ -26,7 +26,7 @@ public class Link<T extends PageObject>
         {
             AtlassianWebDriver.getDriver().findElement(locator).click();
 
-            return (T) testedProduct.gotoPage(pageObjectClass);
+            return (T) testedProduct.gotoPage(pageObjectClass, true);
         }
 
         throw new ElementNotVisibleException("The link could not be activated By(" + locator + ") failed to find element");

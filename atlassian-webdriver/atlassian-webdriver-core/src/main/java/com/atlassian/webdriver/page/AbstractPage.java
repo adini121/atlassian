@@ -85,7 +85,7 @@ public abstract class AbstractPage<TP extends TestedProduct, P extends PageObjec
             goTo(uri);
         }
 
-        if (activated && !at(uri))
+        if (activated && uri != null && !at(uri))
         {
             throw new IllegalStateException("Expected to be at uri: " + (testedProduct.getProductInstance().getBaseUrl() + uri) + ", instead at: " + testedProduct.getDriver().getCurrentUrl());
         }

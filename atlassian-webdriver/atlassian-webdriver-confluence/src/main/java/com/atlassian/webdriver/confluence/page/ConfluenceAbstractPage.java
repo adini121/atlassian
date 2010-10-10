@@ -90,13 +90,13 @@ public abstract class ConfluenceAbstractPage<P extends PageObject> extends Abstr
 
         //Check whether we are on the admin access page and it wasn't requested.
         //If this is the case log in the user automatically.
-        if (!uri.equals(AdministratorAccessPage.URI) && at(AdministratorAccessPage.URI))
+        if (uri != null && !uri.equals(AdministratorAccessPage.URI) && at(AdministratorAccessPage.URI))
         {
             new AdministratorAccessPage(getTestedProduct()).get(true).login(getTestedProduct().getLoggedInUser());
         }
 
 
-        if (activated && !at(uri))
+        if (activated && uri != null && !at(uri))
         {
             throw new IllegalStateException("Expected to be at uri: " + (getBaseUrl() + uri) + ", instead at: " + getDriver().getCurrentUrl());
         }
