@@ -10,7 +10,7 @@
 
     <groupId>com.atlassian.selenium</groupId>
     <artifactId>atlassian-selenium-parent</artifactId>
-    <version>2.0-SNAPSHOT</version>
+    <version>2.0.0-m10</version>
     <packaging>pom</packaging>
     <name>${project.artifactId}</name>
     <description>
@@ -19,9 +19,9 @@
     </description>
 
     <scm>
-        <connection>scm:svn:https://studio.atlassian.com/svn/SELENIUM/trunk/</connection>
-        <developerConnection>scm:svn:https://studio.atlassian.com/svn/SELENIUM/trunk/</developerConnection>
-        <url>https://studio.atlassian.com/svn/SELENIUM/trunk/</url>
+        <connection>scm:svn:https://studio.atlassian.com/svn/SELENIUM/tags/atlassian-selenium-parent-2.0.0-m10</connection>
+        <developerConnection>scm:svn:https://studio.atlassian.com/svn/SELENIUM/tags/atlassian-selenium-parent-2.0.0-m10</developerConnection>
+        <url>https://studio.atlassian.com/svn/SELENIUM/tags/atlassian-selenium-parent-2.0.0-m10</url>
     </scm>
 
     <properties>
