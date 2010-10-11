@@ -26,6 +26,7 @@
 
     <properties>
         <jdkLevel>1.5</jdkLevel>
+        <atlassian-browsers-version>1.1-beta1</atlassian-browsers-version>
     </properties>
 
     <modules>

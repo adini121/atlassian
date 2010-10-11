@@ -24,6 +24,7 @@ public class AutoInstallConfiguration
                 public void setupFirefoxBrowser(final BrowserConfig browserConfig)
                 {
                     System.setProperty("webdriver.firefox.bin", browserConfig.getBinaryPath());
+                    //System.setProperty("webdriver.firefox.profile", browserConfig.getProfilePath());
                 }
 
                 @Override

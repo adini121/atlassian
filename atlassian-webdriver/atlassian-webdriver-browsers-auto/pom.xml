@@ -35,10 +35,6 @@
         </dependencies>
     </dependencyManagement>
 
-    <properties>
-        <atlassian-browsers-version>1.0</atlassian-browsers-version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
