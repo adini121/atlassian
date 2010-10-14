@@ -11,7 +11,7 @@ if(inx != -1){
 var found = $(inDocument).find(loc);
 if (found.length >= 1) {
     if (isattr) {
-        return found[0].getAttribute(attr);
+        return found.attr(attr);
     } else {
         return found[0];
     }
