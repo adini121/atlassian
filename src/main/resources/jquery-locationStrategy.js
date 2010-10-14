@@ -9,18 +9,12 @@ if(inx != -1){
     isattr = true;
 }
 var found = $(inDocument).find(loc);
-if(found.length == 1 ){
-    if(isattr){
-        return found[0].attr(attr);
-    }else{
+if (found.length >= 1) {
+    if (isattr) {
+        return found[0].getAttribute(attr);
+    } else {
         return found[0];
     }
-} else if(found.length > 1){
-    if(isattr){
-        return found.get().attr(attr);
-    }else{
-        return found.get();
-    }
-}else{
+} else {
     return null;
 }
