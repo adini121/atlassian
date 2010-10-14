@@ -421,7 +421,7 @@ public class SingleBrowserSeleniumClient extends DefaultSelenium implements Sele
 
     private void addJqueryLocator() throws IOException
     {
-        String jqueryImpl = readFile("jquery-1.3.1.min.js");
+        String jqueryImpl = readFile("jquery-1.4.2.min.js");
         String jqueryLocStrategy = readFile("jquery-locationStrategy.js");
         //client.setExtensionJs(jqueryImpl);
         addScript(jqueryImpl, "jquery");
