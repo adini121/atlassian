@@ -2,11 +2,19 @@
 
 package com.atlassian.selenium;
 
+import com.atlassian.selenium.keyboard.CharacterKeySequence;
+import com.atlassian.selenium.keyboard.KeyEvent;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.thoughtworks.selenium.DefaultSelenium;
 
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Extends the {@link DefaultSelenium} client to provide a more sensible implementation
@@ -16,6 +24,8 @@ public class SingleBrowserSeleniumClient extends DefaultSelenium implements Sele
 {
 
     private Browser browser;
+
+    private Map<String, CharacterKeySequence> characterKeySequenceMap = new HashMap<String, CharacterKeySequence>();
 
     /**
      * The maximum page load wait time used by Selenium. This value is set with
@@ -248,25 +258,20 @@ public class SingleBrowserSeleniumClient extends DefaultSelenium implements Sele
             super.type(locator, "");
         }
 
-        // The typeKeys method doesn't work properly in Firefox
-        if (Browser.FIREFOX.equals(browser))
+        char[] chars = string.toCharArray();
+        StringBuilder typedTo = new StringBuilder();
+        if(!reset)
         {
-            char[] chars = string.toCharArray();
-            for (char aChar : chars)
-            {
-                super.focus(locator);
-                //Using codes because the methhod doesn't worki n
-                keyPress(locator, "\\" + (int) aChar);
-            }
+            typedTo.append(super.getValue(locator));
         }
-        else
+        for (char aChar : chars)
         {
-            if(!reset)
+            if (Browser.IE.equals(browser))
             {
-                string = super.getValue(locator) + string;
+                typedTo.append(aChar);
+                super.type(locator, typedTo.toString());
             }
-            super.type(locator, string);
-            super.typeKeys(locator, string);
+            simulateKeyPressForCharacter(locator, aChar);
         }
     }
 
@@ -280,6 +285,112 @@ public class SingleBrowserSeleniumClient extends DefaultSelenium implements Sele
     public void typeWithFullKeyEvents(String locator, String string)
     {
         typeWithFullKeyEvents(locator, string, true);
+    }
+
+    public void simulateKeyPressForCharacter(final String locator, final Character character)
+    {
+        simulateKeyPressForIdentifier(locator,character.toString());
+    }
+
+    public void simulateKeyPressForSpecialKey(final String locator, final int keyCode)
+    {
+        simulateKeyPressForIdentifier(locator,String.format("0x%x",keyCode));
+    }
+
+    private void simulateKeyPressForIdentifier(final String locator, final String identifier)
+    {
+        if (characterKeySequenceMap.containsKey(identifier))
+        {
+            for (KeyEvent ke : characterKeySequenceMap.get(identifier).getKeyEvents())
+            {
+                if (!ke.getBrowsers().contains(this.browser))
+                {
+                    continue;
+                }
+                toggleShiftKey(ke.isShiftKeyDown());
+                toggleAltKey(ke.isAltKeyDown());
+                toggleControlKey(ke.isCtrlKeyDown());
+                toggleMetaKey(ke.isMetaKey());
+                toggleToKeyCode(ke.isToKeyCode());
+                toggleToCharacterCode(ke.isToCharacterCode());
+                switch (ke.getEventType())
+                {
+                    case KEYDOWN:
+                        super.keyDown(locator, "\\" + ke.getCode());
+                        break;
+                    case KEYPRESS:
+                        super.keyPress(locator, "\\" + ke.getCode());
+                        break;
+                    case KEYUP:
+                        super.keyUp(locator, "\\" + ke.getCode());
+                        break;
+                }
+                // Change them both to true so that subsiquent calls to keyPress etc. worked as they did previously with selenium
+                // that is to say incorrectly.
+                toggleToKeyCode(true);
+                toggleToCharacterCode(true);
+
+            }
+        }
+    }
+
+    private void toggleShiftKey(boolean keyIsPressed)
+    {
+        if (keyIsPressed)
+        {
+            super.shiftKeyDown();
+        }
+        else
+        {
+            super.shiftKeyUp();
+        }
+    }
+
+    private void toggleAltKey(boolean keyIsPressed)
+    {
+        if (keyIsPressed)
+        {
+            super.altKeyDown();
+        }
+        else
+        {
+            super.altKeyUp();
+        }
+    }
+
+    private void toggleControlKey(boolean keyIsPressed)
+    {
+        if (keyIsPressed)
+        {
+            super.controlKeyDown();
+        }
+        else
+        {
+            super.controlKeyUp();
+        }
+    }
+
+    private void toggleMetaKey(boolean keyIsPressed)
+    {
+        if (keyIsPressed)
+        {
+            super.metaKeyDown();
+        }
+        else
+        {
+            super.metaKeyUp();
+        }
+
+    }
+
+    public void toggleToKeyCode(boolean toKeyCode)
+    {
+        super.getEval("this.browserbot.toKeyCode = "+toKeyCode+";");
+    }
+
+    public void toggleToCharacterCode(boolean toCharacterCode)
+    {
+        super.getEval("this.browserbot.toCharacterCode = "+toCharacterCode+";");        
     }
 
     /**
@@ -428,6 +539,23 @@ public class SingleBrowserSeleniumClient extends DefaultSelenium implements Sele
         addLocationStrategy("jquery", jqueryLocStrategy );
     }
 
+    private void addKeyPressJSCorrections() throws IOException
+    {
+        String keyPressCorrectionsImpl = readFile("KeyPressCorrected.js");
+        addScript(keyPressCorrectionsImpl, "KeyPressCorrected");        
+    }
+
+    private void loadCharacterKeyEventMap() throws IOException
+    {
+        Gson gson = new GsonBuilder().create();
+        String characterArrayJSON = readFile("charactersKeySequences.json");
+
+        Type collectionType = new TypeToken<HashMap<String,CharacterKeySequence>>(){}.getType();
+        characterKeySequenceMap = gson.fromJson(characterArrayJSON,collectionType);
+        characterKeySequenceMap.put(" ",characterKeySequenceMap.get(String.format("0x%x",java.awt.event.KeyEvent.VK_SPACE)));
+        characterKeySequenceMap.put("\n",characterKeySequenceMap.get(String.format("0x%x",java.awt.event.KeyEvent.VK_ENTER)));
+    }
+
     private static String readFile(String file) throws IOException
     {
         BufferedReader reader =  new BufferedReader(new InputStreamReader(ClassLoader.getSystemClassLoader().getResourceAsStream(file)));
@@ -449,6 +577,8 @@ public class SingleBrowserSeleniumClient extends DefaultSelenium implements Sele
         super.start();
         try {
             addJqueryLocator();
+            loadCharacterKeyEventMap();
+            addKeyPressJSCorrections();
         }
         catch (IOException ioe)
         {

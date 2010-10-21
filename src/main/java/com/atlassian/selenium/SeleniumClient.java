@@ -151,6 +151,42 @@ public interface SeleniumClient extends Selenium
     public void typeWithFullKeyEvents(String locator, String string);
 
     /**
+     * This will send all the events for a particular character
+     * NOTE: This function will only handle vanilla ascii characters
+     * more exotic characters will be ignored (ie. NO events will be fired).
+     *     *
+     * @param locator - the usual Selenium locator
+     * @param character - the character to send
+     */
+    public void simulateKeyPressForCharacter(String locator, Character character);
+
+    /**
+     * This will send all the events for a particular special key (for example F1 or the down arrow key)
+     * The keyCode matches the codes in java.awt.event.KeyEvent
+     *  NOTE: the return key actually fires events with a keyCode of 13 NOT VK_ENTER
+     *     *
+     * @param locator - the usual Selenium locator
+     * @param keyCode - the code for the special Key can use java.awt.event.KeyEvent.XXX to find these
+     */
+    public void simulateKeyPressForSpecialKey(String locator, int keyCode);
+
+    /**
+     * This sets if subsiquent calls to the keyEvent (@keyDown, @keyPress, @keyUp) fuctions
+     * will set the code in the keyCode or not.
+     * This is applicable to Firefox and webkit.
+     * @param toKeyCode - to set or not to set the keyCode in the event
+     */
+    public void toggleToKeyCode(boolean toKeyCode);
+
+    /**
+     * This sets if subsiquent calls to the keyEvent (@keyDown, @keyPress, @keyUp) fuctions
+     * will set the code in the characterCode or not.
+     * This is applicable to Firefox and webkit.
+     * @param toCharacterCode - to set or not to set the characterCode in the event
+     */
+    public void toggleToCharacterCode(boolean toCharacterCode);
+
+    /**
      * This will select an option from a {@code select} field.
      *
      * @param selectName the select field name
