@@ -10,16 +10,16 @@
 
     <groupId>com.atlassian.selenium</groupId>
     <artifactId>atlassian-selenium</artifactId>
-    <version>1.14-SNAPSHOT</version>
+    <version>1.14</version>
     <description>
         A suite of tools to help with Selenium test harness, assertions
         etc.
     </description>
 
     <scm>
-        <connection>scm:svn:https://studio.atlassian.com/svn/SELENIUM/branches/atlassian-selenium-1.x/</connection>
-	<developerConnection>scm:svn:https://studio.atlassian.com/svn/SELENIUM/branches/atlassian-selenium-1.x/</developerConnection>
-	<url>https://studio.atlassian.com/svn/SELENIUM/branches/atlassian-selenium-1.x/</url>
+        <connection>scm:svn:https://studio.atlassian.com/svn/SELENIUM/tags/atlassian-selenium-1.14</connection>
+	<developerConnection>scm:svn:https://studio.atlassian.com/svn/SELENIUM/tags/atlassian-selenium-1.14</developerConnection>
+	<url>https://studio.atlassian.com/svn/SELENIUM/tags/atlassian-selenium-1.14</url>
     </scm>
 
     <properties>
@@ -37,7 +37,45 @@
             <artifactId>junit</artifactId>
             <version>3.8.1</version>
         </dependency>
-        <dependency>
+	<dependency>
+        <groupId>org.seleniumhq.selenium</groupId>
+        <artifactId>selenium</artifactId>
+        <version>2.0a6</version>
+        <exclusions>
+        <exclusion>
+            <groupId>org.seleniumhq.selenium</groupId>
+           <artifactId>selenium-chrome-driver</artifactId>
+        </exclusion>
+        <exclusion>
+            <groupId>org.seleniumhq.selenium</groupId>
+           <artifactId>selenium-firefox-driver</artifactId>
+        </exclusion>
+        <exclusion>
+            <groupId>org.seleniumhq.selenium</groupId>
+           <artifactId>selenium-iphone-driver</artifactId>
+        </exclusion>
+        <exclusion>
+            <groupId>org.seleniumhq.selenium</groupId>
+           <artifactId>selenium-android-driver</artifactId>
+        </exclusion>
+        <exclusion>
+            <groupId>org.seleniumhq.selenium</groupId>
+           <artifactId>selenium-ie-driver</artifactId>
+        </exclusion>
+      </exclusions>        
+    </dependency>
+    <dependency>
+        <groupId>org.seleniumhq.selenium</groupId>
+        <artifactId>selenium-server</artifactId>
+        <version>2.0a6</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>1.4</version>
+      <scope>compile</scope>
+    </dependency>
+<!--    <dependency>
             <groupId>org.seleniumhq.selenium.client-drivers</groupId>
             <artifactId>selenium-java-client-driver</artifactId>
             <version>1.0.1</version>
@@ -47,7 +85,7 @@
             <artifactId>selenium-server</artifactId>
             <version>1.0.3</version>
             <classifier>standalone</classifier>
-        </dependency>
+        </dependency>-->
     </dependencies>
 
     <issueManagement>
