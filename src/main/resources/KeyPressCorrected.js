@@ -1,6 +1,6 @@
 Selenium.prototype.getBB = function() {
     return this.browserbot;
-}
+};
 
 selenium.getBB().triggerKeyEvent = function(element, eventType, keySequence, canBubble, controlKeyDown, altKeyDown, shiftKeyDown, metaKeyDown, toKeyCode, toCharacterCode) {
     var potentialCode = getKeyCodeFromKeySequence(keySequence);
@@ -39,7 +39,7 @@ selenium.getBB().triggerKeyEvent = function(element, eventType, keySequence, can
 
         element.dispatchEvent(evt);
     }
-}
+};
 
 Selenium.prototype.doKeyPress = function(locator, keySequence) {
     /**
