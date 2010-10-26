@@ -161,6 +161,15 @@ public class TestGenerateJSonKeyEventsForCharacters extends TestCase
         cksl.put(cks.getIdentifier(),cks);
 
         ke = new ArrayList<KeyEvent>();
+        ke.add(shiftKeyDown);
+        ke.add(new KeyEvent(KeyEvent.EventTypes.KEYDOWN,'0',allBrowsers,true,false,false,false,true,false));
+        ke.add(new KeyEvent(KeyEvent.EventTypes.KEYPRESS,')',allBrowsers,true,false,false,false,false,true));
+        ke.add(new KeyEvent(KeyEvent.EventTypes.KEYUP,'0',allBrowsers,true,false,false,false,true,false));
+        ke.add(shiftKeyUp);
+        cks = new CharacterKeySequence(")",ke);
+        cksl.put(cks.getIdentifier(),cks);
+
+        ke = new ArrayList<KeyEvent>();
         ke.add(new KeyEvent(KeyEvent.EventTypes.KEYDOWN,' ',allBrowsers,false,false,false,false,true,false));
         ke.add(new KeyEvent(KeyEvent.EventTypes.KEYPRESS,' ',allBrowsers,false,false,false,false,false,true));
         ke.add(new KeyEvent(KeyEvent.EventTypes.KEYUP,' ',allBrowsers,false,false,false,false,true,false));
@@ -676,7 +685,7 @@ public class TestGenerateJSonKeyEventsForCharacters extends TestCase
         cksl.put(cks.getIdentifier(),cks);
 
     }
-    
+
     private static String readFile(String file) throws IOException
     {
         BufferedReader reader =  new BufferedReader(new InputStreamReader(ClassLoader.getSystemClassLoader().getResourceAsStream(file)));

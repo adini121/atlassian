@@ -524,6 +524,72 @@
             "browsers":[
                 "CHROME","FIREFOX","IE","UNKNOWN","OPERA","SAFARI"]
         }
+    ]},")":{
+    "identifier":")","keyEvents":[
+        {
+            "eventType":"KEYDOWN",
+            "code":16,
+            "shiftKeyDown":true,
+            "altKeyDown":false,
+            "ctrlKeyDown":false,
+            "metaKey":
+                    false,
+            "toKeyCode":true,
+            "toCharacterCode":false,
+            "browsers":[
+                "CHROME","FIREFOX","IE","UNKNOWN","OPERA","SAFARI"]
+        },
+        {
+            "eventType":
+                    "KEYDOWN",
+            "code":48,
+            "shiftKeyDown":true,
+            "altKeyDown":false,
+            "ctrlKeyDown":false,
+            "metaKey":false,
+            "toKeyCode":true,
+            "toCharacterCode":false,
+            "browsers":["CHROME","FIREFOX","IE",
+                "UNKNOWN","OPERA","SAFARI"]
+        },
+        {
+            "eventType":"KEYPRESS",
+            "code":41,
+            "shiftKeyDown":true,
+            "altKeyDown":false,
+            "ctrlKeyDown":false,
+            "metaKey":
+                    false,
+            "toKeyCode":false,
+            "toCharacterCode":true,
+            "browsers":[
+                "CHROME","FIREFOX","IE","UNKNOWN","OPERA","SAFARI"]
+        },
+        {
+            "eventType":
+                    "KEYUP",
+            "code":48,
+            "shiftKeyDown":true,
+            "altKeyDown":false,
+            "ctrlKeyDown":false,
+            "metaKey":false,
+            "toKeyCode":true,
+            "toCharacterCode":false,
+            "browsers":["CHROME","FIREFOX","IE",
+                "UNKNOWN","OPERA","SAFARI"]
+        },
+        {
+            "eventType":"KEYUP",
+            "code":16,
+            "shiftKeyDown":false,
+            "altKeyDown":false,
+            "ctrlKeyDown":false,
+            "metaKey":false,
+            "toKeyCode":true,
+            "toCharacterCode":false,
+            "browsers":[
+                "CHROME","FIREFOX","IE","UNKNOWN","OPERA","SAFARI"]
+        }
     ]},"*":{
     "identifier":"*","keyEvents":[
         {
