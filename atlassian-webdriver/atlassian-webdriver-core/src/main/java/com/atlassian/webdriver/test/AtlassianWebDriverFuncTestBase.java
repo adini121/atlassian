@@ -46,8 +46,6 @@ public abstract class AtlassianWebDriverFuncTestBase
             }
 
             dir.mkdirs();
-
-
         }
 
         @Override
@@ -88,7 +86,6 @@ public abstract class AtlassianWebDriverFuncTestBase
 
     @BeforeClass
     public static void startUp() {
-        //System.setProperty("webdriver.browser","chrome-5");
         driver = WebDriverFactory.getDriver();
     }
 

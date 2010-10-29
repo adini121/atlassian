@@ -1,11 +1,15 @@
 package it.com.atlassian.webdriver.confluence.test;
 
 import com.atlassian.webdriver.component.user.User;
+import com.atlassian.webdriver.confluence.ConfluenceTestedProduct;
 import com.atlassian.webdriver.confluence.page.ConfluenceAdminHomePage;
 import com.atlassian.webdriver.confluence.page.ConfluenceLoginPage;
 import com.atlassian.webdriver.confluence.page.DashboardPage;
 import com.atlassian.webdriver.confluence.page.LogoutPage;
+import com.atlassian.webdriver.product.TestedProductFactory;
+import org.junit.After;
 import org.junit.Test;
+import webdriver.browsers.WebDriverBrowserAutoInstall;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -13,8 +17,12 @@ import static org.junit.Assert.assertTrue;
 /**
  *
  */
-public class TestDashboard extends AbstractConfluenceWebDriverTest
+public class TestDashboard
 {
+
+    private static final ConfluenceTestedProduct CONFLUENCE = TestedProductFactory.create(ConfluenceTestedProduct.class, "confluence",
+            WebDriverBrowserAutoInstall.INSTANCE.getDriver());
+
     @Test
     public void testDashboard()
     {
@@ -24,6 +32,8 @@ public class TestDashboard extends AbstractConfluenceWebDriverTest
         assertTrue(dashboard.isAdmin());
         assertTrue(dashboard.isLoggedIn());
         assertTrue(dashboard.isLoggedInAsUser(new User("admin", "admin", null)));
+
+        CONFLUENCE.gotoPage(LogoutPage.class);
     }
 
     @Test
