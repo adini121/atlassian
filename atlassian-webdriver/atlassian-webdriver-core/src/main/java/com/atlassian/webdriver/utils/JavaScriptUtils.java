@@ -70,8 +70,7 @@ public class JavaScriptUtils
         {
             throw new RuntimeException("Unable to load the javascript file: " + jsScriptName, e);
         }
-
-
+        
     }
 
     public static <T> T execute(String js, WebDriver driver)

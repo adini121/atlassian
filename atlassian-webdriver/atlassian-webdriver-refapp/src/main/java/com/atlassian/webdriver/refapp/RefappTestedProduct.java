@@ -1,5 +1,6 @@
 package com.atlassian.webdriver.refapp;
 
+import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.Link;
 import com.atlassian.webdriver.product.Defaults;
 import com.atlassian.webdriver.product.TestedProductFactory;
@@ -10,7 +11,6 @@ import com.atlassian.webdriver.refapp.page.RefappLoginPage;
 import com.atlassian.webdriver.product.AbstractTestedProduct;
 import com.atlassian.webdriver.product.ProductInstance;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 
 /**
  *
@@ -18,7 +18,7 @@ import org.openqa.selenium.WebDriver;
 @Defaults(instanceId = "refapp", contextPath = "/refapp", httpPort = 5990)
 public class RefappTestedProduct extends AbstractTestedProduct<RefappHomePage, RefappAdminHomePage, RefappLoginPage>
 {
-    public RefappTestedProduct(WebDriver webDriver, ProductInstance productInstance)
+    public RefappTestedProduct(AtlassianWebDriver webDriver, ProductInstance productInstance)
     {
         super(webDriver, productInstance);
     }
@@ -40,7 +40,7 @@ public class RefappTestedProduct extends AbstractTestedProduct<RefappHomePage, R
 
     public static final void main(String[] args)
     {
-        RefappTestedProduct product = TestedProductFactory.create(RefappTestedProduct.class, "refapp");
+        RefappTestedProduct product = TestedProductFactory.create(RefappTestedProduct.class);
         RefappLoginPage login = product.gotoLoginPage();
         login.loginAsAdmin();
         RefappAdminHomePage admin = product.gotoAdminHomePage();

@@ -2,10 +2,9 @@ package com.atlassian.webdriver.confluence.page;
 
 import com.atlassian.webdriver.confluence.ConfluenceTestedProduct;
 import com.atlassian.webdriver.confluence.component.macro.UserMacro;
-import com.atlassian.webdriver.utils.ByJquery;
+import com.atlassian.webdriver.utils.by.ByJquery;
 import com.atlassian.webdriver.utils.Check;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -14,9 +13,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * TODO: Document this class / interface here
- *
- * @since v4.2
+ * 
  */
 public class PeopleDirectoryPage extends ConfluenceAbstractPage<PeopleDirectoryPage>
 {
@@ -68,7 +65,7 @@ public class PeopleDirectoryPage extends ConfluenceAbstractPage<PeopleDirectoryP
             allPeopleLink.click();
         }
 
-        return new PeopleDirectoryPage(getTestedProduct()).get(true);
+        return getTestedProduct().gotoPage(PeopleDirectoryPage.class, true);
     }
 
     public PeopleDirectoryPage showAllPeopleWithPersonalSpaces()
@@ -79,7 +76,7 @@ public class PeopleDirectoryPage extends ConfluenceAbstractPage<PeopleDirectoryP
             peopleWithPersonalSpacesLink.click();
         }
 
-        return new PeopleDirectoryPage(getTestedProduct()).get(true);
+        return getTestedProduct().gotoPage(PeopleDirectoryPage.class, true);
 
     }
 
@@ -95,11 +92,11 @@ public class PeopleDirectoryPage extends ConfluenceAbstractPage<PeopleDirectoryP
 
     public boolean isShowingAllPeople()
     {
-        return Check.elementExists(ByJquery.$("div.greybox p strong:contains(All People)"));
+        return getDriver().elementExists(ByJquery.$("div.greybox p strong:contains(All People)"));
     }
 
     public boolean isShowingPeopleWithPersonalSpaces()
     {
-        return Check.elementExists(ByJquery.$("div.greybox p strong:contains(People with Personal Spaces)"));
+        return getDriver().elementExists(ByJquery.$("div.greybox p strong:contains(People with Personal Spaces)"));
     }
 }

@@ -20,15 +20,6 @@ public class DashboardPage extends JiraAbstractPage<DashboardPage> implements Ho
         super(jiraTestedProduct, URI);
     }
 
-    @Override
-    public DashboardPage get(boolean activated)
-    {
-        get(URI, activated);
-        waitUntilLocated(By.className("layout"));
-
-        return this;
-    }
-
     /**
      * TODO: fix this.
      */
@@ -42,5 +33,9 @@ public class DashboardPage extends JiraAbstractPage<DashboardPage> implements Ho
         return new Gadget(gadgetId, getTestedProduct());
     }
 
-
+    @Override
+    public void doWait()
+    {
+        getDriver().waitUntilElementIsLocated(By.className("layout"));
+    }
 }

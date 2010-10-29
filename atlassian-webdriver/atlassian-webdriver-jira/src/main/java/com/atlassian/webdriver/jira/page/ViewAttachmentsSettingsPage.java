@@ -1,9 +1,8 @@
 package com.atlassian.webdriver.jira.page;
 
 import com.atlassian.webdriver.jira.JiraTestedProduct;
-import com.atlassian.webdriver.utils.ByJquery;
+import com.atlassian.webdriver.utils.by.ByJquery;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 

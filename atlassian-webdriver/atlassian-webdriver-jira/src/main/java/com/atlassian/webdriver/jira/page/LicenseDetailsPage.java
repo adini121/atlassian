@@ -1,6 +1,7 @@
 package com.atlassian.webdriver.jira.page;
 
 import com.atlassian.webdriver.jira.JiraTestedProduct;
+import com.atlassian.webdriver.utils.by.ByJquery;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -18,7 +19,7 @@ import java.util.regex.Pattern;
 public class LicenseDetailsPage extends JiraAdminAbstractPage<LicenseDetailsPage>
 {
 
-    private static final String URI = "/secure/admin/jira/ViewLicense!default.jspa";
+    private static final String URI = "/secure/admin/ViewLicense!default.jspa";
 
     @FindBy (id = "license_table")
     WebElement licenseTable;
@@ -34,15 +35,6 @@ public class LicenseDetailsPage extends JiraAdminAbstractPage<LicenseDetailsPage
         super(testedProduct, URI);
     }
 
-    public LicenseDetailsPage get(boolean activated)
-    {
-        get(URI, activated);
-
-        waitUntilLocated(By.id("license_table"));
-
-        return this;
-    }
-
     public String getOrganisation()
     {
         return licenseTable.findElement(By.cssSelector("tr:nth-child(1) td:nth-child(2) b")).getText();
@@ -53,7 +45,6 @@ public class LicenseDetailsPage extends JiraAdminAbstractPage<LicenseDetailsPage
 
         String datePurchased = licenseTable.findElement(By.cssSelector("tr:nth-child(2) td:nth-child(2) b")).getText();
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yy");
-
 
         Date date;
         try
@@ -118,5 +109,11 @@ public class LicenseDetailsPage extends JiraAdminAbstractPage<LicenseDetailsPage
         addLicenseButton.click();
 
         return new LicenseDetailsPage(getTestedProduct()).get(true);
+    }
+
+    @Override
+    public void doWait()
+    {
+        getDriver().waitUntilElementIsLocated(By.id("license_table"));
     }
 }

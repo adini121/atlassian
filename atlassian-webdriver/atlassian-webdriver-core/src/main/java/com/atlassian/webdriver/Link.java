@@ -22,9 +22,9 @@ public class Link<T extends PageObject>
     public T activate(TestedProduct testedProduct)
     {
 
-        if (Check.elementExists(locator))
+        if (Check.elementExists(locator, testedProduct.getDriver()))
         {
-            AtlassianWebDriver.getDriver().findElement(locator).click();
+            testedProduct.getDriver().findElement(locator).click();
 
             return (T) testedProduct.gotoPage(pageObjectClass, true);
         }

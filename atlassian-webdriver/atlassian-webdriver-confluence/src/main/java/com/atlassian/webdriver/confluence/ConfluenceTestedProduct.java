@@ -1,17 +1,13 @@
 package com.atlassian.webdriver.confluence;
 
-import com.atlassian.webdriver.Link;
+import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.component.user.User;
-import com.atlassian.webdriver.confluence.page.DashboardPage;
-import com.atlassian.webdriver.product.Defaults;
-import com.atlassian.webdriver.product.TestedProductFactory;
-import com.atlassian.webdriver.confluence.page.ConfluenceAbstractPage;
 import com.atlassian.webdriver.confluence.page.ConfluenceAdminHomePage;
 import com.atlassian.webdriver.confluence.page.ConfluenceLoginPage;
+import com.atlassian.webdriver.confluence.page.DashboardPage;
 import com.atlassian.webdriver.product.AbstractTestedProduct;
+import com.atlassian.webdriver.product.Defaults;
 import com.atlassian.webdriver.product.ProductInstance;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 
 /**
  *
@@ -21,7 +17,7 @@ public class ConfluenceTestedProduct extends AbstractTestedProduct<DashboardPage
 {
     private User loggedInUser;
 
-    public ConfluenceTestedProduct(WebDriver webDriver, ProductInstance productInstance)
+    public ConfluenceTestedProduct(AtlassianWebDriver webDriver, ProductInstance productInstance)
     {
         super(webDriver, productInstance);
     }

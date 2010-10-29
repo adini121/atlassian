@@ -19,14 +19,14 @@ public class TestChrome_5WebDriverAutoInstaller extends WebDriverAutoInstallerTe
     {
         System.setProperty("webdriver.browser", "chrome-5");
 
-        WebDriver driver = WebDriverBrowserAutoInstall.getDriver();
+        AtlassianWebDriver driver = WebDriverBrowserAutoInstall.INSTANCE.getDriver();
 
         driver.get(TEST_URL);
 
-        AtlassianWebDriver.waitUntil(new ElementLocated(By.tagName("h1")));
+        driver.waitUntilElementIsLocated(By.tagName("h1"));
 
         assertEquals(driver.findElement(By.tagName("h1")).getText(), "Hello");
-        AtlassianWebDriver.quitDriver();
+        //driver.quit();
     }
 
 }

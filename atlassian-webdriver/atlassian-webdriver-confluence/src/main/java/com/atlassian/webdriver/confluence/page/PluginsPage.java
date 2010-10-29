@@ -2,9 +2,8 @@ package com.atlassian.webdriver.confluence.page;
 
 
 import com.atlassian.webdriver.confluence.ConfluenceTestedProduct;
-import com.atlassian.webdriver.utils.ByJquery;
+import com.atlassian.webdriver.utils.by.ByJquery;
 import com.google.common.collect.ImmutableSet;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.HashMap;
@@ -48,7 +47,7 @@ public class PluginsPage extends ConfluenceAbstractPage<PluginsPage>
         if (pluginIsLoaded(pluginKey))
         {
             loadedPlugins.get(pluginKey).click();
-            return new PluginsPage(getTestedProduct()).get(true);
+            return getTestedProduct().gotoPage(PluginsPage.class, true);
         }
 
         return null;

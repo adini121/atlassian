@@ -6,6 +6,7 @@ import com.atlassian.webdriver.PageObject;
 import com.atlassian.webdriver.product.ProductInstance;
 import com.atlassian.webdriver.product.TestedProduct;
 import com.atlassian.webdriver.utils.QueryString;
+import com.atlassian.webdriver.utils.by.ByHelper;
 import com.atlassian.webdriver.utils.element.ElementLocated;
 import org.apache.commons.lang.Validate;
 import org.openqa.selenium.By;
@@ -21,9 +22,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
  */
 public abstract class AbstractPage<TP extends TestedProduct, P extends PageObject> implements PageObject<TP, P>
 {
-    private static final long CHROME_HACK_SLEEP = 100;
-
-    protected final Wait<WebDriver> wait;
     protected QueryString queryString;
 
     protected final TP testedProduct;
@@ -33,7 +31,6 @@ public abstract class AbstractPage<TP extends TestedProduct, P extends PageObjec
     {
         this.testedProduct = testedProduct;
         this.queryString = new QueryString();
-        this.wait = new WebDriverWait(testedProduct.getDriver(), 60);
     }
 
     public ProductInstance getProductInstance()
@@ -41,7 +38,7 @@ public abstract class AbstractPage<TP extends TestedProduct, P extends PageObjec
         return testedProduct.getProductInstance();
     }
 
-    public WebDriver getDriver()
+    public AtlassianWebDriver getDriver()
     {
         return testedProduct.getDriver();
     }
@@ -67,14 +64,23 @@ public abstract class AbstractPage<TP extends TestedProduct, P extends PageObjec
         this.queryString = queryString;
     }
 
-    public void waitUntilLocated(By by)
+    public void waitAndCheck(String uri, boolean activated)
     {
-        wait.until(new ElementLocated(by));
+        doWait();
+        doCheck(uri, activated);
     }
 
-    public void waitUntilLocated(By by, WebElement el)
+    public void doWait()
     {
-        wait.until(new ElementLocated(by, el));
+        getDriver().waitUntilElementIsLocated(ByHelper.BODY_TAG);
+    }
+
+    public void doCheck(String uri, boolean activated)
+    {
+        if (activated && uri != null && !at(uri))
+        {
+            throw new IllegalStateException("Expected to be at uri: " + (testedProduct.getProductInstance().getBaseUrl() + uri) + ", instead at: " + testedProduct.getDriver().getCurrentUrl());
+        }
     }
 
     public void get(String uri, boolean activated)
@@ -85,10 +91,8 @@ public abstract class AbstractPage<TP extends TestedProduct, P extends PageObjec
             goTo(uri);
         }
 
-        if (activated && uri != null && !at(uri))
-        {
-            throw new IllegalStateException("Expected to be at uri: " + (testedProduct.getProductInstance().getBaseUrl() + uri) + ", instead at: " + testedProduct.getDriver().getCurrentUrl());
-        }
+        waitAndCheck(uri, activated);
+
         PageFactory.initElements(getDriver(), this);
     }
 
@@ -97,7 +101,7 @@ public abstract class AbstractPage<TP extends TestedProduct, P extends PageObjec
     protected boolean at(String uri)
     {
         //TODO: remove at some point (Chrome hack).
-        AtlassianWebDriver.waitFor(CHROME_HACK_SLEEP);
+        //getTestedProduct().getDriver().sleep(CHROME_HACK_SLEEP);
 
         String currentUrl = testedProduct.getDriver().getCurrentUrl();
         String updatedCurrentUrl = currentUrl.replace("!default", "");
@@ -126,10 +130,5 @@ public abstract class AbstractPage<TP extends TestedProduct, P extends PageObjec
     public String getBaseUrl()
     {
         return testedProduct.getProductInstance().getBaseUrl();
-    }
-
-    public String getPageSource()
-    {
-        return testedProduct.getDriver().getPageSource();
     }
 }

@@ -1,11 +1,10 @@
 package com.atlassian.webdriver.product;
 
+import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.PageObject;
 import com.atlassian.webdriver.page.AdminHomePage;
 import com.atlassian.webdriver.page.HomePage;
 import com.atlassian.webdriver.page.LoginPage;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.PageFactory;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -17,11 +16,11 @@ import java.util.Map;
  */
 public abstract class AbstractTestedProduct<H extends HomePage, A extends AdminHomePage, L extends LoginPage> implements TestedProduct<H, A, L>
 {
-    private final WebDriver webDriver;
+    private final AtlassianWebDriver webDriver;
     private final ProductInstance productInstance;
     private final Map<Class<? extends PageObject>, Class<? extends PageObject>> pageOverrides;
 
-    public AbstractTestedProduct(WebDriver webDriver, ProductInstance productInstance)
+    public AbstractTestedProduct(AtlassianWebDriver webDriver, ProductInstance productInstance)
     {
         this.webDriver = webDriver;
         this.productInstance = productInstance;
@@ -33,7 +32,7 @@ public abstract class AbstractTestedProduct<H extends HomePage, A extends AdminH
         return productInstance;
     }
 
-    public WebDriver getDriver()
+    public AtlassianWebDriver getDriver()
     {
         return webDriver;
     }
@@ -77,4 +76,5 @@ public abstract class AbstractTestedProduct<H extends HomePage, A extends AdminH
         }
         throw new RuntimeException();
     }
+
 }

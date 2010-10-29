@@ -4,8 +4,7 @@ import com.atlassian.webdriver.confluence.ConfluenceTestedProduct;
 import com.atlassian.webdriver.confluence.component.sherpa.WelcomeScreen;
 import com.atlassian.webdriver.component.menu.AjsDropdownMenu;
 import com.atlassian.webdriver.confluence.page.LogoutPage;
-import com.atlassian.webdriver.utils.ByJquery;
-import org.openqa.selenium.WebDriver;
+import com.atlassian.webdriver.utils.by.ByJquery;
 
 /**
  * TODO: Document this class / interface here
@@ -17,21 +16,21 @@ public class UserMenu extends AjsDropdownMenu<ConfluenceTestedProduct>
 
     public UserMenu(ConfluenceTestedProduct testedProduct)
     {
-        super(ByJquery.$("('#user-menu-link').parent('li')"), testedProduct);
+        super(ByJquery.$("#user-menu-link").parent("li"), testedProduct);
     }
 
     public LogoutPage logout()
     {
         activate("logout-link");
 
-        return new LogoutPage(getTestedProduct()).get(true);
+        return getTestedProduct().gotoPage(LogoutPage.class, true);
     }
 
     public WelcomeScreen showWelcomeScreen()
     {
         activate("show-sherpa-lightbox");
 
-        return new WelcomeScreen(getDriver());
+        return new WelcomeScreen(getTestedProduct());
     }
 
 }

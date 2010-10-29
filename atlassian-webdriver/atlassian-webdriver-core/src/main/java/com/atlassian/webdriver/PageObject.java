@@ -10,6 +10,8 @@ public interface PageObject<TP extends TestedProduct, P extends PageObject> exte
 {
     P get(boolean activated);
 
+    void doWait();
+
     TP getTestedProduct();
 
     void setQueryString(QueryString queryString);

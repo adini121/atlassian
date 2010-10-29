@@ -27,11 +27,35 @@ WD.loadJquery = function()
 }
 
 WD.byJquery.execute = function(jq, context) {
-    return WD.byJquery.$.makeArray(eval(jq));
+    console.log("execute: " + jq);
+
+    if(context) {
+        console.log("CONTEXT: ");
+        console.log(context);
+        console.log(context[0]);
+    }
+
+    /*if (context) {
+        for (i in context) {
+            console.log(i + " : " + context[i]);
+        }
+    }*/
+
+    var result = WD.byJquery.$.makeArray(eval(jq));
+
+    console.log("execute result: ");
+    console.log(result);
+    
+    return result;
 };
 
 WD.byJquery.executeOne = function(jq, context) {
-    return eval(jq)[0];
+    console.log("executeOne: " + jq);
+    console.log("contextOne: " + context);
+    var result = eval(jq)[0];
+
+    console.log("executeOne result: " + result);
+    return result;
 };
 
 window.WD = WD;

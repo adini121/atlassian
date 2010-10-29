@@ -11,7 +11,6 @@ import com.atlassian.webdriver.page.AbstractPage;
 import com.atlassian.webdriver.page.UserDiscoverable;
 import com.atlassian.webdriver.utils.Check;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 
 /**
  * Proveds a set of common functions that a JIRA page object can do.
@@ -40,16 +39,14 @@ public abstract class JiraAbstractPage<P extends PageObject> extends AbstractPag
 
     public boolean isAdmin()
     {
-        return Check.elementExists(By.cssSelector("#header #menu a#admin_link"));
+        return Check.elementExists(By.cssSelector("#header #menu a#admin_link"), getDriver());
     }
 
     public P get(boolean activated)
     {
         super.get(uri, activated);
-        waitUntilLocated(By.className("jira-footer"));
         return (P) this;
     }
-
 
     public DashboardMenu getDashboardMenu()
     {
@@ -80,4 +77,12 @@ public abstract class JiraAbstractPage<P extends PageObject> extends AbstractPag
         }
     }
 
+    /**
+     * The default doWait for JIRA is to wait for the footer to be located.
+     */
+    @Override
+    public void doWait()
+    {
+        getDriver().waitUntilElementIsLocated(By.className("footer"));
+    }
 }

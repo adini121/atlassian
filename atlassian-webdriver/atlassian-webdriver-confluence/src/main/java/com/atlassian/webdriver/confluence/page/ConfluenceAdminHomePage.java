@@ -30,13 +30,13 @@ public class ConfluenceAdminHomePage extends ConfluenceAbstractPage<ConfluenceAd
     {
         pluginsLink.click();
 
-        return new PluginsPage(getTestedProduct()).get(true);
+        return getTestedProduct().gotoPage(PluginsPage.class, true);
     }
 
     public LicenseDetailsPage gotoLicenseDetailsPage()
     {
         licenseDetailsLink.click();
 
-        return new LicenseDetailsPage(getTestedProduct()).get(true);
+        return getTestedProduct().gotoPage(LicenseDetailsPage.class, true);
     }
 }

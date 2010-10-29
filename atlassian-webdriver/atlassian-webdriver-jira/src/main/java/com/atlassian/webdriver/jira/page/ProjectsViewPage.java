@@ -3,10 +3,9 @@ package com.atlassian.webdriver.jira.page;
 import com.atlassian.webdriver.jira.JiraTestedProduct;
 import com.atlassian.webdriver.jira.component.project.ProjectSummary;
 import com.atlassian.webdriver.PageObject;
-import com.atlassian.webdriver.utils.ByJquery;
+import com.atlassian.webdriver.utils.by.ByJquery;
 import com.atlassian.webdriver.utils.Check;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -50,14 +49,19 @@ public class ProjectsViewPage extends JiraAdminAbstractPage<ProjectsViewPage>
 
         WebElement projectsTable = getDriver().findElement(ByJquery.$("table.grid"));
 
-        for(WebElement row : projectsTable.findElements(ByJquery.$("> tbody > tr")))
+        List<WebElement> rows = projectsTable.findElements(ByJquery.$("> tbody > tr"));
+
+        // Remove the th.
+        rows.remove(0);
+
+        if (rows.get(0).getText().equals("You do not have the permissions to administer any projects, or there are none created."))
         {
+            return;
+        }
 
-            if (Check.elementExists(By.tagName("td"), row))
-            {
-                projects.add(new ProjectSummary(row));
-            }
-
+        for(WebElement row : rows)
+        {
+            projects.add(new ProjectSummary(row));
         }
 
     }

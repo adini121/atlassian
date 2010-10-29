@@ -21,12 +21,12 @@ public class TestFirefox3_6WebDriverAutoInstaller extends WebDriverAutoInstaller
     {
         System.setProperty("webdriver.browser", "firefox-3.6");
 
-        WebDriver driver = WebDriverBrowserAutoInstall.getDriver();
+        AtlassianWebDriver driver = WebDriverBrowserAutoInstall.INSTANCE.getDriver();
 
         driver.get(TEST_URL);
-        AtlassianWebDriver.waitUntil(new ElementLocated(By.tagName("h1")));
+        driver.waitUntilElementIsLocated(By.tagName("h1"));
         assertEquals(driver.findElement(By.tagName("h1")).getText(), "Hello");
-        AtlassianWebDriver.quitDriver();
+        //AtlassianWebDriver.INSTANCE.quit();
 
     }
 

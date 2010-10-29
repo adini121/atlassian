@@ -1,9 +1,10 @@
 package com.atlassian.webdriver.utils.element;
 
-import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.utils.Check;
+import com.atlassian.webdriver.utils.by.ByHelper;
 import org.apache.commons.lang.Validate;
 import org.openqa.selenium.By;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
@@ -22,20 +23,20 @@ abstract class ElementVisibilityCondition implements ExpectedCondition<Boolean>
         NOTVISIBLE;
     }
 
-    private final By findCondition;
-    private final WebElement at;
+    private final By by;
+    private final SearchContext at;
     private final Visibility visibility;
 
     ElementVisibilityCondition(By by, Visibility visibility)
     {
-        this(by, AtlassianWebDriver.getBody(), visibility);
+        this(by, null, visibility);
     }
 
-    ElementVisibilityCondition(By by, WebElement el, Visibility visibility)
+    ElementVisibilityCondition(By by, SearchContext el, Visibility visibility)
     {
-        Validate.notNull(el, "WebElement cannot be null");
+        Validate.notNull(by, "by cannot be null.");
 
-        this.findCondition = by;
+        this.by = by;
         this.at = el;
         this.visibility = visibility;
     }
@@ -44,11 +45,11 @@ abstract class ElementVisibilityCondition implements ExpectedCondition<Boolean>
     {
         if (visibility.equals(Visibility.VISIBLE))
         {
-            return Check.elementIsVisible(findCondition, at);
+            return Check.elementIsVisible(by, at);
         }
         else
         {
-            return !Check.elementIsVisible(findCondition, at);
+            return !Check.elementIsVisible(by, at);
         }
     }
 }

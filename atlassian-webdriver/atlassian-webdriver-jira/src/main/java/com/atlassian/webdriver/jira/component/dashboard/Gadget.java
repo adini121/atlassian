@@ -18,7 +18,7 @@ public class Gadget
     private final String titleId;
     private final String frameId;
     private final WebElement chrome;
-    private final WebDriver driver;
+    private final AtlassianWebDriver driver;
     private final JiraTestedProduct jiraTestedProduct;
 
     public Gadget(String gadgetId, JiraTestedProduct jiraTestedProduct)
@@ -32,12 +32,12 @@ public class Gadget
 
         // This should only get invoked when the gadget doesn't exist. If there are unexpected timing
         // issues, could change to a wait until.
-        if (!Check.elementExists(By.id(titleId)))
+        if (!Check.elementExists(By.id(titleId), driver))
         {
             throw new IllegalStateException("Gadget with id: " + id + " not found on page.");
         }
 
-        AtlassianWebDriver.waitUntil(new ElementLocated(By.id(frameId)));
+        driver.waitUntilElementIsLocated(By.id(frameId));
         this.chrome = driver.findElement(By.id(chromeId));
     }
 
@@ -48,7 +48,7 @@ public class Gadget
     public GadgetView view()
     {
         driver.switchTo().frame(frameId);
-        AtlassianWebDriver.waitUntil(new ElementLocated(By.className("view")));
+        driver.waitUntilElementIsLocated(By.className("view"));
 
         return new GadgetView(driver.findElement(By.className("view")), jiraTestedProduct);
     }

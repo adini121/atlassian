@@ -7,13 +7,15 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+// TODO: Add the currently logged in logic.
+
 /**
  * Page object implementation for the LoginPage in Confluence.
  */
 public class ConfluenceLoginPage extends ConfluenceAbstractPage<ConfluenceLoginPage>
     implements LoginPage<ConfluenceTestedProduct, ConfluenceLoginPage, DashboardPage>
 {
-    private static final String URI = "/login.action";
+    public static final String URI = "/login.action";
 
     @FindBy (id = "os_username")
     private WebElement usernameField;
@@ -30,6 +32,12 @@ public class ConfluenceLoginPage extends ConfluenceAbstractPage<ConfluenceLoginP
     public ConfluenceLoginPage(ConfluenceTestedProduct testedProduct)
     {
         super(testedProduct, URI);
+    }
+
+    // Add this to handle the logout page redirecting to the login page.
+    protected  ConfluenceLoginPage(ConfluenceTestedProduct testedProduct, String uri)
+    {
+        super(testedProduct, uri);
     }
 
     public DashboardPage login(User user)
@@ -50,7 +58,7 @@ public class ConfluenceLoginPage extends ConfluenceAbstractPage<ConfluenceLoginP
         loginForm.submit();
         getTestedProduct().setLoggedInUser(user);
 
-        return new DashboardPage(getTestedProduct()).get(true);
+        return getTestedProduct().gotoPage(DashboardPage.class, true);
     }
 
     public DashboardPage loginAsAdmin()

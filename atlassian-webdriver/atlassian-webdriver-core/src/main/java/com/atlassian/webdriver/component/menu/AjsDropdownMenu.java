@@ -1,12 +1,9 @@
 package com.atlassian.webdriver.component.menu;
 
-import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.product.TestedProduct;
 import com.atlassian.webdriver.utils.Check;
 import com.atlassian.webdriver.utils.MouseEvents;
-import com.atlassian.webdriver.utils.element.ElementIsVisible;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 /**
@@ -43,7 +40,7 @@ public class AjsDropdownMenu<T extends TestedProduct> extends Menu<T>
         }
 
         // Wait until the menu has finished loading items
-        AtlassianWebDriver.waitUntil(new ElementIsVisible(By.className("ajs-drop-down"), menuItem));
+        getTestedProduct().getDriver().waitUntilElementIsVisibleAt(By.className("ajs-drop-down"), menuItem);
 
         return this;
 

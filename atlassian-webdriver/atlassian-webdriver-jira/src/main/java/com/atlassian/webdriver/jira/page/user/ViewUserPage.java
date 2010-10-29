@@ -61,7 +61,7 @@ public class ViewUserPage extends JiraAdminAbstractPage<ViewUserPage>
     {
         deleteUserLink.click();
 
-        return new DeleteUserPage(getTestedProduct()).get(true);
+        return getTestedProduct().gotoPage(DeleteUserPage.class, true);
     }
 
     public PageObject setPassword()
@@ -83,7 +83,7 @@ public class ViewUserPage extends JiraAdminAbstractPage<ViewUserPage>
     {
         editUserLink.click();
 
-        return new EditUserGroupsPage(getTestedProduct()).get(true);
+        return getTestedProduct().gotoPage(EditUserGroupsPage.class, true);
     }
 
     public PageObject editProperties()

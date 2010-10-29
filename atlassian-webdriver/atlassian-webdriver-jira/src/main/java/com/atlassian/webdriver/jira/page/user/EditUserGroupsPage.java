@@ -3,9 +3,8 @@ package com.atlassian.webdriver.jira.page.user;
 import com.atlassian.webdriver.jira.JiraTestedProduct;
 import com.atlassian.webdriver.jira.page.JiraAdminAbstractPage;
 import com.atlassian.webdriver.PageObject;
-import com.atlassian.webdriver.utils.ByJquery;
+import com.atlassian.webdriver.utils.by.ByJquery;
 import com.atlassian.webdriver.utils.Check;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -60,7 +59,7 @@ public class  EditUserGroupsPage extends JiraAdminAbstractPage<EditUserGroupsPag
     private void parsePage()
     {
 
-        if (Check.elementExists(ByJquery.$(ERROR_SELECTOR)))
+        if (Check.elementExists(ByJquery.$(ERROR_SELECTOR), getDriver()))
         {
             for (WebElement el : getDriver().findElements(ByJquery.$(ERROR_SELECTOR)))
             {
@@ -85,7 +84,7 @@ public class  EditUserGroupsPage extends JiraAdminAbstractPage<EditUserGroupsPag
     {
         returnLink.click();
 
-        return new ViewUserPage(getTestedProduct()).get(true);
+        return getTestedProduct().gotoPage(ViewUserPage.class, true);
     }
 
     /**
@@ -100,16 +99,12 @@ public class  EditUserGroupsPage extends JiraAdminAbstractPage<EditUserGroupsPag
 
         joinButton.click();
 
-        return testedProduct.gotoPage(pageClass, true);
+        return getTestedProduct().gotoPage(pageClass, true);
     }
 
     public EditUserGroupsPage addToGroupsExpectingError(String ... groups)
     {
-        selectGroups(groupsToLeaveSelect, groups);
-
-        leaveButton.click();
-
-        return new EditUserGroupsPage(getTestedProduct()).get(true);
+        return addToGroupsAndReturnToPage(EditUserGroupsPage.class, groups);
     }
 
     public <T extends PageObject> T removeFromGroupsAndReturnToPage(Class<T> pageClass, String ... groups)
@@ -123,11 +118,7 @@ public class  EditUserGroupsPage extends JiraAdminAbstractPage<EditUserGroupsPag
 
     public EditUserGroupsPage removeFromGroupsExpectingError(String ... groups)
     {
-        selectGroups(groupsToLeaveSelect, groups);
-
-        leaveButton.click();
-
-        return new EditUserGroupsPage(getTestedProduct()).get(true);
+        return removeFromGroupsAndReturnToPage(EditUserGroupsPage.class, groups);
     }
 
     private void selectGroups(WebElement select, String ... groups)

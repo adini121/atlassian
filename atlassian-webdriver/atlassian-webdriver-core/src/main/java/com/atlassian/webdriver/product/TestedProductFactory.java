@@ -1,6 +1,7 @@
 package com.atlassian.webdriver.product;
 
 import com.atlassian.webdriver.AtlassianWebDriver;
+import com.atlassian.webdriver.WebDriverFactory;
 import org.openqa.selenium.WebDriver;
 
 import java.lang.reflect.Constructor;
@@ -17,16 +18,17 @@ public class TestedProductFactory
         return create(testedProductClass, getDefaultInstanceId(testedProductClass));
     }
 
-    public static <P extends TestedProduct> P create(Class<P> testedProductClass, WebDriver webDriver)
+    public static <P extends TestedProduct> P create(Class<P> testedProductClass, AtlassianWebDriver webDriver)
     {
         return create(testedProductClass, getDefaultInstanceId(testedProductClass), webDriver);
     }
 
     public static <P extends TestedProduct> P create(Class<P> testedProductClass, String instanceId)
     {
-        return create(testedProductClass, instanceId, AtlassianWebDriver.getDriver());
+        return create(testedProductClass, instanceId, WebDriverFactory.getDriver());
     }
-    public static <P extends TestedProduct> P create(Class<P> testedProductClass, String instanceId, WebDriver webDriver)
+
+    public static <P extends TestedProduct> P create(Class<P> testedProductClass, String instanceId, AtlassianWebDriver webDriver)
     {
         final String contextPath, baseUrl;
         final int httpPort;
@@ -58,7 +60,7 @@ public class TestedProductFactory
     private static <P extends TestedProduct> P create(Class<P> testedProductClass, ProductInstance instance, WebDriver webDriver) {
         try
         {
-            Constructor<P> c = testedProductClass.getConstructor(WebDriver.class, ProductInstance.class);
+            Constructor<P> c = testedProductClass.getConstructor(AtlassianWebDriver.class, ProductInstance.class);
             return c.newInstance(webDriver, instance);
         }
         catch (NoSuchMethodException e)

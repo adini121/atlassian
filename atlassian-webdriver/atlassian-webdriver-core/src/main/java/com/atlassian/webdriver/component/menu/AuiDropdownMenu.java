@@ -5,6 +5,7 @@ import com.atlassian.webdriver.product.TestedProduct;
 import com.atlassian.webdriver.utils.Check;
 import com.atlassian.webdriver.utils.element.ElementLocated;
 import com.atlassian.webdriver.utils.element.ElementNotLocated;
+import org.apache.commons.lang.Validate;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -29,6 +30,8 @@ public class AuiDropdownMenu<T extends TestedProduct> extends Menu<T>
     {
         super(testedProduct);
 
+        Validate.notNull(menuItem, "Menu item cannot be null.");
+
         this.menuItem = menuItem;
     }
 
@@ -45,9 +48,9 @@ public class AuiDropdownMenu<T extends TestedProduct> extends Menu<T>
         }
 
         // Wait until the menu has finished loading items
-        AtlassianWebDriver.waitUntil(new ElementNotLocated(By.className("loading"), menuItem));
+        getTestedProduct().getDriver().waitUntilElementIsNotLocatedAt(By.className("loading"), menuItem);
         // Wait until the menu item has been injected after it's loaded.
-        AtlassianWebDriver.waitUntil(new ElementLocated(By.tagName("li"), menuItem));
+        getTestedProduct().getDriver().waitUntilElementIsLocatedAt(By.tagName("li"), menuItem);
 
         return this;
 

@@ -7,6 +7,7 @@ import com.atlassian.webdriver.test.WebDriverTest;
  *
  * @since v4.2
  */
+@Deprecated
 public class ConfluenceWebDriverTest extends WebDriverTest
 {
 

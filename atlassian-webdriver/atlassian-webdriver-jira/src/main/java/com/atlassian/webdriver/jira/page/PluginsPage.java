@@ -1,9 +1,8 @@
 package com.atlassian.webdriver.jira.page;
 
 import com.atlassian.webdriver.jira.JiraTestedProduct;
-import com.atlassian.webdriver.utils.ByJquery;
+import com.atlassian.webdriver.utils.by.ByJquery;
 import com.google.common.collect.ImmutableSet;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.HashMap;
@@ -18,7 +17,7 @@ import java.util.Set;
  */
 public class PluginsPage extends JiraAdminAbstractPage<PluginsPage>
 {
-    private final static String URI = "/secure/admin/jira/ViewPlugins!default.jspa";
+    private final static String URI = "/secure/admin/ViewPlugins!default.jspa";
 
     private static final String PLUGIN_KEY = "pluginKey=";
     private final Map<String, WebElement> loadedPlugins;
@@ -49,7 +48,7 @@ public class PluginsPage extends JiraAdminAbstractPage<PluginsPage>
         if (pluginIsLoaded(pluginKey))
         {
             loadedPlugins.get(pluginKey).click();
-            return new PluginsPage(getTestedProduct()).get(true);
+            return getTestedProduct().gotoPage(PluginsPage.class,true);
         }
 
         return null;

@@ -36,7 +36,12 @@ public abstract class RefappAbstractPage<P extends PageObject> extends AbstractP
     public P get(boolean activated)
     {
         super.get(uri, activated);
-        waitUntilLocated(By.className("refapp-footer"));
         return (P) this;
+    }
+
+    @Override
+    public void doWait()
+    {
+        testedProduct.getDriver().waitUntilElementIsLocated(By.className("refapp-footer"));
     }
 }

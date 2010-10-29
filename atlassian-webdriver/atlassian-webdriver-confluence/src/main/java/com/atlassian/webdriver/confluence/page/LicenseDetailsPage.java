@@ -1,8 +1,7 @@
 package com.atlassian.webdriver.confluence.page;
 
 import com.atlassian.webdriver.confluence.ConfluenceTestedProduct;
-import com.atlassian.webdriver.utils.ByJquery;
-import org.openqa.selenium.WebDriver;
+import com.atlassian.webdriver.utils.by.ByJquery;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -62,7 +61,7 @@ public class LicenseDetailsPage extends ConfluenceAbstractPage<LicenseDetailsPag
 
     // TODO: fix this
     public boolean isEvaluation() {
-        return false;
+        throw new UnsupportedOperationException("isEvaluation hasn't been implemented yet");
     }
 
     public String getLicenseType()
@@ -107,7 +106,7 @@ public class LicenseDetailsPage extends ConfluenceAbstractPage<LicenseDetailsPag
         updateLicenseTextArea.sendKeys(license);
         submitLicenseButton.click();
 
-        return new LicenseDetailsPage(getTestedProduct()).get(true);
+        return getTestedProduct().gotoPage(LicenseDetailsPage.class, true);
     }
 
 }

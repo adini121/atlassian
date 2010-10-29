@@ -125,21 +125,21 @@ public class AddUserPage extends JiraAdminAbstractPage<AddUserPage>
     {
         createButton.click();
 
-        return new ViewUserPage(getTestedProduct()).get(true);
+        return getTestedProduct().gotoPage(ViewUserPage.class, true);
     }
 
     public AddUserPage createUserExpectingError()
     {
         createButton.click();
 
-        return new AddUserPage(getTestedProduct()).get(true);
+        return getTestedProduct().gotoPage(AddUserPage.class, true);
     }
 
     public UserBrowserPage cancelCreateUser()
     {
         cancelButton.click();
 
-        return new UserBrowserPage(getTestedProduct()).get(true);
+        return getTestedProduct().gotoPage(UserBrowserPage.class, true);
     }
 
     public boolean hasError()

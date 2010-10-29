@@ -1,12 +1,11 @@
-package com.atlassian.webdriver.greenhopper.page.license;
+package com.atlassian.webdriver.greenhopper.page.admin;
 
 import com.atlassian.webdriver.jira.JiraTestedProduct;
 import com.atlassian.webdriver.jira.page.JiraAdminAbstractPage;
-import com.atlassian.webdriver.utils.ByJquery;
+import com.atlassian.webdriver.utils.by.ByJquery;
 import com.atlassian.webdriver.utils.Check;
 import org.apache.commons.lang.StringUtils;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -128,7 +127,7 @@ public class GreenHopperLicenseDetailsPage extends JiraAdminAbstractPage<GreenHo
     }
 
     /**
-     * Gets the error message in the update license form area.
+     * Gets the error message in the update admin form area.
      * @return a String of the error message or empty string if there is no error
      */
     public String getErrorMessage()
@@ -186,6 +185,6 @@ public class GreenHopperLicenseDetailsPage extends JiraAdminAbstractPage<GreenHo
         updateLicenseTextArea.sendKeys(license);
         updateLicenseForm.submit();
 
-        return new GreenHopperLicenseDetailsPage(getTestedProduct()).get(true);
+        return getTestedProduct().gotoPage(GreenHopperLicenseDetailsPage.class, true);
     }
 }

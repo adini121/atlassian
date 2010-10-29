@@ -1,9 +1,11 @@
 package com.atlassian.webdriver.utils;
 
-import com.atlassian.webdriver.AtlassianWebDriver;
+import com.atlassian.webdriver.utils.by.ByHelper;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.RenderedWebElement;
+import org.openqa.selenium.SearchContext;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 
@@ -18,15 +20,15 @@ public class Check
     /**
      * Checks that an element that matches the by exists.
      */
-    public static boolean elementExists(By by)
+    public static boolean elementExists(By by, WebElement element)
     {
-        return elementExists(by, AtlassianWebDriver.getBody());
+        return elementExists(by, (SearchContext) element);
     }
 
     /**
      * Checks that an element that matches the by param exists within another element.
      */
-    public static boolean elementExists(By by, WebElement el)
+    public static boolean elementExists(By by, SearchContext el)
     {
 
         try
@@ -39,19 +41,18 @@ public class Check
         }
 
         return true;
-
     }
 
-    public static boolean elementIsVisible(By by)
+    public static boolean elementIsVisible(By by, WebElement element)
     {
-        return elementIsVisible(by, AtlassianWebDriver.getBody());
+        return elementIsVisible(by, (SearchContext) element);
     }
 
-    public static boolean elementIsVisible(By by, WebElement el)
+    public static boolean elementIsVisible(By by, SearchContext context)
     {
         try
         {
-            WebElement lookFor = el.findElement(by);
+            WebElement lookFor = context.findElement(by);
             return ((RenderedWebElement) lookFor).isDisplayed();
         }
         catch (NoSuchElementException e)
@@ -86,15 +87,5 @@ public class Check
 
         return false;
     }
-
-    /**
-     * Checks to see if the given text is found on the page or not. This is done by checking the
-     * page source.
-     */
-    public static boolean pageContains(String text)
-    {
-        return AtlassianWebDriver.getDriver().getPageSource().contains(text);
-    }
-
 
 }

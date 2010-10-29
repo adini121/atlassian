@@ -2,9 +2,8 @@ package com.atlassian.webdriver.jira.page.user;
 
 import com.atlassian.webdriver.jira.JiraTestedProduct;
 import com.atlassian.webdriver.jira.page.JiraAdminAbstractPage;
-import com.atlassian.webdriver.utils.ByJquery;
+import com.atlassian.webdriver.utils.by.ByJquery;
 import com.atlassian.webdriver.utils.Check;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -62,7 +61,7 @@ public class DeleteUserPage extends JiraAdminAbstractPage<DeleteUserPage>
     private void parsePage()
     {
         //Check for errors on the page
-        if (Check.elementExists(ByJquery.$(ERROR_SELECTOR)))
+        if (Check.elementExists(ByJquery.$(ERROR_SELECTOR), getDriver()))
         {
             for (WebElement el : getDriver().findElements(ByJquery.$(ERROR_SELECTOR)))
             {
@@ -70,8 +69,8 @@ public class DeleteUserPage extends JiraAdminAbstractPage<DeleteUserPage>
             }
         }
 
-        numberOfAssignedIssuesElement = getDriver().findElement(ByJquery.$("('td.fieldLabelArea:contains(Assigned Issues)').siblings('td').get(0)"));
-        numberOfReportedIssuesElement = getDriver().findElement(ByJquery.$("('td.fieldLabelArea:contains(Reported Issues)').siblings('td').get(0)"));
+        numberOfAssignedIssuesElement = getDriver().findElement(ByJquery.$("td.fieldLabelArea:contains(Assigned Issues)").siblings("td"));
+        numberOfReportedIssuesElement = getDriver().findElement(ByJquery.$("td.fieldLabelArea:contains(Reported Issues)").siblings("td"));
     }
 
     public boolean hasErrors()
@@ -88,14 +87,14 @@ public class DeleteUserPage extends JiraAdminAbstractPage<DeleteUserPage>
     {
         deleteUserButton.click();
 
-        return new UserBrowserPage(getTestedProduct()).get(true);
+        return getTestedProduct().gotoPage(UserBrowserPage.class, true);
     }
 
     public DeleteUserPage deleteUserExpectingError()
     {
         deleteUserButton.click();
 
-        return new DeleteUserPage(getTestedProduct()).get(true);
+        return getTestedProduct().gotoPage(DeleteUserPage.class, true);
     }
 
     public int getNumberOfSharedFiltersElement()

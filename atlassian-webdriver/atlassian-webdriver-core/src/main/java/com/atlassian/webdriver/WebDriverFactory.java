@@ -1,5 +1,6 @@
 package com.atlassian.webdriver;
 
+import com.gargoylesoftware.htmlunit.BrowserVersion;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxBinary;
@@ -19,8 +20,10 @@ public class WebDriverFactory
 
     private WebDriverFactory() {}
 
-    public static WebDriver getDriver()
+    public static AtlassianWebDriver getDriver()
     {
+        WebDriver driver;
+
         String BROWSER = System.getProperty("webdriver.browser", "firefox-3.5");
 
         if (BROWSER.startsWith("firefox"))
@@ -40,24 +43,27 @@ public class WebDriverFactory
                 };
             }
             */
-            return new FirefoxDriver(firefox, profile);
+
+            driver = new FirefoxDriver(firefox, profile);
         }
         else if (BROWSER.startsWith("chrome"))
         {
-            return new ChromeDriver();
+            driver = new ChromeDriver();
         }
         else if (BROWSER.startsWith("ie"))
         {
-            return new InternetExplorerDriver();
+            driver = new InternetExplorerDriver();
         }
         else if (BROWSER.startsWith("htmlunit"))
         {
-            return new HtmlUnitDriver();
+            driver = new HtmlUnitDriver(BrowserVersion.FIREFOX_3);
         }
         else
         {
-            System.err.println("Unknown browser: " + BROWSER + ", defaulting to firefox");
-            return new FirefoxDriver();
+            System.err.println("Unknown browser: " + BROWSER + ", defaulting to firefox.");
+            driver = new FirefoxDriver();
         }
+
+        return new AtlassianWebDriver(driver);
     }
 }

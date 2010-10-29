@@ -21,7 +21,7 @@ public class RefappLoginPage extends RefappAbstractPage<RefappLoginPage> impleme
         driver().findElement(By.name("os_username")).sendKeys(user.getUsername());
         driver().findElement(By.name("os_password")).sendKeys(user.getPassword());
         driver().findElement(By.id("os_login")).submit();
-        return new RefappHomePage(getTestedProduct()).get(true);
+        return getTestedProduct().gotoPage(RefappHomePage.class, true);
     }
 
     public RefappHomePage loginAsAdmin() {

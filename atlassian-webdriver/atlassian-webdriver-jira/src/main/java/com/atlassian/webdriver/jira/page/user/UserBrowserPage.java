@@ -4,15 +4,16 @@ import com.atlassian.webdriver.component.group.Group;
 import com.atlassian.webdriver.component.user.User;
 import com.atlassian.webdriver.jira.JiraTestedProduct;
 import com.atlassian.webdriver.jira.page.JiraAdminAbstractPage;
-import com.atlassian.webdriver.utils.ByJquery;
+import com.atlassian.webdriver.utils.by.ByJquery;
 import com.atlassian.webdriver.utils.Check;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -29,7 +30,7 @@ public class UserBrowserPage extends JiraAdminAbstractPage<UserBrowserPage>
     private String FIFTY = "50";
     private String ONE_HUNDRED = "100";
 
-    private final Set<User> users;
+    private final Map<String, User> users;
     private WebElement filterSubmit;
 
     @FindBy (id = "add_user")
@@ -47,7 +48,7 @@ public class UserBrowserPage extends JiraAdminAbstractPage<UserBrowserPage>
     public UserBrowserPage(JiraTestedProduct jiraTestedProduct)
     {
         super(jiraTestedProduct, URI);
-        users = new HashSet<User>();
+        users = new HashMap<String, User>();
     }
 
     public UserBrowserPage get(boolean activated)
@@ -65,7 +66,7 @@ public class UserBrowserPage extends JiraAdminAbstractPage<UserBrowserPage>
 
     public boolean hasUser(User user)
     {
-        return users.contains(user);
+        return users.containsKey(user.getUsername());
     }
 
     /**
@@ -83,7 +84,7 @@ public class UserBrowserPage extends JiraAdminAbstractPage<UserBrowserPage>
 
             getDriver().findElement(By.id(editGroupsId)).click();
 
-            return new EditUserGroupsPage(getTestedProduct()).get(true);
+            return getTestedProduct().gotoPage(EditUserGroupsPage.class, true);
         }
         else
         {
@@ -98,7 +99,7 @@ public class UserBrowserPage extends JiraAdminAbstractPage<UserBrowserPage>
         if (hasUser(user))
         {
             Set<String> groups = new HashSet<String>();
-            WebElement groupCol = userTable.findElements(ByJquery.$("('#enterprise-hosted-support').parents('tr.vcard').find('td')[4]")).get(0);
+            WebElement groupCol = userTable.findElements(ByJquery.$("#" + user.getUsername()).parents("tr.vcard").find("td")).get(4);
 
             for (WebElement groupEl : groupCol.findElements(By.tagName("a")))
             {
@@ -117,10 +118,11 @@ public class UserBrowserPage extends JiraAdminAbstractPage<UserBrowserPage>
     {
         if (hasUser(user))
         {
-            WebElement userLink = getDriver().findElement(By.id(user.getUsername()));
-            userLink.click();
+            User actualUser = users.get(user.getUsername());
+            WebElement userEmailLink = getTestedProduct().getDriver().findElement(By.linkText(actualUser.getEmail()));
+            userEmailLink.click();
 
-            return new ViewUserPage(getTestedProduct()).get(true);
+            return getTestedProduct().gotoPage(ViewUserPage.class, true);
         }
         else
         {
@@ -138,7 +140,7 @@ public class UserBrowserPage extends JiraAdminAbstractPage<UserBrowserPage>
         getDriver().findElement(By.name("userNameFilter")).sendKeys(username);
         filterSubmit.click();
 
-        return new UserBrowserPage(getTestedProduct()).get(true);
+        return getTestedProduct().gotoPage(UserBrowserPage.class, true);
     }
 
     /**
@@ -149,7 +151,7 @@ public class UserBrowserPage extends JiraAdminAbstractPage<UserBrowserPage>
     {
         addUserLink.click();
 
-        return new AddUserPage(getTestedProduct()).get(true);
+        return getTestedProduct().gotoPage(AddUserPage.class, true);
     }
 
     /**
@@ -180,8 +182,7 @@ public class UserBrowserPage extends JiraAdminAbstractPage<UserBrowserPage>
 
     private void getUsers()
     {
-
-        users.removeAll(users);
+        users.clear();
 
         List<WebElement> rows = userTable.findElements(By.tagName("tr"));
 
@@ -203,7 +204,7 @@ public class UserBrowserPage extends JiraAdminAbstractPage<UserBrowserPage>
                     groups.add(new Group(group.getText()));
                 }
 
-                users.add(new User(username, fullName, email, groups));
+                users.put(username, new User(username, fullName, email, groups));
             }
         }
 

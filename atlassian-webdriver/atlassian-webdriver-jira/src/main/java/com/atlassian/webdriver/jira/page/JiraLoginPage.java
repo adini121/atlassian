@@ -14,16 +14,16 @@ public class JiraLoginPage extends JiraAbstractPage<JiraLoginPage> implements Lo
 {
     private static final String URI = "/login.jsp";
 
-    @FindBy (id = "usernameinput")
+    @FindBy (name = "os_username")
     private WebElement usernameField;
 
-    @FindBy (id = "os_password")
+    @FindBy (name = "os_password")
     private WebElement passwordField;
 
-    @FindBy (id = "os_cookie_id")
+    @FindBy (name = "os_cookie")
     private WebElement rememberMeTickBox;
 
-    @FindBy (id = "login")
+    @FindBy (name = "login")
     private WebElement loginButton;
 
     public JiraLoginPage(JiraTestedProduct driver)
@@ -52,7 +52,7 @@ public class JiraLoginPage extends JiraAbstractPage<JiraLoginPage> implements Lo
 
         loginButton.click();
 
-        return new DashboardPage(getTestedProduct()).get(true);
+        return getTestedProduct().gotoPage(DashboardPage.class, true);
     }
 
 

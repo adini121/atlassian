@@ -1,6 +1,5 @@
 package com.atlassian.webdriver.jira.component.dashboard;
 
-import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.jira.JiraTestedProduct;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;

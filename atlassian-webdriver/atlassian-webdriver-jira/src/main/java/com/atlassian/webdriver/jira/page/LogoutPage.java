@@ -1,6 +1,7 @@
 package com.atlassian.webdriver.jira.page;
 
 import com.atlassian.webdriver.jira.JiraTestedProduct;
+import com.atlassian.webdriver.utils.by.ByJquery;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -14,5 +15,11 @@ public class LogoutPage extends JiraAbstractPage<LogoutPage>
     public LogoutPage(JiraTestedProduct jiraTestedProduct)
     {
         super(jiraTestedProduct, URI);
+    }
+
+    @Override
+    public void doWait()
+    {
+        getDriver().waitUntilElementIsLocated(ByJquery.$("h2:contains(Logout)"));
     }
 }

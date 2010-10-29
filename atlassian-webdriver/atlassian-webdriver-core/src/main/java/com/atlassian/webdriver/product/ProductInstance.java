@@ -19,7 +19,8 @@ public class ProductInstance<T extends TestedProduct>
 
     public String getBaseUrl()
     {
-        return baseUrl;
+        // Added to lower as base url could have upper case and the WebDriver always returns lowercase
+        return baseUrl.toLowerCase();
     }
 
     public int getHttpPort()

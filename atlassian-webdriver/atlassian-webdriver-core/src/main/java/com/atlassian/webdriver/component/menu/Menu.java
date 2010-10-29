@@ -4,6 +4,7 @@ import com.atlassian.webdriver.Link;
 import com.atlassian.webdriver.Linkable;
 import com.atlassian.webdriver.PageObject;
 import com.atlassian.webdriver.product.TestedProduct;
+import org.apache.commons.lang.Validate;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -18,6 +19,7 @@ public class Menu<T extends TestedProduct> implements Linkable
 
     public Menu(T testedProduct)
     {
+        Validate.notNull(testedProduct, "Tested product cannot be null.");
         this.testedProduct = testedProduct;
     }
 

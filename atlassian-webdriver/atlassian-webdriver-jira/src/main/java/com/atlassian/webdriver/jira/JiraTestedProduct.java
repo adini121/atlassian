@@ -1,5 +1,6 @@
 package com.atlassian.webdriver.jira;
 
+import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.Link;
 import com.atlassian.webdriver.jira.page.DashboardPage;
 import com.atlassian.webdriver.product.Defaults;
@@ -18,7 +19,7 @@ import org.openqa.selenium.WebDriver;
 @Defaults(instanceId = "jira", contextPath = "/jira", httpPort = 2990)
 public class JiraTestedProduct extends AbstractTestedProduct<DashboardPage, JiraAdminHomePage, JiraLoginPage>
 {
-    public JiraTestedProduct(WebDriver webDriver, ProductInstance productInstance)
+    public JiraTestedProduct(AtlassianWebDriver webDriver, ProductInstance productInstance)
     {
         super(webDriver, productInstance);
     }
