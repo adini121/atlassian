@@ -23,7 +23,7 @@ public class TestedProductFactory
     /**
      * Create a new TestedProduct implementation based on system environment.
      *
-     * @return
+     * @return a TestedProduct implementation.
      */
     public static <P extends TestedProduct> P create()
     {
@@ -45,6 +45,10 @@ public class TestedProductFactory
             else if (app.equals("confluence"))
             {
                 testedProductClass = (Class<P>) Class.forName("ConfluenceTestedProduct");
+            }
+            else
+            {
+                throw new RuntimeException("Unknown app defined in " + TESTED_PRODUCT_VARIABLE + ":" + app);
             }
         }
         catch(ClassNotFoundException cnfe)
