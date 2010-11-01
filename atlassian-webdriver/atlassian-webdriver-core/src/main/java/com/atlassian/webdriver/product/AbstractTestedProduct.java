@@ -76,5 +76,4 @@ public abstract class AbstractTestedProduct<H extends HomePage, A extends AdminH
         }
         throw new RuntimeException();
     }
-
 }
