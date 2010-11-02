@@ -11,7 +11,7 @@ import org.openqa.selenium.By;
 public class RefappLoginPage extends RefappAbstractPage<RefappLoginPage> implements LoginPage<RefappTestedProduct,
         RefappLoginPage, RefappHomePage>
 {
-    protected RefappLoginPage(RefappTestedProduct testedProduct)
+    public RefappLoginPage(RefappTestedProduct testedProduct)
     {
         super(testedProduct, "/plugins/servlet/login");
     }

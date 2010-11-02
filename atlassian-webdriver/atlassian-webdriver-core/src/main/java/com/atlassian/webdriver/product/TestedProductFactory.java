@@ -18,7 +18,7 @@ public class TestedProductFactory
 
     private static final Logger LOG = Logger.getLogger(TestedProductFactory.class);
 
-    private static final String TESTED_PRODUCT_VARIABLE = "webdriver.app";
+    private static final String TESTED_PRODUCT_VARIABLE = "testedproduct.app";
 
     /**
      * Create a new TestedProduct implementation based on system environment.
@@ -36,24 +36,24 @@ public class TestedProductFactory
         {
             if (app.equals("refapp"))
             {
-                testedProductClass = (Class<P>) Class.forName("RefappTestedProduct");
+                testedProductClass = (Class<P>) Class.forName("com.atlassian.webdriver.refapp.RefappTestedProduct");
             }
             else if (app.equals("jira"))
             {
-                testedProductClass = (Class<P>) Class.forName("JiraTestedProduct");
+                testedProductClass = (Class<P>) Class.forName("com.atlassian.webdriver.jira.JiraTestedProduct");
             }
             else if (app.equals("confluence"))
             {
-                testedProductClass = (Class<P>) Class.forName("ConfluenceTestedProduct");
+                testedProductClass = (Class<P>) Class.forName("com.atlassian.webdriver.confluence.ConfluenceTestedProduct");
             }
             else
             {
                 throw new RuntimeException("Unknown app defined in " + TESTED_PRODUCT_VARIABLE + ":" + app);
             }
         }
-        catch(ClassNotFoundException cnfe)
+        catch (ClassNotFoundException cnfe)
         {
-            String errorMsg = "Cannot instantiation tested product. Please make sure webdriver implementation of the product is available in classpath";
+            String errorMsg = "Cannot instantiation tested product. Please make sure webdriver implementation of " + app + " is available in classpath";
             LOG.error(errorMsg);
             throw new RuntimeException(errorMsg, cnfe);
         }

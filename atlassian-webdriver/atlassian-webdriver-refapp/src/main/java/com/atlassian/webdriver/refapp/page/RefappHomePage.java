@@ -8,7 +8,7 @@ import com.atlassian.webdriver.refapp.RefappTestedProduct;
  */
 public class RefappHomePage extends RefappAbstractPage<RefappHomePage> implements HomePage<RefappTestedProduct, RefappHomePage>
 {
-    protected RefappHomePage(RefappTestedProduct testedProduct)
+    public RefappHomePage(RefappTestedProduct testedProduct)
     {
         super(testedProduct, "");
     }
