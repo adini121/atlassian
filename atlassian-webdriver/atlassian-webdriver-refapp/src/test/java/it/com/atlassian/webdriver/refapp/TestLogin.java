@@ -16,6 +16,9 @@ public class TestLogin
     @Test
     public void testLogin()
     {
+        // just to get the browser installed.
+        WebDriverBrowserAutoInstall.INSTANCE.getDriver();
+
         TestedProduct refapp = TestedProductFactory.create();
         refapp.gotoLoginPage().loginAsAdmin();
         UserDiscoverable page = (UserDiscoverable)refapp.gotoLoginPage();

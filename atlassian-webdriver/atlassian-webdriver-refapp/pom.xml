@@ -29,9 +29,6 @@
                         <Spring-Context>
                             *;timeout:=60
                         </Spring-Context>
-                        <Import-Package>
-                            com.atlassian.webdriver*,com.sun.javadoc*
-                        </Import-Package>
                         <Export-Package>
                             com.atlassian.webdriver.refapp*
                         </Export-Package>
