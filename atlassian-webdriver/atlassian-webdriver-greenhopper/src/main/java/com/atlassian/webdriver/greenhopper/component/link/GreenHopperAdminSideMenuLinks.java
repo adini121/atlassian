@@ -12,16 +12,16 @@ import org.openqa.selenium.By;
  */
 public class GreenHopperAdminSideMenuLinks
 {
-    public Link<GreenHopperEnabledProjectsPage> ENABLED_PROJECTS =
+    public static final Link<GreenHopperEnabledProjectsPage> ENABLED_PROJECTS =
             new Link<GreenHopperEnabledProjectsPage>(By.id("greenhopper-admin-system"), GreenHopperEnabledProjectsPage.class);
 
-    public Link<GreenHopperProjectTemplatesPage> PROJECT_TEMPLATES =
+    public static final Link<GreenHopperProjectTemplatesPage> PROJECT_TEMPLATES =
             new Link<GreenHopperProjectTemplatesPage>(By.id("greenhopper-admin-template"), GreenHopperProjectTemplatesPage.class);
 
-    public Link<GreenHopperGeneralConfigurationPage> GENERAL_CONFIGURATION =
+    public static final Link<GreenHopperGeneralConfigurationPage> GENERAL_CONFIGURATION =
             new Link<GreenHopperGeneralConfigurationPage>(By.id("greenhopper-admin-general"), GreenHopperGeneralConfigurationPage.class);
 
-    public Link<GreenHopperLicenseDetailsPage> LICENSE_DETAILS =
+    public static final Link<GreenHopperLicenseDetailsPage> LICENSE_DETAILS =
             new Link<GreenHopperLicenseDetailsPage>(By.id("greenhopper-license"), GreenHopperLicenseDetailsPage.class);
 
     

@@ -57,6 +57,7 @@ public class WebDriverFactory
         else if (BROWSER.startsWith("htmlunit"))
         {
             driver = new HtmlUnitDriver(BrowserVersion.FIREFOX_3);
+            ((HtmlUnitDriver)driver).setJavascriptEnabled(true);
         }
         else
         {

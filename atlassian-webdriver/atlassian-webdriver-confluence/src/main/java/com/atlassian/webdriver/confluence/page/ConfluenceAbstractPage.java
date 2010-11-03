@@ -77,37 +77,6 @@ public abstract class ConfluenceAbstractPage<P extends PageObject> extends Abstr
         return (P) this;
     }
 
-    /**
-     * Must override the AbstractPage version as need to handle the Administrator Access
-     * page. (WebSudo)
-     * TODO: remove this and force web sudo not to be enabled.
-     * @param activated
-     */
-    /*public P get(boolean activated)
-    {
-        if (!activated && !at(uri))
-        {
-            goTo(uri);
-        }
-
-        //Check whether we are on the admin access page and it wasn't requested.
-        //If this is the case log in the user automatically.
-        if (uri != null && !uri.equals(AdministratorAccessPage.URI) && at(AdministratorAccessPage.URI))
-        {
-            getTestedProduct().gotoPage(AdministratorAccessPage.class, true).login(getTestedProduct().getLoggedInUser());
-        }
-
-
-        if (activated && uri != null && !at(uri))
-        {
-            throw new IllegalStateException("Expected to be at uri: " + (getBaseUrl() + uri) + ", instead at: " + getDriver().getCurrentUrl());
-        }
-        PageFactory.initElements(getDriver(), this);
-
-        return (P) this;
-
-    }*/
-
     @Override
     public void doWait()
     {
@@ -118,6 +87,7 @@ public abstract class ConfluenceAbstractPage<P extends PageObject> extends Abstr
     public void doCheck(final String uri, final boolean activated)
     {
 
+        // Check for WebSudo
         if (uri != null && !uri.equals(AdministratorAccessPage.URI) && at(AdministratorAccessPage.URI))
         {
             getTestedProduct().gotoPage(AdministratorAccessPage.class, true).login(getTestedProduct().getLoggedInUser());

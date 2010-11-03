@@ -6,6 +6,7 @@ import com.atlassian.webdriver.jira.page.DashboardPage;
 import com.atlassian.webdriver.jira.page.LicenseDetailsPage;
 import com.atlassian.webdriver.jira.page.LogoutPage;
 import com.atlassian.webdriver.product.TestedProductFactory;
+import com.atlassian.webdriver.utils.by.ByJquery;
 import org.junit.Test;
 import webdriver.browsers.WebDriverBrowserAutoInstall;
 

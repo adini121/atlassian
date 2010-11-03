@@ -58,6 +58,14 @@ WD.byJquery.executeOne = function(jq, context) {
     return result;
 };
 
+//Silence console calls if there is no console.    
+if(typeof console !== 'object') {
+    console = {
+        log: function() {}, alert: function() {}, warn: function() {}, info: function() {},
+        time: function() {}, timeEnd: function() {}, error: function() {}
+    };
+}
+
 window.WD = WD;
 
 })();
