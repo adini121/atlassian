@@ -2,7 +2,6 @@ package com.atlassian.webdriver.product;
 
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.WebDriverFactory;
-import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 
@@ -15,51 +14,7 @@ import java.net.InetAddress;
  */
 public class TestedProductFactory
 {
-
     private static final Logger LOG = Logger.getLogger(TestedProductFactory.class);
-
-    private static final String TESTED_PRODUCT_VARIABLE = "testedproduct.app";
-
-    /**
-     * Create a new TestedProduct implementation based on system environment.
-     *
-     * @return a TestedProduct implementation.
-     */
-    public static <P extends TestedProduct> P create()
-    {
-        String app = System.getProperty(TESTED_PRODUCT_VARIABLE);
-        Validate.notEmpty(app, "no system variable '" + TESTED_PRODUCT_VARIABLE + "' defined. Don't know which TestedProduct to create");
-
-        Class<P> testedProductClass = null;
-
-        try
-        {
-            if (app.equals("refapp"))
-            {
-                testedProductClass = (Class<P>) Class.forName("com.atlassian.webdriver.refapp.RefappTestedProduct");
-            }
-            else if (app.equals("jira"))
-            {
-                testedProductClass = (Class<P>) Class.forName("com.atlassian.webdriver.jira.JiraTestedProduct");
-            }
-            else if (app.equals("confluence"))
-            {
-                testedProductClass = (Class<P>) Class.forName("com.atlassian.webdriver.confluence.ConfluenceTestedProduct");
-            }
-            else
-            {
-                throw new RuntimeException("Unknown app defined in " + TESTED_PRODUCT_VARIABLE + ":" + app);
-            }
-        }
-        catch (ClassNotFoundException cnfe)
-        {
-            String errorMsg = "Cannot instantiation tested product. Please make sure webdriver implementation of " + app + " is available in classpath";
-            LOG.error(errorMsg);
-            throw new RuntimeException(errorMsg, cnfe);
-        }
-
-        return create(testedProductClass);
-    }
 
     public static <P extends TestedProduct> P create(Class<P> testedProductClass)
     {
