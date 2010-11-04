@@ -48,6 +48,11 @@ public abstract class AbstractPage<TP extends TestedProduct, P extends PageObjec
         return link.activate(testedProduct);
     }
 
+    public <T extends PageObject> T gotoPage(Class<T> pageClass)
+    {
+        return (T) testedProduct.gotoPage(pageClass);
+    }
+
 
     public TP getTestedProduct()
     {

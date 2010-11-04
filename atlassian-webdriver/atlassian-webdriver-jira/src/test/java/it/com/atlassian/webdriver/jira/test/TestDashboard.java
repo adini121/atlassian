@@ -5,6 +5,7 @@ import com.atlassian.webdriver.jira.JiraTestedProduct;
 import com.atlassian.webdriver.jira.page.DashboardPage;
 import com.atlassian.webdriver.jira.page.LicenseDetailsPage;
 import com.atlassian.webdriver.jira.page.LogoutPage;
+import com.atlassian.webdriver.jira.page.ViewAttachmentsSettingsPage;
 import com.atlassian.webdriver.product.TestedProductFactory;
 import com.atlassian.webdriver.utils.by.ByJquery;
 import org.junit.Test;
@@ -28,7 +29,7 @@ public class TestDashboard
         assertTrue(dashboard.isLoggedIn());
         assertTrue(dashboard.isLoggedInAsUser(new User("admin", "admin", null)));
 
-        JIRA.gotoPage(LogoutPage.class);
+        dashboard.gotoPage(LogoutPage.class).confirmLogout();
     }
 
     @Test

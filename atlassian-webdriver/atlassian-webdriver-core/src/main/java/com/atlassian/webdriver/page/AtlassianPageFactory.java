@@ -8,6 +8,7 @@ import org.openqa.selenium.support.PageFactory;
 /**
  *
  */
+@Deprecated
 public class AtlassianPageFactory
 {
 

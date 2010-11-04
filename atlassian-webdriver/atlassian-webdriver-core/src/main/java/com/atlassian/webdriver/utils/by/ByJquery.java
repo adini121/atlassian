@@ -30,7 +30,7 @@ public abstract class ByJquery extends By
 
     // TODO: fix this so that can extract the simple selection out and run that and continue chaining
     // eg. $("#someid .class") -> By.id("someid"), By.className(class)
-    private final Pattern SIMPLE_SELECTOR_PATTERN = Pattern.compile("^([#]|[.]|[a-zA-Z])[\\w-]+(\\s.*)?$");
+    private final Pattern SIMPLE_SELECTOR_PATTERN = Pattern.compile("^([#]|[.]|[a-zA-Z])[\\w-]+(\\s[^~]*)?$");
     private final Pattern ID_SELECTOR = Pattern.compile("^#(\\S+)(\\s?.*)$");
     private final Pattern CLASSNAME_SELECTOR = Pattern.compile("^[.](\\S+)(\\s?.*)$");
     private final Pattern TAGNAME_SELECTOR = Pattern.compile("^([A-Za-z]\\w+)(\\s?.*)$");

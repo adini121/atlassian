@@ -79,17 +79,17 @@ public class ViewAttachmentsSettingsPage extends JiraAdminAbstractPage<ViewAttac
         return "";
     }
 
-    public boolean isAttachmentsEnabled()
+    public boolean attachmentsAreEnabled()
     {
         return attachmentsEnabled;
     }
 
-    public boolean isThumnailsEnabled()
+    public boolean thumnailsAreEnabled()
     {
         return thumnailsEnabled;
     }
 
-    public boolean isZipSupportEnabled()
+    public boolean zipSupportIsEnabled()
     {
         return zipSupportEnabled;
     }
