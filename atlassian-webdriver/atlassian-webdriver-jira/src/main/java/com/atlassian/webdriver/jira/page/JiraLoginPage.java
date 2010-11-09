@@ -6,6 +6,7 @@ import com.atlassian.webdriver.page.LoginPage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.How;
 
 /**
  * Page object implementation for the LoginPage in JIRA.
@@ -23,7 +24,7 @@ public class JiraLoginPage extends JiraAbstractPage<JiraLoginPage> implements Lo
     @FindBy (name = "os_cookie")
     private WebElement rememberMeTickBox;
 
-    @FindBy (name = "login")
+    @FindBy (how = How.ID_OR_NAME, using = "login")
     private WebElement loginButton;
 
     public JiraLoginPage(JiraTestedProduct driver)

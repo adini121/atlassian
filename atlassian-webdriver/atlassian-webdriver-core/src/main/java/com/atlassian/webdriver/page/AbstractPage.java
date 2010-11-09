@@ -80,8 +80,15 @@ public abstract class AbstractPage<TP extends TestedProduct, P extends PageObjec
         getDriver().waitUntilElementIsLocated(ByHelper.BODY_TAG);
     }
 
+    /**
+     * Checks that the driver is on the expected URI.
+     * @param uri
+     * @param activated
+     * @throws IllegalStateException if the driver is at the wrong URI.
+     */
     public void doCheck(String uri, boolean activated)
     {
+        //TODO: remove the activated check as should be at the uri by now.
         if (activated && uri != null && !at(uri))
         {
             throw new IllegalStateException("Expected to be at uri: " + (testedProduct.getProductInstance().getBaseUrl() + uri) + ", instead at: " + testedProduct.getDriver().getCurrentUrl());
@@ -105,9 +112,6 @@ public abstract class AbstractPage<TP extends TestedProduct, P extends PageObjec
 
     protected boolean at(String uri)
     {
-        //TODO: remove at some point (Chrome hack).
-        //getTestedProduct().getDriver().sleep(CHROME_HACK_SLEEP);
-
         String currentUrl = testedProduct.getDriver().getCurrentUrl();
         String updatedCurrentUrl = currentUrl.replace("!default", "");
         String urlToCheck = testedProduct.getProductInstance().getBaseUrl() + uri;
