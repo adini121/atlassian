@@ -1,5 +1,8 @@
 package com.atlassian.webdriver.component.menu;
 
+import com.atlassian.webdriver.Link;
+import com.atlassian.webdriver.PageObject;
+import com.atlassian.webdriver.component.AbstractComponent;
 import com.atlassian.webdriver.product.TestedProduct;
 import com.atlassian.webdriver.utils.Check;
 import com.atlassian.webdriver.utils.MouseEvents;
@@ -7,24 +10,23 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 /**
- * TODO: Document this class / interface here
  *
- * @since v4.2
  */
-public class AjsDropdownMenu<T extends TestedProduct> extends Menu<T>
+public class AjsDropdownMenu<T extends TestedProduct> extends AbstractComponent<T, AjsDropdownMenu<T>>
+        implements DropdownMenu
 {
     private WebElement menuItem;
 
-    public AjsDropdownMenu(By by, T testedProduct)
-    {
-        this(testedProduct.getDriver().findElement(by), testedProduct);
-    }
-
-    public AjsDropdownMenu(WebElement menuItem, T testedProduct)
+    public AjsDropdownMenu(T testedProduct)
     {
         super(testedProduct);
+    }
 
-        this.menuItem = menuItem;
+    @Override
+    public void initialise(final By componentLocator)
+    {
+        super.initialise(componentLocator);
+        this.menuItem = getDriver().findElement(componentLocator);
     }
 
     private boolean isOpen()
@@ -46,10 +48,10 @@ public class AjsDropdownMenu<T extends TestedProduct> extends Menu<T>
 
     }
 
-    public void activate(String itemId)
+    public <T extends PageObject> T activate(Link<T> link)
     {
         open();
-        menuItem.findElement(By.id(itemId)).click();
+        return link.activate(menuItem, getTestedProduct());
     }
 
     public void close()

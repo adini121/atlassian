@@ -45,7 +45,7 @@ public class PeopleDirectoryPage extends ConfluenceAbstractPage<PeopleDirectoryP
     {
         for (WebElement profile : getDriver().findElements(By.className("profile-macro")))
         {
-            UserMacro userMacro = new UserMacro(profile.findElement(By.className("vcard")));
+            UserMacro userMacro = getTestedProduct().getComponent(By.className("vcard"), profile, UserMacro.class);
             users.put(userMacro.getUsername(), userMacro);
         }
     }

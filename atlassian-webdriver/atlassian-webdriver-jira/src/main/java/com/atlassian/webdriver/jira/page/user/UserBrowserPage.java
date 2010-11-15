@@ -1,7 +1,7 @@
 package com.atlassian.webdriver.jira.page.user;
 
-import com.atlassian.webdriver.component.group.Group;
-import com.atlassian.webdriver.component.user.User;
+import com.atlassian.webdriver.utils.group.Group;
+import com.atlassian.webdriver.utils.user.User;
 import com.atlassian.webdriver.jira.JiraTestedProduct;
 import com.atlassian.webdriver.jira.page.JiraAdminAbstractPage;
 import com.atlassian.webdriver.utils.by.ByJquery;

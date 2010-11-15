@@ -1,10 +1,12 @@
 package com.atlassian.webdriver.confluence.page;
 
 import com.atlassian.webdriver.PageObject;
+import com.atlassian.webdriver.component.header.Header;
 import com.atlassian.webdriver.confluence.ConfluenceTestedProduct;
+import com.atlassian.webdriver.confluence.component.header.ConfluenceHeader;
 import com.atlassian.webdriver.confluence.component.menu.BrowseMenu;
-import com.atlassian.webdriver.confluence.component.menu.UserMenu;
-import com.atlassian.webdriver.component.user.User;
+import com.atlassian.webdriver.confluence.component.menu.ConfluenceUserMenu;
+import com.atlassian.webdriver.utils.user.User;
 import com.atlassian.webdriver.page.AbstractPage;
 import com.atlassian.webdriver.page.UserDiscoverable;
 import org.openqa.selenium.By;
@@ -15,7 +17,7 @@ import org.openqa.selenium.By;
  * @since v4.2
  */
 public abstract class ConfluenceAbstractPage<P extends PageObject> extends AbstractPage<ConfluenceTestedProduct, P>
-    implements UserDiscoverable
+    implements UserDiscoverable, Header<ConfluenceHeader>
 {
     private final String uri;
 
@@ -27,48 +29,27 @@ public abstract class ConfluenceAbstractPage<P extends PageObject> extends Abstr
 
     public boolean isAdmin()
     {
-        return getDriver().elementExists(By.id("administration-link"));
+        return getHeader().isAdmin();
     }
 
     public boolean isLoggedIn()
     {
-        return getDriver().elementExists(By.id("user-menu-link"));
+        return getHeader().isLoggedIn();
     }
 
     public boolean isLoggedInAsUser(final User user)
     {
-        if (isLoggedIn())
-        {
-            return getDriver().findElement(By.id("user-menu-link"))
-                    .getText()
-                    .equals(user.getFullName());
-        }
-
-        return false;
+        return getHeader().isLoggedInAsUser(user);
     }
 
     public BrowseMenu getBrowseMenu()
     {
-        if (isLoggedIn())
-        {
-            return new BrowseMenu(getTestedProduct());
-        }
-        else
-        {
-            throw new RuntimeException("Tried to get the browse menu but the user is not logged in.");
-        }
+        return getHeader().getBrowseMenu();
     }
 
-    public UserMenu getUserMenu()
+    public ConfluenceUserMenu getUserMenu()
     {
-        if (isLoggedIn())
-        {
-            return new UserMenu(getTestedProduct());
-        }
-        else
-        {
-            throw new RuntimeException("Tried to get the user menu but the user is not logged in.");
-        }
+        return getHeader().getUserMenu();
     }
 
     public P get(boolean activated)
@@ -94,5 +75,10 @@ public abstract class ConfluenceAbstractPage<P extends PageObject> extends Abstr
         }
 
         super.doCheck(uri, activated);
+    }
+
+    public ConfluenceHeader getHeader()
+    {
+        return getTestedProduct().getComponent(ConfluenceHeader.class);
     }
 }

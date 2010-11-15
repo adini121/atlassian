@@ -1,6 +1,6 @@
 package com.atlassian.webdriver.page;
 
-import com.atlassian.webdriver.component.user.User;
+import com.atlassian.webdriver.utils.user.User;
 
 /**
  *

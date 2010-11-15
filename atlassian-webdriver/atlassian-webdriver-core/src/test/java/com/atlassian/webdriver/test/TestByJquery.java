@@ -85,4 +85,7 @@ public class TestByJquery
         assertEquals("innerblock", el.getAttribute("class"));
         assertEquals("Inner block test", el.getText());
     }
+
+    //TODO: more tests!
+
 }

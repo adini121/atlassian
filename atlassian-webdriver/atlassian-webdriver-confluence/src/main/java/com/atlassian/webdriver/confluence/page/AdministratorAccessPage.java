@@ -1,8 +1,7 @@
 package com.atlassian.webdriver.confluence.page;
 
-import com.atlassian.webdriver.component.user.User;
+import com.atlassian.webdriver.utils.user.User;
 import com.atlassian.webdriver.confluence.ConfluenceTestedProduct;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 

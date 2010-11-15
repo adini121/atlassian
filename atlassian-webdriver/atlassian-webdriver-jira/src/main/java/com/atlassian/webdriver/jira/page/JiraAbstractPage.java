@@ -2,14 +2,15 @@ package com.atlassian.webdriver.jira.page;
 
 
 import com.atlassian.webdriver.PageObject;
+import com.atlassian.webdriver.component.header.Header;
+import com.atlassian.webdriver.utils.user.User;
 import com.atlassian.webdriver.jira.JiraTestedProduct;
+import com.atlassian.webdriver.jira.component.header.JiraHeader;
 import com.atlassian.webdriver.jira.component.menu.AdminMenu;
-import com.atlassian.webdriver.jira.component.menu.UserMenu;
-import com.atlassian.webdriver.component.menu.DashboardMenu;
-import com.atlassian.webdriver.component.user.User;
+import com.atlassian.webdriver.jira.component.menu.DashboardMenu;
+import com.atlassian.webdriver.jira.component.menu.JiraUserMenu;
 import com.atlassian.webdriver.page.AbstractPage;
 import com.atlassian.webdriver.page.UserDiscoverable;
-import com.atlassian.webdriver.utils.Check;
 import org.openqa.selenium.By;
 
 /**
@@ -17,7 +18,7 @@ import org.openqa.selenium.By;
  * Such as getting the admin menu.
  * Sets the base url for the WebDrivePage class to use which is defined in the jira-base-url system property.
  */
-public abstract class JiraAbstractPage<P extends PageObject> extends AbstractPage<JiraTestedProduct, P> implements UserDiscoverable
+public abstract class JiraAbstractPage<P extends PageObject> extends AbstractPage<JiraTestedProduct, P> implements UserDiscoverable, Header<JiraHeader>
 {
     private final String uri;
 
@@ -29,17 +30,22 @@ public abstract class JiraAbstractPage<P extends PageObject> extends AbstractPag
 
     public boolean isLoggedIn()
     {
-        return !getDriver().findElement(By.id("header-details-user")).findElement(By.tagName("a")).getText().equals("Log In");
+        return getHeader().isLoggedIn();
     }
 
     public boolean isLoggedInAsUser(User user)
     {
-        return getDriver().findElement(By.id("header-details-user")).findElement(By.tagName("a")).getText().equals(user.getFullName());
+        return getHeader().isLoggedInAsUser(user);
     }
 
     public boolean isAdmin()
     {
-        return Check.elementExists(By.cssSelector("#header #menu a#admin_link"), getDriver());
+        return getHeader().isAdmin();
+    }
+
+    public JiraHeader getHeader()
+    {
+        return getTestedProduct().getComponent(JiraHeader.class);
     }
 
     public P get(boolean activated)
@@ -50,14 +56,14 @@ public abstract class JiraAbstractPage<P extends PageObject> extends AbstractPag
 
     public DashboardMenu getDashboardMenu()
     {
-        return new DashboardMenu<JiraTestedProduct>(getTestedProduct());
+        return getHeader().getDashboardMenu();
     }
 
     public AdminMenu getAdminMenu()
     {
         if (isAdmin())
         {
-            return new AdminMenu(testedProduct);
+            return getHeader().getAdminMenu();
         }
         else
         {
@@ -65,11 +71,11 @@ public abstract class JiraAbstractPage<P extends PageObject> extends AbstractPag
         }
     }
 
-    public UserMenu getUserMenu()
+    public JiraUserMenu getUserMenu()
     {
         if (isLoggedIn())
         {
-            return new UserMenu(getTestedProduct());
+            return getHeader().getUserMenu();
         }
         else
         {

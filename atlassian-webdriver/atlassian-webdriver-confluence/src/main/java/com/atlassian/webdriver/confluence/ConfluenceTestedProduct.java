@@ -1,7 +1,7 @@
 package com.atlassian.webdriver.confluence;
 
 import com.atlassian.webdriver.AtlassianWebDriver;
-import com.atlassian.webdriver.component.user.User;
+import com.atlassian.webdriver.utils.user.User;
 import com.atlassian.webdriver.confluence.page.ConfluenceAdminHomePage;
 import com.atlassian.webdriver.confluence.page.ConfluenceLoginPage;
 import com.atlassian.webdriver.confluence.page.DashboardPage;

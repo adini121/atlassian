@@ -1,5 +1,7 @@
 package com.atlassian.webdriver.confluence.component.macro;
 
+import com.atlassian.webdriver.component.AbstractComponent;
+import com.atlassian.webdriver.confluence.ConfluenceTestedProduct;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
@@ -8,27 +10,34 @@ import org.openqa.selenium.WebElement;
  *
  * @since v4.2
  */
-public class UserMacro
+public class UserMacro extends AbstractComponent<ConfluenceTestedProduct, UserMacro>
 {
 
-    private final WebElement vCardElement;
+    private WebElement vCardElement;
 
-    private final WebElement userLogoLink;
-    private final WebElement userLogo;
-    private final WebElement usernameLink;
-    private final WebElement emailLink;
+    private WebElement userLogoLink;
+    private WebElement userLogo;
+    private WebElement usernameLink;
+    private WebElement emailLink;
 
-    private final String username;
-    private final String fullName;
-    private final String email;
+    private String username;
+    private String fullName;
+    private String email;
 
     /**
-     * TODO: extend by passing in the hover element
-     * @param vCardElement The element that is the container for the user information
+     * 
      */
-    public UserMacro(WebElement vCardElement)
+    public UserMacro(ConfluenceTestedProduct testedProduct)
     {
-        this.vCardElement = vCardElement;
+        super(testedProduct);
+    }
+
+    @Override
+    public void initialise(final By componentLocator)
+    {
+        super.initialise(componentLocator);
+
+        vCardElement = getContext().findElement(componentLocator);
 
         userLogoLink = vCardElement.findElement(By.className("userLogoLink"));
         userLogo = vCardElement.findElement(By.className("userLogo"));
@@ -38,6 +47,7 @@ public class UserMacro
         username = usernameLink.getAttribute("data-username");
         fullName = usernameLink.getText();
         email = emailLink.getText();
+
     }
 
     public String getFullName()

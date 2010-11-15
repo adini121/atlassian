@@ -14,6 +14,7 @@ import org.apache.xmlbeans.impl.common.IOUtil;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -148,9 +149,9 @@ public class AtlassianWebDriver implements WebDriver, JavascriptExecutor
         return Check.elementExists(locator, driver);
     }
 
-    public boolean elementExistsAt(By locator, WebElement element)
+    public boolean elementExistsAt(By locator, SearchContext context)
     {
-        return Check.elementExists(locator, element);
+        return Check.elementExists(locator, context);
     }
 
     public boolean elementIsVisible(By locator)
@@ -158,9 +159,9 @@ public class AtlassianWebDriver implements WebDriver, JavascriptExecutor
         return Check.elementIsVisible(locator, driver);
     }
 
-    public boolean elementIsVisibleAt(By locator, WebElement element)
+    public boolean elementIsVisibleAt(By locator, SearchContext context)
     {
-        return Check.elementIsVisible(locator, element);
+        return Check.elementIsVisible(locator, context);
     }
 
     public WebElement getBody()

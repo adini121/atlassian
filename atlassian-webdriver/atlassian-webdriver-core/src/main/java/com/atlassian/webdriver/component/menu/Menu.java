@@ -1,8 +1,10 @@
 package com.atlassian.webdriver.component.menu;
 
+import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.Link;
 import com.atlassian.webdriver.Linkable;
 import com.atlassian.webdriver.PageObject;
+import com.atlassian.webdriver.component.AbstractComponent;
 import com.atlassian.webdriver.product.TestedProduct;
 import org.apache.commons.lang.Validate;
 import org.openqa.selenium.WebDriver;
@@ -12,27 +14,14 @@ import org.openqa.selenium.WebDriver;
  *
  * @since v4.2
  */
-public class Menu<T extends TestedProduct> implements Linkable
+@Deprecated
+public class Menu<T extends TestedProduct> extends AbstractComponent<T, Menu>
 {
 
-    private final T testedProduct;
+    //private final T testedProduct;
 
     public Menu(T testedProduct)
     {
-        Validate.notNull(testedProduct, "Tested product cannot be null.");
-        this.testedProduct = testedProduct;
-    }
-
-    public <T extends PageObject> T gotoPage(Link<T> link) {
-        return link.activate(testedProduct);
-    }
-
-    public T getTestedProduct() {
-        return testedProduct;
-    }
-
-    public WebDriver getDriver()
-    {
-        return getTestedProduct().getDriver();
+       super(testedProduct);
     }
 }

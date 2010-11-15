@@ -1,6 +1,6 @@
 package com.atlassian.webdriver.refapp.page;
 
-import com.atlassian.webdriver.component.user.User;
+import com.atlassian.webdriver.utils.user.User;
 import com.atlassian.webdriver.page.LoginPage;
 import com.atlassian.webdriver.refapp.RefappTestedProduct;
 import org.openqa.selenium.By;

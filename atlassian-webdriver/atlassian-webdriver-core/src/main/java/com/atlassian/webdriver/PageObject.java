@@ -11,6 +11,7 @@ public interface PageObject<TP extends TestedProduct, P extends PageObject> exte
     P get(boolean activated);
 
     void doWait();
+    void doCheck(String uri, boolean activated);
 
     TP getTestedProduct();
 

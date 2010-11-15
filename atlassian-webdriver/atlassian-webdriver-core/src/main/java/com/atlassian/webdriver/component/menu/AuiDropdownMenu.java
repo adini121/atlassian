@@ -1,6 +1,9 @@
 package com.atlassian.webdriver.component.menu;
 
 import com.atlassian.webdriver.AtlassianWebDriver;
+import com.atlassian.webdriver.Link;
+import com.atlassian.webdriver.PageObject;
+import com.atlassian.webdriver.component.AbstractComponent;
 import com.atlassian.webdriver.product.TestedProduct;
 import com.atlassian.webdriver.utils.Check;
 import com.atlassian.webdriver.utils.element.ElementLocated;
@@ -15,24 +18,22 @@ import org.openqa.selenium.WebElement;
  *
  * @since v4.2
  */
-public class AuiDropdownMenu<T extends TestedProduct> extends Menu<T>
+public class AuiDropdownMenu<T extends TestedProduct> extends AbstractComponent<T, AuiDropdownMenu<T>> implements DropdownMenu
 {
 
     private WebElement menuItem;
 
 
-    public AuiDropdownMenu(By by, T testedProduct)
-    {
-        this(testedProduct.getDriver().findElement(by), testedProduct);
-    }
-
-    public AuiDropdownMenu(WebElement menuItem, T testedProduct)
+    public AuiDropdownMenu(T testedProduct)
     {
         super(testedProduct);
+    }
 
-        Validate.notNull(menuItem, "Menu item cannot be null.");
-
-        this.menuItem = menuItem;
+    @Override
+    public void initialise(final By componentLocator)
+    {
+        super.initialise(componentLocator);
+        this.menuItem = getDriver().findElement(componentLocator);
     }
 
     private boolean isOpen()
@@ -56,10 +57,10 @@ public class AuiDropdownMenu<T extends TestedProduct> extends Menu<T>
 
     }
 
-    public void activate(String itemId)
+    public <T extends PageObject> T activate(Link<T> link)
     {
         open();
-        menuItem.findElement(By.id(itemId)).click();
+        return link.activate(menuItem, getTestedProduct());
     }
 
     private void close()

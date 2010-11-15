@@ -9,9 +9,11 @@ import com.atlassian.webdriver.jira.JiraTestedProduct;
  */
 public class JiraAdminHomePage extends JiraAbstractPage<JiraAdminHomePage> implements AdminHomePage<JiraTestedProduct, JiraAdminHomePage>
 {
-    protected JiraAdminHomePage(JiraTestedProduct testedProduct)
+    private final static String URI = "/secure/admin";
+
+    public JiraAdminHomePage(JiraTestedProduct testedProduct)
     {
-        super(testedProduct, "/secure/admin");
+        super(testedProduct, URI);
     }
 
     public AdminSideMenu getAdminSideMenu()

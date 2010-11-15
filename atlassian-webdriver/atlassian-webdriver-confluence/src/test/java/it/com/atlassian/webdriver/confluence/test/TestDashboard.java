@@ -1,13 +1,12 @@
 package it.com.atlassian.webdriver.confluence.test;
 
-import com.atlassian.webdriver.component.user.User;
+import com.atlassian.webdriver.utils.user.User;
 import com.atlassian.webdriver.confluence.ConfluenceTestedProduct;
 import com.atlassian.webdriver.confluence.page.ConfluenceAdminHomePage;
 import com.atlassian.webdriver.confluence.page.ConfluenceLoginPage;
 import com.atlassian.webdriver.confluence.page.DashboardPage;
 import com.atlassian.webdriver.confluence.page.LogoutPage;
 import com.atlassian.webdriver.product.TestedProductFactory;
-import org.junit.After;
 import org.junit.Test;
 import webdriver.browsers.WebDriverBrowserAutoInstall;
 

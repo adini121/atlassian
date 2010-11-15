@@ -1,6 +1,6 @@
 package it.com.atlassian.webdriver.refapp;
 
-import com.atlassian.webdriver.component.user.User;
+import com.atlassian.webdriver.utils.user.User;
 import com.atlassian.webdriver.product.TestedProductFactory;
 import com.atlassian.webdriver.refapp.RefappTestedProduct;
 import com.atlassian.webdriver.refapp.page.RefappHomePage;

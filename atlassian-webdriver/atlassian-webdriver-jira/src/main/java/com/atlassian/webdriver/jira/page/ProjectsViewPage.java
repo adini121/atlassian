@@ -47,9 +47,7 @@ public class ProjectsViewPage extends JiraAdminAbstractPage<ProjectsViewPage>
     private void loadProjects()
     {
 
-        WebElement projectsTable = getDriver().findElement(ByJquery.$("table.grid"));
-
-        List<WebElement> rows = projectsTable.findElements(ByJquery.$("> tbody > tr"));
+        List<WebElement> rows = getDriver().findElements(By.cssSelector("table.grid > tbody > tr"));
 
         // Remove the th.
         rows.remove(0);
