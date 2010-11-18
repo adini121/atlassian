@@ -29,12 +29,12 @@ public class AjsDropdownMenu<T extends TestedProduct> extends AbstractComponent<
         this.menuItem = getDriver().findElement(componentLocator);
     }
 
-    private boolean isOpen()
+    public boolean isOpen()
     {
         return Check.hasClass("opened", menuItem);
     }
 
-    private AjsDropdownMenu open()
+    public void open()
     {
         if (!isOpen())
         {
@@ -43,8 +43,6 @@ public class AjsDropdownMenu<T extends TestedProduct> extends AbstractComponent<
 
         // Wait until the menu has finished loading items
         getTestedProduct().getDriver().waitUntilElementIsVisibleAt(By.className("ajs-drop-down"), menuItem);
-
-        return this;
 
     }
 

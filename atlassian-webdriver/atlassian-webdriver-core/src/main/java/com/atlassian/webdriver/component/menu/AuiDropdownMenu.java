@@ -36,12 +36,12 @@ public class AuiDropdownMenu<T extends TestedProduct> extends AbstractComponent<
         this.menuItem = getDriver().findElement(componentLocator);
     }
 
-    private boolean isOpen()
+    public boolean isOpen()
     {
         return Check.hasClass("active", menuItem);
     }
 
-    private AuiDropdownMenu open()
+    public void open()
     {
         if (!isOpen())
         {
@@ -53,7 +53,6 @@ public class AuiDropdownMenu<T extends TestedProduct> extends AbstractComponent<
         // Wait until the menu item has been injected after it's loaded.
         getTestedProduct().getDriver().waitUntilElementIsLocatedAt(By.tagName("li"), menuItem);
 
-        return this;
 
     }
 
@@ -63,7 +62,7 @@ public class AuiDropdownMenu<T extends TestedProduct> extends AbstractComponent<
         return link.activate(menuItem, getTestedProduct());
     }
 
-    private void close()
+    public void close()
     {
         if (isOpen())
         {
