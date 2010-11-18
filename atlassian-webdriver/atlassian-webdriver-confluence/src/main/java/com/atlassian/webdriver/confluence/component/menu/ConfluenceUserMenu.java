@@ -45,4 +45,19 @@ public class ConfluenceUserMenu extends AbstractComponent<ConfluenceTestedProduc
     {
         return userMenu.activate(link);
     }
+
+    public void open()
+    {
+        userMenu.open();
+    }
+
+    public boolean isOpen()
+    {
+        return userMenu.isOpen();
+    }
+
+    public void close()
+    {
+        userMenu.close();
+    }
 }

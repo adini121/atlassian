@@ -66,4 +66,19 @@ public class AdminMenu extends AbstractComponent<JiraTestedProduct, AdminMenu>
     {
         return adminMenu.activate(link);
     }
+
+    public void open()
+    {
+        adminMenu.open();
+    }
+
+    public boolean isOpen()
+    {
+        return adminMenu.isOpen();
+    }
+
+    public void close()
+    {
+        adminMenu.close();
+    }
 }

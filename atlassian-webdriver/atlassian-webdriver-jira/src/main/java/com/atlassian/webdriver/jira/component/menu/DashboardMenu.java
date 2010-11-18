@@ -39,4 +39,20 @@ public class DashboardMenu extends AbstractComponent<JiraTestedProduct, JiraUser
     {
         return dashboardMenu.activate(link);
     }
+
+    public void open()
+    {
+        dashboardMenu.open();
+    }
+
+    public boolean isOpen()
+    {
+        return dashboardMenu.isOpen();
+    }
+
+    public void close()
+    {
+        dashboardMenu.close();
+    }
+
 }

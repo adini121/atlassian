@@ -40,4 +40,19 @@ public class JiraUserMenu extends AbstractComponent<JiraTestedProduct, JiraUserM
     {
         return userMenu.activate(link);
     }
+
+    public void open()
+    {
+        userMenu.open();
+    }
+
+    public boolean isOpen()
+    {
+        return userMenu.isOpen();
+    }
+
+    public void close()
+    {
+        userMenu.close();
+    }
 }

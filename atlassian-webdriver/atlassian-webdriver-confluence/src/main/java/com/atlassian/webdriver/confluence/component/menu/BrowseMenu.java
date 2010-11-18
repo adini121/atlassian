@@ -52,4 +52,19 @@ public class BrowseMenu  extends AbstractComponent<ConfluenceTestedProduct, Brow
     {
         return browseMenu.activate(link);
     }
+
+    public void open()
+    {
+        browseMenu.open();
+    }
+
+    public boolean isOpen()
+    {
+        return browseMenu.isOpen();
+    }
+
+    public void close()
+    {
+        browseMenu.close();
+    }
 }
