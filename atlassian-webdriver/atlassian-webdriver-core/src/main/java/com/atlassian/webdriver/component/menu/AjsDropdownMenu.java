@@ -15,7 +15,7 @@ import org.openqa.selenium.WebElement;
 public class AjsDropdownMenu<T extends TestedProduct> extends AbstractComponent<T, AjsDropdownMenu<T>>
         implements DropdownMenu
 {
-    private WebElement menuItem;
+    protected WebElement menuItem;
 
     public AjsDropdownMenu(T testedProduct)
     {
