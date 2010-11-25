@@ -21,7 +21,7 @@ import org.openqa.selenium.WebElement;
 public class AuiDropdownMenu<T extends TestedProduct> extends AbstractComponent<T, AuiDropdownMenu<T>> implements DropdownMenu
 {
 
-    private WebElement menuItem;
+    protected WebElement menuItem;
 
 
     public AuiDropdownMenu(T testedProduct)
