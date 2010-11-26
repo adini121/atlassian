@@ -1,5 +1,6 @@
-package com.atlassian.performance;
+package com.atlassian.performance.junit;
 
+import com.atlassian.performance.PerformanceReporter;
 import junit.framework.AssertionFailedError;
 import junit.framework.Test;
 import junit.framework.TestListener;
