@@ -1,6 +1,6 @@
 package com.atlassian.selenium;
 
-import com.atlassian.performance.PerformanceTest;
+import com.atlassian.performance.junit.PerformanceTest;
 import com.atlassian.performance.TimeRecorder;
 import junit.framework.TestCase;
 

@@ -1,6 +1,6 @@
 package com.atlassian.selenium;
 
-import com.atlassian.performance.PerformanceListener;
+import com.atlassian.performance.junit.PerformanceListener;
 import com.atlassian.performance.PerformanceReporter;
 import junit.framework.*;
 
