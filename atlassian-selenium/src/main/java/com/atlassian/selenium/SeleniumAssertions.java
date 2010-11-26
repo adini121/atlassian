@@ -1,5 +1,7 @@
 package com.atlassian.selenium;
 
+import com.atlassian.performance.EventTime;
+import com.atlassian.performance.TimeRecorder;
 import com.thoughtworks.selenium.Selenium;
 import com.atlassian.selenium.pageobjects.PageElement;
 import junit.framework.Assert;
@@ -15,26 +17,51 @@ import java.util.Arrays;
 public class SeleniumAssertions
 {
     private static final Logger log = Logger.getLogger(SeleniumAssertions.class);
-
     private final Selenium client;
     private final long conditionCheckInterval;
     private final long defaultMaxWait;
+    private final TimeRecorder recorder;
 
-    public SeleniumAssertions(Selenium client, SeleniumConfiguration config)
+    public SeleniumAssertions(Selenium client, SeleniumConfiguration config, TimeRecorder recorder)
     {
         this.client = client;
         this.conditionCheckInterval = config.getConditionCheckInterval();
         this.defaultMaxWait = config.getActionWait();
+        this.recorder = recorder;
+    }
+
+    private String defIfNull(String def, String alt)
+    {
+        if(alt == null)
+        {
+            return def;
+        }
+        else
+        {
+            return alt;
+        }
+    }
+
+
+    public ByTimeoutConfiguration generateByTimeoutConfig(Condition condition, String locator, long maxWait)
+    {
+        return new ByTimeoutConfiguration(condition, locator, true, maxWait, conditionCheckInterval, null);
+    }
+
+
+    public ByTimeoutConfiguration generateByTimeoutConfig(Condition condition, PageElement elem, long maxWait)
+    {
+        return new ByTimeoutConfiguration(condition, elem, maxWait, conditionCheckInterval, null);
     }
 
     public void visibleByTimeout(String locator)
     {
-        byTimeout(Conditions.isVisible(locator));
+       visibleByTimeout(locator, defaultMaxWait);
     }
 
     public void visibleByTimeout(PageElement element)
     {
-        visibleByTimeout(element.getLocator());
+        visibleByTimeout(element, defaultMaxWait);
     }
 
     /**
@@ -46,12 +73,12 @@ public class SeleniumAssertions
      */
     public void visibleByTimeout(String locator, long maxMillis)
     {
-        byTimeout(Conditions.isVisible(locator), maxMillis);
+        byTimeout(generateByTimeoutConfig(Conditions.isVisible(locator), locator, maxMillis));
     }
 
     public void visibleByTimeout(PageElement element, long maxMillis)
     {
-        visibleByTimeout(element.getLocator(), maxMillis);
+        byTimeout(generateByTimeoutConfig(Conditions.isVisible(element.getLocator()), element, maxMillis));
     }
 
     public void notVisibleByTimeout(String locator)
@@ -61,37 +88,37 @@ public class SeleniumAssertions
 
     public void notVisibleByTimeout(PageElement element)
     {
-        notVisibleByTimeout(element.getLocator());
+        notVisibleByTimeout(element, defaultMaxWait);
     }
 
     public void notVisibleByTimeout(String locator, long maxMillis)
     {
-        byTimeout(Conditions.isNotVisible(locator), maxMillis);
+        byTimeout(generateByTimeoutConfig(Conditions.isNotVisible(locator), locator, maxMillis));
     }
 
     public void notVisibleByTimeout(PageElement element, long maxMillis)
     {
-        notVisibleByTimeout(element.getLocator(), maxMillis);
+        byTimeout(generateByTimeoutConfig(Conditions.isNotVisible(element.getLocator()), element, maxMillis));
     }
 
     public void elementPresentByTimeout(String locator)
     {
-        byTimeout(Conditions.isPresent(locator));
+        elementPresentByTimeout(locator, defaultMaxWait);
     }
 
     public void elementPresentByTimeout(PageElement element)
     {
-        elementPresentByTimeout(element.getLocator());
+        elementPresentByTimeout(element, defaultMaxWait);
     }
 
     public void elementPresentByTimeout(String locator, long maxMillis)
     {
-        byTimeout(Conditions.isPresent(locator), maxMillis);
+        byTimeout(generateByTimeoutConfig(Conditions.isPresent(locator), locator, maxMillis));
     }
 
     public void elementPresentByTimeout(PageElement element, long maxMillis)
     {
-        elementPresentByTimeout(element.getLocator(), maxMillis);
+        byTimeout(generateByTimeoutConfig(Conditions.isPresent(element.getLocator()), element, maxMillis));
     }
 
 
@@ -117,12 +144,12 @@ public class SeleniumAssertions
     
     public void elementNotPresentByTimeout(String locator)
     {
-        byTimeout(Conditions.isNotPresent(locator));
+        elementPresentByTimeout(locator, defaultMaxWait);
     }
 
     public void elementNotPresentByTimeout(PageElement element)
     {
-        elementNotPresentByTimeout(element.getLocator());
+        elementNotPresentByTimeout(element, defaultMaxWait);
     }
 
     public void elementNotPresentUntilTimeout(String locator)
@@ -174,12 +201,12 @@ public class SeleniumAssertions
      */
     public void elementNotPresentByTimeout(String locator, long maxMillis)
     {
-        byTimeout(Conditions.isNotPresent(locator), maxMillis);
+        byTimeout(generateByTimeoutConfig(Conditions.isNotPresent(locator), locator, maxMillis));
     }
 
     public void elementNotPresentByTimeout(PageElement element, long maxMillis)
     {
-        elementNotPresentByTimeout(element.getLocator(), maxMillis);
+        byTimeout(generateByTimeoutConfig(Conditions.isNotPresent(element.getLocator()), element, maxMillis));
     }
 
     public void byTimeout(Condition condition)
@@ -189,26 +216,32 @@ public class SeleniumAssertions
 
     public void byTimeout(Condition condition, long maxWaitTime)
     {
-        long startTime = System.currentTimeMillis();
-        while (true)
+        byTimeout(new ByTimeoutConfiguration(condition, null, maxWaitTime, conditionCheckInterval, null));
+    }
+
+
+    public void byTimeout(ByTimeoutConfiguration config)
+    {
+        EventTime et = EventTime.timeEvent(config.getKey(), config.getAutoGeneratedKey(), new TimedWaitFor(config, client));
+        recorder.record(et);
+        if(et.getTimedOut())
         {
-            if (System.currentTimeMillis() - startTime >= maxWaitTime)
-            {
-                log.error("Page source:\n" + client.getHtmlSource());
-                throw new AssertionError("Waited " + maxWaitTime + " ms for [" + condition.errorMessage() + "], but it never became true.");
-            }
+            log.error("Page source:\n" + client.getHtmlSource());
 
-            if (condition.executeTest(client))
-                break;
+            throw new AssertionError(prepareAssertionText(config.getAssertMessage(),
+                                                          "Waited " + config.getMaxWaitTime() + " ms for [" + config.getCondition().errorMessage() + "], but it never became true."));
+        }
+    }
 
-            try
-            {
-                Thread.sleep(conditionCheckInterval);
-            }
-            catch (InterruptedException e)
-            {
-                throw new RuntimeException("Thread was interupted", e);
-            }
+    private String prepareAssertionText(String userTxt, String systemTxt)
+    {
+        if(userTxt != null)
+        {
+            return userTxt + " \n" + systemTxt;
+        }
+        else
+        {
+            return systemTxt;
         }
     }
 
@@ -314,6 +347,7 @@ public class SeleniumAssertions
     {
         elementVisible(element.getLocator());
     }
+    
     /**
      * Asserts that a given element is not present and visible. Calling selenium's native selenium.isVisible method on
      * an element that doesn't exist causes selenium to throw an exception

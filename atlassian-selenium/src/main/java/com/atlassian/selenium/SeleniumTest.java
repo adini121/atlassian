@@ -1,5 +1,7 @@
 package com.atlassian.selenium;
 
+import com.atlassian.performance.PerformanceTest;
+import com.atlassian.performance.TimeRecorder;
 import junit.framework.TestCase;
 
 /**
@@ -7,11 +9,12 @@ import junit.framework.TestCase;
  *
  * @since v3.12
  */
-public abstract class SeleniumTest extends TestCase
+public abstract class SeleniumTest extends TestCase implements PerformanceTest
 {
     protected SeleniumAssertions assertThat;
     protected SeleniumClient client;
     protected SeleniumConfiguration config;
+    protected TimeRecorder recorder;
 
     public abstract SeleniumConfiguration getSeleniumConfiguration();
 
@@ -31,8 +34,9 @@ public abstract class SeleniumTest extends TestCase
         }
 
         client = getSeleniumClient();
+        recorder = new TimeRecorder(this.getClass().getName());
 
-        assertThat = new SeleniumAssertions(client, config);
+        assertThat = new SeleniumAssertions(client, config, recorder);
         onSetUp();
     }
 
@@ -73,5 +77,10 @@ public abstract class SeleniumTest extends TestCase
      */
     protected  void onTearDown() throws Exception
     {
+    }
+
+    public TimeRecorder getRecorder()
+    {
+        return recorder;
     }
 }

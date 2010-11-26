@@ -1,9 +1,8 @@
 package com.atlassian.selenium;
 
+import com.atlassian.performance.TimeRecorder;
 import junit.framework.TestCase;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Proxy;
 import java.util.List;
 
 public abstract class SeleniumMultiTest extends TestCase
@@ -30,7 +29,7 @@ public abstract class SeleniumMultiTest extends TestCase
             SeleniumStarter.getInstance().start(getSeleniumConfigurations().get(0));
         }
 
-        assertThat = new SeleniumAssertions(client, getSeleniumConfigurations().get(0));
+        assertThat = new SeleniumAssertions(client, getSeleniumConfigurations().get(0), new TimeRecorder(this.getClass().getName()));
         onSetUp();
     }
 
