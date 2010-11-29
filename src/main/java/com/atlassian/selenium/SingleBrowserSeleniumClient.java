@@ -13,8 +13,12 @@ import java.io.InputStreamReader;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Extends the {@link DefaultSelenium} client to provide a more sensible implementation
@@ -26,6 +30,15 @@ public class SingleBrowserSeleniumClient extends DefaultSelenium implements Sele
     private Browser browser;
 
     private Map<String, CharacterKeySequence> characterKeySequenceMap = new HashMap<String, CharacterKeySequence>();
+
+    private static final Set<KeyEvent.EventTypes> allEvents;
+    static {
+        HashSet<KeyEvent.EventTypes> events = new HashSet<KeyEvent.EventTypes>();
+        events.add(KeyEvent.EventTypes.KEYDOWN);
+        events.add(KeyEvent.EventTypes.KEYUP);
+        events.add(KeyEvent.EventTypes.KEYPRESS);
+        allEvents = Collections.unmodifiableSet(events);
+    }
 
     /**
      * The maximum page load wait time used by Selenium. This value is set with
@@ -289,21 +302,35 @@ public class SingleBrowserSeleniumClient extends DefaultSelenium implements Sele
 
     public void simulateKeyPressForCharacter(final String locator, final Character character)
     {
-        simulateKeyPressForIdentifier(locator,character.toString());
+        simulateKeyPressForCharacter(locator,character,allEvents);
+    }
+
+    public void simulateKeyPressForCharacter(final String locator, final Character character, Collection<KeyEvent.EventTypes> eventsToFire)
+    {
+        simulateKeyPressForIdentifier(locator,character.toString(), eventsToFire);
     }
 
     public void simulateKeyPressForSpecialKey(final String locator, final int keyCode)
     {
-        simulateKeyPressForIdentifier(locator,String.format("0x%x",keyCode));
+        simulateKeyPressForSpecialKey(locator,keyCode,allEvents);
     }
 
-    private void simulateKeyPressForIdentifier(final String locator, final String identifier)
+    public void simulateKeyPressForSpecialKey(final String locator, final int keyCode, Collection<KeyEvent.EventTypes> eventsToFire)
+    {
+        simulateKeyPressForIdentifier(locator,String.format("0x%x",keyCode), eventsToFire);
+    }
+
+    private void simulateKeyPressForIdentifier(final String locator, final String identifier, Collection<KeyEvent.EventTypes> eventsToFire)
     {
         if (characterKeySequenceMap.containsKey(identifier))
         {
             for (KeyEvent ke : characterKeySequenceMap.get(identifier).getKeyEvents())
             {
                 if (!ke.getBrowsers().contains(this.browser))
+                {
+                    continue;
+                }
+                if (!eventsToFire.contains(ke.getEventType()))
                 {
                     continue;
                 }

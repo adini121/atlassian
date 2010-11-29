@@ -1,6 +1,9 @@
 package com.atlassian.selenium;
 
+import com.atlassian.selenium.keyboard.KeyEvent;
 import com.thoughtworks.selenium.Selenium;
+
+import java.util.Collection;
 
 
 /**
@@ -157,6 +160,18 @@ public interface SeleniumClient extends Selenium
      *     *
      * @param locator - the usual Selenium locator
      * @param character - the character to send
+     * @param eventsToFire - a collection of the types of events to Fire
+     */
+    public void simulateKeyPressForCharacter(final String locator, final Character character, Collection<KeyEvent.EventTypes> eventsToFire);
+
+    /**
+     * This will send all the events for a particular character
+     * NOTE: This function will only handle vanilla ascii characters
+     * more exotic characters will be ignored (ie. NO events will be fired).
+     * This will fire ALL events for the Character
+     *     *
+     * @param locator - the usual Selenium locator
+     * @param character - the character to send
      */
     public void simulateKeyPressForCharacter(String locator, Character character);
 
@@ -164,6 +179,18 @@ public interface SeleniumClient extends Selenium
      * This will send all the events for a particular special key (for example F1 or the down arrow key)
      * The keyCode matches the codes in java.awt.event.KeyEvent
      *  NOTE: the return key actually fires events with a keyCode of 13 NOT VK_ENTER
+     *     *
+     * @param locator - the usual Selenium locator
+     * @param keyCode - the code for the special Key can use java.awt.event.KeyEvent.XXX to find these
+     * @param eventsToFire - a collection of the types of events to Fire
+     */
+    public void simulateKeyPressForSpecialKey(final String locator, final int keyCode, Collection<KeyEvent.EventTypes> eventsToFire);
+
+    /**
+     * This will send all the events for a particular special key (for example F1 or the down arrow key)
+     * The keyCode matches the codes in java.awt.event.KeyEvent
+     *  NOTE: the return key actually fires events with a keyCode of 13 NOT VK_ENTER
+     * This will fire ALL events for the special key.
      *     *
      * @param locator - the usual Selenium locator
      * @param keyCode - the code for the special Key can use java.awt.event.KeyEvent.XXX to find these
