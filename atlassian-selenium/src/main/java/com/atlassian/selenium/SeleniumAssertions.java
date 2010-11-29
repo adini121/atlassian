@@ -29,6 +29,18 @@ public class SeleniumAssertions
         this.defaultMaxWait = config.getActionWait();
         this.recorder = recorder;
     }
+    
+    
+    /**
+     * Temporarily bring back the old constructor so that some older codes compile.
+     */
+    public SeleniumAssertions(Selenium client, SeleniumConfiguration config)
+    {
+        this.client = client;
+        this.conditionCheckInterval = config.getConditionCheckInterval();
+        this.defaultMaxWait = config.getActionWait();
+        this.recorder = new TimeRecorder("Unnamed Test");
+    }    
 
     private String defIfNull(String def, String alt)
     {
