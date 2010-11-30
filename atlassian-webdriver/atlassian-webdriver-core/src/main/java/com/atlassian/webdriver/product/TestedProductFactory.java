@@ -57,7 +57,12 @@ public class TestedProductFactory
 
     private static String getDefaultInstanceId(Class<?> testedProductClass)
     {
-        return testedProductClass.getAnnotation(Defaults.class).instanceId();
+        Defaults annotation = testedProductClass.getAnnotation(Defaults.class);
+        if (annotation == null)
+        {
+            throw new IllegalArgumentException("The tested product class '" + testedProductClass.getName() + "' is missing the @Defaults annotation");
+        }
+        return annotation.instanceId();
     }
 
     private static <P extends TestedProduct> P create(Class<P> testedProductClass, ProductInstance instance, WebDriver webDriver) {
