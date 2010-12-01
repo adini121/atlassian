@@ -1,4 +1,4 @@
-package webdriver.browsers;
+package com.atlassian.webdriver.browsers;
 
 import com.atlassian.browsers.BrowserConfiguration;
 import com.atlassian.browsers.BrowserVersion;

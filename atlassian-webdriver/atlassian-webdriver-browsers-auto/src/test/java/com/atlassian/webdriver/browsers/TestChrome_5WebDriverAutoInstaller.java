@@ -1,11 +1,8 @@
 package com.atlassian.webdriver.browsers;
 
 import com.atlassian.webdriver.AtlassianWebDriver;
-import com.atlassian.webdriver.utils.element.ElementLocated;
 import org.junit.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import webdriver.browsers.WebDriverBrowserAutoInstall;
 
 import static org.junit.Assert.assertEquals;
 

@@ -1,4 +1,4 @@
-package webdriver.browsers;
+package com.atlassian.webdriver.browsers;
 
 import com.atlassian.browsers.InstallConfigurator;
 import com.atlassian.browsers.BrowserAutoInstaller;
@@ -12,7 +12,6 @@ import com.atlassian.browsers.BrowserConfig;
  */
 public class AutoInstallConfiguration
 {
-
 
     public AutoInstallConfiguration()
     {

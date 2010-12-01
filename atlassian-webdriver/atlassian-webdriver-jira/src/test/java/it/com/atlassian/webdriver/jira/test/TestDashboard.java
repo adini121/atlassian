@@ -1,16 +1,14 @@
 package it.com.atlassian.webdriver.jira.test;
 
+import com.atlassian.webdriver.browsers.WebDriverBrowserAutoInstall;
 import com.atlassian.webdriver.jira.JiraTestedProduct;
 import com.atlassian.webdriver.jira.component.header.JiraHeader;
 import com.atlassian.webdriver.jira.page.DashboardPage;
 import com.atlassian.webdriver.jira.page.LicenseDetailsPage;
 import com.atlassian.webdriver.jira.page.LogoutPage;
 import com.atlassian.webdriver.product.TestedProductFactory;
-import com.atlassian.webdriver.utils.by.ByJquery;
 import com.atlassian.webdriver.utils.user.User;
 import org.junit.Test;
-import org.openqa.selenium.WebElement;
-import webdriver.browsers.WebDriverBrowserAutoInstall;
 
 import static org.junit.Assert.assertTrue;
 

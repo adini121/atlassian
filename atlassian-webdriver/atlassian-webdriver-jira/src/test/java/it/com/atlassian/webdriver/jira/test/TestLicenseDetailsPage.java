@@ -1,5 +1,6 @@
 package it.com.atlassian.webdriver.jira.test;
 
+import com.atlassian.webdriver.browsers.WebDriverBrowserAutoInstall;
 import com.atlassian.webdriver.jira.JiraTestedProduct;
 import com.atlassian.webdriver.jira.page.DashboardPage;
 import com.atlassian.webdriver.jira.page.LicenseDetailsPage;
@@ -7,7 +8,6 @@ import com.atlassian.webdriver.product.TestedProductFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import webdriver.browsers.WebDriverBrowserAutoInstall;
 
 /**
  * TODO: Document this class / interface here

@@ -1,11 +1,11 @@
 package it.com.atlassian.webdriver.refapp;
 
+import com.atlassian.webdriver.browsers.WebDriverBrowserAutoInstall;
 import com.atlassian.webdriver.utils.user.User;
 import com.atlassian.webdriver.product.TestedProductFactory;
 import com.atlassian.webdriver.refapp.RefappTestedProduct;
 import com.atlassian.webdriver.refapp.page.RefappHomePage;
 import org.junit.Test;
-import webdriver.browsers.WebDriverBrowserAutoInstall;
 
 import static org.junit.Assert.assertTrue;
 

@@ -1,5 +1,6 @@
 package it.com.atlassian.webdriver.confluence.test;
 
+import com.atlassian.webdriver.browsers.WebDriverBrowserAutoInstall;
 import com.atlassian.webdriver.utils.user.User;
 import com.atlassian.webdriver.confluence.ConfluenceTestedProduct;
 import com.atlassian.webdriver.confluence.page.ConfluenceAdminHomePage;
@@ -8,7 +9,6 @@ import com.atlassian.webdriver.confluence.page.DashboardPage;
 import com.atlassian.webdriver.confluence.page.LogoutPage;
 import com.atlassian.webdriver.product.TestedProductFactory;
 import org.junit.Test;
-import webdriver.browsers.WebDriverBrowserAutoInstall;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
