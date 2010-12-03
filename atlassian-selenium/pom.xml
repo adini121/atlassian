@@ -32,6 +32,11 @@
             <artifactId>atlassian-performance</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.atlassian.selenium</groupId>
+            <artifactId>atlassian-pageobjects-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 	<dependency>
         <groupId>org.seleniumhq.selenium</groupId>
         <artifactId>selenium</artifactId>

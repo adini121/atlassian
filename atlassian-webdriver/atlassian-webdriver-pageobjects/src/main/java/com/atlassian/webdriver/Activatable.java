@@ -1,6 +1,7 @@
-package com.atlassian.pageobjects;
+package com.atlassian.webdriver;
 
-import com.atlassian.pageobjects.page.PageObject;
+import com.atlassian.webdriver.Link;
+import com.atlassian.webdriver.PageObject;
 
 /**
  * TODO: Document this class / interface here

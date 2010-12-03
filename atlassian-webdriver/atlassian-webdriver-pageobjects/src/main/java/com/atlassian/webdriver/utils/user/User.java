@@ -1,7 +1,10 @@
-package com.atlassian.pageobjects.page;
+package com.atlassian.webdriver.utils.user;
+
+import com.atlassian.webdriver.utils.group.Group;
 
 import java.util.HashSet;
 import java.util.Set;
+
 
 /**
  * A class that represents a User in JIRA.
@@ -13,6 +16,8 @@ public class User
     private final String email;
     private final String password;
 
+    private final Set<Group> groups;
+
     public User(String username, String fullName, String email)
     {
         this(username, null, fullName, email);
@@ -20,11 +25,22 @@ public class User
 
     public User(String username, String password, String fullName, String email)
     {
+        this(username, password, fullName, email, new HashSet<Group>());
+    }
+
+    public User(String username, String fullName, String email, Set<Group> groups)
+    {
+        this(username, null, fullName, email, groups);
+    }
+
+    public User(String username, String password, String fullName, String email, Set<Group> groups)
+    {
         this.username = username;
         this.fullName = fullName;
         this.email = email;
         this.password = password;
 
+        this.groups = groups;
 
     }
 
@@ -48,6 +64,11 @@ public class User
     public String getEmail()
     {
         return email;
+    }
+
+    public Set<Group> getGroups()
+    {
+        return groups;
     }
 
     @Override

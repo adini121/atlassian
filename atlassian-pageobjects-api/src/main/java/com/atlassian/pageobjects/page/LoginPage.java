@@ -3,11 +3,11 @@ package com.atlassian.pageobjects.page;
 /**
  *
  */
-public interface LoginPage<P extends PageObject> extends PageObject<P>
+public interface LoginPage<T> extends Page<T>
 {
 
-    <M extends PageObject> M login(User user, Class<M> nextPage);
+    <M extends Page<T>> M login(User user, Class<M> nextPage);
 
-    public <M extends PageObject> M loginAsAdmin(Class<M> nextPage);
+    <M extends Page<T>> M loginAsSysAdmin(Class<M> nextPage);
     
 }

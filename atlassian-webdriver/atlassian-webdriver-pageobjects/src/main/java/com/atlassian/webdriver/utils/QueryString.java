@@ -1,8 +1,9 @@
-package com.atlassian.pageobjects.page;
+package com.atlassian.webdriver.utils;
+
+import org.apache.commons.lang.Validate;
 
 import java.util.HashMap;
 import java.util.Map;
-
 
 /**
  * TODO: Document this class / interface here
@@ -17,7 +18,7 @@ public class QueryString
 
     public QueryString(String... params)
     {
-        //Validate.isTrue(params.length % 2 == 0, "Must be an even number of parameters");
+        Validate.isTrue(params.length % 2 == 0, "Must be an even number of parameters");
 
         for (int i = 0; i < params.length; i += 2)
         {
@@ -25,10 +26,9 @@ public class QueryString
         }
     }
 
-    public QueryString add(String key, String value)
+    public void add(String key, String value)
     {
         params.put(key, value);
-        return this;
     }
 
     public int size()

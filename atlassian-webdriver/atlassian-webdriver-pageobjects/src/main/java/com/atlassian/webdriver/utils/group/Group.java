@@ -1,4 +1,4 @@
-package com.atlassian.pageobjects.page;
+package com.atlassian.webdriver.utils.group;
 
 /**
  * A class for that represents a Group object in JIRA.

@@ -1,13 +1,13 @@
 package com.atlassian.pageobjects;
 
-import com.atlassian.pageobjects.page.PageObject;
+import com.atlassian.pageobjects.page.Page;
 import com.atlassian.pageobjects.product.TestedProduct;
 
 /**
  *
  */
-public interface Link<T extends PageObject>
+public interface Link<T, P extends Page<T>>
 {
-    public T activate(TestedProduct testedProduct);
+    public P activate(PageNavigator<T> pageNavigator);
 
 }

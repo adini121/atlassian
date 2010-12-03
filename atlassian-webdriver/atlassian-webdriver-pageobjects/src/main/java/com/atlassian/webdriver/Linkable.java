@@ -1,6 +1,4 @@
-package com.atlassian.pageobjects;
-
-import com.atlassian.pageobjects.page.PageObject;
+package com.atlassian.webdriver;
 
 /**
  *

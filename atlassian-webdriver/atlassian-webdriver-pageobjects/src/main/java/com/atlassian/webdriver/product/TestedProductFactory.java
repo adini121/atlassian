@@ -1,7 +1,9 @@
-package com.atlassian.pageobjects.product;
+package com.atlassian.webdriver.product;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.atlassian.webdriver.AtlassianWebDriver;
+import com.atlassian.webdriver.WebDriverFactory;
+import org.apache.log4j.Logger;
+import org.openqa.selenium.WebDriver;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -12,14 +14,24 @@ import java.net.InetAddress;
  */
 public class TestedProductFactory
 {
-    private static final Logger LOG = LoggerFactory.getLogger(TestedProductFactory.class);
+    private static final Logger LOG = Logger.getLogger(TestedProductFactory.class);
 
-    public static interface TesterFactory<T>
+    public static <P extends TestedProduct> P create(Class<P> testedProductClass)
     {
-        T create();
+        return create(testedProductClass, getDefaultInstanceId(testedProductClass));
     }
 
-    public static <P extends TestedProduct> P create(Class<P> testedProductClass, String instanceId, TesterFactory<?> testerFactory)
+    public static <P extends TestedProduct> P create(Class<P> testedProductClass, AtlassianWebDriver webDriver)
+    {
+        return create(testedProductClass, getDefaultInstanceId(testedProductClass), webDriver);
+    }
+
+    public static <P extends TestedProduct> P create(Class<P> testedProductClass, String instanceId)
+    {
+        return create(testedProductClass, instanceId, WebDriverFactory.getDriver());
+    }
+
+    public static <P extends TestedProduct> P create(Class<P> testedProductClass, String instanceId, AtlassianWebDriver webDriver)
     {
         final String contextPath, baseUrl;
         final int httpPort;
@@ -40,7 +52,7 @@ public class TestedProductFactory
             baseUrl = "http://" + getLocalHostName() + ":" + httpPort + contextPath;
         }
         instance = new ProductInstance(instanceId, httpPort, contextPath, baseUrl);
-        return create(testedProductClass, instance, testerFactory);
+        return create(testedProductClass, instance, webDriver);
     }
 
     private static String getDefaultInstanceId(Class<?> testedProductClass)
@@ -53,11 +65,11 @@ public class TestedProductFactory
         return annotation.instanceId();
     }
 
-    private static <P extends TestedProduct> P create(Class<P> testedProductClass, ProductInstance instance, TesterFactory<?> testerFactory) {
+    private static <P extends TestedProduct> P create(Class<P> testedProductClass, ProductInstance instance, WebDriver webDriver) {
         try
         {
-            Constructor<P> c = testedProductClass.getConstructor(TesterFactory.class, ProductInstance.class);
-            return c.newInstance(testerFactory, instance);
+            Constructor<P> c = testedProductClass.getConstructor(AtlassianWebDriver.class, ProductInstance.class);
+            return c.newInstance(webDriver, instance);
         }
         catch (NoSuchMethodException e)
         {
@@ -78,7 +90,7 @@ public class TestedProductFactory
         throw new RuntimeException();
     }
 
-    private static String getLocalHostName()
+    public static String getLocalHostName()
     {
         try {
             return InetAddress.getLocalHost().getHostName();
