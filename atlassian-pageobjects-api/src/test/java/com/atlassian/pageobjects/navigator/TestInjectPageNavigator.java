@@ -26,6 +26,15 @@ public class TestInjectPageNavigator
         assertEquals("Bob", page.getName());
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testInjectMissing()
+    {
+        MapTester tester = new MapTester(Collections.<Class<?>, Object>emptyMap());
+        InjectPageNavigator<MapTester> navigator = new InjectPageNavigator<MapTester>(tester);
+
+        navigator.create(OneFieldPage.class);
+    }
+
     @Test
     public void testInjectWithArgument()
     {

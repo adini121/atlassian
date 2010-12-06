@@ -87,7 +87,7 @@ public class InjectPageNavigator<T extends Tester> implements PageNavigator<T>
                 }
                 else
                 {
-                    throw new RuntimeException("Injectable for class " + field.getType() + " not found");
+                    throw new IllegalArgumentException("Injectable for class " + field.getType() + " not found");
                 }
             }
         }
