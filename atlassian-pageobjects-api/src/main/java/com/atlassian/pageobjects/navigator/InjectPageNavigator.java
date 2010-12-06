@@ -3,6 +3,8 @@ package com.atlassian.pageobjects.navigator;
 import com.atlassian.pageobjects.PageNavigator;
 import com.atlassian.pageobjects.PageObject;
 import com.atlassian.pageobjects.Tester;
+import com.atlassian.pageobjects.product.ProductInstance;
+import com.atlassian.pageobjects.product.TestedProduct;
 
 import javax.inject.Inject;
 import java.lang.annotation.Annotation;
@@ -17,11 +19,11 @@ import java.util.Map;
  */
 public class InjectPageNavigator<T extends Tester> implements PageNavigator<T>
 {
-    private final T tester;
+    private final TestedProduct<T, ?, ?, ?> testedProduct;
 
-    public InjectPageNavigator(T tester)
+    public InjectPageNavigator(TestedProduct<T,?,?,?> testedProduct)
     {
-        this.tester = tester;
+        this.testedProduct = testedProduct;
     }
 
     public <P extends PageObject<T>> P gotoPage(Class<P> pageClass, Object... args)
@@ -56,13 +58,30 @@ public class InjectPageNavigator<T extends Tester> implements PageNavigator<T>
         }
 
         autowireInjectables(instance, args);
+        postInject(instance, args);
         callLifecycleMethod(instance, Init.class);
         return instance;
     }
 
+    protected <P extends PageObject<T>> void postInject(P instance, Object[] args)
+    {}
+
     private <P extends PageObject<T>> void autowireInjectables(P instance, Object... args)
     {
-        Map<Class<?>,Object> injectables = new HashMap<Class<?>, Object>(tester.getInjectables());
+        Map<Class<?>,Object> injectables = new HashMap<Class<?>, Object>();
+        T tester = testedProduct.getTester();
+
+        injectables.put(TestedProduct.class, testedProduct);
+        injectables.put(testedProduct.getClass(), testedProduct);
+
+        injectables.put(Tester.class, tester);
+        injectables.put(tester.getClass(), tester);
+
+        injectables.put(ProductInstance.class, testedProduct.getProductInstance());
+        
+        injectables.put(PageNavigator.class, this);
+
+        injectables.putAll(tester.getInjectables());
         for (Object arg : args)
         {
             injectables.put(arg.getClass(), arg);

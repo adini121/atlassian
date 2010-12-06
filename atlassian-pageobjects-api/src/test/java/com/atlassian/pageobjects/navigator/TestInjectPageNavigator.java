@@ -1,14 +1,17 @@
 package com.atlassian.pageobjects.navigator;
 
 import com.atlassian.pageobjects.Link;
+import com.atlassian.pageobjects.PageNavigator;
 import com.atlassian.pageobjects.Tester;
 import com.atlassian.pageobjects.page.Page;
+import com.atlassian.pageobjects.product.ProductInstance;
+import com.atlassian.pageobjects.product.TestedProduct;
+import org.junit.Before;
 import org.junit.Test;
 
 import javax.inject.Inject;
-import java.util.Collections;
-import java.util.Map;
 
+import static junit.framework.Assert.assertNotNull;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -16,59 +19,60 @@ import static org.junit.Assert.assertEquals;
  */
 public class TestInjectPageNavigator
 {
+    private MapTester tester;
+    private MyTestedProduct product;
+    private InjectPageNavigator<MapTester> navigator;
+
+    @Before
+    public void setUp() throws Exception
+    {
+        tester = new MapTester();
+        product = new MyTestedProduct(tester);
+        navigator = new InjectPageNavigator<MapTester>(product);
+    }
+
     @Test
     public void testInject()
     {
-        MapTester tester = new MapTester(Collections.<Class<?>, Object>singletonMap(String.class, "Bob"));
-        InjectPageNavigator<MapTester> navigator = new InjectPageNavigator<MapTester>(tester);
-
+        tester.add(String.class, "Bob");
         OneFieldPage page = navigator.create(OneFieldPage.class);
-        assertEquals("Bob", page.getName());
+        assertEquals("Bob", page.name);
+    }
+
+    @Test
+    public void testInjectDefaults()
+    {
+        DefaultsPage page = navigator.create(DefaultsPage.class);
+        assertNotNull(page.testedProduct);
+        assertNotNull(page.myTestedProduct);
+        assertNotNull(page.tester);
+        assertNotNull(page.mapTester);
+        assertNotNull(page.pageNavigator);
+        assertNotNull(page.productInstance);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testInjectMissing()
     {
-        MapTester tester = new MapTester(Collections.<Class<?>, Object>emptyMap());
-        InjectPageNavigator<MapTester> navigator = new InjectPageNavigator<MapTester>(tester);
-
         navigator.create(OneFieldPage.class);
     }
 
     @Test
     public void testInjectWithArgument()
     {
-        MapTester tester = new MapTester(Collections.<Class<?>, Object>emptyMap());
-        InjectPageNavigator<MapTester> navigator = new InjectPageNavigator<MapTester>(tester);
-
         OneFieldPage page = navigator.create(OneFieldPage.class, "Bob");
-        assertEquals("Bob", page.getName());
+        assertEquals("Bob", page.name);
     }
 
     @Test
     public void testInitAfterInject()
     {
-        MapTester tester = new MapTester(Collections.<Class<?>, Object>emptyMap());
-        InjectPageNavigator<MapTester> navigator = new InjectPageNavigator<MapTester>(tester);
-
         OneFieldWithInitPage page = navigator.create(OneFieldWithInitPage.class, "Bob");
-        assertEquals("Bob Jones", page.getName());
+        assertEquals("Bob Jones", page.name);
     }
 
-    private static class MapTester implements Tester
-    {
-        private final Map<Class<?>,Object> injectables;
 
-        public MapTester(Map<Class<?>, Object> injectables)
-        {
-            this.injectables = injectables;
-        }
 
-        public Map<Class<?>, Object> getInjectables()
-        {
-            return injectables;
-        }
-    }
     static class OneFieldPage implements Page<MapTester>
     {
         @Inject
@@ -77,10 +81,30 @@ public class TestInjectPageNavigator
         {
             return null;
         }
+    }
 
-        public String getName()
+    static class DefaultsPage implements Page<MapTester>
+    {
+        @Inject
+        private ProductInstance productInstance;
+
+        @Inject
+        private TestedProduct testedProduct;
+
+        @Inject
+        private MyTestedProduct myTestedProduct;
+
+        @Inject
+        private Tester tester;
+
+        @Inject
+        private MapTester mapTester;
+
+        @Inject
+        private PageNavigator pageNavigator;
+        public Page gotoPage(Link link)
         {
-            return name;
+            return null;
         }
     }
 
@@ -97,11 +121,6 @@ public class TestInjectPageNavigator
         public void init()
         {
             name += " Jones";
-        }
-
-        public String getName()
-        {
-            return name;
         }
     }
 
