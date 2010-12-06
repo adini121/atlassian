@@ -1,5 +1,6 @@
 package com.atlassian.pageobjects.product;
 
+import com.atlassian.pageobjects.Tester;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,7 +20,7 @@ public class TestedProductFactory
         T create();
     }
 
-    public static <P extends TestedProduct> P create(Class<P> testedProductClass, String instanceId, TesterFactory<?> testerFactory)
+    public static <T extends Tester, P extends TestedProduct<T,?,?,?>> P create(Class<P> testedProductClass, String instanceId, TesterFactory<T> testerFactory)
     {
         final String contextPath, baseUrl;
         final int httpPort;
@@ -53,7 +54,7 @@ public class TestedProductFactory
         return annotation.instanceId();
     }
 
-    private static <P extends TestedProduct> P create(Class<P> testedProductClass, ProductInstance instance, TesterFactory<?> testerFactory) {
+    private static <T extends Tester, P extends TestedProduct<T,?,?,?>> P create(Class<P> testedProductClass, ProductInstance instance, TesterFactory<T> testerFactory) {
         try
         {
             Constructor<P> c = testedProductClass.getConstructor(TesterFactory.class, ProductInstance.class);

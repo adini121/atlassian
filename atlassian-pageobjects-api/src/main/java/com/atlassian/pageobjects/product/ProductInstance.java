@@ -1,6 +1,6 @@
 package com.atlassian.pageobjects.product;
 
-public class ProductInstance<T extends TestedProduct>
+public class ProductInstance
 {
     private final String baseUrl;
     private final String instanceId;

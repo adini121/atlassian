@@ -3,7 +3,7 @@ package com.atlassian.pageobjects;
 /**
  *
  */
-public interface PageNavigator<T>
+public interface PageNavigator<T extends Tester>
 {
     <P extends PageObject<T>> P gotoPage(Class<P> pageClass, Object... args);
     <P extends PageObject<T>> P gotoActivatedPage(Class<P> pageClass, Object... args);
