@@ -7,15 +7,15 @@ import java.util.List;
  *
  * @since v4.2
  */
-public class CharacterKeySequence
+public class KeyEventSequence
 {
-    public CharacterKeySequence(final String identifier,final List<KeyEvent> keyEvents)
+    public KeyEventSequence(final String identifier,final List<KeyEvent> keyEvents)
     {
         this.keyEvents = keyEvents;
         this.identifier = identifier;
     }
 
-    public CharacterKeySequence()
+    public KeyEventSequence()
     {
     }
 

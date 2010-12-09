@@ -1,6 +1,6 @@
 package com.atlassian.selenium;
 
-import com.atlassian.selenium.keyboard.KeyEvent;
+import com.atlassian.webtest.ui.keys.KeyEventType;
 import com.thoughtworks.selenium.Selenium;
 
 import java.util.Collection;
@@ -162,7 +162,7 @@ public interface SeleniumClient extends Selenium
      * @param character - the character to send
      * @param eventsToFire - a collection of the types of events to Fire
      */
-    public void simulateKeyPressForCharacter(final String locator, final Character character, Collection<KeyEvent.EventTypes> eventsToFire);
+    public void simulateKeyPressForCharacter(final String locator, final Character character, Collection<KeyEventType> eventsToFire);
 
     /**
      * This will send all the events for a particular character
@@ -184,7 +184,7 @@ public interface SeleniumClient extends Selenium
      * @param keyCode - the code for the special Key can use java.awt.event.KeyEvent.XXX to find these
      * @param eventsToFire - a collection of the types of events to Fire
      */
-    public void simulateKeyPressForSpecialKey(final String locator, final int keyCode, Collection<KeyEvent.EventTypes> eventsToFire);
+    public void simulateKeyPressForSpecialKey(final String locator, final int keyCode, Collection<KeyEventType> eventsToFire);
 
     /**
      * This will send all the events for a particular special key (for example F1 or the down arrow key)

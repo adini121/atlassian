@@ -1,0 +1,378 @@
+package com.atlassian.webtest.ui.keys;
+
+import com.atlassian.selenium.SeleniumClient;
+import com.atlassian.selenium.keyboard.SeleniumTypeWriter;
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Iterators;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
+
+import java.awt.event.KeyEvent;
+import java.util.Collection;
+import java.util.EnumSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
+import static com.atlassian.webtest.ui.keys.Sequences.chars;
+import static com.atlassian.webtest.ui.keys.Sequences.charsBuilder;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.anyChar;
+import static org.mockito.Matchers.anyCollectionOf;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+/**
+ * Test case for {@link com.atlassian.selenium.keyboard.SeleniumTypeWriter}.
+ *
+ * @since v1.21
+ */
+public class TestSeleniumTypeWriter
+{
+    private static final String TEST_LOCATOR = "id=test";
+
+    private KeyPressVerifyingMock keyPressMock;
+    private SeleniumTypeWriter writer;
+
+    @Before
+    public void setUpMocks()
+    {
+        keyPressMock = new KeyPressVerifyingMock();
+        writer = new SeleniumTypeWriter(keyPressMock.mockClient(), TEST_LOCATOR, TypeMode.TYPE);
+    }
+
+    @Test
+    public void shouldInsertWithEvent()
+    {
+        writer.type(charsBuilder("blah").typeMode(TypeMode.INSERT_WITH_EVENT).build());
+        keyPressMock.verifyTyped(TEST_LOCATOR, "bla");
+        keyPressMock.verifyChars(TEST_LOCATOR, "h", KeyEventType.ALL);
+        keyPressMock.verifyNoMore();
+    }
+
+
+    @Test
+    public void fullTypeShouldUseAllKeyEventsByDefault()
+    {
+        writer.type(chars("blah"));
+        keyPressMock.verifyChars(TEST_LOCATOR, "blah", KeyEventType.ALL);
+        keyPressMock.verifyNoMore();
+    }
+
+    @Test
+    public void shouldSupportCustomKeySequenceImplementations()
+    {
+        writer.type(new CustomKeySequence(chars("test")));
+        keyPressMock.verifyChars(TEST_LOCATOR, "test", KeyEventType.ALL);
+        keyPressMock.verifyNoMore();
+    }
+
+    @Test
+    public void shouldHandleNonEditableElements()
+    {
+        when(keyPressMock.mockClient().getValue(TEST_LOCATOR)).thenThrow(new IllegalStateException("I'm not editable"));
+        when(keyPressMock.mockClient().isElementPresent(TEST_LOCATOR)).thenReturn(true);
+        when(keyPressMock.mockClient().getEval("this.getTagName('" + TEST_LOCATOR + "')")).thenReturn("body");
+        writer.type(chars("test"));
+        keyPressMock.verifyChars(TEST_LOCATOR, "test", EnumSet.allOf(KeyEventType.class));
+        keyPressMock.verifyNoMore();
+        verify(keyPressMock.mockClient()).getEval("this.getTagName('" + TEST_LOCATOR + "')");
+    }
+
+    @Test
+    public void shouldTypeSpecifiedCharEventsAndFullTypeMode()
+    {
+        writer.type(charsBuilder("blah").keyEvents(KeyEventType.KEYDOWN, KeyEventType.KEYPRESS).build());
+        keyPressMock.verifyChars(TEST_LOCATOR, "blah", EnumSet.of(KeyEventType.KEYDOWN, KeyEventType.KEYPRESS));
+        keyPressMock.verifyNoMore();
+    }
+
+    @Test
+    public void shouldTypeSpecifiedKeyEventsAndFullTypeMode()
+    {
+        writer.type(SpecialKeys.ARROW_DOWN.withEvents(KeyEventType.KEYDOWN, KeyEventType.KEYPRESS));
+        keyPressMock.verifyKeys(TEST_LOCATOR, EnumSet.of(KeyEventType.KEYDOWN, KeyEventType.KEYPRESS), KeyEvent.VK_DOWN);
+        keyPressMock.verifyNoMore();
+    }
+
+    @Test
+    public void shouldTypeSpecifiedKeyEventsInMixedSequenceAndFullTypeMode()
+    {
+        KeySequence input = new KeySequenceBuilder("abc").append(SpecialKeys.ENTER).append("def")
+                .keyEvents(KeyEventType.KEYDOWN, KeyEventType.KEYUP).build();
+        writer.type(input);
+        keyPressMock.verifyChars(TEST_LOCATOR, "abc", EnumSet.of(KeyEventType.KEYDOWN, KeyEventType.KEYUP));
+        keyPressMock.verifyKeys(TEST_LOCATOR, EnumSet.of(KeyEventType.KEYDOWN, KeyEventType.KEYUP), KeyEvent.VK_ENTER);
+        keyPressMock.verifyChars(TEST_LOCATOR, "def", EnumSet.of(KeyEventType.KEYDOWN, KeyEventType.KEYUP));
+        keyPressMock.verifyNoMore();
+    }
+
+    // TODO more tests;)
+
+    private static class CustomKeySequence implements KeySequence
+    {
+        private final KeySequence real;
+
+        public CustomKeySequence(final KeySequence real)
+        {
+            this.real = real;
+        }
+
+        public List<Key> keys()
+        {
+            return real.keys();
+        }
+
+        public Set<ModifierKey> withPressed()
+        {
+            return real.withPressed();
+        }
+    }
+
+    private static class KeyPressVerifyingMock
+    {
+        private final SeleniumClient mockClient;
+        private final List<KeyInteraction> keyPresses = new LinkedList<KeyInteraction>();
+        private Iterator<KeyInteraction> current;
+
+        public KeyPressVerifyingMock()
+        {
+            this.mockClient = mock(SeleniumClient.class);
+            doAnswer(new Answer<Void>()
+            {
+                public Void answer(InvocationOnMock invocation) throws Throwable
+                {
+                    checkNoVerification();
+                    keyPresses.add(new KeyInteraction(targetArg(invocation), charArg(invocation), eventsArg(invocation)));
+                    return null;
+                }
+            }).when(mockClient).simulateKeyPressForCharacter(anyString(), anyChar(), anyCollectionOf(KeyEventType.class));
+            doAnswer(new Answer<Void>()
+            {
+                public Void answer(InvocationOnMock invocation) throws Throwable
+                {
+                    checkNoVerification();
+                    keyPresses.add(new KeyInteraction(targetArg(invocation), keyArg(invocation), eventsArg(invocation)));
+                    return null;
+                }
+            }).when(mockClient).simulateKeyPressForSpecialKey(anyString(), anyInt(), anyCollectionOf(KeyEventType.class));
+            doAnswer(new Answer<Void>()
+            {
+                public Void answer(InvocationOnMock invocation) throws Throwable
+                {
+                    checkNoVerification();
+                    keyPresses.add(new KeyInteraction(targetArg(invocation), typedArg(invocation)));
+                    return null;
+                }
+            }).when(mockClient).type(anyString(), anyString());
+        }
+
+        private void checkNoVerification()
+        {
+            if (isVerifying())
+            {
+                throw new IllegalStateException("Already verifying");
+            }
+        }
+
+//        private void checkVerification()
+//        {
+//            if (!isVerifying())
+//            {
+//                throw new IllegalStateException("Not in verifying mode");
+//            }
+//        }
+
+        static String targetArg(InvocationOnMock invocation)
+        {
+            return (String) invocation.getArguments()[0];
+        }
+
+        static char charArg(InvocationOnMock invocation)
+        {
+            return (Character) invocation.getArguments()[1];
+        }
+
+        static int keyArg(InvocationOnMock invocation)
+        {
+            return (Integer) invocation.getArguments()[1];
+        }
+
+        static String typedArg(InvocationOnMock invocation)
+        {
+            return (String) invocation.getArguments()[1];
+        }
+
+        @SuppressWarnings ({ "unchecked" })
+        static Collection<KeyEventType> eventsArg(InvocationOnMock invocation)
+        {
+            return (Collection<KeyEventType>) invocation.getArguments()[2];
+        }
+
+        SeleniumClient mockClient()
+        {
+            return mockClient;
+        }
+
+        private void startVerification()
+        {
+            if (current == null)
+            {
+                current = keyPresses.iterator();
+            }
+        }
+
+        boolean isVerifying()
+        {
+            return current != null;
+        }
+
+        void verifyChars(String target, String chars, Set<KeyEventType> events)
+        {
+            startVerification();
+            for (char character : chars.toCharArray())
+            {
+                nextInteraction().verify(target, character, events);
+            }
+        }
+
+        void verifyKeys(String target, Set<KeyEventType> events, int... keys)
+        {
+            startVerification();
+            for (int key : keys)
+            {
+                nextInteraction().verify(target, key, events);
+            }
+        }
+
+        void verifyTyped(String target, String typed)
+        {
+            startVerification();
+            nextInteraction().verify(target, typed);
+        }
+
+        KeyInteraction nextInteraction()
+        {
+            if (current.hasNext())
+            {
+                return current.next();
+            }
+            else
+            {
+                throw new IllegalStateException("No more recorded key presses");
+            }
+        }
+
+        void verifyNoMore()
+        {
+            startVerification();
+            if (current.hasNext())
+            {
+                throw new AssertionError("More events available:" + Iterators.toString(current));
+            }
+        }
+
+    }
+
+    private static class KeyInteraction
+    {
+        private final String target;
+        private final String typed;
+        private final char character;
+        private final int key;
+        private final EnumSet<KeyEventType> keyEvents;
+
+        KeyInteraction(String target, char character, Collection<KeyEventType> events)
+        {
+            this.target = target;
+            this.typed = null;
+            this.character = character;
+            this.key = -1;
+            this.keyEvents = EnumSet.copyOf(events);
+        }
+
+        KeyInteraction(String target, int key, Collection<KeyEventType> events)
+        {
+            Preconditions.checkArgument(key > 0);
+            this.target = target;
+            this.typed = null;
+            this.character = 0;
+            this.key = key;
+            this.keyEvents = EnumSet.copyOf(events);
+        }
+
+        KeyInteraction(String target, String typed)
+        {
+            Preconditions.checkNotNull(typed);
+            this.target = target;
+            this.typed = typed;
+            this.character = 0;
+            this.key = -1;
+            this.keyEvents = null;
+        }
+
+        boolean isTyped()
+        {
+            return !isKey() && typed != null;
+        }
+
+        boolean isChar()
+        {
+            return !isKey() && !isTyped();
+        }
+
+        boolean isKey()
+        {
+            return key > 0;
+        }
+
+        void verify(String target, String typed)
+        {
+            assertTrue("Not a type interaction:" + this, isTyped());
+            assertEquals(target, this.target);
+            assertEquals(typed, this.typed);
+        }
+
+        void verify(String target, char character, Set<KeyEventType> events)
+        {
+            assertTrue("Not a char event: " + this, isChar());
+            assertEquals(target, this.target);
+            assertEquals(character, this.character);
+            assertEquals(events, this.keyEvents);
+        }
+
+        void verify(String target, int key, Set<KeyEventType> events)
+        {
+            assertTrue("Not a key event: " + this, isKey());
+            assertEquals(target, this.target);
+            assertEquals(key, this.key);
+            assertEquals(events, this.keyEvents);
+        }
+
+        @Override
+        public String toString()
+        {
+            if (isChar())
+            {
+                return "Character Key Press [target=" + target + ",character=" + character + ",events=" + keyEvents + "]";
+            }
+            if (isTyped())
+            {
+                return "Type Interaction [target=" + target + ",typed=" + typed + "]";
+            }
+            if (isKey())
+            {
+                return "Special Key Press [target=" + target + ",key=" + key + ",events=" + keyEvents + "]";
+            }
+            throw new AssertionError("???");
+        }
+    }
+}

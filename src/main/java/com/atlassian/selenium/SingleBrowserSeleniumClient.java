@@ -2,21 +2,21 @@
 
 package com.atlassian.selenium;
 
-import com.atlassian.selenium.keyboard.CharacterKeySequence;
 import com.atlassian.selenium.keyboard.KeyEvent;
+import com.atlassian.selenium.keyboard.KeyEventSequence;
+import com.atlassian.webtest.ui.keys.KeyEventType;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.thoughtworks.selenium.DefaultSelenium;
 
-import java.io.InputStreamReader;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.EnumSet;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -29,16 +29,9 @@ public class SingleBrowserSeleniumClient extends DefaultSelenium implements Sele
 
     private Browser browser;
 
-    private Map<String, CharacterKeySequence> characterKeySequenceMap = new HashMap<String, CharacterKeySequence>();
+    private Map<String, KeyEventSequence> characterKeySequenceMap = new HashMap<String, KeyEventSequence>();
 
-    private static final Set<KeyEvent.EventTypes> allEvents;
-    static {
-        HashSet<KeyEvent.EventTypes> events = new HashSet<KeyEvent.EventTypes>();
-        events.add(KeyEvent.EventTypes.KEYDOWN);
-        events.add(KeyEvent.EventTypes.KEYUP);
-        events.add(KeyEvent.EventTypes.KEYPRESS);
-        allEvents = Collections.unmodifiableSet(events);
-    }
+    private static final Set<KeyEventType> ALL_EVENTS = EnumSet.allOf(KeyEventType.class);
 
     /**
      * The maximum page load wait time used by Selenium. This value is set with
@@ -265,27 +258,7 @@ public class SingleBrowserSeleniumClient extends DefaultSelenium implements Sele
      */
     public void typeWithFullKeyEvents(String locator, String string, boolean reset)
     {
-        super.focus(locator);
-        if (reset)
-        {
-            super.type(locator, "");
-        }
-
-        char[] chars = string.toCharArray();
-        StringBuilder typedTo = new StringBuilder();
-        if(!reset)
-        {
-            typedTo.append(super.getValue(locator));
-        }
-        for (char aChar : chars)
-        {
-            if (Browser.IE.equals(browser))
-            {
-                typedTo.append(aChar);
-                super.type(locator, typedTo.toString());
-            }
-            simulateKeyPressForCharacter(locator, aChar);
-        }
+        new SeleniumKeyHandler(this, locator, ALL_EVENTS, reset).typeWithFullKeyEvents(string);
     }
 
     /**
@@ -302,25 +275,25 @@ public class SingleBrowserSeleniumClient extends DefaultSelenium implements Sele
 
     public void simulateKeyPressForCharacter(final String locator, final Character character)
     {
-        simulateKeyPressForCharacter(locator,character,allEvents);
+        simulateKeyPressForCharacter(locator,character, ALL_EVENTS);
     }
 
-    public void simulateKeyPressForCharacter(final String locator, final Character character, Collection<KeyEvent.EventTypes> eventsToFire)
+    public void simulateKeyPressForCharacter(final String locator, final Character character, Collection<KeyEventType> eventsToFire)
     {
         simulateKeyPressForIdentifier(locator,character.toString(), eventsToFire);
     }
 
     public void simulateKeyPressForSpecialKey(final String locator, final int keyCode)
     {
-        simulateKeyPressForSpecialKey(locator,keyCode,allEvents);
+        simulateKeyPressForSpecialKey(locator,keyCode, ALL_EVENTS);
     }
 
-    public void simulateKeyPressForSpecialKey(final String locator, final int keyCode, Collection<KeyEvent.EventTypes> eventsToFire)
+    public void simulateKeyPressForSpecialKey(final String locator, final int keyCode, Collection<KeyEventType> eventsToFire)
     {
         simulateKeyPressForIdentifier(locator,String.format("0x%x",keyCode), eventsToFire);
     }
 
-    private void simulateKeyPressForIdentifier(final String locator, final String identifier, Collection<KeyEvent.EventTypes> eventsToFire)
+    private void simulateKeyPressForIdentifier(final String locator, final String identifier, Collection<KeyEventType> eventsToFire)
     {
         if (characterKeySequenceMap.containsKey(identifier))
         {
@@ -577,10 +550,16 @@ public class SingleBrowserSeleniumClient extends DefaultSelenium implements Sele
         Gson gson = new GsonBuilder().create();
         String characterArrayJSON = readFile("charactersKeySequences.json");
 
-        Type collectionType = new TypeToken<HashMap<String,CharacterKeySequence>>(){}.getType();
+        Type collectionType = new TypeToken<HashMap<String, KeyEventSequence>>(){}.getType();
         characterKeySequenceMap = gson.fromJson(characterArrayJSON,collectionType);
         characterKeySequenceMap.put(" ",characterKeySequenceMap.get(String.format("0x%x",java.awt.event.KeyEvent.VK_SPACE)));
         characterKeySequenceMap.put("\n",characterKeySequenceMap.get(String.format("0x%x",java.awt.event.KeyEvent.VK_ENTER)));
+    }
+
+    private void addTagNameScripts() throws IOException
+    {
+        String tagNames = readFile("tag-name.js");
+        addScript(tagNames, "seleniumTagNames");
     }
 
     private static String readFile(String file) throws IOException
@@ -602,10 +581,12 @@ public class SingleBrowserSeleniumClient extends DefaultSelenium implements Sele
     public void start()
     {
         super.start();
-        try {
+        try
+        {
             addJqueryLocator();
             loadCharacterKeyEventMap();
             addKeyPressJSCorrections();
+            addTagNameScripts();
         }
         catch (IOException ioe)
         {
