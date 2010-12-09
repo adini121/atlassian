@@ -261,14 +261,6 @@ public class TestSeleniumTypeWriter
             }
         }
 
-//        private void checkVerification()
-//        {
-//            if (!isVerifying())
-//            {
-//                throw new IllegalStateException("Not in verifying mode");
-//            }
-//        }
-
         static String targetArg(InvocationOnMock invocation)
         {
             return (String) invocation.getArguments()[0];
