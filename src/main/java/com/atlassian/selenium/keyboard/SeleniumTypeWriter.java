@@ -216,15 +216,15 @@ public final class SeleniumTypeWriter extends AbstractSeleniumDriver
     private void insertMixedSequence(KeySequence sequence)
     {
         setUpModifiers(sequence);
-        for (KeySequence keySequence : divide(sequence))
+        for (KeySequence subSequence : divide(sequence))
         {
-            if (keySequence instanceof CharacterKeySequence)
+            if (subSequence instanceof CharacterKeySequence)
             {
-                bareInsert(asCharacterSequence(sequence));
+                bareInsert(asCharacterSequence(subSequence));
             }
-            else if (keySequence instanceof SpecialKeys)
+            else if (isSpecialKeys(subSequence))
             {
-                typeSpecialKey(asSppecialKeys(sequence), extractKeyEvents(sequence));
+                typeSpecialKeys(subSequence);
             }
             else
             {
@@ -238,15 +238,15 @@ public final class SeleniumTypeWriter extends AbstractSeleniumDriver
     {
         setUpModifiers(sequence);
         List<KeySequence> subSequences = divide(sequence);
-        for (KeySequence keySequence : subSequences.subList(0, subSequences.size()-1))
+        for (KeySequence subSequence : subSequences.subList(0, subSequences.size()-1))
         {
-            if (keySequence instanceof CharacterKeySequence)
+            if (subSequence instanceof CharacterKeySequence)
             {
-                bareInsert(asCharacterSequence(sequence));
+                bareInsert(asCharacterSequence(subSequence));
             }
-            else if (keySequence instanceof SpecialKeys)
+            else if (isSpecialKeys(subSequence))
             {
-                typeSpecialKey(asSppecialKeys(sequence), extractKeyEvents(sequence));
+                typeSpecialKeys(subSequence);
             }
             else
             {
@@ -256,11 +256,11 @@ public final class SeleniumTypeWriter extends AbstractSeleniumDriver
         KeySequence last = subSequences.get(subSequences.size()-1);
         if (last instanceof CharacterKeySequence)
         {
-            bareLastCharType(asCharacterSequence(sequence));
+            bareLastCharType(asCharacterSequence(last));
         }
-        else if (last instanceof SpecialKeys)
+        else if (isSpecialKeys(last))
         {
-            typeSpecialKey(asSppecialKeys(sequence), extractKeyEvents(sequence));
+            typeSpecialKeys(last);
         }
         else
         {

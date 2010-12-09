@@ -17,8 +17,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import static com.atlassian.webtest.ui.keys.KeyEventType.KEYDOWN;
+import static com.atlassian.webtest.ui.keys.KeyEventType.KEYPRESS;
+import static com.atlassian.webtest.ui.keys.KeyEventType.KEYUP;
 import static com.atlassian.webtest.ui.keys.Sequences.chars;
 import static com.atlassian.webtest.ui.keys.Sequences.charsBuilder;
+import static com.atlassian.webtest.ui.keys.Sequences.keysBuilder;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyChar;
@@ -88,18 +92,18 @@ public class TestSeleniumTypeWriter
     }
 
     @Test
-    public void shouldTypeSpecifiedCharEventsAndFullTypeMode()
+    public void shouldTypeSpecifiedCharEventsInFullTypeMode()
     {
-        writer.type(charsBuilder("blah").keyEvents(KeyEventType.KEYDOWN, KeyEventType.KEYPRESS).build());
-        keyPressMock.verifyChars(TEST_LOCATOR, "blah", EnumSet.of(KeyEventType.KEYDOWN, KeyEventType.KEYPRESS));
+        writer.type(charsBuilder("blah").keyEvents(KEYDOWN, KEYPRESS).build());
+        keyPressMock.verifyChars(TEST_LOCATOR, "blah", EnumSet.of(KEYDOWN, KEYPRESS));
         keyPressMock.verifyNoMore();
     }
 
     @Test
-    public void shouldTypeSpecifiedKeyEventsAndFullTypeMode()
+    public void shouldTypeSpecifiedKeyEventsInFullTypeMode()
     {
-        writer.type(SpecialKeys.ARROW_DOWN.withEvents(KeyEventType.KEYDOWN, KeyEventType.KEYPRESS));
-        keyPressMock.verifyKeys(TEST_LOCATOR, EnumSet.of(KeyEventType.KEYDOWN, KeyEventType.KEYPRESS), KeyEvent.VK_DOWN);
+        writer.type(SpecialKeys.ARROW_DOWN.withEvents(KEYDOWN, KEYPRESS));
+        keyPressMock.verifyKeys(TEST_LOCATOR, EnumSet.of(KEYDOWN, KEYPRESS), KeyEvent.VK_DOWN);
         keyPressMock.verifyNoMore();
     }
 
@@ -107,15 +111,89 @@ public class TestSeleniumTypeWriter
     public void shouldTypeSpecifiedKeyEventsInMixedSequenceAndFullTypeMode()
     {
         KeySequence input = new KeySequenceBuilder("abc").append(SpecialKeys.ENTER).append("def")
-                .keyEvents(KeyEventType.KEYDOWN, KeyEventType.KEYUP).build();
+                .keyEvents(KEYDOWN, KEYUP).build();
         writer.type(input);
-        keyPressMock.verifyChars(TEST_LOCATOR, "abc", EnumSet.of(KeyEventType.KEYDOWN, KeyEventType.KEYUP));
-        keyPressMock.verifyKeys(TEST_LOCATOR, EnumSet.of(KeyEventType.KEYDOWN, KeyEventType.KEYUP), KeyEvent.VK_ENTER);
-        keyPressMock.verifyChars(TEST_LOCATOR, "def", EnumSet.of(KeyEventType.KEYDOWN, KeyEventType.KEYUP));
+        keyPressMock.verifyChars(TEST_LOCATOR, "abc", EnumSet.of(KEYDOWN, KEYUP));
+        keyPressMock.verifyKeys(TEST_LOCATOR, EnumSet.of(KEYDOWN, KEYUP), KeyEvent.VK_ENTER);
+        keyPressMock.verifyChars(TEST_LOCATOR, "def", EnumSet.of(KEYDOWN, KEYUP));
         keyPressMock.verifyNoMore();
     }
 
-    // TODO more tests;)
+    @Test
+    public void shouldTypeCharsInInsertTypeMode()
+    {
+        writer.type(charsBuilder("blah").keyEvents(KEYDOWN, KEYPRESS).typeMode(TypeMode.INSERT)
+                .build());
+        keyPressMock.verifyTyped(TEST_LOCATOR, "blah");
+        keyPressMock.verifyNoMore();
+    }
+
+    @Test
+    public void shouldTypeSpecifiedKeyEventsInInsertTypeMode()
+    {
+        writer.type(keysBuilder(SpecialKeys.ARROW_DOWN).keyEvents(KEYDOWN, KEYPRESS)
+                .typeMode(TypeMode.INSERT).build());
+        keyPressMock.verifyKeys(TEST_LOCATOR, EnumSet.of(KEYDOWN, KEYPRESS), KeyEvent.VK_DOWN);
+        keyPressMock.verifyNoMore();
+    }
+
+    @Test
+    public void shouldTypeSpecifiedKeyEventsInMixedSequenceAndInsertTypeMode()
+    {
+        KeySequence input = new KeySequenceBuilder("abc").append(SpecialKeys.ENTER).append("def")
+                .keyEvents(KEYDOWN, KEYUP).typeMode(TypeMode.INSERT).build();
+        writer.type(input);
+        keyPressMock.verifyTyped(TEST_LOCATOR, "abc");
+        keyPressMock.verifyKeys(TEST_LOCATOR, EnumSet.of(KEYDOWN, KEYUP), KeyEvent.VK_ENTER);
+        keyPressMock.verifyTyped(TEST_LOCATOR, "def");
+        keyPressMock.verifyNoMore();
+    }
+
+    @Test
+    public void shouldTypeCharsInInsertWithEventTypeMode()
+    {
+        writer.type(charsBuilder("blah").keyEvents(KEYDOWN, KEYPRESS).typeMode(TypeMode.INSERT_WITH_EVENT)
+                .build());
+        keyPressMock.verifyTyped(TEST_LOCATOR, "bla");
+        keyPressMock.verifyChars(TEST_LOCATOR, "h", EnumSet.of(KEYDOWN, KEYPRESS));
+        keyPressMock.verifyNoMore();
+    }
+
+    @Test
+    public void shouldTypeSpecifiedKeyEventsInInsertWithEventTypeMode()
+    {
+        writer.type(keysBuilder(SpecialKeys.ARROW_DOWN).keyEvents(KEYDOWN, KEYPRESS).typeMode(TypeMode.INSERT_WITH_EVENT)
+                .build());
+        keyPressMock.verifyKeys(TEST_LOCATOR, EnumSet.of(KEYDOWN, KEYPRESS), KeyEvent.VK_DOWN);
+        keyPressMock.verifyNoMore();
+    }
+
+    @Test
+    public void shouldTypeSpecifiedKeyEventsInMixedSequenceAndInsertWithEventTypeMode()
+    {
+        KeySequence input = new KeySequenceBuilder("abc").append(SpecialKeys.ENTER).append("def")
+                .keyEvents(KEYDOWN, KEYUP).typeMode(TypeMode.INSERT_WITH_EVENT).build();
+        writer.type(input);
+        keyPressMock.verifyTyped(TEST_LOCATOR, "abc");
+        keyPressMock.verifyKeys(TEST_LOCATOR, EnumSet.of(KEYDOWN, KEYUP), KeyEvent.VK_ENTER);
+        keyPressMock.verifyTyped(TEST_LOCATOR, "de");
+        keyPressMock.verifyChars(TEST_LOCATOR, "f", EnumSet.of(KEYDOWN, KEYUP));
+        keyPressMock.verifyNoMore();
+    }
+
+    @Test
+    public void shouldTypeSpecifiedKeyEventsInMixedSequenceAndInsertWithEventTypeModeWithKeyAtTheEndHAHAHA()
+    {
+        KeySequence input = new KeySequenceBuilder("abc").append(SpecialKeys.ENTER).append("def")
+                .append(SpecialKeys.ESC).keyEvents(KEYDOWN, KEYPRESS).typeMode(TypeMode.INSERT_WITH_EVENT)
+                .build();
+        writer.type(input);
+        keyPressMock.verifyTyped(TEST_LOCATOR, "abc");
+        keyPressMock.verifyKeys(TEST_LOCATOR, EnumSet.of(KEYDOWN, KEYPRESS), KeyEvent.VK_ENTER);
+        keyPressMock.verifyTyped(TEST_LOCATOR, "def");
+        keyPressMock.verifyKeys(TEST_LOCATOR, EnumSet.of(KEYDOWN, KEYPRESS), KeyEvent.VK_ESCAPE);
+        keyPressMock.verifyNoMore();
+    }
 
     private static class CustomKeySequence implements KeySequence
     {
