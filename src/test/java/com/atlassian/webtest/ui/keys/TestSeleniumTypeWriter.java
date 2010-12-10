@@ -2,7 +2,9 @@ package com.atlassian.webtest.ui.keys;
 
 import com.atlassian.selenium.SeleniumClient;
 import com.atlassian.selenium.keyboard.SeleniumTypeWriter;
+import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterators;
 import org.junit.Before;
 import org.junit.Test;
@@ -193,6 +195,36 @@ public class TestSeleniumTypeWriter
         keyPressMock.verifyTyped(TEST_LOCATOR, "def");
         keyPressMock.verifyKeys(TEST_LOCATOR, EnumSet.of(KEYDOWN, KEYPRESS), KeyEvent.VK_ESCAPE);
         keyPressMock.verifyNoMore();
+    }
+
+    @Test
+    public void shouldTypeAllSpecialKeys()
+    {
+        KeySequence input = new KeySequenceBuilder().append(allSpecialKeys()).keyEvents(KEYDOWN, KEYPRESS)
+                .typeMode(TypeMode.INSERT_WITH_EVENT).build();
+        writer.type(input);
+        keyPressMock.verifyKeys(TEST_LOCATOR, EnumSet.of(KEYDOWN, KEYPRESS),
+                KeyEvent.VK_ENTER,
+                KeyEvent.VK_ESCAPE,
+                KeyEvent.VK_BACK_SPACE,
+                KeyEvent.VK_DELETE,
+                KeyEvent.VK_SPACE,
+                KeyEvent.VK_LEFT,
+                KeyEvent.VK_RIGHT,
+                KeyEvent.VK_UP,
+                KeyEvent.VK_DOWN);
+        keyPressMock.verifyNoMore();
+    }
+
+    private static Collection<Key> allSpecialKeys()
+    {
+        return Collections2.transform(EnumSet.allOf(SpecialKeys.class), new Function<SpecialKeys, Key>()
+        {
+            public Key apply(SpecialKeys input)
+            {
+                return input;
+            }
+        });
     }
 
     private static class CustomKeySequence implements KeySequence

@@ -78,6 +78,12 @@ public final class KeySequenceBuilder implements KeyEventAware
         return this;
     }
 
+    public KeySequenceBuilder append(Collection<Key> keys)
+    {
+        this.keys.addAll(keys);
+        return this;
+    }
+
     public KeySequenceBuilder withPressed(ModifierKey key)
     {
         pressed.add(key);

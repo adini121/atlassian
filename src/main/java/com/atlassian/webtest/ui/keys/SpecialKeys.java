@@ -26,6 +26,7 @@ public enum SpecialKeys implements SpecialKey, KeySequence
     ESC,
     BACKSPACE,
     DELETE,
+    SPACE,
     ARROW_LEFT,
     ARROW_RIGHT,
     ARROW_UP,

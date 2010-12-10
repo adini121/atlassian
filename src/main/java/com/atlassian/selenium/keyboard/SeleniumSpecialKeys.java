@@ -19,6 +19,7 @@ public enum SeleniumSpecialKeys
     ENTER(SpecialKeys.ENTER, KeyEvent.VK_ENTER),
     ESC(SpecialKeys.ESC, KeyEvent.VK_ESCAPE),
     DELETE(SpecialKeys.DELETE, KeyEvent.VK_DELETE),
+    SPACE(SpecialKeys.SPACE, KeyEvent.VK_SPACE),
     BACKSPACE(SpecialKeys.BACKSPACE, KeyEvent.VK_BACK_SPACE),
     ARROW_UP(SpecialKeys.ARROW_UP, KeyEvent.VK_UP),
     ARROW_DOWN(SpecialKeys.ARROW_DOWN, KeyEvent.VK_DOWN),

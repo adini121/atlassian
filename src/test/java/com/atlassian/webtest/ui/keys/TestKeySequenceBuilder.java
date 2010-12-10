@@ -1,5 +1,6 @@
 package com.atlassian.webtest.ui.keys;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -21,6 +22,16 @@ public class TestKeySequenceBuilder
         CharacterKeySequence charSeq = (CharacterKeySequence) result;
         assertEquals("something", charSeq.string());
         assertSequenceEquals(charSeq, "something");
+    }
+
+    @Ignore("nice to have")
+    @Test
+    public void shouldDetectCharacterKeysAddedAsKeys()
+    {
+        KeySequence result = new KeySequenceBuilder("hahaha").append(new DefaultCharacterKey("h")).build();
+        assertTrue(result instanceof CharacterKeySequence);
+        CharacterKeySequence charResult = (CharacterKeySequence) result;
+        assertEquals("hahahah", charResult.string());
     }
 
     private void assertSequenceEquals(KeySequence sequence, String chars)
