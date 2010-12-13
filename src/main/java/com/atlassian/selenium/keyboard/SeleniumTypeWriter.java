@@ -163,6 +163,11 @@ public final class SeleniumTypeWriter extends AbstractSeleniumDriver
 
     private void lastCharType(CharacterKeySequence sequence)
     {
+        if (sequence.string().isEmpty())
+        {
+            bareInsert(sequence);
+            return;
+        }
         setUpModifiers(sequence);
         try
         {
@@ -205,6 +210,10 @@ public final class SeleniumTypeWriter extends AbstractSeleniumDriver
             {
                 typeSpecialKey(specialKey, events);
             }
+        }
+        else
+        {
+            throw new AssertionError("Should not invoke .typeSpecialKeys for: " + sequence);
         }
     }
 

@@ -44,6 +44,7 @@ import static org.mockito.Mockito.when;
 public class TestSeleniumTypeWriter
 {
     private static final String TEST_LOCATOR = "id=test";
+    private static final String TEST_LOCATOR_WITH_QUOTES = "css=input[name='inquotes']";
     private static final int CORRECT_ENTER = 13;
 
     private KeyPressVerifyingMock keyPressMock;
@@ -225,6 +226,53 @@ public class TestSeleniumTypeWriter
                 KeyEvent.VK_UP,
                 KeyEvent.VK_DOWN);
         keyPressMock.verifyNoMore();
+    }
+
+    @Test
+    public void shouldHandleZeroLengthSequenceInInsertMode()
+    {
+        writer.type(charsBuilder("").typeMode(TypeMode.INSERT).build());
+        keyPressMock.verifyTyped(TEST_LOCATOR, "");
+        keyPressMock.verifyNoMore();
+    }
+
+    @Test
+    public void shouldHandleZeroLengthSequenceInInsertWithEventMode()
+    {
+        writer.type(charsBuilder("").typeMode(TypeMode.INSERT_WITH_EVENT).build());
+        keyPressMock.verifyTyped(TEST_LOCATOR, "");
+        keyPressMock.verifyNoMore();
+    }
+
+    @Test
+    public void shouldHandleZeroLengthSequenceInFullEventTypeMode()
+    {
+        writer.type(charsBuilder("").typeMode(TypeMode.TYPE).build());
+        keyPressMock.verifyNoMore();
+    }
+
+    @Test
+    public void shouldPreserveExistingText()
+    {
+        when(keyPressMock.mockClient().getValue(TEST_LOCATOR)).thenReturn("existing");
+        when(keyPressMock.mockClient().isElementPresent(TEST_LOCATOR)).thenReturn(true);
+        when(keyPressMock.mockClient().getEval("this.getTagName('" + TEST_LOCATOR + "')")).thenReturn("input");
+        writer.type(charsBuilder("").typeMode(TypeMode.INSERT).build());
+        keyPressMock.verifyTyped(TEST_LOCATOR, "existing");
+        keyPressMock.verifyNoMore();
+
+    }
+
+    @Test
+    public void shouldNotPreserveExistingTextOnClear()
+    {
+        when(keyPressMock.mockClient().getValue(TEST_LOCATOR)).thenReturn("existing");
+        when(keyPressMock.mockClient().isElementPresent(TEST_LOCATOR)).thenReturn(true);
+        when(keyPressMock.mockClient().getEval("this.getTagName('" + TEST_LOCATOR + "')")).thenReturn("input");
+        writer.clear();
+        keyPressMock.verifyTyped(TEST_LOCATOR, "");
+        keyPressMock.verifyNoMore();
+
     }
 
     private static Collection<Key> allSpecialKeys()
