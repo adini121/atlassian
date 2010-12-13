@@ -7,7 +7,7 @@ import org.openqa.selenium.WebDriver;
 /**
  *
  */
-public interface WebDriverTester extends Tester
+public interface WebDriverTester<W extends WebDriver> extends Tester
 {
-    WebDriver getDriver();
+    W getDriver();
 }

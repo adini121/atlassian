@@ -1,14 +1,17 @@
 package com.atlassian.webdriver.refapp;
 
-import com.atlassian.webdriver.AtlassianWebDriver;
+import com.atlassian.pageobjects.PageNavigator;
+import com.atlassian.pageobjects.navigator.InjectPageNavigator;
+import com.atlassian.pageobjects.product.TestedProduct;
+import com.atlassian.pageobjects.product.TestedProductFactory;
 import com.atlassian.webdriver.Link;
+import com.atlassian.webdriver.browsers.pageobjects.AutoInstallWebDriverTester;
+import com.atlassian.webdriver.pageobjects.WebDriverTester;
 import com.atlassian.webdriver.product.Defaults;
-import com.atlassian.webdriver.product.TestedProductFactory;
 import com.atlassian.webdriver.refapp.page.RefappAbstractPage;
 import com.atlassian.webdriver.refapp.page.RefappAdminHomePage;
 import com.atlassian.webdriver.refapp.page.RefappHomePage;
 import com.atlassian.webdriver.refapp.page.RefappLoginPage;
-import com.atlassian.webdriver.product.AbstractTestedProduct;
 import com.atlassian.webdriver.product.ProductInstance;
 import org.openqa.selenium.By;
 
@@ -16,26 +19,41 @@ import org.openqa.selenium.By;
  *
  */
 @Defaults(instanceId = "refapp", contextPath = "/refapp", httpPort = 5990)
-public class RefappTestedProduct extends AbstractTestedProduct<RefappHomePage, RefappAdminHomePage, RefappLoginPage>
+public class RefappTestedProduct implements TestedProduct<WebDriverTester, RefappHomePage, RefappAdminHomePage, RefappLoginPage>
 {
-    public RefappTestedProduct(AtlassianWebDriver webDriver, ProductInstance productInstance)
+    private final PageNavigator pageNavigator;
+    private final WebDriverTester webDriverTester;
+    private final ProductInstance productInstance;
+
+    public RefappTestedProduct(com.atlassian.pageobjects.product.TestedProductFactory.TesterFactory<WebDriverTester> testerFactory, ProductInstance productInstance)
     {
-        super(webDriver, productInstance);
+        WebDriverTester tester = null;
+        if (testerFactory == null)
+        {
+            tester = new AutoInstallWebDriverTester();
+        }
+        else
+        {
+            tester = testerFactory.create();
+        }
+        this.webDriverTester = tester;
+        this.pageNavigator = new InjectPageNavigator<WebDriverTester>(this);
+        this.productInstance = productInstance;
     }
 
     public RefappHomePage gotoHomePage()
     {
-        return gotoPage(RefappHomePage.class);
+        return pageNavigator.gotoPageObject(RefappHomePage.class);
     }
 
     public RefappAdminHomePage gotoAdminHomePage()
     {
-        return gotoPage(RefappAdminHomePage.class);
+        return pageNavigator.gotoPageObject(RefappAdminHomePage.class);
     }
 
     public RefappLoginPage gotoLoginPage()
     {
-        return gotoPage(RefappLoginPage.class);
+        return pageNavigator.gotoPageObject(RefappLoginPage.class);
     }
 
     public static final void main(String[] args)

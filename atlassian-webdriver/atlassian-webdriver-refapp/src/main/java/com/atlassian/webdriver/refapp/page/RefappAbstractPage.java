@@ -1,20 +1,22 @@
 package com.atlassian.webdriver.refapp.page;
 
-import com.atlassian.webdriver.utils.user.User;
-import com.atlassian.webdriver.page.AbstractPage;
-import com.atlassian.webdriver.PageObject;
-import com.atlassian.webdriver.page.UserDiscoverable;
+import com.atlassian.pageobjects.page.Page;
+import com.atlassian.pageobjects.page.User;
+import com.atlassian.webdriver.pageobjects.WebDriverTester;
 import com.atlassian.webdriver.refapp.RefappTestedProduct;
 import org.openqa.selenium.By;
 
-public abstract class RefappAbstractPage<P extends PageObject> extends AbstractPage<RefappTestedProduct, P>
-    implements UserDiscoverable
+import javax.inject.Inject;
+
+public abstract class RefappAbstractPage implements Page<WebDriverTester>
 {
     private final String uri;
 
+    @Inject
+    
+
     public RefappAbstractPage(RefappTestedProduct testedProduct, String uri)
     {
-        super(testedProduct);
         this.uri = uri;
     }
 

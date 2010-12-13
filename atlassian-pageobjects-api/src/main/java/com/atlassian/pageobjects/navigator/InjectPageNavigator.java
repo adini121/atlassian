@@ -20,33 +20,46 @@ import java.util.Map;
 public class InjectPageNavigator<T extends Tester> implements PageNavigator<T>
 {
     private final TestedProduct<T, ?, ?, ?> testedProduct;
+    private final Map<Class<PageObject<T>>, Class<PageObject<T>>> overrides =
+            new HashMap<Class<PageObject<T>>, Class<PageObject<T>>>();
 
     public InjectPageNavigator(TestedProduct<T,?,?,?> testedProduct)
     {
         this.testedProduct = testedProduct;
     }
 
-    public <P extends PageObject<T>> P gotoPage(Class<P> pageClass, Object... args)
+    public PageObject<T> gotoPageObject(Class<PageObject<T>> pageClass, Object... args)
     {
-        return null;
+        PageObject<T> p = create(pageClass, args);
+        callLifecycleMethod(p, WaitUntil.class);
+        callLifecycleMethod(p, ValidateLocation.class);
+        return p;
     }
 
-    public <P extends PageObject<T>> P gotoActivatedPage(Class<P> pageClass, Object... args)
+    public PageObject<T> gotoActivatedPageObject(Class<PageObject<T>> pageClass, Object... args)
     {
-        return null;
+        PageObject<T> p = create(pageClass, args);
+        callLifecycleMethod(p, ValidateLocation.class);
+        return p;
     }
 
-    public <P extends PageObject<T>, Q extends P> void override(Class<P> oldClass, Class<Q> newClass)
+    public void override(Class<PageObject<T>> oldClass, Class<PageObject<T>> newClass)
     {
-
+        overrides.put(oldClass, newClass);
     }
 
-    <P extends PageObject<T>> P create(Class<P> pageClass, Object... args)
+    PageObject<T> create(Class<PageObject<T>> pageClass, Object... args)
     {
-        P instance = null;
+        PageObject<T> instance = null;
+        Class<PageObject<T>> actualClass = pageClass;
+        if (overrides.containsKey(pageClass))
+        {
+            actualClass = overrides.get(pageClass);
+        }
+
         try
         {
-            instance = pageClass.newInstance();
+            instance = actualClass.newInstance();
         }
         catch (InstantiationException e)
         {

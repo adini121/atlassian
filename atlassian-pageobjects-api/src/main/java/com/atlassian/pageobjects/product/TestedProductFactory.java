@@ -20,6 +20,21 @@ public class TestedProductFactory
         T create();
     }
 
+    public static class SingletonTesterFactory<T extends Tester> implements TesterFactory<T>
+    {
+        private final T tester;
+
+        public SingletonTesterFactory(T tester)
+        {
+            this.tester = tester;
+        }
+
+        public T create()
+        {
+            return tester;
+        }
+    }
+
     public static <T extends Tester, P extends TestedProduct<T,?,?,?>> P create(Class<P> testedProductClass, String instanceId, TesterFactory<T> testerFactory)
     {
         final String contextPath, baseUrl;

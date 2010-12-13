@@ -1,5 +1,6 @@
 package com.atlassian.webdriver.refapp.page;
 
+import com.atlassian.pageobjects.navigator.ValidateLocation;
 import com.atlassian.webdriver.utils.user.User;
 import com.atlassian.webdriver.page.LoginPage;
 import com.atlassian.webdriver.refapp.RefappTestedProduct;
@@ -27,5 +28,11 @@ public class RefappLoginPage extends RefappAbstractPage<RefappLoginPage> impleme
     public RefappHomePage loginAsAdmin() {
 
         return login(new User("admin", "admin", "fullname", "email"));
+    }
+
+    @ValidateLocation
+    public void doWait()
+    {
+        testedProduct.getDriver().waitUntilElementIsLocated(By.className("refapp-footer"));
     }
 }

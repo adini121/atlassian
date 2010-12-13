@@ -56,7 +56,6 @@
             <groupId>com.atlassian.selenium</groupId>
             <artifactId>atlassian-webdriver-browsers-auto</artifactId>
             <version>${project.version}</version>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 
