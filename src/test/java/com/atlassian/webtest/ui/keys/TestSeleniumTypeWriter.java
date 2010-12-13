@@ -44,9 +44,11 @@ import static org.mockito.Mockito.when;
 public class TestSeleniumTypeWriter
 {
     private static final String TEST_LOCATOR = "id=test";
+    private static final int CORRECT_ENTER = 13;
 
     private KeyPressVerifyingMock keyPressMock;
     private SeleniumTypeWriter writer;
+
 
     @Before
     public void setUpMocks()
@@ -116,7 +118,7 @@ public class TestSeleniumTypeWriter
                 .keyEvents(KEYDOWN, KEYUP).build();
         writer.type(input);
         keyPressMock.verifyChars(TEST_LOCATOR, "abc", EnumSet.of(KEYDOWN, KEYUP));
-        keyPressMock.verifyKeys(TEST_LOCATOR, EnumSet.of(KEYDOWN, KEYUP), KeyEvent.VK_ENTER);
+        keyPressMock.verifyKeys(TEST_LOCATOR, EnumSet.of(KEYDOWN, KEYUP), CORRECT_ENTER);
         keyPressMock.verifyChars(TEST_LOCATOR, "def", EnumSet.of(KEYDOWN, KEYUP));
         keyPressMock.verifyNoMore();
     }
@@ -146,7 +148,7 @@ public class TestSeleniumTypeWriter
                 .keyEvents(KEYDOWN, KEYUP).typeMode(TypeMode.INSERT).build();
         writer.type(input);
         keyPressMock.verifyTyped(TEST_LOCATOR, "abc");
-        keyPressMock.verifyKeys(TEST_LOCATOR, EnumSet.of(KEYDOWN, KEYUP), KeyEvent.VK_ENTER);
+        keyPressMock.verifyKeys(TEST_LOCATOR, EnumSet.of(KEYDOWN, KEYUP), CORRECT_ENTER);
         keyPressMock.verifyTyped(TEST_LOCATOR, "def");
         keyPressMock.verifyNoMore();
     }
@@ -177,11 +179,20 @@ public class TestSeleniumTypeWriter
                 .keyEvents(KEYDOWN, KEYUP).typeMode(TypeMode.INSERT_WITH_EVENT).build();
         writer.type(input);
         keyPressMock.verifyTyped(TEST_LOCATOR, "abc");
-        keyPressMock.verifyKeys(TEST_LOCATOR, EnumSet.of(KEYDOWN, KEYUP), KeyEvent.VK_ENTER);
+        keyPressMock.verifyKeys(TEST_LOCATOR, EnumSet.of(KEYDOWN, KEYUP), CORRECT_ENTER);
         keyPressMock.verifyTyped(TEST_LOCATOR, "de");
         keyPressMock.verifyChars(TEST_LOCATOR, "f", EnumSet.of(KEYDOWN, KEYUP));
         keyPressMock.verifyNoMore();
     }
+
+    @Test
+    public void shouldUserCorrectKeyForEnter()
+    {
+        writer.type(SpecialKeys.ENTER);
+        keyPressMock.verifyKeys(TEST_LOCATOR, KeyEventType.ALL, CORRECT_ENTER);
+        keyPressMock.verifyNoMore();
+    }
+
 
     @Test
     public void shouldTypeSpecifiedKeyEventsInMixedSequenceAndInsertWithEventTypeModeWithKeyAtTheEndHAHAHA()
@@ -191,7 +202,7 @@ public class TestSeleniumTypeWriter
                 .build();
         writer.type(input);
         keyPressMock.verifyTyped(TEST_LOCATOR, "abc");
-        keyPressMock.verifyKeys(TEST_LOCATOR, EnumSet.of(KEYDOWN, KEYPRESS), KeyEvent.VK_ENTER);
+        keyPressMock.verifyKeys(TEST_LOCATOR, EnumSet.of(KEYDOWN, KEYPRESS), CORRECT_ENTER);
         keyPressMock.verifyTyped(TEST_LOCATOR, "def");
         keyPressMock.verifyKeys(TEST_LOCATOR, EnumSet.of(KEYDOWN, KEYPRESS), KeyEvent.VK_ESCAPE);
         keyPressMock.verifyNoMore();
@@ -204,7 +215,7 @@ public class TestSeleniumTypeWriter
                 .typeMode(TypeMode.INSERT_WITH_EVENT).build();
         writer.type(input);
         keyPressMock.verifyKeys(TEST_LOCATOR, EnumSet.of(KEYDOWN, KEYPRESS),
-                KeyEvent.VK_ENTER,
+                CORRECT_ENTER,
                 KeyEvent.VK_ESCAPE,
                 KeyEvent.VK_BACK_SPACE,
                 KeyEvent.VK_DELETE,

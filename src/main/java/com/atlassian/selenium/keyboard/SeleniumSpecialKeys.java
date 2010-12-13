@@ -16,7 +16,8 @@ import java.awt.event.KeyEvent;
 public enum SeleniumSpecialKeys
 {
 
-    ENTER(SpecialKeys.ENTER, KeyEvent.VK_ENTER),
+
+    ENTER(SpecialKeys.ENTER, 13), // correct JS code for ENTER event is 13, not 10 assumed by AWT key events!
     ESC(SpecialKeys.ESC, KeyEvent.VK_ESCAPE),
     DELETE(SpecialKeys.DELETE, KeyEvent.VK_DELETE),
     SPACE(SpecialKeys.SPACE, KeyEvent.VK_SPACE),
