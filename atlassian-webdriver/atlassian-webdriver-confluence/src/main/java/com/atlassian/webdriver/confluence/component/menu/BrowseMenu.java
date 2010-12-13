@@ -19,7 +19,7 @@ import org.openqa.selenium.By;
 public class BrowseMenu  extends AbstractComponent<ConfluenceTestedProduct, BrowseMenu>
         implements DropdownMenu
 {
-    private final static By BROWSER_MENU_LOCATOR = ByJquery.$("#browse-menu-link").parent("li");
+    private final By BROWSER_MENU_LOCATOR = ByJquery.$("#browse-menu-link").parent("li");
 
     private final static Link<ConfluenceAdminHomePage> ADMIN_PAGE_LINK = new Link(By.id("administration-link"), ConfluenceAdminHomePage.class);
     private final static Link<PeopleDirectoryPage> PEOPLE_DIRECTORY_LINK = new Link(By.id("people-directory-link"), PeopleDirectoryPage.class);

@@ -16,9 +16,9 @@ import org.openqa.selenium.By;
 public class ConfluenceHeader extends AbstractHeader<ConfluenceTestedProduct, ConfluenceHeader> implements UserDiscoverable
 {
 
-    private final static By CONFLUENCE_HEADER_LOCATION = By.id("header");
-    private final static By USER_MENU_LOCATOR = By.id("user-menu-link");
-    private final static By ADMIN_MENU_LOCATOR = By.id("administration-link");
+    private final By CONFLUENCE_HEADER_LOCATION = By.id("header");
+    private final By USER_MENU_LOCATOR = By.id("user-menu-link");
+    private final By ADMIN_MENU_LOCATOR = By.id("administration-link");
 
     public ConfluenceHeader(ConfluenceTestedProduct testedProduct)
     {

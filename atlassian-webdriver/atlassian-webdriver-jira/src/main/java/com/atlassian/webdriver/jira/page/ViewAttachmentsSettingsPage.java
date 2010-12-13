@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 public class ViewAttachmentsSettingsPage extends JiraAdminAbstractPage<ViewAttachmentsSettingsPage>
 {
 
-    private static final String URI = "/secure/admin/jira/ViewAttachmentSettings.jspa";
+    private static final String URI = "/secure/admin/ViewAttachmentSettings.jspa";
 
     private static final String ENABLED = "ON";
 

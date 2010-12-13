@@ -126,7 +126,7 @@ public abstract class ByJquery extends By
                     for (WebElement element : elements)
                     {
                         args = new Object[]{"WD.byJquery.$(context)." + selector.type.name().toLowerCase() + "(" + selectorStr + ")", element };
-                        List<WebElement> temp = JavaScriptUtils.execute("return WD.byJquery.execute(arguments[0],arguments[1])", driver, args);
+                        List<WebElement> temp = JavaScriptUtils.execute("return window.WD.byJquery.execute(arguments[0],arguments[1])", driver, args);
                         newElements.addAll(temp);
                     }
 
@@ -297,7 +297,6 @@ public abstract class ByJquery extends By
         {
             throw new IllegalArgumentException("The jquery selector cannot be null.");
         }
-
         loadJqueryLocator(driver);
 
         return new ByJquery(selector, SelectorType.FIND)

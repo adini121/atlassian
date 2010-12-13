@@ -25,7 +25,7 @@ public abstract class JiraAdminAbstractPage<P extends PageObject> extends JiraAb
 
     public AdminSideMenu getAdminSideMenu()
     {
-        return new AdminSideMenu(testedProduct);
+        return testedProduct.getComponent(AdminSideMenu.class);
     }
 
 }

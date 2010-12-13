@@ -15,7 +15,7 @@ import org.openqa.selenium.WebElement;
  */
 public class AdminSideMenu extends AbstractComponent implements Linkable
 {
-    private static final By ADMIN_SIDE_MENU_LOCATOR = By.id("adminMenu");
+    private final By ADMIN_SIDE_MENU_LOCATOR = By.id("adminMenu");
 
     private WebElement sideMenuContainer;
 

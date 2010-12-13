@@ -18,7 +18,7 @@ import org.openqa.selenium.By;
  */
 public class ConfluenceUserMenu extends AbstractComponent<ConfluenceTestedProduct, ConfluenceUserMenu> implements DropdownMenu, UserMenu
 {
-    private final static By USER_MENU_LOCATOR = ByJquery.$("#user-menu-link").parent("li");
+    private final By USER_MENU_LOCATOR = ByJquery.$("#user-menu-link").parent("li");
 
     private final static Link<LogoutPage> LOGOUT_LINK = new Link(By.id("logout-link"), LogoutPage.class);
 

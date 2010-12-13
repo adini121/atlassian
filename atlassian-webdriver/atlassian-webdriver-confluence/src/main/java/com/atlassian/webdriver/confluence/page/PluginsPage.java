@@ -4,6 +4,7 @@ package com.atlassian.webdriver.confluence.page;
 import com.atlassian.webdriver.confluence.ConfluenceTestedProduct;
 import com.atlassian.webdriver.utils.by.ByJquery;
 import com.google.common.collect.ImmutableSet;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import java.util.HashMap;
@@ -86,7 +87,7 @@ public class PluginsPage extends ConfluenceAbstractPage<PluginsPage>
     private void waitForLoadedPlugins()
     {
 
-        WebElement table = getDriver().findElement(ByJquery.$("td.pagebody table table > tbody"));
+        WebElement table = getDriver().findElement(By.cssSelector("td.pagebody table table > tbody"));
 
         List<WebElement> pluginAnchors = table.findElements(ByJquery.$("tr td a[href^=viewplugins]"));
         List<WebElement> pluginAnchorsWithErrors = table.findElements(ByJquery.$("tr td:contains(Errors loading plugin) a"));

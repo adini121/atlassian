@@ -9,7 +9,7 @@ var oldjQuery = window.jQuery;
 var old$ = window.$;
 
 // potential to namspace things away for WebDriver
-var WD = window.WD != undefined ? WD : {};
+var WD = window.WD ? WD : {};
 
 WD.byJquery = {};
 

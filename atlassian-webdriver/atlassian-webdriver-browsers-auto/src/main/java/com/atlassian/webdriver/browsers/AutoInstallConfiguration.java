@@ -35,7 +35,6 @@ public class AutoInstallConfiguration
         );
 
         browserAutoInstaller.setupBrowser();
-
     }
 
 }

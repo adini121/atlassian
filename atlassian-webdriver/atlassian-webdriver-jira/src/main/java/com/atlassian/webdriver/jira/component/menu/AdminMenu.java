@@ -21,7 +21,7 @@ public class AdminMenu extends AbstractComponent<JiraTestedProduct, AdminMenu>
         implements DropdownMenu
 {
 
-    private static final By ADMIN_MENU_LOCATOR = ByJquery.$("#admin_link").parent("li");
+    private final By ADMIN_MENU_LOCATOR = ByJquery.$("#admin_link").parent("li");
 
     private static final Link<PluginsPage> PLUGINS_PAGE = new Link(By.id("plugins_lnk"), PluginsPage.class);
     private static final Link<LicenseDetailsPage> LICENSE_DETAILS_PAGE = new Link(By.id("license_details_lnk"), LicenseDetailsPage.class);

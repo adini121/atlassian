@@ -15,7 +15,7 @@ import org.openqa.selenium.By;
  */
 public class JiraUserMenu extends AbstractComponent<JiraTestedProduct, JiraUserMenu> implements DropdownMenu, UserMenu
 {
-    private static final Link<LogoutPage> LOG_OUT = new Link(By.id("log_out"), LogoutPage.class);
+    private final Link<LogoutPage> LOG_OUT = new Link(By.id("log_out"), LogoutPage.class);
 
     private AuiDropdownMenu<JiraTestedProduct> userMenu;
 

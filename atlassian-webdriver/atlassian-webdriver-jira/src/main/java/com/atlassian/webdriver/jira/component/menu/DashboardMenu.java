@@ -19,7 +19,7 @@ import org.openqa.selenium.By;
 public class DashboardMenu extends AbstractComponent<JiraTestedProduct, JiraUserMenu>
         implements DropdownMenu
 {
-    private static final By DASHBOARD_MENU_LOCATOR = ByJquery.$("#home_link").parent("li");
+    private final By DASHBOARD_MENU_LOCATOR = ByJquery.$("#home_link").parent("li");
 
     private AuiDropdownMenu<JiraTestedProduct> dashboardMenu;
 
