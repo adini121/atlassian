@@ -4,7 +4,6 @@ import com.atlassian.pageobjects.PageNavigator;
 import com.atlassian.pageobjects.page.LoginPage;
 import com.atlassian.pageobjects.page.Page;
 import com.atlassian.pageobjects.product.ProductInstance;
-import com.atlassian.pageobjects.product.ProductType;
 import com.atlassian.pageobjects.product.TestedProduct;
 
 import static org.mockito.Mockito.mock;
@@ -53,8 +52,4 @@ class MyTestedProduct implements TestedProduct<MapTester,Page,Page, LoginPage>
         return mapTester;
     }
 
-    public ProductType getProductType()
-    {
-        return null;
-    }
 }

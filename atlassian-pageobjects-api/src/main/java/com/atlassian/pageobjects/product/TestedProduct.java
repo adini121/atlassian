@@ -17,5 +17,4 @@ public interface TestedProduct<T extends Tester, H extends Page, A extends Page,
     PageNavigator getPageNavigator();
     ProductInstance getProductInstance();
     T getTester();
-    ProductType getProductType();
 }

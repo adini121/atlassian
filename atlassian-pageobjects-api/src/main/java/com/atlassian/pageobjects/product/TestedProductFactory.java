@@ -47,7 +47,6 @@ public class TestedProductFactory
 
         final String ampsBaseUrl = System.getProperty("baseurl." + instanceId);
         final ProductInstance instance;
-        final ProductType productType;
         if (ampsBaseUrl != null)    // running within an AMPS IntegrationTestMojo invocation - read sys props for env vars
         {
             httpPort = Integer.getInteger("http." + instanceId + ".port");

@@ -2,7 +2,6 @@ package com.atlassian.pageobjects.navigator;
 
 import com.atlassian.pageobjects.Tester;
 
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 

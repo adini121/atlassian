@@ -37,9 +37,4 @@ public abstract class RefappAbstractPage implements Page
     {
         driver.waitUntilElementIsLocated(By.className("refapp-footer"));
     }
-
-    public <P extends Page> P gotoPage(Link<P> webDriverTesterPLink)
-    {
-        return webDriverTesterPLink.activate();
-    }
 }

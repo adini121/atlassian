@@ -1,6 +1,5 @@
 package com.atlassian.pageobjects;
 
-import java.net.URL;
 import java.util.Map;
 
 /**

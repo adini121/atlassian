@@ -1,10 +1,7 @@
 package com.atlassian.pageobjects.navigator;
 
-import com.atlassian.pageobjects.Link;
 import com.atlassian.pageobjects.PageNavigator;
-import com.atlassian.pageobjects.PageObject;
 import com.atlassian.pageobjects.Tester;
-import com.atlassian.pageobjects.component.Component;
 import com.atlassian.pageobjects.page.Page;
 import com.atlassian.pageobjects.product.ProductInstance;
 import com.atlassian.pageobjects.product.TestedProduct;
@@ -16,9 +13,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -44,8 +39,8 @@ public final class InjectPageNavigator implements PageNavigator
         }
     }
     private final PostInjectionProcessor postInjectionProcessor;
-    private final Map<Class<? extends PageObject>, Class<? extends PageObject>> overrides =
-            new HashMap<Class<? extends PageObject>, Class<? extends PageObject>>();
+    private final Map<Class, Class> overrides =
+            new HashMap<Class, Class>();
 
     public InjectPageNavigator(TestedProduct<?, ?, ?, ?> testedProduct)
     {
@@ -81,7 +76,7 @@ public final class InjectPageNavigator implements PageNavigator
         tester.gotoUrl(baseUrl + pageUrl);
     }
 
-    public <P extends Page> P getPage(Class<P> pageClass, Object... args)
+    public <P> P build(Class<P> pageClass, Object... args)
     {
         checkNotNull(pageClass);
         P p = create(pageClass, args);
@@ -90,25 +85,11 @@ public final class InjectPageNavigator implements PageNavigator
         return p;
     }
 
-    public <C extends Component> C getComponent(Class<C> componentClass, Object... args)
-    {
-        checkNotNull(componentClass);
-        C p = create(componentClass, args);
-        callLifecycleMethod(p, WaitUntil.class);
-        callLifecycleMethod(p, ValidateLocation.class);
-        return p;
-    }
-
-    public <P extends PageObject> void override(Class<P> oldClass, Class<? extends P> newClass)
+    public <P> void override(Class<P> oldClass, Class<? extends P> newClass)
     {
         checkNotNull(oldClass);
         checkNotNull(newClass);
         overrides.put(oldClass, newClass);
-    }
-
-    public <P extends Page, L extends Link<P>> L createLink(Class<L> myLinkClass)
-    {
-        return null;
     }
 
     <C> C create(Class<C> pageClass, Object... args)

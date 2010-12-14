@@ -3,7 +3,6 @@ package com.atlassian.webdriver.refapp;
 import com.atlassian.pageobjects.PageNavigator;
 import com.atlassian.pageobjects.product.Defaults;
 import com.atlassian.pageobjects.product.ProductInstance;
-import com.atlassian.pageobjects.product.ProductType;
 import com.atlassian.pageobjects.product.TestedProduct;
 import com.atlassian.pageobjects.product.TestedProductFactory;
 import com.atlassian.webdriver.AtlassianWebDriver;
@@ -76,18 +75,15 @@ public class RefappTestedProduct implements TestedProduct<WebDriverTester<Atlass
         return webDriverTester;
     }
 
-    public ProductType getProductType()
-    {
-        return ProductType.REFAPP;
-    }
-
     public static final void main(String[] args)
     {
         RefappTestedProduct product = TestedProductFactory.create(RefappTestedProduct.class);
         MyPage page = product.gotoLoginPage()
-                             .loginAsSysAdmin(RefappAdminHomePage.class)
-                             .gotoPage(product.getPageNavigator().createLink(MyLink.class));
-        
+                             .loginAsSysAdmin(MyPage.class);
+
+        RefappAdminHomePage adminPage = product.gotoAdminHomePage();
+        MyPage pageViaLink = product.getPageNavigator().build(MyLink.class).activate();
+
         MyPage myPage = product.getPageNavigator().gotoPage(MyPage.class);
     }
 

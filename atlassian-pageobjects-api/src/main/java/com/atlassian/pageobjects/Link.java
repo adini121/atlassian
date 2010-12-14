@@ -6,7 +6,7 @@ import com.atlassian.pageobjects.product.TestedProduct;
 /**
  *
  */
-public interface Link<P extends Page>
+public interface Link<P>
 {
     public P activate();
 }

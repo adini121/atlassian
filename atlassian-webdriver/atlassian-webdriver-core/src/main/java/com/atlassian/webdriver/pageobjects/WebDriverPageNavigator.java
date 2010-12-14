@@ -1,9 +1,6 @@
 package com.atlassian.webdriver.pageobjects;
 
-import com.atlassian.pageobjects.Link;
 import com.atlassian.pageobjects.PageNavigator;
-import com.atlassian.pageobjects.PageObject;
-import com.atlassian.pageobjects.component.Component;
 import com.atlassian.pageobjects.navigator.InjectPageNavigator;
 import com.atlassian.pageobjects.page.Page;
 import com.atlassian.pageobjects.product.TestedProduct;
@@ -34,23 +31,13 @@ public class WebDriverPageNavigator<T extends WebDriver> implements PageNavigato
         return delegate.gotoPage(pageClass, args);
     }
 
-    public <P extends Page> P getPage(Class<P> pageClass, Object... args)
+    public <P> P build(Class<P> pageClass, Object... args)
     {
-        return delegate.getPage(pageClass, args);
+        return delegate.build(pageClass, args);
     }
 
-    public <C extends Component> C getComponent(Class<C> componentClass, Object... args)
-    {
-        return delegate.getComponent(componentClass, args);
-    }
-
-    public <P extends PageObject> void override(Class<P> oldClass, Class<? extends P> newClass)
+    public <P> void override(Class<P> oldClass, Class<? extends P> newClass)
     {
         delegate.override(oldClass, newClass);
-    }
-
-    public <P extends Page, L extends Link<P>> L createLink(Class<L> myLinkClass)
-    {
-        return delegate.createLink(myLinkClass);
     }
 }

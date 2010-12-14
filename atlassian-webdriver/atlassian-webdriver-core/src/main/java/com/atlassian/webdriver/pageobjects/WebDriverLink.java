@@ -41,7 +41,7 @@ public abstract class WebDriverLink<P extends Page> implements Link<P>
         {
             context.findElement(locator).click();
 
-            return (P) pageNavigator.getPage(pageObjectClass);
+            return (P) pageNavigator.build(pageObjectClass);
         }
 
         throw new ElementNotVisibleException("The link could not be activated By(" + locator + ") failed to find element");
