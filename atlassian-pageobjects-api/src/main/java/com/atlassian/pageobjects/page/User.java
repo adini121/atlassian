@@ -1,10 +1,7 @@
 package com.atlassian.pageobjects.page;
 
-import java.util.HashSet;
-import java.util.Set;
-
 /**
- * A class that represents a User in JIRA.
+ * A class that represents a User
  */
 public class User
 {
@@ -27,8 +24,6 @@ public class User
 
 
     }
-
-    // GENERATED CODE BELOW
 
     public String getUsername()
     {

@@ -5,9 +5,7 @@ import java.util.Map;
 
 
 /**
- * TODO: Document this class / interface here
- *
- * @since v1.0
+ * Helper class for building a query string
  */
 public class QueryStringBuilder
 {

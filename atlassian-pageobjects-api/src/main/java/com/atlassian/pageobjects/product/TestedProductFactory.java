@@ -9,17 +9,32 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.InetAddress;
 
 /**
- *
+ * Constructs a {@link TestedProduct}.  The {@link TestedProduct} instance is created by calling the constructor
+ * with the following method signature:
+ * <pre>
+ *   TestedProduct(TesterFactory, ProductInstance)
+ * </pre>
  */
 public class TestedProductFactory
 {
     private static final Logger LOG = LoggerFactory.getLogger(TestedProductFactory.class);
 
+    /**
+     * A factory for {@link Tester} instances
+     * @param <T> The tester type
+     */
     public static interface TesterFactory<T>
     {
+        /**
+         * @return The tester instance to be used through the tested product
+         */
         T create();
     }
 
+    /**
+     * A factory that always returns the same {@link Tester}
+     * @param <T> The tester type
+     */
     public static class SingletonTesterFactory<T extends Tester> implements TesterFactory<T>
     {
         private final T tester;
@@ -35,11 +50,27 @@ public class TestedProductFactory
         }
     }
 
+    /**
+     * Creates a tested product, allowing the instance to choose its own default {@link Tester} and instance id
+     * @param testedProductClass The tested product class
+     * @param <T> The {@link Tester} type
+     * @param <P> The tested product type
+     * @return The created tested product
+     */
     public static <T extends Tester, P extends TestedProduct<T,?,?,?>> P create(Class<P> testedProductClass)
     {
-        return create(testedProductClass, (String) null, null);
+        return create(testedProductClass, getDefaultInstanceId(testedProductClass), null);
     }
 
+    /**
+     * Creates a tested product using the passed tester factory and instance id.
+     * @param testedProductClass The tested product class
+     * @param instanceId The instance id
+     * @param testerFactory The tester factory to use to pass to the tested product
+     * @param <T> The {@link Tester} type
+     * @param <P> The tested product type
+     * @return The created tested product
+     */
     public static <T extends Tester, P extends TestedProduct<T,?,?,?>> P create(Class<P> testedProductClass, String instanceId, TesterFactory<T> testerFactory)
     {
         final String contextPath, baseUrl;
@@ -55,7 +86,7 @@ public class TestedProductFactory
         }
         else
         {
-            Defaults defaults = testedProductClass.getAnnotation(Defaults.class);
+            Defaults defaults = getDefaultsAnnotation(testedProductClass);
             httpPort = defaults.httpPort();
             contextPath = defaults.contextPath();
             baseUrl = "http://" + getLocalHostName() + ":" + httpPort + contextPath;
@@ -66,12 +97,18 @@ public class TestedProductFactory
 
     private static String getDefaultInstanceId(Class<?> testedProductClass)
     {
+        Defaults annotation = getDefaultsAnnotation(testedProductClass);
+        return annotation.instanceId();
+    }
+
+    private static Defaults getDefaultsAnnotation(Class<?> testedProductClass)
+    {
         Defaults annotation = testedProductClass.getAnnotation(Defaults.class);
         if (annotation == null)
         {
             throw new IllegalArgumentException("The tested product class '" + testedProductClass.getName() + "' is missing the @Defaults annotation");
         }
-        return annotation.instanceId();
+        return annotation;
     }
 
     private static <T extends Tester, P extends TestedProduct<T,?,?,?>> P create(Class<P> testedProductClass, ProductInstance instance, TesterFactory<T> testerFactory) {

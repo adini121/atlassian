@@ -1,7 +1,8 @@
 package com.atlassian.pageobjects.product;
 
-import java.net.URI;
-
+/**
+ * Information representing the product instance being tested
+ */
 public class ProductInstance
 {
     private final String baseUrl;
@@ -20,7 +21,6 @@ public class ProductInstance
 
     public String getBaseUrl()
     {
-        // Added to lower as base url could have upper case and the WebDriver always returns lowercase
         return baseUrl.toLowerCase();
     }
 

@@ -18,7 +18,20 @@ import java.util.Map;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
+ * Page navigator that builds page objects from classes, then injects them with dependencies and calls lifecycle methods.
  *
+ * <p>The construction process is as follows:
+ * <ol>
+ *  <li>Determine the actual class by checking for an override</li>
+ *  <li>Instantiate the class using the default constructor</li>
+ *  <li>Inject all fields annotationed with {@link Inject}, including private</li>
+ *  <li>Call all methods annotationed with {@link Init}</li>
+ *  <li>Call all methods annotationed with {@link WaitUntil}</li>
+ *  <li>Call all methods annotationed with {@link ValidateState}</li>
+ * </ol>
+ *
+ * <p>When going to a page via the {@link #gotoPage(Class, Object...)} method, the page's URL is retrieved and navigated to
+ * via {@link Tester#gotoUrl(String)} after construction and initializing but before {@link WaitUntil} methods are called.
  */
 public final class InjectPageNavigator implements PageNavigator
 {
@@ -64,7 +77,7 @@ public final class InjectPageNavigator implements PageNavigator
         P p = create(pageClass, args);
         visitUrl(p);
         callLifecycleMethod(p, WaitUntil.class);
-        callLifecycleMethod(p, ValidateLocation.class);
+        callLifecycleMethod(p, ValidateState.class);
         return p;
     }
 
@@ -81,7 +94,7 @@ public final class InjectPageNavigator implements PageNavigator
         checkNotNull(pageClass);
         P p = create(pageClass, args);
         callLifecycleMethod(p, WaitUntil.class);
-        callLifecycleMethod(p, ValidateLocation.class);
+        callLifecycleMethod(p, ValidateState.class);
         return p;
     }
 
