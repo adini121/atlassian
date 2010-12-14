@@ -1,16 +1,21 @@
 package com.atlassian.webdriver.refapp.page;
 
-import com.atlassian.webdriver.page.HomePage;
+import com.atlassian.pageobjects.Link;
+import com.atlassian.pageobjects.page.Page;
+import com.atlassian.webdriver.pageobjects.WebDriverTester;
 import com.atlassian.webdriver.refapp.RefappTestedProduct;
+import org.openqa.selenium.WebDriver;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 
 /**
  *
  */
-public class RefappHomePage extends RefappAbstractPage<RefappHomePage> implements HomePage<RefappTestedProduct, RefappHomePage>
+public class RefappHomePage extends RefappAbstractPage
 {
-    public RefappHomePage(RefappTestedProduct testedProduct)
+    public String getUrl()
     {
-        super(testedProduct, "");
+       return "";
     }
-
 }

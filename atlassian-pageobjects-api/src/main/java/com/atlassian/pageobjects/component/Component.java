@@ -7,6 +7,6 @@ import com.atlassian.pageobjects.Tester;
  *
  * @since v1.0
  */
-public interface Component<T extends Tester> extends PageObject<T>
+public interface Component extends PageObject
 {
 }

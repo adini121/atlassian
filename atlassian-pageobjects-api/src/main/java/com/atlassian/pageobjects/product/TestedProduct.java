@@ -8,7 +8,7 @@ import com.atlassian.pageobjects.page.LoginPage;
 /**
  *
  */
-public interface TestedProduct<T extends Tester, H extends Page<T>, A extends Page<T>, L extends LoginPage<T>>
+public interface TestedProduct<T extends Tester, H extends Page, A extends Page, L extends LoginPage>
 {
     H gotoHomePage();
     A gotoAdminHomePage();
@@ -17,5 +17,5 @@ public interface TestedProduct<T extends Tester, H extends Page<T>, A extends Pa
     PageNavigator getPageNavigator();
     ProductInstance getProductInstance();
     T getTester();
-
+    ProductType getProductType();
 }

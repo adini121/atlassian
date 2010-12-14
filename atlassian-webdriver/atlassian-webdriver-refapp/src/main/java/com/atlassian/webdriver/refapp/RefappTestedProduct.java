@@ -1,33 +1,38 @@
 package com.atlassian.webdriver.refapp;
 
 import com.atlassian.pageobjects.PageNavigator;
-import com.atlassian.pageobjects.navigator.InjectPageNavigator;
+import com.atlassian.pageobjects.product.Defaults;
+import com.atlassian.pageobjects.product.ProductInstance;
+import com.atlassian.pageobjects.product.ProductType;
 import com.atlassian.pageobjects.product.TestedProduct;
 import com.atlassian.pageobjects.product.TestedProductFactory;
-import com.atlassian.webdriver.Link;
+import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.browsers.pageobjects.AutoInstallWebDriverTester;
+import com.atlassian.webdriver.pageobjects.WebDriverLink;
+import com.atlassian.webdriver.pageobjects.WebDriverPageNavigator;
 import com.atlassian.webdriver.pageobjects.WebDriverTester;
-import com.atlassian.webdriver.product.Defaults;
 import com.atlassian.webdriver.refapp.page.RefappAbstractPage;
 import com.atlassian.webdriver.refapp.page.RefappAdminHomePage;
 import com.atlassian.webdriver.refapp.page.RefappHomePage;
 import com.atlassian.webdriver.refapp.page.RefappLoginPage;
-import com.atlassian.webdriver.product.ProductInstance;
 import org.openqa.selenium.By;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  *
  */
 @Defaults(instanceId = "refapp", contextPath = "/refapp", httpPort = 5990)
-public class RefappTestedProduct implements TestedProduct<WebDriverTester, RefappHomePage, RefappAdminHomePage, RefappLoginPage>
+public class RefappTestedProduct implements TestedProduct<WebDriverTester<AtlassianWebDriver>, RefappHomePage, RefappAdminHomePage, RefappLoginPage>
 {
     private final PageNavigator pageNavigator;
-    private final WebDriverTester webDriverTester;
+    private final WebDriverTester<AtlassianWebDriver> webDriverTester;
     private final ProductInstance productInstance;
 
-    public RefappTestedProduct(com.atlassian.pageobjects.product.TestedProductFactory.TesterFactory<WebDriverTester> testerFactory, ProductInstance productInstance)
+    public RefappTestedProduct(TestedProductFactory.TesterFactory<WebDriverTester<AtlassianWebDriver>> testerFactory, ProductInstance productInstance)
     {
-        WebDriverTester tester = null;
+        checkNotNull(productInstance);
+        WebDriverTester<AtlassianWebDriver> tester = null;
         if (testerFactory == null)
         {
             tester = new AutoInstallWebDriverTester();
@@ -37,35 +42,56 @@ public class RefappTestedProduct implements TestedProduct<WebDriverTester, Refap
             tester = testerFactory.create();
         }
         this.webDriverTester = tester;
-        this.pageNavigator = new InjectPageNavigator<WebDriverTester>(this);
         this.productInstance = productInstance;
+        this.pageNavigator = new WebDriverPageNavigator<AtlassianWebDriver>(this);
     }
 
     public RefappHomePage gotoHomePage()
     {
-        return pageNavigator.gotoPageObject(RefappHomePage.class);
+        return pageNavigator.gotoPage(RefappHomePage.class);
     }
 
     public RefappAdminHomePage gotoAdminHomePage()
     {
-        return pageNavigator.gotoPageObject(RefappAdminHomePage.class);
+        return pageNavigator.gotoPage(RefappAdminHomePage.class);
     }
 
     public RefappLoginPage gotoLoginPage()
     {
-        return pageNavigator.gotoPageObject(RefappLoginPage.class);
+        return pageNavigator.gotoPage(RefappLoginPage.class);
+    }
+
+    public PageNavigator getPageNavigator()
+    {
+        return pageNavigator;
+    }
+
+    public ProductInstance getProductInstance()
+    {
+        return productInstance;
+    }
+
+    public WebDriverTester<AtlassianWebDriver> getTester()
+    {
+        return webDriverTester;
+    }
+
+    public ProductType getProductType()
+    {
+        return ProductType.REFAPP;
     }
 
     public static final void main(String[] args)
     {
         RefappTestedProduct product = TestedProductFactory.create(RefappTestedProduct.class);
-        RefappLoginPage login = product.gotoLoginPage();
-        login.loginAsAdmin();
-        RefappAdminHomePage admin = product.gotoAdminHomePage();
-        MyPage page = admin.gotoPage(new MyLink());
+        MyPage page = product.gotoLoginPage()
+                             .loginAsSysAdmin(RefappAdminHomePage.class)
+                             .gotoPage(product.getPageNavigator().createLink(MyLink.class));
+        
+        MyPage myPage = product.getPageNavigator().gotoPage(MyPage.class);
     }
 
-    public static class MyLink extends Link<MyPage>
+    public static class MyLink extends WebDriverLink<MyPage>
     {
         public MyLink()
         {
@@ -73,11 +99,11 @@ public class RefappTestedProduct implements TestedProduct<WebDriverTester, Refap
         }
     }
 
-    public static class MyPage extends RefappAbstractPage<MyPage>
+    public static class MyPage extends RefappAbstractPage
     {
-        protected MyPage(RefappTestedProduct testedProduct)
+        public String getUrl()
         {
-            super(testedProduct, "/mypage");
+            return "/mypage";
         }
     }
 }

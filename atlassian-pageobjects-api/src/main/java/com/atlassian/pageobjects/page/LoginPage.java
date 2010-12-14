@@ -5,11 +5,11 @@ import com.atlassian.pageobjects.Tester;
 /**
  *
  */
-public interface LoginPage<T extends Tester> extends Page<T>
+public interface LoginPage extends Page
 {
 
-    <M extends Page<T>> M login(User user, Class<M> nextPage);
+    <M extends Page> M login(User user, Class<M> nextPage);
 
-    <M extends Page<T>> M loginAsSysAdmin(Class<M> nextPage);
+    <M extends Page> M loginAsSysAdmin(Class<M> nextPage);
     
 }

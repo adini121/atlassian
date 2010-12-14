@@ -31,4 +31,9 @@ public class AutoInstallWebDriverTester implements WebDriverTester<AtlassianWebD
             put(AtlassianWebDriver.class, webDriver);
         }};
     }
+
+    public void gotoUrl(String url)
+    {
+        webDriver.get(url);
+    }
 }

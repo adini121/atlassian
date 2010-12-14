@@ -35,6 +35,11 @@ public class TestedProductFactory
         }
     }
 
+    public static <T extends Tester, P extends TestedProduct<T,?,?,?>> P create(Class<P> testedProductClass)
+    {
+        return create(testedProductClass, (String) null, null);
+    }
+
     public static <T extends Tester, P extends TestedProduct<T,?,?,?>> P create(Class<P> testedProductClass, String instanceId, TesterFactory<T> testerFactory)
     {
         final String contextPath, baseUrl;
@@ -42,6 +47,7 @@ public class TestedProductFactory
 
         final String ampsBaseUrl = System.getProperty("baseurl." + instanceId);
         final ProductInstance instance;
+        final ProductType productType;
         if (ampsBaseUrl != null)    // running within an AMPS IntegrationTestMojo invocation - read sys props for env vars
         {
             httpPort = Integer.getInteger("http." + instanceId + ".port");

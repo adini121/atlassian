@@ -11,6 +11,9 @@ import org.junit.Test;
 
 import javax.inject.Inject;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import static junit.framework.Assert.assertNotNull;
 import static org.junit.Assert.assertEquals;
 
@@ -21,14 +24,14 @@ public class TestInjectPageNavigator
 {
     private MapTester tester;
     private MyTestedProduct product;
-    private InjectPageNavigator<MapTester> navigator;
+    private InjectPageNavigator navigator;
 
     @Before
     public void setUp() throws Exception
     {
         tester = new MapTester();
         product = new MyTestedProduct(tester);
-        navigator = new InjectPageNavigator<MapTester>(product);
+        navigator = new InjectPageNavigator(product);
     }
 
     @Test
@@ -71,19 +74,44 @@ public class TestInjectPageNavigator
         assertEquals("Bob Jones", page.name);
     }
 
-
-
-    static class OneFieldPage implements Page<MapTester>
+    @Test
+    public void testParentInject()
     {
-        @Inject
-        private String name;
-        public Page gotoPage(Link link)
+        ChildNoNamePage page = navigator.create(ChildNoNamePage.class, "Bob");
+        assertEquals("Bob", page.name);
+    }
+
+
+    static class AbstractPage implements Page
+    {
+        public String getUrl()
+        {
+            return null;
+        }
+
+        public <P extends Page> P gotoPage(Link<P> link)
         {
             return null;
         }
     }
 
-    static class DefaultsPage implements Page<MapTester>
+    static class OneFieldPage extends AbstractPage
+    {
+        @Inject
+        private String name;
+    }
+
+    static class ParentNamePage extends AbstractPage
+    {
+        @Inject
+        protected String name;
+    }
+
+    static class ChildNoNamePage extends ParentNamePage
+    {
+    }
+
+    static class DefaultsPage extends AbstractPage
     {
         @Inject
         private ProductInstance productInstance;
@@ -102,20 +130,12 @@ public class TestInjectPageNavigator
 
         @Inject
         private PageNavigator pageNavigator;
-        public Page gotoPage(Link link)
-        {
-            return null;
-        }
     }
 
-    static class OneFieldWithInitPage implements Page<MapTester>
+    static class OneFieldWithInitPage extends AbstractPage
     {
         @Inject
         private String name;
-        public Page gotoPage(Link link)
-        {
-            return null;
-        }
 
         @Init
         public void init()

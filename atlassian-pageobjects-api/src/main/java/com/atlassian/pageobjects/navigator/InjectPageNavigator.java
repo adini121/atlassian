@@ -1,8 +1,11 @@
 package com.atlassian.pageobjects.navigator;
 
+import com.atlassian.pageobjects.Link;
 import com.atlassian.pageobjects.PageNavigator;
 import com.atlassian.pageobjects.PageObject;
 import com.atlassian.pageobjects.Tester;
+import com.atlassian.pageobjects.component.Component;
+import com.atlassian.pageobjects.page.Page;
 import com.atlassian.pageobjects.product.ProductInstance;
 import com.atlassian.pageobjects.product.TestedProduct;
 
@@ -11,50 +14,110 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  *
  */
-public class InjectPageNavigator<T extends Tester> implements PageNavigator<T>
+public final class InjectPageNavigator implements PageNavigator
 {
-    private final TestedProduct<T, ?, ?, ?> testedProduct;
-    private final Map<Class<PageObject<T>>, Class<PageObject<T>>> overrides =
-            new HashMap<Class<PageObject<T>>, Class<PageObject<T>>>();
+    private final TestedProduct<?, ?, ?, ?> testedProduct;
+    private final Tester tester;
+    private final ProductInstance productInstance;
 
-    public InjectPageNavigator(TestedProduct<T,?,?,?> testedProduct)
+    public static interface PostInjectionProcessor
     {
-        this.testedProduct = testedProduct;
+        <T> T process(T pageObject);
     }
 
-    public PageObject<T> gotoPageObject(Class<PageObject<T>> pageClass, Object... args)
+    private static class NoOpPostInjectionProcessor implements PostInjectionProcessor
     {
-        PageObject<T> p = create(pageClass, args);
+        public <T> T process(T pageObject)
+        {
+            return pageObject;
+        }
+    }
+    private final PostInjectionProcessor postInjectionProcessor;
+    private final Map<Class<? extends PageObject>, Class<? extends PageObject>> overrides =
+            new HashMap<Class<? extends PageObject>, Class<? extends PageObject>>();
+
+    public InjectPageNavigator(TestedProduct<?, ?, ?, ?> testedProduct)
+    {
+        this(testedProduct, new NoOpPostInjectionProcessor());
+    }
+
+    public InjectPageNavigator(TestedProduct<?, ?, ?, ?> testedProduct, PostInjectionProcessor postInjectionProcessor)
+    {
+        checkNotNull(testedProduct);
+        checkNotNull(testedProduct.getProductInstance());
+        checkNotNull(postInjectionProcessor);
+        this.testedProduct = testedProduct;
+        this.tester = testedProduct.getTester();
+        this.productInstance = testedProduct.getProductInstance();
+        this.postInjectionProcessor = postInjectionProcessor;
+    }
+
+    public <P extends Page> P gotoPage(Class<P> pageClass, Object... args)
+    {
+        checkNotNull(pageClass);
+        P p = create(pageClass, args);
+        visitUrl(p);
         callLifecycleMethod(p, WaitUntil.class);
         callLifecycleMethod(p, ValidateLocation.class);
         return p;
     }
 
-    public PageObject<T> gotoActivatedPageObject(Class<PageObject<T>> pageClass, Object... args)
+    protected void visitUrl(Page p)
     {
-        PageObject<T> p = create(pageClass, args);
+        checkNotNull(p);
+        String pageUrl = p.getUrl();
+        String baseUrl = productInstance.getBaseUrl();
+        tester.gotoUrl(baseUrl + pageUrl);
+    }
+
+    public <P extends Page> P getPage(Class<P> pageClass, Object... args)
+    {
+        checkNotNull(pageClass);
+        P p = create(pageClass, args);
+        callLifecycleMethod(p, WaitUntil.class);
         callLifecycleMethod(p, ValidateLocation.class);
         return p;
     }
 
-    public void override(Class<PageObject<T>> oldClass, Class<PageObject<T>> newClass)
+    public <C extends Component> C getComponent(Class<C> componentClass, Object... args)
     {
+        checkNotNull(componentClass);
+        C p = create(componentClass, args);
+        callLifecycleMethod(p, WaitUntil.class);
+        callLifecycleMethod(p, ValidateLocation.class);
+        return p;
+    }
+
+    public <P extends PageObject> void override(Class<P> oldClass, Class<? extends P> newClass)
+    {
+        checkNotNull(oldClass);
+        checkNotNull(newClass);
         overrides.put(oldClass, newClass);
     }
 
-    PageObject<T> create(Class<PageObject<T>> pageClass, Object... args)
+    public <P extends Page, L extends Link<P>> L createLink(Class<L> myLinkClass)
     {
-        PageObject<T> instance = null;
-        Class<PageObject<T>> actualClass = pageClass;
+        return null;
+    }
+
+    <C> C create(Class<C> pageClass, Object... args)
+    {
+        C instance;
+        Class<C> actualClass = pageClass;
         if (overrides.containsKey(pageClass))
         {
-            actualClass = overrides.get(pageClass);
+            actualClass = (Class<C>) overrides.get(pageClass);
         }
 
         try
@@ -71,18 +134,14 @@ public class InjectPageNavigator<T extends Tester> implements PageNavigator<T>
         }
 
         autowireInjectables(instance, args);
-        postInject(instance, args);
+        instance = postInjectionProcessor.process(instance);
         callLifecycleMethod(instance, Init.class);
         return instance;
     }
 
-    protected <P extends PageObject<T>> void postInject(P instance, Object[] args)
-    {}
-
-    private <P extends PageObject<T>> void autowireInjectables(P instance, Object... args)
+    private void autowireInjectables(Object instance, Object... args)
     {
         Map<Class<?>,Object> injectables = new HashMap<Class<?>, Object>();
-        T tester = testedProduct.getTester();
 
         injectables.put(TestedProduct.class, testedProduct);
         injectables.put(testedProduct.getClass(), testedProduct);
@@ -90,7 +149,7 @@ public class InjectPageNavigator<T extends Tester> implements PageNavigator<T>
         injectables.put(Tester.class, tester);
         injectables.put(tester.getClass(), tester);
 
-        injectables.put(ProductInstance.class, testedProduct.getProductInstance());
+        injectables.put(ProductInstance.class, productInstance);
         
         injectables.put(PageNavigator.class, this);
 
@@ -100,7 +159,7 @@ public class InjectPageNavigator<T extends Tester> implements PageNavigator<T>
             injectables.put(arg.getClass(), arg);
         }
 
-        for (Field field : instance.getClass().getDeclaredFields())
+        for (Field field : findAllFields(instance))
         {
             if (field.getAnnotation(Inject.class) != null)
             {
@@ -125,7 +184,25 @@ public class InjectPageNavigator<T extends Tester> implements PageNavigator<T>
         }
     }
 
-    private <P extends PageObject<T>> void callLifecycleMethod(P instance, Class<? extends Annotation> annotation)
+    private Collection<Field> findAllFields(Object instance)
+    {
+        Map<String,Field> fields = new HashMap<String,Field>();
+        Class cls = instance.getClass();
+        while (cls != Object.class)
+        {
+            for (Field field : cls.getDeclaredFields())
+            {
+                if (!fields.containsKey(field.getName()))
+                {
+                    fields.put(field.getName(), field);
+                }
+            }
+            cls = cls.getSuperclass();
+        }
+        return fields.values();
+    }
+
+    private void callLifecycleMethod(Object instance, Class<? extends Annotation> annotation)
     {
         for (Method method : instance.getClass().getMethods())
         {

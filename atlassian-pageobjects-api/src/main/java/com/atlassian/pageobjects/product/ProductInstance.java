@@ -1,5 +1,7 @@
 package com.atlassian.pageobjects.product;
 
+import java.net.URI;
+
 public class ProductInstance
 {
     private final String baseUrl;
@@ -11,7 +13,6 @@ public class ProductInstance
     public ProductInstance(final String instanceId, final int httpPort, final String contextPath, final String baseUrl)
     {
         this.instanceId = instanceId;
-
         this.httpPort = httpPort;
         this.contextPath = contextPath;
         this.baseUrl = baseUrl;

@@ -1,4 +1,4 @@
-package com.atlassian.pageobjects.page;
+package com.atlassian.pageobjects.util;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,13 +9,13 @@ import java.util.Map;
  *
  * @since v1.0
  */
-public class QueryString
+public class QueryStringBuilder
 {
 
     private final Map<String, String> params = new HashMap<String, String>();
 
 
-    public QueryString(String... params)
+    public QueryStringBuilder(String... params)
     {
         //Validate.isTrue(params.length % 2 == 0, "Must be an even number of parameters");
 
@@ -25,7 +25,7 @@ public class QueryString
         }
     }
 
-    public QueryString add(String key, String value)
+    public QueryStringBuilder add(String key, String value)
     {
         params.put(key, value);
         return this;

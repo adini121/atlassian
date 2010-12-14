@@ -3,15 +3,17 @@ package com.atlassian.webdriver.refapp.page;
 import com.atlassian.webdriver.page.AdminHomePage;
 import com.atlassian.webdriver.refapp.RefappTestedProduct;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 /**
  *
  */
-public class RefappAdminHomePage extends RefappAbstractPage<RefappAdminHomePage> implements AdminHomePage<RefappTestedProduct, RefappAdminHomePage>
+public class RefappAdminHomePage extends RefappAbstractPage
 {
-    protected RefappAdminHomePage(RefappTestedProduct testedProduct)
-    {
-        super(testedProduct, "/admin");
-    }
 
-    
+    public String getUrl()
+    {
+        return "/admin";
+    }
 }
