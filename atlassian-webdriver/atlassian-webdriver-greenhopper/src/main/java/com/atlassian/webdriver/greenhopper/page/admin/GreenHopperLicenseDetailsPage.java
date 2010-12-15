@@ -1,5 +1,6 @@
 package com.atlassian.webdriver.greenhopper.page.admin;
 
+import com.atlassian.pageobjects.navigator.Init;
 import com.atlassian.webdriver.jira.JiraTestedProduct;
 import com.atlassian.webdriver.jira.page.JiraAdminAbstractPage;
 import com.atlassian.webdriver.utils.by.ByJquery;
@@ -21,7 +22,7 @@ import java.util.regex.Pattern;
  *
  * @since v4.2
  */
-public class GreenHopperLicenseDetailsPage extends JiraAdminAbstractPage<GreenHopperLicenseDetailsPage>
+public class GreenHopperLicenseDetailsPage extends JiraAdminAbstractPage
 {
 
     private static final String URI = "/secure/GHLicense.jspa?decorator=admin";
@@ -46,22 +47,15 @@ public class GreenHopperLicenseDetailsPage extends JiraAdminAbstractPage<GreenHo
     private String errorMessage = "";
 
     private boolean licenseIsLoaded = false;
-    
 
-    public GreenHopperLicenseDetailsPage(JiraTestedProduct testedProduct)
+
+    public String getUrl()
     {
-        super(testedProduct, URI);
+        return URI;
     }
 
-    public GreenHopperLicenseDetailsPage get(final boolean activated)
-    {
-        get(URI, activated);
 
-        readLicense();
-
-        return this;
-    }
-
+    @Init
     private void readLicense()
     {
         if(Check.elementExists(By.className("errMsg"), updateLicenseForm))
@@ -185,6 +179,6 @@ public class GreenHopperLicenseDetailsPage extends JiraAdminAbstractPage<GreenHo
         updateLicenseTextArea.sendKeys(license);
         updateLicenseForm.submit();
 
-        return getTestedProduct().gotoPage(GreenHopperLicenseDetailsPage.class, true);
+        return pageNavigator.build(GreenHopperLicenseDetailsPage.class);
     }
 }

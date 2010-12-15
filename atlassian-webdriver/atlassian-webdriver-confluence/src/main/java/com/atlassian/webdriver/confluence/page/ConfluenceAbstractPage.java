@@ -1,31 +1,37 @@
 package com.atlassian.webdriver.confluence.page;
 
+import com.atlassian.pageobjects.PageNavigator;
+import com.atlassian.pageobjects.navigator.WaitUntil;
+import com.atlassian.pageobjects.page.Page;
+import com.atlassian.pageobjects.page.User;
+import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.PageObject;
 import com.atlassian.webdriver.component.header.Header;
 import com.atlassian.webdriver.confluence.ConfluenceTestedProduct;
 import com.atlassian.webdriver.confluence.component.header.ConfluenceHeader;
 import com.atlassian.webdriver.confluence.component.menu.BrowseMenu;
 import com.atlassian.webdriver.confluence.component.menu.ConfluenceUserMenu;
-import com.atlassian.webdriver.utils.user.User;
 import com.atlassian.webdriver.pageobjects.page.AbstractPage;
 import com.atlassian.webdriver.pageobjects.page.UserDiscoverable;
 import org.openqa.selenium.By;
+
+import javax.inject.Inject;
 
 /**
  * TODO: Document this class / interface here
  *
  * @since v4.2
  */
-public abstract class ConfluenceAbstractPage<P extends PageObject> extends AbstractPage<ConfluenceTestedProduct, P>
-    implements UserDiscoverable, Header<ConfluenceHeader>
+public abstract class ConfluenceAbstractPage implements UserDiscoverable, Page
 {
-    private final String uri;
+    @Inject
+    AtlassianWebDriver driver;
+    
+    @Inject
+    PageNavigator pageNavigator;
 
-    public ConfluenceAbstractPage(ConfluenceTestedProduct testedProduct, String uri)
-    {
-        super(testedProduct);
-        this.uri = uri;
-    }
+    @Inject
+    ConfluenceTestedProduct testedProduct;
 
     public boolean isAdmin()
     {
@@ -52,16 +58,10 @@ public abstract class ConfluenceAbstractPage<P extends PageObject> extends Abstr
         return getHeader().getUserMenu();
     }
 
-    public P get(boolean activated)
-    {
-        super.get(uri, activated);
-        return (P) this;
-    }
-
-    @Override
+    @WaitUntil
     public void doWait()
     {
-        getDriver().waitUntilElementIsLocated(By.id("footer"));
+        driver.waitUntilElementIsLocated(By.id("footer"));
     }
 
     @Override
@@ -71,10 +71,13 @@ public abstract class ConfluenceAbstractPage<P extends PageObject> extends Abstr
         // Check for WebSudo
         if (uri != null && !uri.equals(AdministratorAccessPage.URI) && at(AdministratorAccessPage.URI))
         {
-            getTestedProduct().gotoPage(AdministratorAccessPage.class, true).login(getTestedProduct().getLoggedInUser());
+            pageNavigator.build(AdministratorAccessPage.class).login(testedProduct.getLoggedInUser());
         }
+    }
 
-        super.doCheck(uri, activated);
+    private boolean at(String uri)
+    {
+        return false;  //To change body of created methods use File | Settings | File Templates.
     }
 
     public ConfluenceHeader getHeader()

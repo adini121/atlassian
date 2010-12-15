@@ -1,10 +1,9 @@
 package com.atlassian.webdriver.greenhopper.component.link;
 
-import com.atlassian.webdriver.Link;
 import com.atlassian.webdriver.greenhopper.page.admin.GreenHopperEnabledProjectsPage;
 import com.atlassian.webdriver.greenhopper.page.admin.GreenHopperGeneralConfigurationPage;
 import com.atlassian.webdriver.greenhopper.page.admin.GreenHopperLicenseDetailsPage;
-import com.atlassian.webdriver.greenhopper.page.admin.GreenHopperProjectTemplatesPage;
+import com.atlassian.webdriver.pageobjects.ClickableLink;
 import com.atlassian.webdriver.pageobjects.WebDriverLink;
 import org.openqa.selenium.By;
 
@@ -13,21 +12,35 @@ import org.openqa.selenium.By;
  */
 public class GreenHopperAdminSideMenuLinks
 {
-    public static final WebDriverLink<GreenHopperEnabledProjectsPage> ENABLED_PROJECTS =
-            new Link<GreenHopperEnabledProjectsPage>(By.id("greenhopper-admin-system"), GreenHopperEnabledProjectsPage.class);
+    @ClickableLink(id = "greenhopper-admin-system", nextPage = GreenHopperEnabledProjectsPage.class)
+    WebDriverLink enabledProductsLink;
 
-    public static final Link<GreenHopperProjectTemplatesPage> PROJECT_TEMPLATES =
-            new Link<GreenHopperProjectTemplatesPage>(By.id("greenhopper-admin-template"), GreenHopperProjectTemplatesPage.class);
+    @ClickableLink(id="greenhopper-admin-template", nextPage = GreenHopperEnabledProjectsPage.class)
+    WebDriverLink projectTemplatesLink;
 
-    public static final Link<GreenHopperGeneralConfigurationPage> GENERAL_CONFIGURATION =
-            new Link<GreenHopperGeneralConfigurationPage>(By.id("greenhopper-admin-general"), GreenHopperGeneralConfigurationPage.class);
+    @ClickableLink(id="greenhopper-admin-general", nextPage = GreenHopperGeneralConfigurationPage.class)
+    WebDriverLink generalConfigurationLink;
 
-    public static final Link<GreenHopperLicenseDetailsPage> LICENSE_DETAILS =
-            new Link<GreenHopperLicenseDetailsPage>(By.id("greenhopper-license"), GreenHopperLicenseDetailsPage.class);
+    @ClickableLink(id="greenhopper-license", nextPage = GreenHopperLicenseDetailsPage.class)
+    WebDriverLink licenseDetailsLink;
 
-    
-    private GreenHopperAdminSideMenuLinks()
+    public WebDriverLink getEnabledProductsLink()
     {
-        throw new UnsupportedOperationException("Cannot instantiate GreenHopperAdminMenuLinks");
+        return enabledProductsLink;
+    }
+
+    public WebDriverLink getProjectTemplatesLink()
+    {
+        return projectTemplatesLink;
+    }
+
+    public WebDriverLink getGeneralConfigurationLink()
+    {
+        return generalConfigurationLink;
+    }
+
+    public WebDriverLink getLicenseDetailsLink()
+    {
+        return licenseDetailsLink;
     }
 }

@@ -12,11 +12,8 @@ public class GreenHopperEnabledProjectsPage extends JiraAdminAbstractPage
 {
     private static final String URI = "/secure/GHProjects.jspa?decorator=admin";
 
-    public GreenHopperEnabledProjectsPage()
+    public String getUrl()
     {
-        super(URI);
+        return URI;
     }
-
-
-
 }
