@@ -4,7 +4,7 @@ import com.atlassian.webdriver.component.header.AbstractHeader;
 import com.atlassian.webdriver.confluence.ConfluenceTestedProduct;
 import com.atlassian.webdriver.confluence.component.menu.BrowseMenu;
 import com.atlassian.webdriver.confluence.component.menu.ConfluenceUserMenu;
-import com.atlassian.webdriver.page.UserDiscoverable;
+import com.atlassian.webdriver.pageobjects.page.UserDiscoverable;
 import com.atlassian.webdriver.utils.user.User;
 import org.openqa.selenium.By;
 

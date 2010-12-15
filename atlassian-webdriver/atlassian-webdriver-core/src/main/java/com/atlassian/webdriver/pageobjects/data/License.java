@@ -1,14 +1,9 @@
-package com.atlassian.webdriver.data;
+package com.atlassian.webdriver.pageobjects.data;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * TODO: Document this class / interface here
- *
- * @since v4.2
- */
 public class License
 {
     private final String license;

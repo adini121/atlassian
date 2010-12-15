@@ -1,10 +1,9 @@
 package it.com.atlassian.webdriver.jira.test;
 
-import com.atlassian.webdriver.browsers.WebDriverBrowserAutoInstall;
+import com.atlassian.pageobjects.product.TestedProductFactory;
 import com.atlassian.webdriver.jira.JiraTestedProduct;
 import com.atlassian.webdriver.jira.page.DashboardPage;
 import com.atlassian.webdriver.jira.page.LicenseDetailsPage;
-import com.atlassian.webdriver.product.TestedProductFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,27 +16,24 @@ import org.junit.Test;
 public class TestLicenseDetailsPage
 {
 
-    private static final JiraTestedProduct JIRA = TestedProductFactory.create(JiraTestedProduct.class, "jira",
-            WebDriverBrowserAutoInstall.INSTANCE.getDriver());
-
-    private DashboardPage dashboard;
+    private static final JiraTestedProduct JIRA = TestedProductFactory.create(JiraTestedProduct.class);
 
     @Before
     public void login()
     {
-        dashboard = JIRA.gotoLoginPage().loginAsAdmin();
+       JIRA.gotoLoginPage().loginAsSysAdmin(DashboardPage.class);
     }
 
     @After
     public void cleanUpCookies()
     {
-        JIRA.getDriver().manage().deleteAllCookies();
+        JIRA.getTester().getDriver().manage().deleteAllCookies();
     }
 
     @Test
     public void testLicenseDetailsPage()
     {
-        dashboard.gotoPage(LicenseDetailsPage.class);
+        JIRA.getPageNavigator().gotoPage(LicenseDetailsPage.class);
     }
 
 }

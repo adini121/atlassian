@@ -1,10 +1,6 @@
 package com.atlassian.webdriver.refapp.page;
 
-import com.atlassian.webdriver.page.AdminHomePage;
-import com.atlassian.webdriver.refapp.RefappTestedProduct;
-
-import java.net.URI;
-import java.net.URISyntaxException;
+import com.atlassian.webdriver.pageobjects.page.AdminHomePage;
 
 /**
  *

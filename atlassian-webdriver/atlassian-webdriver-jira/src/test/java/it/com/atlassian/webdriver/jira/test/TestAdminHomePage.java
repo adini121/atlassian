@@ -1,13 +1,13 @@
 package it.com.atlassian.webdriver.jira.test;
 
-import com.atlassian.webdriver.browsers.WebDriverBrowserAutoInstall;
+import com.atlassian.pageobjects.product.TestedProductFactory;
 import com.atlassian.webdriver.jira.JiraTestedProduct;
-import com.atlassian.webdriver.jira.page.DashboardPage;
 import com.atlassian.webdriver.jira.page.JiraAdminHomePage;
-import com.atlassian.webdriver.product.TestedProductFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import static junit.framework.Assert.assertEquals;
 
 /**
  * TODO: Document this class / interface here
@@ -17,26 +17,25 @@ import org.junit.Test;
 public class TestAdminHomePage
 {
 
-    private static final JiraTestedProduct JIRA = TestedProductFactory.create(JiraTestedProduct.class, "jira",
-            WebDriverBrowserAutoInstall.INSTANCE.getDriver());
+    private static final JiraTestedProduct JIRA = TestedProductFactory.create(JiraTestedProduct.class);
 
-    private DashboardPage dashboard;
+    private JiraAdminHomePage adminPage;
 
     @Before
     public void login()
     {
-        dashboard = JIRA.gotoLoginPage().loginAsAdmin();
+        adminPage = JIRA.gotoLoginPage().loginAsSysAdmin(JiraAdminHomePage.class);
     }
 
     @After
     public void cleanUpCookies()
     {
-        JIRA.getDriver().manage().deleteAllCookies();
+        JIRA.getTester().getDriver().manage().deleteAllCookies();
     }
 
     @Test
     public void testAdminHomePage()
     {
-        dashboard.gotoPage(JiraAdminHomePage.class);
+        assertEquals(JIRA.gotoAdminHomePage().getClass(), adminPage.getClass()); 
     }
 }

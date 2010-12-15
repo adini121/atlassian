@@ -1,32 +1,32 @@
 package com.atlassian.webdriver.jira.page;
 
 
-import com.atlassian.webdriver.PageObject;
-import com.atlassian.webdriver.component.header.Header;
-import com.atlassian.webdriver.utils.user.User;
-import com.atlassian.webdriver.jira.JiraTestedProduct;
+import com.atlassian.pageobjects.PageNavigator;
+import com.atlassian.pageobjects.navigator.WaitUntil;
+import com.atlassian.pageobjects.page.Page;
+import com.atlassian.pageobjects.page.User;
+import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.jira.component.header.JiraHeader;
 import com.atlassian.webdriver.jira.component.menu.AdminMenu;
 import com.atlassian.webdriver.jira.component.menu.DashboardMenu;
 import com.atlassian.webdriver.jira.component.menu.JiraUserMenu;
-import com.atlassian.webdriver.page.AbstractPage;
-import com.atlassian.webdriver.page.UserDiscoverable;
+import com.atlassian.webdriver.pageobjects.page.UserDiscoverable;
 import org.openqa.selenium.By;
+
+import javax.inject.Inject;
 
 /**
  * Proveds a set of common functions that a JIRA page object can do.
  * Such as getting the admin menu.
  * Sets the base url for the WebDrivePage class to use which is defined in the jira-base-url system property.
  */
-public abstract class JiraAbstractPage<P extends PageObject> extends AbstractPage<JiraTestedProduct, P> implements UserDiscoverable, Header<JiraHeader>
+public abstract class JiraAbstractPage implements Page, UserDiscoverable
 {
-    private final String uri;
+    @Inject
+    protected PageNavigator pageNavigator;
 
-    public JiraAbstractPage(JiraTestedProduct testedProduct, String uri)
-    {
-        super(testedProduct);
-        this.uri = uri;
-    }
+    @Inject
+    protected AtlassianWebDriver driver;
 
     public boolean isLoggedIn()
     {
@@ -45,13 +45,7 @@ public abstract class JiraAbstractPage<P extends PageObject> extends AbstractPag
 
     public JiraHeader getHeader()
     {
-        return getTestedProduct().getComponent(JiraHeader.class);
-    }
-
-    public P get(boolean activated)
-    {
-        super.get(uri, activated);
-        return (P) this;
+        return pageNavigator.build(JiraHeader.class);
     }
 
     public DashboardMenu getDashboardMenu()
@@ -86,9 +80,9 @@ public abstract class JiraAbstractPage<P extends PageObject> extends AbstractPag
     /**
      * The default doWait for JIRA is to wait for the footer to be located.
      */
-    @Override
+    @WaitUntil
     public void doWait()
     {
-        getDriver().waitUntilElementIsLocated(By.className("footer"));
+        driver.waitUntilElementIsLocated(By.className("footer"));
     }
 }

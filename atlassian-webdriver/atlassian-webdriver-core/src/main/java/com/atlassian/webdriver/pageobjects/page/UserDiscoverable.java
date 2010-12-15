@@ -1,6 +1,6 @@
-package com.atlassian.webdriver.page;
+package com.atlassian.webdriver.pageobjects.page;
 
-import com.atlassian.webdriver.utils.user.User;
+import com.atlassian.pageobjects.page.User;
 
 /**
  *

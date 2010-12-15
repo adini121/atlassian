@@ -2,7 +2,7 @@ package com.atlassian.webdriver.confluence.page;
 
 import com.atlassian.webdriver.utils.user.User;
 import com.atlassian.webdriver.confluence.ConfluenceTestedProduct;
-import com.atlassian.webdriver.page.LoginPage;
+import com.atlassian.webdriver.pageobjects.page.LoginPage;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 

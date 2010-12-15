@@ -1,49 +1,49 @@
 package com.atlassian.webdriver.jira.component.menu;
 
-import com.atlassian.webdriver.Link;
-import com.atlassian.webdriver.PageObject;
-import com.atlassian.webdriver.component.AbstractComponent;
-import com.atlassian.webdriver.component.menu.AuiDropdownMenu;
-import com.atlassian.webdriver.component.menu.DropdownMenu;
-import com.atlassian.webdriver.component.menu.UserMenu;
+import com.atlassian.pageobjects.PageNavigator;
+import com.atlassian.pageobjects.navigator.Init;
+import com.atlassian.webdriver.jira.page.PluginsPage;
+import com.atlassian.webdriver.pageobjects.ClickableLink;
+import com.atlassian.webdriver.pageobjects.WebDriverLink;
+import com.atlassian.webdriver.pageobjects.menu.AuiDropdownMenu;
+import com.atlassian.webdriver.pageobjects.menu.DropdownMenu;
+import com.atlassian.webdriver.pageobjects.menu.UserMenu;
 import com.atlassian.webdriver.jira.JiraTestedProduct;
 import com.atlassian.webdriver.jira.page.LogoutPage;
+import com.atlassian.webdriver.utils.by.ByJquery;
 import org.openqa.selenium.By;
+
+import javax.inject.Inject;
 
 /**
  * Object for interacting with the User Menu in the JIRA Header.
  */
-public class JiraUserMenu extends AbstractComponent<JiraTestedProduct, JiraUserMenu> implements DropdownMenu, UserMenu
+public class JiraUserMenu implements DropdownMenu<JiraUserMenu>, UserMenu
 {
-    private static final Link<LogoutPage> LOG_OUT = new Link(By.id("log_out"), LogoutPage.class);
+    @Inject
+    PageNavigator pageNavigator;
 
-    private AuiDropdownMenu<JiraTestedProduct> userMenu;
+    @ClickableLink(id = "log_out", nextPage = LogoutPage.class)
+    WebDriverLink<LogoutPage> logoutLink;
 
-    public JiraUserMenu(JiraTestedProduct testedProduct)
-    {
-        super(testedProduct);
-    }
 
-    @Override
+    private AuiDropdownMenu userMenu;
+
+    @Init
     public void initialise()
     {
-        super.initialise(By.id("header-details-user"));
-        userMenu = getTestedProduct().getComponent(getComponentLocator(), AuiDropdownMenu.class);
+        userMenu = pageNavigator.build(AuiDropdownMenu.class, By.id("header-details-user"));
     }
 
     public LogoutPage logout()
     {
-        return activate(LOG_OUT);
+        return logoutLink.activate();
     }
 
-    public <T extends PageObject> T activate(final Link<T> link)
-    {
-        return userMenu.activate(link);
-    }
-
-    public void open()
+    public JiraUserMenu open()
     {
         userMenu.open();
+        return this;
     }
 
     public boolean isOpen()
@@ -51,8 +51,9 @@ public class JiraUserMenu extends AbstractComponent<JiraTestedProduct, JiraUserM
         return userMenu.isOpen();
     }
 
-    public void close()
+    public JiraUserMenu close()
     {
         userMenu.close();
+        return this;
     }
 }

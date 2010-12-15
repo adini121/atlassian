@@ -1,6 +1,5 @@
 package com.atlassian.pageobjects.navigator;
 
-import com.atlassian.pageobjects.Link;
 import com.atlassian.pageobjects.PageNavigator;
 import com.atlassian.pageobjects.Tester;
 import com.atlassian.pageobjects.page.Page;
@@ -10,9 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import javax.inject.Inject;
-
-import java.net.URI;
-import java.net.URISyntaxException;
 
 import static junit.framework.Assert.assertNotNull;
 import static org.junit.Assert.assertEquals;
@@ -38,14 +34,14 @@ public class TestInjectPageNavigator
     public void testInject()
     {
         tester.add(String.class, "Bob");
-        OneFieldPage page = navigator.create(OneFieldPage.class);
+        OneFieldPage page = navigator.build(OneFieldPage.class);
         assertEquals("Bob", page.name);
     }
 
     @Test
     public void testInjectDefaults()
     {
-        DefaultsPage page = navigator.create(DefaultsPage.class);
+        DefaultsPage page = navigator.build(DefaultsPage.class);
         assertNotNull(page.testedProduct);
         assertNotNull(page.myTestedProduct);
         assertNotNull(page.tester);
@@ -57,27 +53,29 @@ public class TestInjectPageNavigator
     @Test(expected = IllegalArgumentException.class)
     public void testInjectMissing()
     {
-        navigator.create(OneFieldPage.class);
+        navigator.build(OneFieldPage.class);
     }
 
     @Test
     public void testInjectWithArgument()
     {
-        OneFieldPage page = navigator.create(OneFieldPage.class, "Bob");
-        assertEquals("Bob", page.name);
+        ConstructorArgumentPage page = navigator.build(ConstructorArgumentPage.class, 43);
+        assertEquals(43, page.age);
     }
 
     @Test
     public void testInitAfterInject()
     {
-        OneFieldWithInitPage page = navigator.create(OneFieldWithInitPage.class, "Bob");
+        tester.add(String.class, "Bob");
+        OneFieldWithInitPage page = navigator.build(OneFieldWithInitPage.class);
         assertEquals("Bob Jones", page.name);
     }
 
     @Test
     public void testParentInject()
     {
-        ChildNoNamePage page = navigator.create(ChildNoNamePage.class, "Bob");
+        tester.add(String.class, "Bob");
+        ChildNoNamePage page = navigator.build(ChildNoNamePage.class);
         assertEquals("Bob", page.name);
     }
 
@@ -88,17 +86,22 @@ public class TestInjectPageNavigator
         {
             return null;
         }
-
-        public <P extends Page> P gotoPage(Link<P> link)
-        {
-            return null;
-        }
     }
 
     static class OneFieldPage extends AbstractPage
     {
         @Inject
         private String name;
+    }
+
+    static class ConstructorArgumentPage extends AbstractPage
+    {
+        private final int age;
+
+        public ConstructorArgumentPage(int age)
+        {
+            this.age = age;
+        }
     }
 
     static class ParentNamePage extends AbstractPage

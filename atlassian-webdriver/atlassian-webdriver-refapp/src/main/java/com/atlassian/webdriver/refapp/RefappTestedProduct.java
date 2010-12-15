@@ -75,6 +75,8 @@ public class RefappTestedProduct implements TestedProduct<WebDriverTester<Atlass
         return webDriverTester;
     }
 
+    // ---- testing stuff ------------------
+
     public static final void main(String[] args)
     {
         RefappTestedProduct product = TestedProductFactory.create(RefappTestedProduct.class);

@@ -1,6 +1,5 @@
 package com.atlassian.webdriver.pageobjects;
 
-import com.atlassian.pageobjects.Link;
 import com.atlassian.pageobjects.PageNavigator;
 import com.atlassian.pageobjects.page.Page;
 import com.atlassian.webdriver.AtlassianWebDriver;
@@ -13,7 +12,7 @@ import javax.inject.Inject;
 /**
  *
  */
-public abstract class WebDriverLink<P extends Page> implements Link<P>
+public class WebDriverLink<P extends Page>
 {
     @Inject
     private AtlassianWebDriver webDriver;
@@ -41,7 +40,7 @@ public abstract class WebDriverLink<P extends Page> implements Link<P>
         {
             context.findElement(locator).click();
 
-            return (P) pageNavigator.build(pageObjectClass);
+            return pageNavigator.build(pageObjectClass);
         }
 
         throw new ElementNotVisibleException("The link could not be activated By(" + locator + ") failed to find element");

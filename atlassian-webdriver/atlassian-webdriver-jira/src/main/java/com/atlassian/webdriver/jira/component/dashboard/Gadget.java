@@ -1,5 +1,7 @@
 package com.atlassian.webdriver.jira.component.dashboard;
 
+import com.atlassian.pageobjects.PageNavigator;
+import com.atlassian.pageobjects.navigator.Init;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.jira.JiraTestedProduct;
 import com.atlassian.webdriver.utils.Check;
@@ -9,23 +11,32 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import javax.inject.Inject;
+
 /**
  * Implements a object for interacting with a JIRA Dashboard Gadget.
  */
 public class Gadget
 {
-    private final String id;
-    private final String titleId;
-    private final String frameId;
-    private final WebElement chrome;
-    private final AtlassianWebDriver driver;
-    private final JiraTestedProduct jiraTestedProduct;
+    @Inject
+    AtlassianWebDriver driver;
 
-    public Gadget(String gadgetId, JiraTestedProduct jiraTestedProduct)
+    @Inject
+    PageNavigator pageNavigator;
+
+    private final String id;
+    private String titleId;
+    private String frameId;
+    private WebElement chrome;
+
+    public Gadget(String id)
     {
-        this.jiraTestedProduct = jiraTestedProduct;
-        this.driver = jiraTestedProduct.getDriver();
-        this.id = gadgetId;
+        this.id = id;
+    }
+
+    @Init
+    public void init()
+    {
         this.frameId = "gadget-" + id;
         this.titleId = frameId + "-title";
         final String chromeId = frameId + "-chrome";
@@ -50,7 +61,7 @@ public class Gadget
         driver.switchTo().frame(frameId);
         driver.waitUntilElementIsLocated(By.className("view"));
 
-        return new GadgetView(driver.findElement(By.className("view")), jiraTestedProduct);
+        return pageNavigator.build(GadgetView.class, driver.findElement(By.className("view")));
     }
 
     public void minimize()

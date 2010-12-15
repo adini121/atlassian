@@ -1,6 +1,6 @@
 package com.atlassian.webdriver.jira.page;
 
-import com.atlassian.webdriver.jira.JiraTestedProduct;
+import com.atlassian.pageobjects.navigator.Init;
 import com.atlassian.webdriver.utils.by.ByJquery;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 /**
  * 
  */
-public class ViewAttachmentsSettingsPage extends JiraAdminAbstractPage<ViewAttachmentsSettingsPage>
+public class ViewAttachmentsSettingsPage extends JiraAdminAbstractPage
 {
 
     private static final String URI = "/secure/admin/jira/ViewAttachmentSettings.jspa";
@@ -30,21 +30,14 @@ public class ViewAttachmentsSettingsPage extends JiraAdminAbstractPage<ViewAttac
     private String attachmentPath;
     private String attachmentSize;
 
-    public ViewAttachmentsSettingsPage(JiraTestedProduct jiraTestedProduct)
+
+    public String getUrl()
     {
-        super(jiraTestedProduct, URI);
+        return URI;
     }
 
-    public ViewAttachmentsSettingsPage get(final boolean activated)
-    {
-        get(URI, activated);
-
-        readAttachmentSettings();
-
-        return this;
-    }
-
-    private void readAttachmentSettings()
+    @Init
+    public void readAttachmentSettings()
     {
 
         By colLocator = ByJquery.$("td ~ td");

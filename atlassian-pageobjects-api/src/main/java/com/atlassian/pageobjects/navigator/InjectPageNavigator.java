@@ -5,9 +5,11 @@ import com.atlassian.pageobjects.Tester;
 import com.atlassian.pageobjects.page.Page;
 import com.atlassian.pageobjects.product.ProductInstance;
 import com.atlassian.pageobjects.product.TestedProduct;
+import com.atlassian.pageobjects.util.InjectUtils;
 
 import javax.inject.Inject;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -15,7 +17,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.atlassian.pageobjects.util.InjectUtils.forEachFieldWithAnnotation;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static java.util.Arrays.asList;
 
 /**
  * Page navigator that builds page objects from classes, then injects them with dependencies and calls lifecycle methods.
@@ -23,11 +27,13 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * <p>The construction process is as follows:
  * <ol>
  *  <li>Determine the actual class by checking for an override</li>
- *  <li>Instantiate the class using the default constructor</li>
- *  <li>Inject all fields annotationed with {@link Inject}, including private</li>
- *  <li>Call all methods annotationed with {@link Init}</li>
- *  <li>Call all methods annotationed with {@link WaitUntil}</li>
- *  <li>Call all methods annotationed with {@link ValidateState}</li>
+ *  <li>Instantiate the class using a constructor that matches the passed arguments</li>
+ *  <li>Changes the tester to the corrent URL (if {@link #gotoPage(Class, Object...)})</li>
+ *  <li>Inject all fields annotated with {@link Inject}, including private</li>
+ *  <li>Execute the supplied {@link PostInjectionProcessor}</li>
+ *  <li>Call all methods annotated with {@link Init}</li>
+ *  <li>Call all methods annotated with {@link WaitUntil}</li>
+ *  <li>Call all methods annotated with {@link ValidateState}</li>
  * </ol>
  *
  * <p>When going to a page via the {@link #gotoPage(Class, Object...)} method, the page's URL is retrieved and navigated to
@@ -76,6 +82,21 @@ public final class InjectPageNavigator implements PageNavigator
         checkNotNull(pageClass);
         P p = create(pageClass, args);
         visitUrl(p);
+        return autowireAndCallLifecycleMethods(p);
+    }
+
+    public <P> P build(Class<P> pageClass, Object... args)
+    {
+        checkNotNull(pageClass);
+        P p = create(pageClass, args);
+        return autowireAndCallLifecycleMethods(p);
+    }
+
+    private <P> P autowireAndCallLifecycleMethods(P p)
+    {
+        autowireInjectables(p);
+        p = postInjectionProcessor.process(p);
+        callLifecycleMethod(p, Init.class);
         callLifecycleMethod(p, WaitUntil.class);
         callLifecycleMethod(p, ValidateState.class);
         return p;
@@ -87,15 +108,6 @@ public final class InjectPageNavigator implements PageNavigator
         String pageUrl = p.getUrl();
         String baseUrl = productInstance.getBaseUrl();
         tester.gotoUrl(baseUrl + pageUrl);
-    }
-
-    public <P> P build(Class<P> pageClass, Object... args)
-    {
-        checkNotNull(pageClass);
-        P p = create(pageClass, args);
-        callLifecycleMethod(p, WaitUntil.class);
-        callLifecycleMethod(p, ValidateState.class);
-        return p;
     }
 
     public <P> void override(Class<P> oldClass, Class<? extends P> newClass)
@@ -116,7 +128,7 @@ public final class InjectPageNavigator implements PageNavigator
 
         try
         {
-            instance = actualClass.newInstance();
+            instance = instatiate(actualClass, args);
         }
         catch (InstantiationException e)
         {
@@ -126,16 +138,55 @@ public final class InjectPageNavigator implements PageNavigator
         {
             throw new IllegalArgumentException(e);
         }
+        catch (InvocationTargetException e)
+        {
+            throw new IllegalArgumentException(e.getCause());
+        }
 
-        autowireInjectables(instance, args);
-        instance = postInjectionProcessor.process(instance);
-        callLifecycleMethod(instance, Init.class);
         return instance;
     }
 
-    private void autowireInjectables(Object instance, Object... args)
+    private <C> C instatiate(Class<C> clazz, Object[] args) throws IllegalAccessException, InstantiationException, InvocationTargetException
     {
-        Map<Class<?>,Object> injectables = new HashMap<Class<?>, Object>();
+        if (args != null && args.length > 0)
+        {
+            for (Constructor c : clazz.getConstructors())
+            {
+                Class[] paramTypes = c.getParameterTypes();
+                if (args.length == paramTypes.length)
+                {
+                    boolean match = true;
+                    for (int x=0; x<args.length; x++) {
+                        if (args[x] != null && !paramTypes[x].isAssignableFrom(args[x].getClass()))
+                        {
+                            match = false;
+                            break;
+                        }
+                    }
+                    if (match)
+                    {
+                        return (C) c.newInstance(args);
+                    }
+                }
+            }
+        }
+        else
+        {
+            try
+            {
+                return clazz.newInstance();
+            }
+            catch (InstantiationException ex)
+            {
+                throw new IllegalArgumentException("Error invoking default constructor", ex);
+            }
+        }
+        throw new IllegalArgumentException("Cannot find constructor on " + clazz + " to match args: " + asList(args));
+    }
+
+    private void autowireInjectables(final Object instance)
+    {
+        final Map<Class<?>,Object> injectables = new HashMap<Class<?>, Object>();
 
         injectables.put(TestedProduct.class, testedProduct);
         injectables.put(testedProduct.getClass(), testedProduct);
@@ -148,14 +199,10 @@ public final class InjectPageNavigator implements PageNavigator
         injectables.put(PageNavigator.class, this);
 
         injectables.putAll(tester.getInjectables());
-        for (Object arg : args)
-        {
-            injectables.put(arg.getClass(), arg);
-        }
 
-        for (Field field : findAllFields(instance))
+        forEachFieldWithAnnotation(instance, Inject.class, new InjectUtils.FieldVisitor<Inject>()
         {
-            if (field.getAnnotation(Inject.class) != null)
+            public void visit(Field field, Inject annotation)
             {
                 Object val = injectables.get(field.getType());
                 if (val != null)
@@ -175,25 +222,7 @@ public final class InjectPageNavigator implements PageNavigator
                     throw new IllegalArgumentException("Injectable for class " + field.getType() + " not found");
                 }
             }
-        }
-    }
-
-    private Collection<Field> findAllFields(Object instance)
-    {
-        Map<String,Field> fields = new HashMap<String,Field>();
-        Class cls = instance.getClass();
-        while (cls != Object.class)
-        {
-            for (Field field : cls.getDeclaredFields())
-            {
-                if (!fields.containsKey(field.getName()))
-                {
-                    fields.put(field.getName(), field);
-                }
-            }
-            cls = cls.getSuperclass();
-        }
-        return fields.values();
+        });
     }
 
     private void callLifecycleMethod(Object instance, Class<? extends Annotation> annotation)

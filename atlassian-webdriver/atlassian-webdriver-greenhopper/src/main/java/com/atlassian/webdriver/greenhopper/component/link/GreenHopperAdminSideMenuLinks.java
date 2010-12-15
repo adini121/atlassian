@@ -5,6 +5,7 @@ import com.atlassian.webdriver.greenhopper.page.admin.GreenHopperEnabledProjects
 import com.atlassian.webdriver.greenhopper.page.admin.GreenHopperGeneralConfigurationPage;
 import com.atlassian.webdriver.greenhopper.page.admin.GreenHopperLicenseDetailsPage;
 import com.atlassian.webdriver.greenhopper.page.admin.GreenHopperProjectTemplatesPage;
+import com.atlassian.webdriver.pageobjects.WebDriverLink;
 import org.openqa.selenium.By;
 
 /**
@@ -12,7 +13,7 @@ import org.openqa.selenium.By;
  */
 public class GreenHopperAdminSideMenuLinks
 {
-    public static final Link<GreenHopperEnabledProjectsPage> ENABLED_PROJECTS =
+    public static final WebDriverLink<GreenHopperEnabledProjectsPage> ENABLED_PROJECTS =
             new Link<GreenHopperEnabledProjectsPage>(By.id("greenhopper-admin-system"), GreenHopperEnabledProjectsPage.class);
 
     public static final Link<GreenHopperProjectTemplatesPage> PROJECT_TEMPLATES =

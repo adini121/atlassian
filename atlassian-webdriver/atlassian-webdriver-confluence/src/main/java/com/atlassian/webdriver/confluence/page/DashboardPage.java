@@ -1,8 +1,7 @@
 package com.atlassian.webdriver.confluence.page;
 
 import com.atlassian.webdriver.confluence.ConfluenceTestedProduct;
-import com.atlassian.webdriver.page.HomePage;
-import org.openqa.selenium.WebDriver;
+import com.atlassian.webdriver.pageobjects.page.HomePage;
 
 /**
  * Page object implementation for the Dashbaord page in Confluence.

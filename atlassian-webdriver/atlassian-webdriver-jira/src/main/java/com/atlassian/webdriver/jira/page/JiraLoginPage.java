@@ -1,8 +1,8 @@
 package com.atlassian.webdriver.jira.page;
 
-import com.atlassian.webdriver.utils.user.User;
-import com.atlassian.webdriver.jira.JiraTestedProduct;
-import com.atlassian.webdriver.page.LoginPage;
+import com.atlassian.pageobjects.page.LoginPage;
+import com.atlassian.pageobjects.page.Page;
+import com.atlassian.pageobjects.page.User;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
@@ -10,7 +10,7 @@ import org.openqa.selenium.support.How;
 /**
  * Page object implementation for the LoginPage in JIRA.
  */
-public class JiraLoginPage extends JiraAbstractPage<JiraLoginPage> implements LoginPage<JiraTestedProduct, JiraLoginPage, DashboardPage>
+public class JiraLoginPage extends JiraAbstractPage implements LoginPage
 {
     private static final String URI = "/login.jsp";
 
@@ -26,21 +26,22 @@ public class JiraLoginPage extends JiraAbstractPage<JiraLoginPage> implements Lo
     @FindBy (how = How.ID_OR_NAME, using = "login")
     private WebElement loginButton;
 
-    public JiraLoginPage(JiraTestedProduct driver)
+    public String getUrl()
     {
-        super(driver, URI);
+        return URI;
     }
 
-    public DashboardPage loginAsAdmin() {
-        return login(new User("admin", "admin", "fullname", "email"));
-    }
-
-    public DashboardPage login(User user)
+    public <M extends Page> M login(User user, Class<M> nextPage)
     {
-        return login(user, false);
+        return login(user, false, nextPage);
     }
 
-    public DashboardPage login(User user, boolean rememberMe)
+    public <M extends Page> M loginAsSysAdmin(Class<M> nextPage)
+    {
+        return login(new User("admin", "admin", "fullname", "email"), nextPage);
+    }
+
+    public <M extends Page> M login(User user, boolean rememberMe, Class<M> nextPage)
     {
         usernameField.sendKeys(user.getUsername());
         passwordField.sendKeys(user.getPassword());
@@ -52,7 +53,7 @@ public class JiraLoginPage extends JiraAbstractPage<JiraLoginPage> implements Lo
 
         loginButton.click();
 
-        return getTestedProduct().gotoPage(DashboardPage.class, true);
+        return pageNavigator.gotoPage(nextPage);
     }
 
 
