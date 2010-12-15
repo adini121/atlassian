@@ -1,7 +1,9 @@
 package com.atlassian.webdriver.pageobjects.menu;
 
 import com.atlassian.pageobjects.navigator.Init;
+import com.atlassian.pageobjects.page.Page;
 import com.atlassian.webdriver.AtlassianWebDriver;
+import com.atlassian.webdriver.pageobjects.WebDriverLink;
 import com.atlassian.webdriver.utils.Check;
 import com.atlassian.webdriver.utils.MouseEvents;
 import org.openqa.selenium.By;
@@ -36,6 +38,10 @@ public class AjsDropdownMenu implements DropdownMenu<AjsDropdownMenu>
     public boolean isOpen()
     {
         return Check.hasClass("opened", menuItem);
+    }
+
+    public <T extends Page> T activate(WebDriverLink<T> link) {
+        return link.activate(menuItem);
     }
 
     public AjsDropdownMenu open()

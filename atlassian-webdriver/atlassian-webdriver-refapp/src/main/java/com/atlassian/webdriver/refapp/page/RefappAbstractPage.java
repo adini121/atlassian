@@ -1,14 +1,10 @@
 package com.atlassian.webdriver.refapp.page;
 
-import com.atlassian.pageobjects.Link;
-import com.atlassian.pageobjects.PageNavigator;
 import com.atlassian.pageobjects.navigator.WaitUntil;
 import com.atlassian.pageobjects.page.Page;
 import com.atlassian.pageobjects.page.User;
 import com.atlassian.webdriver.AtlassianWebDriver;
-import com.atlassian.webdriver.pageobjects.WebDriverTester;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 
 import javax.inject.Inject;
 

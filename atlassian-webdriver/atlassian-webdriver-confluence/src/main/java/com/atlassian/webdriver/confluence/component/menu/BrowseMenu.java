@@ -1,61 +1,66 @@
 package com.atlassian.webdriver.confluence.component.menu;
 
-import com.atlassian.webdriver.Link;
-import com.atlassian.webdriver.PageObject;
-import com.atlassian.webdriver.component.AbstractComponent;
+import com.atlassian.pageobjects.PageNavigator;
+import com.atlassian.pageobjects.navigator.Init;
+import com.atlassian.pageobjects.page.Page;
+import com.atlassian.webdriver.AtlassianWebDriver;
+import com.atlassian.webdriver.pageobjects.ClickableLink;
+import com.atlassian.webdriver.pageobjects.WebDriverLink;
 import com.atlassian.webdriver.pageobjects.menu.AjsDropdownMenu;
 import com.atlassian.webdriver.pageobjects.menu.DropdownMenu;
-import com.atlassian.webdriver.confluence.ConfluenceTestedProduct;
 import com.atlassian.webdriver.confluence.page.ConfluenceAdminHomePage;
 import com.atlassian.webdriver.confluence.page.PeopleDirectoryPage;
 import com.atlassian.webdriver.utils.by.ByJquery;
 import org.openqa.selenium.By;
+
+import javax.inject.Inject;
 
 /**
  * TODO: Document this class / interface here
  *
  * @since v4.2
  */
-public class BrowseMenu  extends AbstractComponent<ConfluenceTestedProduct, BrowseMenu>
-        implements DropdownMenu
+public class BrowseMenu implements DropdownMenu<BrowseMenu>
 {
-    private final static By BROWSER_MENU_LOCATOR = ByJquery.$("#browse-menu-link").parent("li");
+    @Inject
+    AtlassianWebDriver driver;
 
-    private final static Link<ConfluenceAdminHomePage> ADMIN_PAGE_LINK = new Link(By.id("administration-link"), ConfluenceAdminHomePage.class);
-    private final static Link<PeopleDirectoryPage> PEOPLE_DIRECTORY_LINK = new Link(By.id("people-directory-link"), PeopleDirectoryPage.class);
+    @Inject
+    PageNavigator pageNavigator;
 
-    private AjsDropdownMenu<ConfluenceTestedProduct> browseMenu;
+    @ClickableLink(id = "administration-link", nextPage = ConfluenceAdminHomePage.class)
+    WebDriverLink<ConfluenceAdminHomePage> adminPageLink;
 
-    public BrowseMenu(ConfluenceTestedProduct testedProduct)
-    {
-        super(testedProduct);
-    }
+    @ClickableLink(id = "people-directory-link", nextPage = PeopleDirectoryPage.class)
+    WebDriverLink<PeopleDirectoryPage> peopleDirectoryLink;
 
-    @Override
+    private AjsDropdownMenu browseMenu;
+
+    @Init
     public void initialise()
     {
-        super.initialise(BROWSER_MENU_LOCATOR);
-        browseMenu = getTestedProduct().getComponent(getComponentLocator(), AjsDropdownMenu.class);
+        browseMenu = pageNavigator.build(AjsDropdownMenu.class, ByJquery.$("#browse-menu-link").parent("li"));
     }
 
     public ConfluenceAdminHomePage gotoAdminPage()
     {
-        return activate(ADMIN_PAGE_LINK);
+        return adminPageLink.activate();
     }
 
     public PeopleDirectoryPage gotoPeopleDirectoryPage()
     {
-        return activate(PEOPLE_DIRECTORY_LINK);
+        return peopleDirectoryLink.activate();
     }
 
-    public <T extends PageObject> T activate(final Link<T> link)
+    public <T extends Page> T activate(final WebDriverLink<T> link)
     {
         return browseMenu.activate(link);
     }
 
-    public void open()
+    public BrowseMenu open()
     {
         browseMenu.open();
+        return this;
     }
 
     public boolean isOpen()
@@ -63,8 +68,9 @@ public class BrowseMenu  extends AbstractComponent<ConfluenceTestedProduct, Brow
         return browseMenu.isOpen();
     }
 
-    public void close()
+    public BrowseMenu close()
     {
         browseMenu.close();
+        return this;
     }
 }

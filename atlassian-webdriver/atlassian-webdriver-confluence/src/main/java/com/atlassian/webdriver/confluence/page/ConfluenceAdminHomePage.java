@@ -1,7 +1,5 @@
 package com.atlassian.webdriver.confluence.page;
 
-import com.atlassian.webdriver.confluence.ConfluenceTestedProduct;
-import com.atlassian.webdriver.pageobjects.page.AdminHomePage;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -10,7 +8,7 @@ import org.openqa.selenium.support.FindBy;
  *
  * @since v4.2
  */
-public class ConfluenceAdminHomePage extends ConfluenceAbstractPage<ConfluenceAdminHomePage> implements AdminHomePage<ConfluenceTestedProduct, ConfluenceAdminHomePage>
+public class ConfluenceAdminHomePage extends ConfluenceAbstractPage
 {
     private static final String URI = "/admin/console.action";
 
@@ -20,22 +18,22 @@ public class ConfluenceAdminHomePage extends ConfluenceAbstractPage<ConfluenceAd
     @FindBy (linkText = "License Details")
     private WebElement licenseDetailsLink;
 
-    public ConfluenceAdminHomePage(ConfluenceTestedProduct testedProduct)
+    public String getUrl()
     {
-        super(testedProduct, URI);
+        return URI;
     }
 
     public PluginsPage gotoPluginsPage()
     {
         pluginsLink.click();
 
-        return getTestedProduct().gotoPage(PluginsPage.class, true);
+        return pageNavigator.build(PluginsPage.class);
     }
 
     public LicenseDetailsPage gotoLicenseDetailsPage()
     {
         licenseDetailsLink.click();
 
-        return getTestedProduct().gotoPage(LicenseDetailsPage.class, true);
+        return pageNavigator.build(LicenseDetailsPage.class);
     }
 }

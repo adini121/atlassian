@@ -1,7 +1,9 @@
 package com.atlassian.webdriver.pageobjects.menu;
 
 import com.atlassian.pageobjects.navigator.Init;
+import com.atlassian.pageobjects.page.Page;
 import com.atlassian.webdriver.AtlassianWebDriver;
+import com.atlassian.webdriver.pageobjects.WebDriverLink;
 import com.atlassian.webdriver.utils.Check;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -32,6 +34,10 @@ public class AuiDropdownMenu implements DropdownMenu<AuiDropdownMenu>
     public void initialise()
     {
         menuItem = driver.findElement(componentLocator);
+    }
+
+    public <T extends Page> T activate(WebDriverLink<T> link) {
+        return link.activate(menuItem);
     }
 
     public boolean isOpen()

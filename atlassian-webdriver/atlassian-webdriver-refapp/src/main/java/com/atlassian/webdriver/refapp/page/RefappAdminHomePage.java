@@ -1,7 +1,5 @@
 package com.atlassian.webdriver.refapp.page;
 
-import com.atlassian.webdriver.pageobjects.page.AdminHomePage;
-
 /**
  *
  */

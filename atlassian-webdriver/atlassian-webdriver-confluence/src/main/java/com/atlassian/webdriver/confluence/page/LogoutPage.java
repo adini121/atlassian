@@ -1,5 +1,6 @@
 package com.atlassian.webdriver.confluence.page;
 
+import com.atlassian.pageobjects.navigator.ValidateState;
 import com.atlassian.webdriver.confluence.ConfluenceTestedProduct;
 import org.openqa.selenium.WebDriver;
 
@@ -11,14 +12,10 @@ public class LogoutPage extends ConfluenceLoginPage
 {
     private static final String URI = "/logout.action";
 
-    public LogoutPage(ConfluenceTestedProduct testedProduct)
-    {
-        super(testedProduct, URI);
-    }
 
     @Override
-    public void doCheck(final String uri, final boolean activated)
+    public String getUrl()
     {
-        super.doCheck(ConfluenceLoginPage.URI, activated);
+        return URI;
     }
 }

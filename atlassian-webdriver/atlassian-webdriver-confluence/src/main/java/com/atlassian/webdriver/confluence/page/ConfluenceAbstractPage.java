@@ -1,17 +1,15 @@
 package com.atlassian.webdriver.confluence.page;
 
 import com.atlassian.pageobjects.PageNavigator;
+import com.atlassian.pageobjects.navigator.ValidateState;
 import com.atlassian.pageobjects.navigator.WaitUntil;
 import com.atlassian.pageobjects.page.Page;
 import com.atlassian.pageobjects.page.User;
 import com.atlassian.webdriver.AtlassianWebDriver;
-import com.atlassian.webdriver.PageObject;
-import com.atlassian.webdriver.component.header.Header;
 import com.atlassian.webdriver.confluence.ConfluenceTestedProduct;
 import com.atlassian.webdriver.confluence.component.header.ConfluenceHeader;
 import com.atlassian.webdriver.confluence.component.menu.BrowseMenu;
 import com.atlassian.webdriver.confluence.component.menu.ConfluenceUserMenu;
-import com.atlassian.webdriver.pageobjects.page.AbstractPage;
 import com.atlassian.webdriver.pageobjects.page.UserDiscoverable;
 import org.openqa.selenium.By;
 
@@ -64,9 +62,11 @@ public abstract class ConfluenceAbstractPage implements UserDiscoverable, Page
         driver.waitUntilElementIsLocated(By.id("footer"));
     }
 
-    @Override
-    public void doCheck(final String uri, final boolean activated)
+    @ValidateState
+    public void doCheck()
     {
+
+        String uri = getUrl();
 
         // Check for WebSudo
         if (uri != null && !uri.equals(AdministratorAccessPage.URI) && at(AdministratorAccessPage.URI))
@@ -75,13 +75,17 @@ public abstract class ConfluenceAbstractPage implements UserDiscoverable, Page
         }
     }
 
-    private boolean at(String uri)
+    protected boolean at(String uri)
     {
-        return false;  //To change body of created methods use File | Settings | File Templates.
+        String currentUrl = driver.getCurrentUrl();
+        String updatedCurrentUrl = currentUrl.replace("!default", "");
+        String urlToCheck = testedProduct.getProductInstance().getBaseUrl() + uri;
+
+        return currentUrl.startsWith(urlToCheck) || updatedCurrentUrl.startsWith(urlToCheck);
     }
 
     public ConfluenceHeader getHeader()
     {
-        return getTestedProduct().getComponent(ConfluenceHeader.class);
+        return pageNavigator.build(ConfluenceHeader.class);
     }
 }

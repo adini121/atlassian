@@ -1,8 +1,11 @@
 package com.atlassian.webdriver.confluence.component.menu;
 
-import com.atlassian.webdriver.Link;
-import com.atlassian.webdriver.PageObject;
-import com.atlassian.webdriver.component.AbstractComponent;
+import com.atlassian.pageobjects.PageNavigator;
+import com.atlassian.pageobjects.navigator.Init;
+import com.atlassian.pageobjects.page.Page;
+import com.atlassian.webdriver.AtlassianWebDriver;
+import com.atlassian.webdriver.pageobjects.ClickableLink;
+import com.atlassian.webdriver.pageobjects.WebDriverLink;
 import com.atlassian.webdriver.pageobjects.menu.AjsDropdownMenu;
 import com.atlassian.webdriver.pageobjects.menu.DropdownMenu;
 import com.atlassian.webdriver.pageobjects.menu.UserMenu;
@@ -11,44 +14,49 @@ import com.atlassian.webdriver.confluence.page.LogoutPage;
 import com.atlassian.webdriver.utils.by.ByJquery;
 import org.openqa.selenium.By;
 
+import javax.inject.Inject;
+
 /**
  * TODO: Document this class / interface here
  *
  * @since v4.2
  */
-public class ConfluenceUserMenu extends AbstractComponent<ConfluenceTestedProduct, ConfluenceUserMenu> implements DropdownMenu, UserMenu
+public class ConfluenceUserMenu implements DropdownMenu<ConfluenceUserMenu>, UserMenu
 {
     private final static By USER_MENU_LOCATOR = ByJquery.$("#user-menu-link").parent("li");
 
-    private final static Link<LogoutPage> LOGOUT_LINK = new Link(By.id("logout-link"), LogoutPage.class);
+    @Inject
+    AtlassianWebDriver driver;
 
-    private AjsDropdownMenu<ConfluenceTestedProduct> userMenu;
+    @Inject
+    PageNavigator pageNavigator;
 
-    public ConfluenceUserMenu(ConfluenceTestedProduct testedProduct)
-    {
-        super(testedProduct);
-    }
+    @ClickableLink(id = "logout-link", nextPage = LogoutPage.class)
+    WebDriverLink<LogoutPage> logoutLink;
 
-    @Override
+
+    private AjsDropdownMenu userMenu;
+
+    @Init
     public void initialise()
     {
-        super.initialise(USER_MENU_LOCATOR);
-        userMenu = getTestedProduct().getComponent(getComponentLocator(), AjsDropdownMenu.class);
+        userMenu = pageNavigator.build(AjsDropdownMenu.class, USER_MENU_LOCATOR);
     }
 
     public LogoutPage logout()
     {
-        return activate(LOGOUT_LINK);
+        return logoutLink.activate();
     }
 
-    public <T extends PageObject> T activate(final Link<T> link)
+    public <T extends Page> T activate(final WebDriverLink<T> link)
     {
         return userMenu.activate(link);
     }
 
-    public void open()
+    public ConfluenceUserMenu open()
     {
         userMenu.open();
+        return this;
     }
 
     public boolean isOpen()
@@ -56,8 +64,9 @@ public class ConfluenceUserMenu extends AbstractComponent<ConfluenceTestedProduc
         return userMenu.isOpen();
     }
 
-    public void close()
+    public ConfluenceUserMenu close()
     {
         userMenu.close();
+        return this;
     }
 }
