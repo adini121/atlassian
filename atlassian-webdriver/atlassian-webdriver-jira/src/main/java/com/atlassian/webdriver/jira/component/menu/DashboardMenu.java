@@ -1,48 +1,35 @@
 package com.atlassian.webdriver.jira.component.menu;
 
-import com.atlassian.webdriver.Link;
-import com.atlassian.webdriver.PageObject;
-import com.atlassian.webdriver.component.AbstractComponent;
-import com.atlassian.webdriver.component.menu.AuiDropdownMenu;
-import com.atlassian.webdriver.component.menu.DropdownMenu;
-import com.atlassian.webdriver.component.menu.Menu;
-import com.atlassian.webdriver.jira.JiraTestedProduct;
-import com.atlassian.webdriver.product.TestedProduct;
+import com.atlassian.pageobjects.PageBinder;
+import com.atlassian.pageobjects.binder.Init;
+import com.atlassian.webdriver.pageobjects.menu.AuiDropdownMenu;
+import com.atlassian.webdriver.pageobjects.menu.DropdownMenu;
 import com.atlassian.webdriver.utils.by.ByJquery;
-import org.openqa.selenium.By;
+
+import javax.inject.Inject;
 
 /**
  * TODO: Document this class / interface here
  *
  * @since v4.2
  */
-public class DashboardMenu extends AbstractComponent<JiraTestedProduct, JiraUserMenu>
-        implements DropdownMenu
+public class DashboardMenu implements DropdownMenu<DashboardMenu>
 {
-    private final By DASHBOARD_MENU_LOCATOR = ByJquery.$("#home_link").parent("li");
+    @Inject
+    PageBinder pageBinder;
 
-    private AuiDropdownMenu<JiraTestedProduct> dashboardMenu;
+    private AuiDropdownMenu dashboardMenu;
 
-    public DashboardMenu(JiraTestedProduct testedProduct)
-    {
-        super(testedProduct);
-    }
-
-    @Override
+    @Init
     public void initialise()
     {
-        super.initialise(DASHBOARD_MENU_LOCATOR);
-        dashboardMenu = getTestedProduct().getComponent(getComponentLocator(), AuiDropdownMenu.class);
+        dashboardMenu = pageBinder.bind(AuiDropdownMenu.class, ByJquery.$("#home_link").parent("li"));
     }
 
-    public <T extends PageObject> T activate(final Link<T> link)
-    {
-        return dashboardMenu.activate(link);
-    }
-
-    public void open()
+    public DashboardMenu open()
     {
         dashboardMenu.open();
+        return this;
     }
 
     public boolean isOpen()
@@ -50,9 +37,10 @@ public class DashboardMenu extends AbstractComponent<JiraTestedProduct, JiraUser
         return dashboardMenu.isOpen();
     }
 
-    public void close()
+    public DashboardMenu close()
     {
         dashboardMenu.close();
+        return this;
     }
 
 }

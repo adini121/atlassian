@@ -1,6 +1,5 @@
 package com.atlassian.webdriver.confluence.page;
 
-import com.atlassian.webdriver.confluence.ConfluenceTestedProduct;
 import com.atlassian.webdriver.utils.by.ByJquery;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -16,7 +15,7 @@ import java.util.regex.Pattern;
  *
  * @since v4.2
  */
-public class LicenseDetailsPage extends ConfluenceAbstractPage<LicenseDetailsPage>
+public class LicenseDetailsPage extends ConfluenceAbstractPage
 {
 
     private static String URI = "/admin/license.action";
@@ -30,9 +29,10 @@ public class LicenseDetailsPage extends ConfluenceAbstractPage<LicenseDetailsPag
     @FindBy (name = "update")
     WebElement submitLicenseButton;
 
-    public LicenseDetailsPage(ConfluenceTestedProduct testedProduct)
+
+    public String getUrl()
     {
-        super(testedProduct, URI);
+        return URI;
     }
 
     public String getOrganisation()
@@ -106,7 +106,7 @@ public class LicenseDetailsPage extends ConfluenceAbstractPage<LicenseDetailsPag
         updateLicenseTextArea.sendKeys(license);
         submitLicenseButton.click();
 
-        return getTestedProduct().gotoPage(LicenseDetailsPage.class, true);
+        return pageBinder.bind(LicenseDetailsPage.class);
     }
 
 }

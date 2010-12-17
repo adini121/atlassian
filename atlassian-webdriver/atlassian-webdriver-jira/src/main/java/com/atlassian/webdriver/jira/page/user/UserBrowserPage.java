@@ -1,8 +1,7 @@
 package com.atlassian.webdriver.jira.page.user;
 
-import com.atlassian.webdriver.utils.group.Group;
-import com.atlassian.webdriver.utils.user.User;
-import com.atlassian.webdriver.jira.JiraTestedProduct;
+import com.atlassian.pageobjects.binder.Init;
+import com.atlassian.pageobjects.page.User;
 import com.atlassian.webdriver.jira.page.JiraAdminAbstractPage;
 import com.atlassian.webdriver.utils.by.ByJquery;
 import com.atlassian.webdriver.utils.Check;
@@ -20,7 +19,7 @@ import java.util.Set;
  * Page object implementation for the User browser page in JIRA.
  * TODO: Handle pagination when there are more users
  */
-public class UserBrowserPage extends JiraAdminAbstractPage<UserBrowserPage>
+public class UserBrowserPage extends JiraAdminAbstractPage
 {
     private static final String URI = "/secure/admin/user/UserBrowser.jspa";
 
@@ -32,7 +31,7 @@ public class UserBrowserPage extends JiraAdminAbstractPage<UserBrowserPage>
 
     private final Map<String, User> users;
     private WebElement filterSubmit;
-
+    
     @FindBy (id = "add_user")
     private WebElement addUserLink;
 
@@ -45,23 +44,25 @@ public class UserBrowserPage extends JiraAdminAbstractPage<UserBrowserPage>
     @FindBy (id = "user_browser_table")
     private WebElement userTable;
 
-    public UserBrowserPage(JiraTestedProduct jiraTestedProduct)
+    public UserBrowserPage()
     {
-        super(jiraTestedProduct, URI);
         users = new HashMap<String, User>();
     }
 
-    public UserBrowserPage get(boolean activated)
-    {
-        get(URI, activated);
 
-        filterSubmit = getDriver().findElement(By.cssSelector("form[name=\"jiraform\"] input[type=\"submit\"]"));
+    public String getUrl()
+    {
+        return URI;
+    }
+
+    @Init
+    public void init()
+    {
+        filterSubmit = driver.findElement(By.cssSelector("form[name=\"jiraform\"] input[type=\"submit\"]"));
 
         setUserFilterToShowAllUsers();
 
         getUsers();
-
-        return this;
     }
 
     public boolean hasUser(User user)
@@ -82,9 +83,9 @@ public class UserBrowserPage extends JiraAdminAbstractPage<UserBrowserPage>
         {
             String editGroupsId = "editgroups_" + user.getUsername();
 
-            getDriver().findElement(By.id(editGroupsId)).click();
+            driver.findElement(By.id(editGroupsId)).click();
 
-            return getTestedProduct().gotoPage(EditUserGroupsPage.class, true);
+            return pageBinder.bind(EditUserGroupsPage.class);
         }
         else
         {
@@ -119,10 +120,10 @@ public class UserBrowserPage extends JiraAdminAbstractPage<UserBrowserPage>
         if (hasUser(user))
         {
             User actualUser = users.get(user.getUsername());
-            WebElement userEmailLink = getTestedProduct().getDriver().findElement(By.linkText(actualUser.getEmail()));
+            WebElement userEmailLink = driver.findElement(By.linkText(actualUser.getEmail()));
             userEmailLink.click();
 
-            return getTestedProduct().gotoPage(ViewUserPage.class, true);
+            return pageBinder.bind(ViewUserPage.class);
         }
         else
         {
@@ -137,10 +138,10 @@ public class UserBrowserPage extends JiraAdminAbstractPage<UserBrowserPage>
 
     public UserBrowserPage filterByUserName(String username)
     {
-        getDriver().findElement(By.name("userNameFilter")).sendKeys(username);
+        driver.findElement(By.name("userNameFilter")).sendKeys(username);
         filterSubmit.click();
 
-        return getTestedProduct().gotoPage(UserBrowserPage.class, true);
+        return pageBinder.bind(UserBrowserPage.class);
     }
 
     /**
@@ -151,7 +152,7 @@ public class UserBrowserPage extends JiraAdminAbstractPage<UserBrowserPage>
     {
         addUserLink.click();
 
-        return getTestedProduct().gotoPage(AddUserPage.class, true);
+        return pageBinder.bind(AddUserPage.class);
     }
 
     /**
@@ -197,14 +198,14 @@ public class UserBrowserPage extends JiraAdminAbstractPage<UserBrowserPage>
                 String email = cols.get(1).getText();
                 String fullName = cols.get(2).getText();
 
-                Set<Group> groups = new HashSet<Group>();
+//                Set<Group> groups = new HashSet<Group>();
+//
+//                for (WebElement group : cols.get(4).findElements(By.tagName("a")))
+//                {
+//                    groups.add(new Group(group.getText()));
+//                }
 
-                for (WebElement group : cols.get(4).findElements(By.tagName("a")))
-                {
-                    groups.add(new Group(group.getText()));
-                }
-
-                users.put(username, new User(username, fullName, email, groups));
+                users.put(username, new User(username, fullName, email));
             }
         }
 

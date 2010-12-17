@@ -1,10 +1,8 @@
 package com.atlassian.webdriver.jira.page;
 
-import com.atlassian.webdriver.jira.JiraTestedProduct;
+import com.atlassian.pageobjects.binder.Init;
+import com.atlassian.pageobjects.page.Page;
 import com.atlassian.webdriver.jira.component.project.ProjectSummary;
-import com.atlassian.webdriver.PageObject;
-import com.atlassian.webdriver.utils.by.ByJquery;
-import com.atlassian.webdriver.utils.Check;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -18,7 +16,7 @@ import java.util.List;
  *
  * @since v4.2
  */
-public class ProjectsViewPage extends JiraAdminAbstractPage<ProjectsViewPage>
+public class ProjectsViewPage extends JiraAdminAbstractPage
 {
 
     @FindBy (id = "add_project")
@@ -28,26 +26,21 @@ public class ProjectsViewPage extends JiraAdminAbstractPage<ProjectsViewPage>
     
     private final static String URI = "/secure/project/ViewProjects.jspa";
 
-    public ProjectsViewPage(JiraTestedProduct jiraTestedProduct)
+    public ProjectsViewPage()
     {
-        super(jiraTestedProduct, URI);
         projects = new ArrayList<ProjectSummary>();
     }
 
-
-    public ProjectsViewPage get(final boolean activated)
+    public String getUrl()
     {
-        super.get(URI, activated);
-
-        loadProjects();
-
-        return this;
+        return URI;
     }
 
-    private void loadProjects()
+    @Init
+    public void loadProjects()
     {
 
-        List<WebElement> rows = getDriver().findElements(By.cssSelector("table.grid > tbody > tr"));
+        List<WebElement> rows = driver.findElements(By.cssSelector("table.grid > tbody > tr"));
 
         // Remove the th.
         rows.remove(0);
@@ -59,12 +52,12 @@ public class ProjectsViewPage extends JiraAdminAbstractPage<ProjectsViewPage>
 
         for(WebElement row : rows)
         {
-            projects.add(new ProjectSummary(row));
+            projects.add(pageBinder.bind(ProjectSummary.class, row));
         }
 
     }
 
-    public PageObject addProject()
+    public Page addProject()
     {
         throw new UnsupportedOperationException("addProject for ProjectViewPage has not been implemented");
     }

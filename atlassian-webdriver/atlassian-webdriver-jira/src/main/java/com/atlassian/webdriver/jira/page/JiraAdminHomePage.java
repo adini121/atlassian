@@ -1,24 +1,22 @@
 package com.atlassian.webdriver.jira.page;
 
 import com.atlassian.webdriver.jira.component.menu.AdminSideMenu;
-import com.atlassian.webdriver.page.AdminHomePage;
-import com.atlassian.webdriver.jira.JiraTestedProduct;
 
 /**
  *
  */
-public class JiraAdminHomePage extends JiraAbstractPage<JiraAdminHomePage> implements AdminHomePage<JiraTestedProduct, JiraAdminHomePage>
+public class JiraAdminHomePage extends JiraAbstractPage
 {
     private final static String URI = "/secure/admin";
 
-    public JiraAdminHomePage(JiraTestedProduct testedProduct)
+    public String getUrl()
     {
-        super(testedProduct, URI);
+        return URI;
     }
 
     public AdminSideMenu getAdminSideMenu()
     {
-        return new AdminSideMenu(testedProduct);
+        return pageBinder.bind(AdminSideMenu.class);
     }
 
     

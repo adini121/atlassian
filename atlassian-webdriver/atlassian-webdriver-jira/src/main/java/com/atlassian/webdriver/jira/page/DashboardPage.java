@@ -1,24 +1,17 @@
 package com.atlassian.webdriver.jira.page;
 
 
-import com.atlassian.webdriver.jira.JiraTestedProduct;
+import com.atlassian.pageobjects.binder.WaitUntil;
 import com.atlassian.webdriver.jira.component.dashboard.Gadget;
-import com.atlassian.webdriver.page.HomePage;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 
 /**
  * Page object implementation for the Dashbaord page in JIRA.
  * TODO: extend to handle more operations like addGadget.
  */
-public class DashboardPage extends JiraAbstractPage<DashboardPage> implements HomePage<JiraTestedProduct, DashboardPage>
+public class DashboardPage extends JiraAbstractPage
 {
     private static final String URI = "/secure/Dashboard.jspa";
-
-    public DashboardPage(JiraTestedProduct jiraTestedProduct)
-    {
-        super(jiraTestedProduct, URI);
-    }
 
     /**
      * TODO: fix this.
@@ -30,12 +23,17 @@ public class DashboardPage extends JiraAbstractPage<DashboardPage> implements Ho
 
     public Gadget getGadget(String gadgetId)
     {
-        return new Gadget(gadgetId, getTestedProduct());
+        return pageBinder.bind(Gadget.class, gadgetId);
     }
 
-    @Override
+    @WaitUntil
     public void doWait()
     {
-        getDriver().waitUntilElementIsLocated(By.className("layout"));
+        driver.waitUntilElementIsLocated(By.className("layout"));
+    }
+
+    public String getUrl()
+    {
+        return URI;
     }
 }

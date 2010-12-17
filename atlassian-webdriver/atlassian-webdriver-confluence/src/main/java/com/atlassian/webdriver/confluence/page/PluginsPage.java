@@ -1,7 +1,7 @@
 package com.atlassian.webdriver.confluence.page;
 
 
-import com.atlassian.webdriver.confluence.ConfluenceTestedProduct;
+import com.atlassian.pageobjects.binder.WaitUntil;
 import com.atlassian.webdriver.utils.by.ByJquery;
 import com.google.common.collect.ImmutableSet;
 import org.openqa.selenium.By;
@@ -17,7 +17,7 @@ import java.util.Set;
  * Page object implementation for the Plugins page for Confluence.
  * TODO: add plugin details method, which also returns loaded modules per plugin
  */
-public class PluginsPage extends ConfluenceAbstractPage<PluginsPage>
+public class PluginsPage extends ConfluenceAbstractPage
 {
     private static final String PLUGIN_KEY = "pluginKey=";
     private static final String URI = "/admin/viewplugins.action";
@@ -26,21 +26,16 @@ public class PluginsPage extends ConfluenceAbstractPage<PluginsPage>
     private final Set<String> pluginsWithErrors;
     private final Set<String> disabledPlugins;
 
-    public PluginsPage(ConfluenceTestedProduct testedProduct)
+    public PluginsPage()
     {
-        super(testedProduct, URI);
         loadedPlugins = new HashMap<String, WebElement>();
         pluginsWithErrors = new HashSet<String>();
         disabledPlugins = new HashSet<String>();
     }
 
-    public PluginsPage get(final boolean activated)
+    public String getUrl()
     {
-        get(URI, activated);
-
-        waitForLoadedPlugins();
-
-        return this;
+        return URI;
     }
 
     public PluginsPage selectPlugin(String pluginKey)
@@ -48,7 +43,7 @@ public class PluginsPage extends ConfluenceAbstractPage<PluginsPage>
         if (pluginIsLoaded(pluginKey))
         {
             loadedPlugins.get(pluginKey).click();
-            return getTestedProduct().gotoPage(PluginsPage.class, true);
+            return pageBinder.bind(PluginsPage.class);
         }
 
         return null;
@@ -84,10 +79,11 @@ public class PluginsPage extends ConfluenceAbstractPage<PluginsPage>
         return activePluginKey;
     }
 
-    private void waitForLoadedPlugins()
+    @WaitUntil
+    public void waitForLoadedPlugins()
     {
 
-        WebElement table = getDriver().findElement(By.cssSelector("td.pagebody table table > tbody"));
+        WebElement table = driver.findElement(ByJquery.$("td.pagebody table table > tbody"));
 
         List<WebElement> pluginAnchors = table.findElements(ByJquery.$("tr td a[href^=viewplugins]"));
         List<WebElement> pluginAnchorsWithErrors = table.findElements(ByJquery.$("tr td:contains(Errors loading plugin) a"));

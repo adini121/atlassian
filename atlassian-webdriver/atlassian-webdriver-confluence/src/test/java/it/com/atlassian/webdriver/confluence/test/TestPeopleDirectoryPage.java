@@ -1,7 +1,7 @@
 package it.com.atlassian.webdriver.confluence.test;
 
+import com.atlassian.pageobjects.page.User;
 import com.atlassian.webdriver.confluence.page.PeopleDirectoryPage;
-import com.atlassian.webdriver.utils.user.User;
 import org.junit.Test;
 
 import static org.junit.Assert.assertNotNull;
@@ -11,7 +11,7 @@ import static org.junit.Assert.assertNotNull;
  *
  * @since v1.0
  */
-public class TestPeopleDirectoryPage extends AbstractConfluenceAutoBrowserWebTest
+public class TestPeopleDirectoryPage extends AbstractConfluenceWebTest
 {
 
     private final static User ADMIN = new User("admin", "admin", "fullname", "email");
@@ -19,13 +19,13 @@ public class TestPeopleDirectoryPage extends AbstractConfluenceAutoBrowserWebTes
     @Test
     public void testPeopleDirectoryPage()
     {
-        dashboard.gotoPage(PeopleDirectoryPage.class);
+        pageBinder.navigateToAndBind(PeopleDirectoryPage.class);
     }
 
     @Test
     public void testUserMacro()
     {
-        PeopleDirectoryPage peopleDirectory = dashboard.gotoPage(PeopleDirectoryPage.class);
+        PeopleDirectoryPage peopleDirectory = pageBinder.navigateToAndBind(PeopleDirectoryPage.class);
         assertNotNull(peopleDirectory.getUserMacro(ADMIN.getUsername()));
     }
 

@@ -1,6 +1,6 @@
 package com.atlassian.webdriver.jira.page;
 
-import com.atlassian.webdriver.jira.JiraTestedProduct;
+import com.atlassian.pageobjects.binder.WaitUntil;
 import com.atlassian.webdriver.utils.by.ByJquery;
 import com.google.common.collect.ImmutableSet;
 import org.openqa.selenium.WebElement;
@@ -15,7 +15,7 @@ import java.util.Set;
  * Page object implementation for the Plugins page for JIRA.
  * TODO: add plugin details method, which also returns loaded modules per plugin
  */
-public class PluginsPage extends JiraAdminAbstractPage<PluginsPage>
+public class PluginsPage extends JiraAdminAbstractPage
 {
     private final static String URI = "/secure/admin/ViewPlugins!default.jspa";
 
@@ -25,22 +25,16 @@ public class PluginsPage extends JiraAdminAbstractPage<PluginsPage>
     private final Set<String> pluginsWithErrors;
     private final Set<String> disabledPlugins;
 
-    public PluginsPage(JiraTestedProduct jiraTestedProduct)
+    public PluginsPage()
     {
-        super(jiraTestedProduct, URI);
-
         loadedPlugins = new HashMap<String, WebElement>();
         pluginsWithErrors = new HashSet<String>();
         disabledPlugins = new HashSet<String>();
     }
 
-    public PluginsPage get(boolean activated)
+    public String getUrl()
     {
-        get(URI, activated);
-
-        waitForLoadedPlugins();
-
-        return this;
+        return URI;
     }
 
     public PluginsPage selectPlugin(String pluginKey)
@@ -48,7 +42,7 @@ public class PluginsPage extends JiraAdminAbstractPage<PluginsPage>
         if (pluginIsLoaded(pluginKey))
         {
             loadedPlugins.get(pluginKey).click();
-            return getTestedProduct().gotoPage(PluginsPage.class,true);
+            return pageBinder.bind(PluginsPage.class);
         }
 
         return null;
@@ -84,9 +78,10 @@ public class PluginsPage extends JiraAdminAbstractPage<PluginsPage>
         return activePluginKey;
     }
 
-    private void waitForLoadedPlugins()
+    @WaitUntil
+    public void waitForLoadedPlugins()
     {
-        WebElement table = getDriver().findElement(ByJquery.$("table table table table"));
+        WebElement table = driver.findElement(ByJquery.$("table table table table"));
 
         List<WebElement> pluginAnchors = table.findElements(ByJquery.$("tr td a[href^=ViewPlugins.jspa]"));
         List<WebElement> pluginAnchorsWithErrors = table.findElements(ByJquery.$("tr td:contains(Errors loading plugin) a"));

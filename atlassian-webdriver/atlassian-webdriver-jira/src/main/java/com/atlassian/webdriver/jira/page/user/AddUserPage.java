@@ -1,9 +1,8 @@
 package com.atlassian.webdriver.jira.page.user;
 
-import com.atlassian.webdriver.jira.JiraTestedProduct;
+import com.atlassian.pageobjects.binder.Init;
 import com.atlassian.webdriver.jira.page.JiraAdminAbstractPage;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -16,7 +15,7 @@ import java.util.Set;
  *
  * @since v1.0
  */
-public class AddUserPage extends JiraAdminAbstractPage<AddUserPage>
+public class AddUserPage extends JiraAdminAbstractPage
 {
     private static String URI = "/secure/admin/user/AddUser!default.jspa";
 
@@ -46,23 +45,15 @@ public class AddUserPage extends JiraAdminAbstractPage<AddUserPage>
 
     private Set<String> errors = new HashSet<String>();
 
-    public AddUserPage(JiraTestedProduct jiraTestedProduct)
+    public String getUrl()
     {
-        super(jiraTestedProduct, URI);
+        return URI;
     }
 
-    public AddUserPage get(final boolean activated)
+    @Init
+    public void checkForErrors()
     {
-        get(URI, activated);
-
-        checkForErrors();
-
-        return this;
-    }
-
-    private void checkForErrors()
-    {
-        List<WebElement> errorElements = getDriver().findElements(By.className(".errMsg"));
+        List<WebElement> errorElements = driver.findElements(By.className(".errMsg"));
 
         for (WebElement errEl : errorElements)
         {
@@ -125,21 +116,21 @@ public class AddUserPage extends JiraAdminAbstractPage<AddUserPage>
     {
         createButton.click();
 
-        return getTestedProduct().gotoPage(ViewUserPage.class, true);
+        return pageBinder.bind(ViewUserPage.class);
     }
 
     public AddUserPage createUserExpectingError()
     {
         createButton.click();
 
-        return getTestedProduct().gotoPage(AddUserPage.class, true);
+        return pageBinder.bind(AddUserPage.class);
     }
 
     public UserBrowserPage cancelCreateUser()
     {
         cancelButton.click();
 
-        return getTestedProduct().gotoPage(UserBrowserPage.class, true);
+        return pageBinder.bind(UserBrowserPage.class);
     }
 
     public boolean hasError()

@@ -1,10 +1,12 @@
 package com.atlassian.webdriver.jira.component.dashboard;
 
+import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.jira.JiraTestedProduct;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import javax.inject.Inject;
 import java.util.List;
 
 /**
@@ -13,12 +15,13 @@ import java.util.List;
  */
 public class GadgetView implements WebElement
 {
-    WebElement view;
-    private final WebDriver driver;
+    @Inject
+    AtlassianWebDriver driver;
 
-    public GadgetView(WebElement view, JiraTestedProduct jiraTestedProduct)
+    private final WebElement view;
+
+    public GadgetView(WebElement view)
     {
-        this.driver = jiraTestedProduct.getDriver();
         this.view = view;
     }
 

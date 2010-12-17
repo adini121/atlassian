@@ -1,9 +1,12 @@
 package com.atlassian.webdriver.confluence.component.sherpa;
 
-import com.atlassian.webdriver.product.TestedProduct;
+import com.atlassian.pageobjects.binder.Init;
+import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.utils.Search;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+
+import javax.inject.Inject;
 
 /**
  * TODO: Document this class / interface here
@@ -12,21 +15,22 @@ import org.openqa.selenium.WebElement;
  */
 public class WelcomeScreen
 {
-    private final TestedProduct testedProduct;
     private WebElement dialogComponent;
     private WebElement dialogPanel;
     private WebElement closeButton;
     private WebElement title;
     private WebElement showAtStartupTickbox;
 
-    public WelcomeScreen(TestedProduct testedProduct)
-    {
-        this.testedProduct = testedProduct;
+    @Inject
+    AtlassianWebDriver driver;
 
+    @Init
+    public void init()
+    {
         By dialogComponentBy = By.id("second-user-dialog");
 
-        testedProduct.getDriver().waitUntilElementIsVisible(dialogComponentBy);
-        dialogComponent = testedProduct.getDriver().findElement(dialogComponentBy);
+        driver.waitUntilElementIsVisible(dialogComponentBy);
+        dialogComponent = driver.findElement(dialogComponentBy);
         dialogPanel = dialogComponent.findElement(By.className("dialog-button-panel"));
         closeButton = Search.findElementWithText(By.tagName("button"), "Close", dialogPanel);
         title = dialogComponent.findElement(By.className("dialog-title"));

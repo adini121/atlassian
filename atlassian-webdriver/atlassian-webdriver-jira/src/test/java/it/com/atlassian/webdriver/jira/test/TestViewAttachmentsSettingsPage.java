@@ -1,10 +1,9 @@
 package it.com.atlassian.webdriver.jira.test;
 
-import com.atlassian.webdriver.browsers.WebDriverBrowserAutoInstall;
+import com.atlassian.pageobjects.product.TestedProductFactory;
 import com.atlassian.webdriver.jira.JiraTestedProduct;
 import com.atlassian.webdriver.jira.page.DashboardPage;
 import com.atlassian.webdriver.jira.page.ViewAttachmentsSettingsPage;
-import com.atlassian.webdriver.product.TestedProductFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,27 +16,26 @@ import org.junit.Test;
 public class TestViewAttachmentsSettingsPage
 {
 
-    private static final JiraTestedProduct JIRA = TestedProductFactory.create(JiraTestedProduct.class, "jira",
-            WebDriverBrowserAutoInstall.INSTANCE.getDriver());
+    private static final JiraTestedProduct JIRA = TestedProductFactory.create(JiraTestedProduct.class);
 
     private DashboardPage dashboard;
 
     @Before
     public void login()
     {
-        dashboard = JIRA.gotoLoginPage().loginAsAdmin();
+        dashboard = JIRA.gotoLoginPage().loginAsSysAdmin(DashboardPage.class);
     }
 
     @After
     public void cleanUpCookies()
     {
-        JIRA.getDriver().manage().deleteAllCookies();
+        JIRA.getTester().getDriver().manage().deleteAllCookies();
     }
 
     @Test
     public void testViewAttachmentSettingsPage()
     {
-        dashboard.gotoPage(ViewAttachmentsSettingsPage.class);
+        JIRA.getPageBinder().navigateToAndBind(ViewAttachmentsSettingsPage.class);
     }
 
 }

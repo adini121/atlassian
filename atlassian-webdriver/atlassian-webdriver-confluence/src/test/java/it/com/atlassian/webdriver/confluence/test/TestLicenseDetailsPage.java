@@ -8,13 +8,13 @@ import org.junit.Test;
  *
  * @since v1.0
  */
-public class TestLicenseDetailsPage extends AbstractConfluenceAutoBrowserWebTest
+public class TestLicenseDetailsPage extends AbstractConfluenceWebTest
 {
 
     @Test
     public void testLicenseDetailsPage()
     {
-        dashboard.gotoPage(LicenseDetailsPage.class);
+        pageBinder.navigateToAndBind(LicenseDetailsPage.class);
     }
 
 }

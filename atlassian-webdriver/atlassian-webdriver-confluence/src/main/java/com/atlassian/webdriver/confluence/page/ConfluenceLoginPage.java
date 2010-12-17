@@ -1,8 +1,8 @@
 package com.atlassian.webdriver.confluence.page;
 
-import com.atlassian.webdriver.utils.user.User;
-import com.atlassian.webdriver.confluence.ConfluenceTestedProduct;
-import com.atlassian.webdriver.page.LoginPage;
+import com.atlassian.pageobjects.page.LoginPage;
+import com.atlassian.pageobjects.page.Page;
+import com.atlassian.pageobjects.page.User;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -11,8 +11,7 @@ import org.openqa.selenium.support.FindBy;
 /**
  * Page object implementation for the LoginPage in Confluence.
  */
-public class ConfluenceLoginPage extends ConfluenceAbstractPage<ConfluenceLoginPage>
-    implements LoginPage<ConfluenceTestedProduct, ConfluenceLoginPage, DashboardPage>
+public class ConfluenceLoginPage extends ConfluenceAbstractPage implements LoginPage
 {
     public static final String URI = "/login.action";
 
@@ -28,23 +27,22 @@ public class ConfluenceLoginPage extends ConfluenceAbstractPage<ConfluenceLoginP
     @FindBy (name = "loginform")
     private WebElement loginForm;
 
-    public ConfluenceLoginPage(ConfluenceTestedProduct testedProduct)
+    public String getUrl()
     {
-        super(testedProduct, URI);
+        return URI;
     }
 
-    // Add this to handle the logout page redirecting to the login page.
-    protected  ConfluenceLoginPage(ConfluenceTestedProduct testedProduct, String uri)
+    public <M extends Page> M login(User user, Class<M> nextPage)
     {
-        super(testedProduct, uri);
+        return login(user, false, nextPage);
     }
 
-    public DashboardPage login(User user)
+    public <M extends Page> M loginAsSysAdmin(Class<M> nextPage)
     {
-        return login(user, false);
+        return login(new User("admin", "admin", "fullname", "email"), nextPage);
     }
 
-    public DashboardPage login(User user, boolean rememberMe)
+    public <M extends Page> M login(User user, boolean rememberMe, Class<M> nextPage)
     {
         usernameField.sendKeys(user.getUsername());
         passwordField.sendKeys(user.getPassword());
@@ -55,13 +53,9 @@ public class ConfluenceLoginPage extends ConfluenceAbstractPage<ConfluenceLoginP
         }      
 
         loginForm.submit();
-        getTestedProduct().setLoggedInUser(user);
+        testedProduct.setLoggedInUser(user);
 
-        return getTestedProduct().gotoPage(DashboardPage.class, true);
+        return pageBinder.navigateToAndBind(nextPage);
     }
 
-    public DashboardPage loginAsAdmin()
-    {
-        return login(new User("admin", "admin", "fullname", "email"));
-    }
 }

@@ -1,9 +1,7 @@
 package com.atlassian.webdriver.jira.page;
 
-import com.atlassian.webdriver.jira.JiraTestedProduct;
-import com.atlassian.webdriver.utils.by.ByJquery;
+import com.atlassian.pageobjects.binder.WaitUntil;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -16,7 +14,7 @@ import java.util.regex.Pattern;
 /**
  * Page object implementation for the License details page in JIRA.
  */
-public class LicenseDetailsPage extends JiraAdminAbstractPage<LicenseDetailsPage>
+public class LicenseDetailsPage extends JiraAdminAbstractPage
 {
 
     private static final String URI = "/secure/admin/ViewLicense!default.jspa";
@@ -30,9 +28,9 @@ public class LicenseDetailsPage extends JiraAdminAbstractPage<LicenseDetailsPage
     @FindBy (id = "add_submit")
     WebElement addLicenseButton;
 
-    public LicenseDetailsPage(JiraTestedProduct testedProduct)
+    public String getUrl()
     {
-        super(testedProduct, URI);
+        return URI;
     }
 
     public String getOrganisation()
@@ -108,12 +106,12 @@ public class LicenseDetailsPage extends JiraAdminAbstractPage<LicenseDetailsPage
 
         addLicenseButton.click();
 
-        return new LicenseDetailsPage(getTestedProduct()).get(true);
+        return pageBinder.bind(LicenseDetailsPage.class);
     }
 
-    @Override
+    @WaitUntil
     public void doWait()
     {
-        getDriver().waitUntilElementIsLocated(By.id("license_table"));
+        driver.waitUntilElementIsLocated(By.id("license_table"));
     }
 }

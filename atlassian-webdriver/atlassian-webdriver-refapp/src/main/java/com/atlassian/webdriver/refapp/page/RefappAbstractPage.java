@@ -1,47 +1,36 @@
 package com.atlassian.webdriver.refapp.page;
 
-import com.atlassian.webdriver.utils.user.User;
-import com.atlassian.webdriver.page.AbstractPage;
-import com.atlassian.webdriver.PageObject;
-import com.atlassian.webdriver.page.UserDiscoverable;
-import com.atlassian.webdriver.refapp.RefappTestedProduct;
+import com.atlassian.pageobjects.binder.WaitUntil;
+import com.atlassian.pageobjects.page.Page;
+import com.atlassian.pageobjects.page.User;
+import com.atlassian.webdriver.AtlassianWebDriver;
 import org.openqa.selenium.By;
 
-public abstract class RefappAbstractPage<P extends PageObject> extends AbstractPage<RefappTestedProduct, P>
-    implements UserDiscoverable
-{
-    private final String uri;
+import javax.inject.Inject;
 
-    public RefappAbstractPage(RefappTestedProduct testedProduct, String uri)
-    {
-        super(testedProduct);
-        this.uri = uri;
-    }
+public abstract class RefappAbstractPage implements Page
+{
+    @Inject
+    protected AtlassianWebDriver driver;
 
     public boolean isLoggedIn()
     {
-        return driver().findElement(By.id("login")).getText().equals("Logout");
+        return driver.findElement(By.id("login")).getText().equals("Logout");
     }
 
     public boolean isLoggedInAsUser(User user)
     {
-        return isLoggedIn() && driver().findElement(By.id("user")).getText().contains(user.getFullName());
+        return isLoggedIn() && driver.findElement(By.id("user")).getText().contains(user.getFullName());
     }
 
     public boolean isAdmin()
     {
-        return isLoggedIn() && driver().findElement(By.id("user")).getText().contains("(Sysadmin)");
+        return isLoggedIn() && driver.findElement(By.id("user")).getText().contains("(Sysadmin)");
     }
 
-    public P get(boolean activated)
-    {
-        super.get(uri, activated);
-        return (P) this;
-    }
-
-    @Override
+    @WaitUntil
     public void doWait()
     {
-        testedProduct.getDriver().waitUntilElementIsLocated(By.className("refapp-footer"));
+        driver.waitUntilElementIsLocated(By.className("refapp-footer"));
     }
 }

@@ -1,7 +1,5 @@
 package com.atlassian.webdriver.confluence.component.macro;
 
-import com.atlassian.webdriver.component.AbstractComponent;
-import com.atlassian.webdriver.confluence.ConfluenceTestedProduct;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
@@ -10,7 +8,7 @@ import org.openqa.selenium.WebElement;
  *
  * @since v4.2
  */
-public class UserMacro extends AbstractComponent<ConfluenceTestedProduct, UserMacro>
+public class UserMacro
 {
 
     private WebElement vCardElement;
@@ -27,17 +25,10 @@ public class UserMacro extends AbstractComponent<ConfluenceTestedProduct, UserMa
     /**
      * 
      */
-    public UserMacro(ConfluenceTestedProduct testedProduct)
+    public UserMacro(final By componentLocator, WebElement profileElement)
     {
-        super(testedProduct);
-    }
 
-    @Override
-    public void initialise(final By componentLocator)
-    {
-        super.initialise(componentLocator);
-
-        vCardElement = getContext().findElement(componentLocator);
+        vCardElement = profileElement.findElement(componentLocator);
 
         userLogoLink = vCardElement.findElement(By.className("userLogoLink"));
         userLogo = vCardElement.findElement(By.className("userLogo"));

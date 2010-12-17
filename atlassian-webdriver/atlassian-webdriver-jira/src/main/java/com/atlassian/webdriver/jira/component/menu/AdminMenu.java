@@ -1,75 +1,79 @@
 package com.atlassian.webdriver.jira.component.menu;
 
-import com.atlassian.webdriver.Link;
-import com.atlassian.webdriver.PageObject;
-import com.atlassian.webdriver.component.AbstractComponent;
-import com.atlassian.webdriver.component.menu.AuiDropdownMenu;
-import com.atlassian.webdriver.component.menu.DropdownMenu;
-import com.atlassian.webdriver.jira.JiraTestedProduct;
+import com.atlassian.pageobjects.PageBinder;
+import com.atlassian.pageobjects.binder.Init;
 import com.atlassian.webdriver.jira.page.LicenseDetailsPage;
 import com.atlassian.webdriver.jira.page.PluginsPage;
 import com.atlassian.webdriver.jira.page.ProjectsViewPage;
 import com.atlassian.webdriver.jira.page.user.UserBrowserPage;
+import com.atlassian.webdriver.pageobjects.ClickableLink;
+import com.atlassian.webdriver.pageobjects.WebDriverLink;
+import com.atlassian.webdriver.pageobjects.menu.AuiDropdownMenu;
+import com.atlassian.webdriver.pageobjects.menu.DropdownMenu;
 import com.atlassian.webdriver.utils.by.ByJquery;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+
+import javax.inject.Inject;
 
 /**
  * Object for interacting with the Admin menu in the JIRA header.
  * TODO: extend for all available links.
  */
-public class AdminMenu extends AbstractComponent<JiraTestedProduct, AdminMenu>
-        implements DropdownMenu
+public class AdminMenu implements DropdownMenu<AdminMenu>
 {
 
-    private final By ADMIN_MENU_LOCATOR = ByJquery.$("#admin_link").parent("li");
+    @Inject
+    PageBinder pageBinder;
 
-    private static final Link<PluginsPage> PLUGINS_PAGE = new Link(By.id("plugins_lnk"), PluginsPage.class);
-    private static final Link<LicenseDetailsPage> LICENSE_DETAILS_PAGE = new Link(By.id("license_details_lnk"), LicenseDetailsPage.class);
-    private static final Link<UserBrowserPage> USER_BROWSER_PAGE = new Link(By.id("user_browser_lnk"), UserBrowserPage.class);
-    private static final Link<ProjectsViewPage> PROJECTS_VIEW_PAGE = new Link(By.id("view_projects_lnk"), ProjectsViewPage.class);
+    @FindBy(id = "plugins_lnk")
+    private WebElement pluginsPageLink;
 
-    private AuiDropdownMenu<JiraTestedProduct> adminMenu;
+    @ClickableLink(id = "plugins_lnk", nextPage = PluginsPage.class)
+    WebDriverLink<PluginsPage> pluginsLink;
 
-    public AdminMenu(JiraTestedProduct jiraTestedProduct)
-    {
-        super(jiraTestedProduct);
-    }
+    @ClickableLink(id = "license_details_lnk", nextPage = LicenseDetailsPage.class)
+    WebDriverLink<LicenseDetailsPage> licenseDetailsLink;
 
-    @Override
+    @ClickableLink(id = "user_browser_lnk", nextPage = UserBrowserPage.class)
+    WebDriverLink<UserBrowserPage> userBrowserLink;
+
+    @ClickableLink(id = "view_projects_lnk", nextPage = ProjectsViewPage.class)
+    WebDriverLink<ProjectsViewPage> projectsViewPage;
+
+    private AuiDropdownMenu adminMenu;
+
+    @Init
     public void initialise()
     {
-        super.initialise(ADMIN_MENU_LOCATOR);
-        adminMenu = getTestedProduct().getComponent(getComponentLocator(), AuiDropdownMenu.class);
+        adminMenu = pageBinder.bind(AuiDropdownMenu.class, ByJquery.$("#admin_link").parent("li"));
     }
 
     public PluginsPage gotoPluginsPage()
     {
-        return activate(PLUGINS_PAGE);
+        return pluginsLink.activate();
     }
 
     public LicenseDetailsPage gotoLicenseDetailsPage()
     {
-        return activate(LICENSE_DETAILS_PAGE);
+        return licenseDetailsLink.activate();
     }
 
     public UserBrowserPage gotoUserBrowserPage()
     {
-        return activate(USER_BROWSER_PAGE);
+        return userBrowserLink.activate();
     }
 
     public ProjectsViewPage gotoProjectsPage()
     {
-        return activate(PROJECTS_VIEW_PAGE);
+        return projectsViewPage.activate();
     }
 
-    public <T extends PageObject> T activate(final Link<T> link)
-    {
-        return adminMenu.activate(link);
-    }
-
-    public void open()
+    public AdminMenu open()
     {
         adminMenu.open();
+        return this;
     }
 
     public boolean isOpen()
@@ -77,8 +81,9 @@ public class AdminMenu extends AbstractComponent<JiraTestedProduct, AdminMenu>
         return adminMenu.isOpen();
     }
 
-    public void close()
+    public AdminMenu close()
     {
         adminMenu.close();
+        return this;
     }
 }

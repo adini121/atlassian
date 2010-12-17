@@ -1,9 +1,7 @@
 package com.atlassian.webdriver.jira.page.user;
 
-import com.atlassian.webdriver.PageObject;
-import com.atlassian.webdriver.jira.JiraTestedProduct;
+import com.atlassian.pageobjects.page.Page;
 import com.atlassian.webdriver.jira.page.JiraAdminAbstractPage;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -12,7 +10,7 @@ import org.openqa.selenium.support.FindBy;
  *
  * @since v1.0
  */
-public class ViewUserPage extends JiraAdminAbstractPage<ViewUserPage>
+public class ViewUserPage extends JiraAdminAbstractPage
 {
     
     private static final String URI = "/secure/admin/user/ViewUser.jspa";
@@ -52,29 +50,29 @@ public class ViewUserPage extends JiraAdminAbstractPage<ViewUserPage>
 
     // TODO: groups are currently image bullets, don't handle them. Make JIRA change to <ul>.
 
-    public ViewUserPage(JiraTestedProduct jiraTestedProduct)
+    public String getUrl()
     {
-        super(jiraTestedProduct, URI);
+        return URI;
     }
 
     public DeleteUserPage gotoDeleteUserPage()
     {
         deleteUserLink.click();
 
-        return getTestedProduct().gotoPage(DeleteUserPage.class, true);
+        return pageBinder.bind(DeleteUserPage.class);
     }
 
-    public PageObject setPassword()
+    public Page setPassword()
     {
         throw new UnsupportedOperationException("Set password on ViewUserPage is not supported");
     }
 
-    public PageObject editDetails()
+    public Page editDetails()
     {
         throw new UnsupportedOperationException("Edit details on ViewUserPage is not supported");
     }
 
-    public PageObject viewProjectsRoles()
+    public Page viewProjectsRoles()
     {
         throw new UnsupportedOperationException("View project roles on ViewUSerPage is not supported");
     }
@@ -83,15 +81,15 @@ public class ViewUserPage extends JiraAdminAbstractPage<ViewUserPage>
     {
         editUserLink.click();
 
-        return getTestedProduct().gotoPage(EditUserGroupsPage.class, true);
+        return pageBinder.bind(EditUserGroupsPage.class);
     }
 
-    public PageObject editProperties()
+    public Page editProperties()
     {
         throw new UnsupportedOperationException("Edit properties on the ViewUserPage is not supported");
     }
 
-    public PageObject viewPublicProfile()
+    public Page viewPublicProfile()
     {
         throw new UnsupportedOperationException("View public profile on ViewUserPage is not supported");
     }

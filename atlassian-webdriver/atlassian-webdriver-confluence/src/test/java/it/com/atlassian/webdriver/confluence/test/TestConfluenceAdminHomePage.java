@@ -8,13 +8,13 @@ import org.junit.Test;
  *
  * @since v1.0
  */
-public class TestConfluenceAdminHomePage extends AbstractConfluenceAutoBrowserWebTest
+public class TestConfluenceAdminHomePage extends AbstractConfluenceWebTest
 {
 
     @Test
     public void testAdminHomePage()
     {
-        dashboard.gotoPage(ConfluenceAdminHomePage.class);
+        pageBinder.navigateToAndBind(ConfluenceAdminHomePage.class);
     }
 
 }

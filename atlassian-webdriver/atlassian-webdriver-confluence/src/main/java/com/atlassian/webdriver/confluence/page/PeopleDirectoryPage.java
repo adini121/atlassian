@@ -1,9 +1,8 @@
 package com.atlassian.webdriver.confluence.page;
 
-import com.atlassian.webdriver.confluence.ConfluenceTestedProduct;
+import com.atlassian.pageobjects.binder.Init;
 import com.atlassian.webdriver.confluence.component.macro.UserMacro;
 import com.atlassian.webdriver.utils.by.ByJquery;
-import com.atlassian.webdriver.utils.Check;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -15,7 +14,7 @@ import java.util.Set;
 /**
  * 
  */
-public class PeopleDirectoryPage extends ConfluenceAbstractPage<PeopleDirectoryPage>
+public class PeopleDirectoryPage extends ConfluenceAbstractPage
 {
     private static final String URI = "/browsepeople.action";
 
@@ -27,25 +26,18 @@ public class PeopleDirectoryPage extends ConfluenceAbstractPage<PeopleDirectoryP
 
     private Map<String, UserMacro> users = new HashMap<String, UserMacro>();
 
-    public PeopleDirectoryPage(ConfluenceTestedProduct testedProduct)
+
+    public String getUrl()
     {
-        super(testedProduct, URI);
+        return URI;
     }
 
-    public PeopleDirectoryPage get(final boolean activated)
+    @Init
+    public void parseUsers()
     {
-        get(URI, activated);
-
-        parseUsers();
-
-        return this;
-    }
-
-    private void parseUsers()
-    {
-        for (WebElement profile : getDriver().findElements(By.className("profile-macro")))
+        for (WebElement profile : driver.findElements(By.className("profile-macro")))
         {
-            UserMacro userMacro = getTestedProduct().getComponent(By.className("vcard"), profile, UserMacro.class);
+            UserMacro userMacro = pageBinder.bind(UserMacro.class, By.className("vcard"), profile);
             users.put(userMacro.getUsername(), userMacro);
         }
     }
@@ -65,7 +57,7 @@ public class PeopleDirectoryPage extends ConfluenceAbstractPage<PeopleDirectoryP
             allPeopleLink.click();
         }
 
-        return getTestedProduct().gotoPage(PeopleDirectoryPage.class, true);
+        return pageBinder.bind(PeopleDirectoryPage.class);
     }
 
     public PeopleDirectoryPage showAllPeopleWithPersonalSpaces()
@@ -76,7 +68,7 @@ public class PeopleDirectoryPage extends ConfluenceAbstractPage<PeopleDirectoryP
             peopleWithPersonalSpacesLink.click();
         }
 
-        return getTestedProduct().gotoPage(PeopleDirectoryPage.class, true);
+        return pageBinder.bind(PeopleDirectoryPage.class);
 
     }
 
@@ -92,11 +84,11 @@ public class PeopleDirectoryPage extends ConfluenceAbstractPage<PeopleDirectoryP
 
     public boolean isShowingAllPeople()
     {
-        return getDriver().elementExists(ByJquery.$("div.greybox p strong:contains(All People)"));
+        return driver.elementExists(ByJquery.$("div.greybox p strong:contains(All People)"));
     }
 
     public boolean isShowingPeopleWithPersonalSpaces()
     {
-        return getDriver().elementExists(ByJquery.$("div.greybox p strong:contains(People with Personal Spaces)"));
+        return driver.elementExists(ByJquery.$("div.greybox p strong:contains(People with Personal Spaces)"));
     }
 }

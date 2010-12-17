@@ -8,13 +8,12 @@ import com.atlassian.webdriver.jira.page.JiraAdminAbstractPage;
  *
  * @since v1.0
  */
-public class GreenHopperGeneralConfigurationPage
-        extends JiraAdminAbstractPage<GreenHopperGeneralConfigurationPage>
+public class GreenHopperGeneralConfigurationPage extends JiraAdminAbstractPage
 {
     private static final String URI = "/secure/GHGeneralConfiguration.jspa?decorator=admin";
 
-    public GreenHopperGeneralConfigurationPage(JiraTestedProduct testedProduct, String uri)
+    public String getUrl()
     {
-        super(testedProduct, uri);
+        return URI;
     }
 }

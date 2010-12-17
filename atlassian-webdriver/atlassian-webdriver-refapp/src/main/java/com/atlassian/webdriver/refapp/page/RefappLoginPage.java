@@ -1,31 +1,38 @@
 package com.atlassian.webdriver.refapp.page;
 
-import com.atlassian.webdriver.utils.user.User;
-import com.atlassian.webdriver.page.LoginPage;
-import com.atlassian.webdriver.refapp.RefappTestedProduct;
+import com.atlassian.pageobjects.PageBinder;
+import com.atlassian.pageobjects.page.LoginPage;
+import com.atlassian.pageobjects.page.Page;
+import com.atlassian.pageobjects.page.User;
 import org.openqa.selenium.By;
+
+import javax.inject.Inject;
 
 /**
  *
  */
-public class RefappLoginPage extends RefappAbstractPage<RefappLoginPage> implements LoginPage<RefappTestedProduct,
-        RefappLoginPage, RefappHomePage>
+public class RefappLoginPage extends RefappAbstractPage implements LoginPage
 {
-    public RefappLoginPage(RefappTestedProduct testedProduct)
+    @Inject
+    PageBinder pageBinder;
+
+    public String getUrl()
     {
-        super(testedProduct, "/plugins/servlet/login");
+        return "/plugins/servlet/login";
     }
 
-    public RefappHomePage login(User user)
+    public <M extends Page> M login(User user, Class<M> nextPage)
     {
-        driver().findElement(By.name("os_username")).sendKeys(user.getUsername());
-        driver().findElement(By.name("os_password")).sendKeys(user.getPassword());
-        driver().findElement(By.id("os_login")).submit();
-        return getTestedProduct().gotoPage(RefappHomePage.class, true);
+        driver.findElement(By.name("os_username")).sendKeys(user.getUsername());
+        driver.findElement(By.name("os_password")).sendKeys(user.getPassword());
+        driver.findElement(By.id("os_login")).submit();
+        return (M) pageBinder.navigateToAndBind(RefappHomePage.class);
     }
 
-    public RefappHomePage loginAsAdmin() {
 
-        return login(new User("admin", "admin", "fullname", "email"));
+    public <M extends Page> M loginAsSysAdmin(Class<M> nextPage)
+    {
+        return login(new User("admin", "admin", "fullname", "email"), nextPage);
     }
+
 }

@@ -1,6 +1,6 @@
 package com.atlassian.webdriver.jira.page.user;
 
-import com.atlassian.webdriver.jira.JiraTestedProduct;
+import com.atlassian.pageobjects.binder.Init;
 import com.atlassian.webdriver.jira.page.JiraAdminAbstractPage;
 import com.atlassian.webdriver.utils.by.ByJquery;
 import com.atlassian.webdriver.utils.Check;
@@ -15,7 +15,7 @@ import java.util.Set;
  *
  * @since v1.0
  */
-public class DeleteUserPage extends JiraAdminAbstractPage<DeleteUserPage>
+public class DeleteUserPage extends JiraAdminAbstractPage
 {
     private static String URI = "/secure/admin/user/DeleteUser.jspa";
 
@@ -44,33 +44,25 @@ public class DeleteUserPage extends JiraAdminAbstractPage<DeleteUserPage>
 
     private Set<String> errors = new HashSet <String>();
 
-    public DeleteUserPage(final JiraTestedProduct jiraTestedProduct)
+    public String getUrl()
     {
-        super(jiraTestedProduct, URI);
+        return URI;
     }
 
-    public DeleteUserPage get(final boolean activated)
-    {
-        get(URI, activated);
-
-        parsePage();
-
-        return this;
-    }
-
-    private void parsePage()
+    @Init
+    public void parsePage()
     {
         //Check for errors on the page
-        if (Check.elementExists(ByJquery.$(ERROR_SELECTOR), getDriver()))
+        if (Check.elementExists(ByJquery.$(ERROR_SELECTOR), driver))
         {
-            for (WebElement el : getDriver().findElements(ByJquery.$(ERROR_SELECTOR)))
+            for (WebElement el : driver.findElements(ByJquery.$(ERROR_SELECTOR)))
             {
                 errors.add(el.getText());
             }
         }
 
-        numberOfAssignedIssuesElement = getDriver().findElement(ByJquery.$("td.fieldLabelArea:contains(Assigned Issues)").siblings("td"));
-        numberOfReportedIssuesElement = getDriver().findElement(ByJquery.$("td.fieldLabelArea:contains(Reported Issues)").siblings("td"));
+        numberOfAssignedIssuesElement = driver.findElement(ByJquery.$("td.fieldLabelArea:contains(Assigned Issues)").siblings("td"));
+        numberOfReportedIssuesElement = driver.findElement(ByJquery.$("td.fieldLabelArea:contains(Reported Issues)").siblings("td"));
     }
 
     public boolean hasErrors()
@@ -87,14 +79,14 @@ public class DeleteUserPage extends JiraAdminAbstractPage<DeleteUserPage>
     {
         deleteUserButton.click();
 
-        return getTestedProduct().gotoPage(UserBrowserPage.class, true);
+        return pageBinder.bind(UserBrowserPage.class);
     }
 
     public DeleteUserPage deleteUserExpectingError()
     {
         deleteUserButton.click();
 
-        return getTestedProduct().gotoPage(DeleteUserPage.class, true);
+        return pageBinder.bind(DeleteUserPage.class);
     }
 
     public int getNumberOfSharedFiltersElement()
