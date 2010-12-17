@@ -17,7 +17,7 @@ public abstract class JiraAdminAbstractPage extends JiraAbstractPage
 
     public AdminSideMenu getAdminSideMenu()
     {
-        return pageNavigator.build(AdminSideMenu.class);
+        return pageBinder.bind(AdminSideMenu.class);
     }
 
 }

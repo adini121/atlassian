@@ -1,8 +1,8 @@
 package com.atlassian.webdriver.jira.page;
 
 
-import com.atlassian.pageobjects.PageNavigator;
-import com.atlassian.pageobjects.navigator.WaitUntil;
+import com.atlassian.pageobjects.PageBinder;
+import com.atlassian.pageobjects.binder.WaitUntil;
 import com.atlassian.pageobjects.page.Page;
 import com.atlassian.pageobjects.page.User;
 import com.atlassian.webdriver.AtlassianWebDriver;
@@ -20,61 +20,22 @@ import javax.inject.Inject;
  * Such as getting the admin menu.
  * Sets the base url for the WebDrivePage class to use which is defined in the jira-base-url system property.
  */
-public abstract class JiraAbstractPage implements Page, UserDiscoverable
+public abstract class JiraAbstractPage implements Page
 {
     @Inject
-    protected PageNavigator pageNavigator;
+    protected PageBinder pageBinder;
 
     @Inject
     protected AtlassianWebDriver driver;
 
-    public boolean isLoggedIn()
-    {
-        return getHeader().isLoggedIn();
-    }
-
-    public boolean isLoggedInAsUser(User user)
-    {
-        return getHeader().isLoggedInAsUser(user);
-    }
-
-    public boolean isAdmin()
-    {
-        return getHeader().isAdmin();
-    }
-
     public JiraHeader getHeader()
     {
-        return pageNavigator.build(JiraHeader.class);
+        return pageBinder.bind(JiraHeader.class);
     }
 
     public DashboardMenu getDashboardMenu()
     {
         return getHeader().getDashboardMenu();
-    }
-
-    public AdminMenu getAdminMenu()
-    {
-        if (isAdmin())
-        {
-            return getHeader().getAdminMenu();
-        }
-        else
-        {
-            throw new RuntimeException("Tried to get the admin menu but the current user does not have access to it.");
-        }
-    }
-
-    public JiraUserMenu getUserMenu()
-    {
-        if (isLoggedIn())
-        {
-            return getHeader().getUserMenu();
-        }
-        else
-        {
-            throw new RuntimeException("Tried to get the user menu but the user is not logged in.");
-        }
     }
 
     /**

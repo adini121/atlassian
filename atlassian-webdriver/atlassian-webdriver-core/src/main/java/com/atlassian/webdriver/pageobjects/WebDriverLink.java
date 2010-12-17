@@ -1,6 +1,6 @@
 package com.atlassian.webdriver.pageobjects;
 
-import com.atlassian.pageobjects.PageNavigator;
+import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.page.Page;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import org.openqa.selenium.By;
@@ -18,7 +18,7 @@ public class WebDriverLink<P extends Page>
     private AtlassianWebDriver webDriver;
 
     @Inject
-    private PageNavigator pageNavigator;
+    private PageBinder pageBinder;
 
     private final By locator;
     private final Class<P> pageObjectClass;
@@ -40,7 +40,7 @@ public class WebDriverLink<P extends Page>
         {
             context.findElement(locator).click();
 
-            return pageNavigator.build(pageObjectClass);
+            return pageBinder.bind(pageObjectClass);
         }
 
         throw new ElementNotVisibleException("The link could not be activated By(" + locator + ") failed to find element");

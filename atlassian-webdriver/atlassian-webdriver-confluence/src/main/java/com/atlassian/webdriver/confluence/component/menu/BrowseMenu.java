@@ -1,7 +1,7 @@
 package com.atlassian.webdriver.confluence.component.menu;
 
-import com.atlassian.pageobjects.PageNavigator;
-import com.atlassian.pageobjects.navigator.Init;
+import com.atlassian.pageobjects.PageBinder;
+import com.atlassian.pageobjects.binder.Init;
 import com.atlassian.pageobjects.page.Page;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.pageobjects.ClickableLink;
@@ -11,7 +11,6 @@ import com.atlassian.webdriver.pageobjects.menu.DropdownMenu;
 import com.atlassian.webdriver.confluence.page.ConfluenceAdminHomePage;
 import com.atlassian.webdriver.confluence.page.PeopleDirectoryPage;
 import com.atlassian.webdriver.utils.by.ByJquery;
-import org.openqa.selenium.By;
 
 import javax.inject.Inject;
 
@@ -26,7 +25,7 @@ public class BrowseMenu implements DropdownMenu<BrowseMenu>
     AtlassianWebDriver driver;
 
     @Inject
-    PageNavigator pageNavigator;
+    PageBinder pageBinder;
 
     @ClickableLink(id = "administration-link", nextPage = ConfluenceAdminHomePage.class)
     WebDriverLink<ConfluenceAdminHomePage> adminPageLink;
@@ -39,7 +38,7 @@ public class BrowseMenu implements DropdownMenu<BrowseMenu>
     @Init
     public void initialise()
     {
-        browseMenu = pageNavigator.build(AjsDropdownMenu.class, ByJquery.$("#browse-menu-link").parent("li"));
+        browseMenu = pageBinder.bind(AjsDropdownMenu.class, ByJquery.$("#browse-menu-link").parent("li"));
     }
 
     public ConfluenceAdminHomePage gotoAdminPage()

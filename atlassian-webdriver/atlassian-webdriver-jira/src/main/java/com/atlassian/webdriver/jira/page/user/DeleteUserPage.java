@@ -1,7 +1,6 @@
 package com.atlassian.webdriver.jira.page.user;
 
-import com.atlassian.pageobjects.navigator.Init;
-import com.atlassian.webdriver.jira.JiraTestedProduct;
+import com.atlassian.pageobjects.binder.Init;
 import com.atlassian.webdriver.jira.page.JiraAdminAbstractPage;
 import com.atlassian.webdriver.utils.by.ByJquery;
 import com.atlassian.webdriver.utils.Check;
@@ -80,14 +79,14 @@ public class DeleteUserPage extends JiraAdminAbstractPage
     {
         deleteUserButton.click();
 
-        return pageNavigator.build(UserBrowserPage.class);
+        return pageBinder.bind(UserBrowserPage.class);
     }
 
     public DeleteUserPage deleteUserExpectingError()
     {
         deleteUserButton.click();
 
-        return pageNavigator.build(DeleteUserPage.class);
+        return pageBinder.bind(DeleteUserPage.class);
     }
 
     public int getNumberOfSharedFiltersElement()

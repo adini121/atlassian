@@ -1,6 +1,6 @@
 package com.atlassian.webdriver.refapp;
 
-import com.atlassian.pageobjects.PageNavigator;
+import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.product.Defaults;
 import com.atlassian.pageobjects.product.ProductInstance;
 import com.atlassian.pageobjects.product.TestedProduct;
@@ -8,7 +8,7 @@ import com.atlassian.pageobjects.product.TestedProductFactory;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.browsers.pageobjects.AutoInstallWebDriverTester;
 import com.atlassian.webdriver.pageobjects.WebDriverLink;
-import com.atlassian.webdriver.pageobjects.WebDriverPageNavigator;
+import com.atlassian.webdriver.pageobjects.WebDriverPageBinder;
 import com.atlassian.webdriver.pageobjects.WebDriverTester;
 import com.atlassian.webdriver.refapp.page.RefappAbstractPage;
 import com.atlassian.webdriver.refapp.page.RefappAdminHomePage;
@@ -24,7 +24,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 @Defaults(instanceId = "refapp", contextPath = "/refapp", httpPort = 5990)
 public class RefappTestedProduct implements TestedProduct<WebDriverTester<AtlassianWebDriver>, RefappHomePage, RefappAdminHomePage, RefappLoginPage>
 {
-    private final PageNavigator pageNavigator;
+    private final PageBinder pageBinder;
     private final WebDriverTester<AtlassianWebDriver> webDriverTester;
     private final ProductInstance productInstance;
 
@@ -42,27 +42,27 @@ public class RefappTestedProduct implements TestedProduct<WebDriverTester<Atlass
         }
         this.webDriverTester = tester;
         this.productInstance = productInstance;
-        this.pageNavigator = new WebDriverPageNavigator<AtlassianWebDriver>(this);
+        this.pageBinder = new WebDriverPageBinder<AtlassianWebDriver>(this);
     }
 
     public RefappHomePage gotoHomePage()
     {
-        return pageNavigator.gotoPage(RefappHomePage.class);
+        return pageBinder.navigateToAndBind(RefappHomePage.class);
     }
 
     public RefappAdminHomePage gotoAdminHomePage()
     {
-        return pageNavigator.gotoPage(RefappAdminHomePage.class);
+        return pageBinder.navigateToAndBind(RefappAdminHomePage.class);
     }
 
     public RefappLoginPage gotoLoginPage()
     {
-        return pageNavigator.gotoPage(RefappLoginPage.class);
+        return pageBinder.navigateToAndBind(RefappLoginPage.class);
     }
 
-    public PageNavigator getPageNavigator()
+    public PageBinder getPageBinder()
     {
-        return pageNavigator;
+        return pageBinder;
     }
 
     public ProductInstance getProductInstance()
@@ -84,9 +84,9 @@ public class RefappTestedProduct implements TestedProduct<WebDriverTester<Atlass
                              .loginAsSysAdmin(MyPage.class);
 
         RefappAdminHomePage adminPage = product.gotoAdminHomePage();
-        MyPage pageViaLink = product.getPageNavigator().build(MyLink.class).activate();
+        MyPage pageViaLink = product.getPageBinder().bind(MyLink.class).activate();
 
-        MyPage myPage = product.getPageNavigator().gotoPage(MyPage.class);
+        MyPage myPage = product.getPageBinder().navigateToAndBind(MyPage.class);
     }
 
     public static class MyLink extends WebDriverLink<MyPage>

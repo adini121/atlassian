@@ -1,6 +1,6 @@
 package com.atlassian.webdriver.jira.page;
 
-import com.atlassian.pageobjects.navigator.WaitUntil;
+import com.atlassian.pageobjects.binder.WaitUntil;
 import com.atlassian.webdriver.utils.by.ByJquery;
 import org.openqa.selenium.By;
 
@@ -22,7 +22,7 @@ public class LogoutPage extends JiraAbstractPage
         if (driver.elementExists(By.id("confirm-logout-submit")))
         {
             driver.findElement(By.id("confirm-logout-submit")).click();
-            return pageNavigator.build(LogoutPage.class);
+            return pageBinder.bind(LogoutPage.class);
         }
         else
         {

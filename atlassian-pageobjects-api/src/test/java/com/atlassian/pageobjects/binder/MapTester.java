@@ -1,4 +1,4 @@
-package com.atlassian.pageobjects.navigator;
+package com.atlassian.pageobjects.binder;
 
 import com.atlassian.pageobjects.Tester;
 

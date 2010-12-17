@@ -1,10 +1,7 @@
 package com.atlassian.webdriver.jira.page;
 
-import com.atlassian.pageobjects.navigator.WaitUntil;
-import com.atlassian.webdriver.jira.JiraTestedProduct;
-import com.atlassian.webdriver.utils.by.ByJquery;
+import com.atlassian.pageobjects.binder.WaitUntil;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -109,7 +106,7 @@ public class LicenseDetailsPage extends JiraAdminAbstractPage
 
         addLicenseButton.click();
 
-        return pageNavigator.build(LicenseDetailsPage.class);
+        return pageBinder.bind(LicenseDetailsPage.class);
     }
 
     @WaitUntil

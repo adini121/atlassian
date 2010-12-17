@@ -1,6 +1,6 @@
 package com.atlassian.webdriver.pageobjects.menu;
 
-import com.atlassian.pageobjects.navigator.Init;
+import com.atlassian.pageobjects.binder.Init;
 import com.atlassian.pageobjects.page.Page;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.pageobjects.WebDriverLink;

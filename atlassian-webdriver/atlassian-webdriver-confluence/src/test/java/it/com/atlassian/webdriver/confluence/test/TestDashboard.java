@@ -1,10 +1,7 @@
 package it.com.atlassian.webdriver.confluence.test;
 
 import com.atlassian.pageobjects.page.User;
-import com.atlassian.webdriver.browsers.WebDriverBrowserAutoInstall;
-import com.atlassian.webdriver.confluence.ConfluenceTestedProduct;
 import com.atlassian.webdriver.confluence.page.ConfluenceAdminHomePage;
-import com.atlassian.webdriver.confluence.page.ConfluenceLoginPage;
 import com.atlassian.webdriver.confluence.page.DashboardPage;
 import com.atlassian.webdriver.confluence.page.LogoutPage;
 import org.junit.Test;
@@ -26,7 +23,7 @@ public class TestDashboard extends AbstractConfluenceWebTest
         assertTrue(dashboard.isLoggedIn());
         assertTrue(dashboard.isLoggedInAsUser(new User("admin", "admin", null)));
 
-        pageNavigator.gotoPage(LogoutPage.class);
+        pageBinder.navigateToAndBind(LogoutPage.class);
     }
 
     @Test

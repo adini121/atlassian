@@ -1,6 +1,5 @@
 package com.atlassian.webdriver.confluence.page;
 
-import com.atlassian.webdriver.confluence.ConfluenceTestedProduct;
 import com.atlassian.webdriver.utils.by.ByJquery;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -107,7 +106,7 @@ public class LicenseDetailsPage extends ConfluenceAbstractPage
         updateLicenseTextArea.sendKeys(license);
         submitLicenseButton.click();
 
-        return pageNavigator.build(LicenseDetailsPage.class);
+        return pageBinder.bind(LicenseDetailsPage.class);
     }
 
 }

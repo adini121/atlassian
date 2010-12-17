@@ -1,6 +1,6 @@
-package com.atlassian.pageobjects.navigator;
+package com.atlassian.pageobjects.binder;
 
-import com.atlassian.pageobjects.PageNavigator;
+import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.Tester;
 import com.atlassian.pageobjects.page.Page;
 import com.atlassian.pageobjects.product.ProductInstance;
@@ -16,50 +16,57 @@ import static org.junit.Assert.assertEquals;
 /**
  *
  */
-public class TestInjectPageNavigator
+public class TestInjectPageBinder
 {
     private MapTester tester;
     private MyTestedProduct product;
-    private InjectPageNavigator navigator;
+    private InjectPageBinder binder;
 
     @Before
     public void setUp() throws Exception
     {
         tester = new MapTester();
         product = new MyTestedProduct(tester);
-        navigator = new InjectPageNavigator(product);
+        binder = new InjectPageBinder(product);
     }
 
     @Test
     public void testInject()
     {
         tester.add(String.class, "Bob");
-        OneFieldPage page = navigator.build(OneFieldPage.class);
+        OneFieldPage page = binder.bind(OneFieldPage.class);
         assertEquals("Bob", page.name);
     }
 
     @Test
     public void testInjectDefaults()
     {
-        DefaultsPage page = navigator.build(DefaultsPage.class);
+        DefaultsPage page = binder.bind(DefaultsPage.class);
         assertNotNull(page.testedProduct);
         assertNotNull(page.myTestedProduct);
         assertNotNull(page.tester);
         assertNotNull(page.mapTester);
-        assertNotNull(page.pageNavigator);
+        assertNotNull(page.pageBinder);
         assertNotNull(page.productInstance);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testInjectMissing()
     {
-        navigator.build(OneFieldPage.class);
+        binder.bind(OneFieldPage.class);
     }
 
     @Test
     public void testInjectWithArgument()
     {
-        ConstructorArgumentPage page = navigator.build(ConstructorArgumentPage.class, 43);
+        ConstructorArgumentPage page = binder.bind(ConstructorArgumentPage.class, "foo");
+        assertEquals("foo", page.name);
+    }
+
+    @Test
+    public void testInjectWithArgumentSubclass()
+    {
+        ConstructorArgumentPage page = binder.bind(ConstructorArgumentPage.class, 43);
         assertEquals(43, page.age);
     }
 
@@ -67,7 +74,7 @@ public class TestInjectPageNavigator
     public void testInitAfterInject()
     {
         tester.add(String.class, "Bob");
-        OneFieldWithInitPage page = navigator.build(OneFieldWithInitPage.class);
+        OneFieldWithInitPage page = binder.bind(OneFieldWithInitPage.class);
         assertEquals("Bob Jones", page.name);
     }
 
@@ -75,7 +82,7 @@ public class TestInjectPageNavigator
     public void testParentInject()
     {
         tester.add(String.class, "Bob");
-        ChildNoNamePage page = navigator.build(ChildNoNamePage.class);
+        ChildNoNamePage page = binder.bind(ChildNoNamePage.class);
         assertEquals("Bob", page.name);
     }
 
@@ -96,11 +103,19 @@ public class TestInjectPageNavigator
 
     static class ConstructorArgumentPage extends AbstractPage
     {
-        private final int age;
+        private final String name;
+        private final Number age;
 
-        public ConstructorArgumentPage(int age)
+        public ConstructorArgumentPage(String name)
+        {
+            this.name = name;
+            this.age = null;
+        }
+
+        public ConstructorArgumentPage(Number age)
         {
             this.age = age;
+            this.name = null;
         }
     }
 
@@ -132,7 +147,7 @@ public class TestInjectPageNavigator
         private MapTester mapTester;
 
         @Inject
-        private PageNavigator pageNavigator;
+        private PageBinder pageBinder;
     }
 
     static class OneFieldWithInitPage extends AbstractPage

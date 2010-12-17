@@ -1,7 +1,8 @@
 package com.atlassian.webdriver.pageobjects;
 
-import com.atlassian.pageobjects.PageNavigator;
-import com.atlassian.pageobjects.navigator.InjectPageNavigator;
+import com.atlassian.pageobjects.PageBinder;
+import com.atlassian.pageobjects.binder.DelayedBinder;
+import com.atlassian.pageobjects.binder.InjectPageBinder;
 import com.atlassian.pageobjects.page.Page;
 import com.atlassian.pageobjects.product.TestedProduct;
 import com.atlassian.pageobjects.util.InjectUtils;
@@ -16,13 +17,13 @@ import static com.atlassian.pageobjects.util.InjectUtils.forEachFieldWithAnnotat
 /**
  *
  */
-public class WebDriverPageNavigator<T extends WebDriver> implements PageNavigator
+public class WebDriverPageBinder<T extends WebDriver> implements PageBinder
 {
-    private final InjectPageNavigator delegate;
+    private final InjectPageBinder delegate;
 
-    public WebDriverPageNavigator(final TestedProduct<WebDriverTester<T>, ?, ?, ?> testedProduct)
+    public WebDriverPageBinder(final TestedProduct<WebDriverTester<T>, ?, ?, ?> testedProduct)
     {
-        this.delegate = new InjectPageNavigator(testedProduct, new InjectPageNavigator.PostInjectionProcessor()
+        this.delegate = new InjectPageBinder(testedProduct, new InjectPageBinder.PostInjectionProcessor()
         {
             public <P> P process(P pageObject)
             {
@@ -77,17 +78,22 @@ public class WebDriverPageNavigator<T extends WebDriver> implements PageNavigato
             throw new IllegalArgumentException("No selector found");
         }
 
-        return build(WebDriverLink.class, by, clickableLink.nextPage());
+        return bind(WebDriverLink.class, by, clickableLink.nextPage());
     }
 
-    public <P extends Page> P gotoPage(Class<P> pageClass, Object... args)
+    public <P extends Page> P navigateToAndBind(Class<P> pageClass, Object... args)
     {
-        return delegate.gotoPage(pageClass, args);
+        return delegate.navigateToAndBind(pageClass, args);
     }
 
-    public <P> P build(Class<P> pageClass, Object... args)
+    public <P> P bind(Class<P> pageClass, Object... args)
     {
-        return delegate.build(pageClass, args);
+        return delegate.bind(pageClass, args);
+    }
+
+    public <P> DelayedBinder<P> delayedBind(Class<P> pageClass, Object... args)
+    {
+        return delegate.delayedBind(pageClass, args);
     }
 
     public <P> void override(Class<P> oldClass, Class<? extends P> newClass)

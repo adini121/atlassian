@@ -19,13 +19,13 @@ public class TestPeopleDirectoryPage extends AbstractConfluenceWebTest
     @Test
     public void testPeopleDirectoryPage()
     {
-        pageNavigator.gotoPage(PeopleDirectoryPage.class);
+        pageBinder.navigateToAndBind(PeopleDirectoryPage.class);
     }
 
     @Test
     public void testUserMacro()
     {
-        PeopleDirectoryPage peopleDirectory = pageNavigator.gotoPage(PeopleDirectoryPage.class);
+        PeopleDirectoryPage peopleDirectory = pageBinder.navigateToAndBind(PeopleDirectoryPage.class);
         assertNotNull(peopleDirectory.getUserMacro(ADMIN.getUsername()));
     }
 

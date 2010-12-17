@@ -14,7 +14,7 @@ public class TestLicenseDetailsPage extends AbstractConfluenceWebTest
     @Test
     public void testLicenseDetailsPage()
     {
-        pageNavigator.gotoPage(LicenseDetailsPage.class);
+        pageBinder.navigateToAndBind(LicenseDetailsPage.class);
     }
 
 }

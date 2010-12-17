@@ -1,14 +1,11 @@
 package com.atlassian.webdriver.jira.component.dashboard;
 
-import com.atlassian.pageobjects.PageNavigator;
-import com.atlassian.pageobjects.navigator.Init;
+import com.atlassian.pageobjects.PageBinder;
+import com.atlassian.pageobjects.binder.Init;
 import com.atlassian.webdriver.AtlassianWebDriver;
-import com.atlassian.webdriver.jira.JiraTestedProduct;
 import com.atlassian.webdriver.utils.Check;
 import com.atlassian.webdriver.utils.MouseEvents;
-import com.atlassian.webdriver.utils.element.ElementLocated;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import javax.inject.Inject;
@@ -22,7 +19,7 @@ public class Gadget
     AtlassianWebDriver driver;
 
     @Inject
-    PageNavigator pageNavigator;
+    PageBinder pageBinder;
 
     private final String id;
     private String titleId;
@@ -61,7 +58,7 @@ public class Gadget
         driver.switchTo().frame(frameId);
         driver.waitUntilElementIsLocated(By.className("view"));
 
-        return pageNavigator.build(GadgetView.class, driver.findElement(By.className("view")));
+        return pageBinder.bind(GadgetView.class, driver.findElement(By.className("view")));
     }
 
     public void minimize()

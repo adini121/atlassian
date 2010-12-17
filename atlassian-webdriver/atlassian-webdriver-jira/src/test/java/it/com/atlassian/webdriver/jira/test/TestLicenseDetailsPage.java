@@ -33,7 +33,7 @@ public class TestLicenseDetailsPage
     @Test
     public void testLicenseDetailsPage()
     {
-        JIRA.getPageNavigator().gotoPage(LicenseDetailsPage.class);
+        JIRA.getPageBinder().navigateToAndBind(LicenseDetailsPage.class);
     }
 
 }

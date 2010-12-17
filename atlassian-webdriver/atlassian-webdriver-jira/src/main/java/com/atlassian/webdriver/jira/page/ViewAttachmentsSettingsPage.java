@@ -1,6 +1,6 @@
 package com.atlassian.webdriver.jira.page;
 
-import com.atlassian.pageobjects.navigator.Init;
+import com.atlassian.pageobjects.binder.Init;
 import com.atlassian.webdriver.utils.by.ByJquery;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;

@@ -14,7 +14,7 @@ public class TestConfluenceAdminHomePage extends AbstractConfluenceWebTest
     @Test
     public void testAdminHomePage()
     {
-        pageNavigator.gotoPage(ConfluenceAdminHomePage.class);
+        pageBinder.navigateToAndBind(ConfluenceAdminHomePage.class);
     }
 
 }

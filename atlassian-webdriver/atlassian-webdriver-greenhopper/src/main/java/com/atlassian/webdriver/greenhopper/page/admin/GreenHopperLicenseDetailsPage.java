@@ -1,7 +1,6 @@
 package com.atlassian.webdriver.greenhopper.page.admin;
 
-import com.atlassian.pageobjects.navigator.Init;
-import com.atlassian.webdriver.jira.JiraTestedProduct;
+import com.atlassian.pageobjects.binder.Init;
 import com.atlassian.webdriver.jira.page.JiraAdminAbstractPage;
 import com.atlassian.webdriver.utils.by.ByJquery;
 import com.atlassian.webdriver.utils.Check;
@@ -179,6 +178,6 @@ public class GreenHopperLicenseDetailsPage extends JiraAdminAbstractPage
         updateLicenseTextArea.sendKeys(license);
         updateLicenseForm.submit();
 
-        return pageNavigator.build(GreenHopperLicenseDetailsPage.class);
+        return pageBinder.bind(GreenHopperLicenseDetailsPage.class);
     }
 }

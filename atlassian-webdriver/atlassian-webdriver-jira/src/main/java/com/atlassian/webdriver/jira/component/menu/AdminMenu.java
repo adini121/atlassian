@@ -1,7 +1,7 @@
 package com.atlassian.webdriver.jira.component.menu;
 
-import com.atlassian.pageobjects.PageNavigator;
-import com.atlassian.pageobjects.navigator.Init;
+import com.atlassian.pageobjects.PageBinder;
+import com.atlassian.pageobjects.binder.Init;
 import com.atlassian.webdriver.jira.page.LicenseDetailsPage;
 import com.atlassian.webdriver.jira.page.PluginsPage;
 import com.atlassian.webdriver.jira.page.ProjectsViewPage;
@@ -24,10 +24,8 @@ import javax.inject.Inject;
 public class AdminMenu implements DropdownMenu<AdminMenu>
 {
 
-    private static final By ADMIN_MENU_LOCATOR = ByJquery.$("#admin_link").parent("li");
-
     @Inject
-    PageNavigator pageNavigator;
+    PageBinder pageBinder;
 
     @FindBy(id = "plugins_lnk")
     private WebElement pluginsPageLink;
@@ -49,7 +47,7 @@ public class AdminMenu implements DropdownMenu<AdminMenu>
     @Init
     public void initialise()
     {
-        adminMenu = pageNavigator.build(AuiDropdownMenu.class, ADMIN_MENU_LOCATOR);
+        adminMenu = pageBinder.bind(AuiDropdownMenu.class, ByJquery.$("#admin_link").parent("li"));
     }
 
     public PluginsPage gotoPluginsPage()

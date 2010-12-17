@@ -1,8 +1,7 @@
 package com.atlassian.webdriver.confluence.page;
 
 
-import com.atlassian.pageobjects.navigator.WaitUntil;
-import com.atlassian.webdriver.confluence.ConfluenceTestedProduct;
+import com.atlassian.pageobjects.binder.WaitUntil;
 import com.atlassian.webdriver.utils.by.ByJquery;
 import com.google.common.collect.ImmutableSet;
 import org.openqa.selenium.WebElement;
@@ -43,7 +42,7 @@ public class PluginsPage extends ConfluenceAbstractPage
         if (pluginIsLoaded(pluginKey))
         {
             loadedPlugins.get(pluginKey).click();
-            return pageNavigator.build(PluginsPage.class);
+            return pageBinder.bind(PluginsPage.class);
         }
 
         return null;

@@ -53,7 +53,7 @@ public class JiraLoginPage extends JiraAbstractPage implements LoginPage
 
         loginButton.click();
 
-        return pageNavigator.gotoPage(nextPage);
+        return pageBinder.navigateToAndBind(nextPage);
     }
 
 

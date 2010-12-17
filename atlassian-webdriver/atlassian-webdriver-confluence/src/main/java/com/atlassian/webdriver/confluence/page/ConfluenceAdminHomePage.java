@@ -27,13 +27,13 @@ public class ConfluenceAdminHomePage extends ConfluenceAbstractPage
     {
         pluginsLink.click();
 
-        return pageNavigator.build(PluginsPage.class);
+        return pageBinder.bind(PluginsPage.class);
     }
 
     public LicenseDetailsPage gotoLicenseDetailsPage()
     {
         licenseDetailsLink.click();
 
-        return pageNavigator.build(LicenseDetailsPage.class);
+        return pageBinder.bind(LicenseDetailsPage.class);
     }
 }

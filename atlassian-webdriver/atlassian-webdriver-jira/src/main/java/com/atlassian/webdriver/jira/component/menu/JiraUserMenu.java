@@ -1,16 +1,13 @@
 package com.atlassian.webdriver.jira.component.menu;
 
-import com.atlassian.pageobjects.PageNavigator;
-import com.atlassian.pageobjects.navigator.Init;
-import com.atlassian.webdriver.jira.page.PluginsPage;
+import com.atlassian.pageobjects.PageBinder;
+import com.atlassian.pageobjects.binder.Init;
 import com.atlassian.webdriver.pageobjects.ClickableLink;
 import com.atlassian.webdriver.pageobjects.WebDriverLink;
 import com.atlassian.webdriver.pageobjects.menu.AuiDropdownMenu;
 import com.atlassian.webdriver.pageobjects.menu.DropdownMenu;
 import com.atlassian.webdriver.pageobjects.menu.UserMenu;
-import com.atlassian.webdriver.jira.JiraTestedProduct;
 import com.atlassian.webdriver.jira.page.LogoutPage;
-import com.atlassian.webdriver.utils.by.ByJquery;
 import org.openqa.selenium.By;
 
 import javax.inject.Inject;
@@ -21,7 +18,7 @@ import javax.inject.Inject;
 public class JiraUserMenu implements DropdownMenu<JiraUserMenu>, UserMenu
 {
     @Inject
-    PageNavigator pageNavigator;
+    PageBinder pageBinder;
 
     @ClickableLink(id = "log_out", nextPage = LogoutPage.class)
     WebDriverLink<LogoutPage> logoutLink;
@@ -32,7 +29,7 @@ public class JiraUserMenu implements DropdownMenu<JiraUserMenu>, UserMenu
     @Init
     public void initialise()
     {
-        userMenu = pageNavigator.build(AuiDropdownMenu.class, By.id("header-details-user"));
+        userMenu = pageBinder.bind(AuiDropdownMenu.class, By.id("header-details-user"));
     }
 
     public LogoutPage logout()

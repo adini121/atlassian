@@ -1,10 +1,8 @@
 package com.atlassian.webdriver.jira.page.user;
 
-import com.atlassian.pageobjects.navigator.Init;
-import com.atlassian.webdriver.jira.JiraTestedProduct;
+import com.atlassian.pageobjects.binder.Init;
 import com.atlassian.webdriver.jira.page.JiraAdminAbstractPage;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -118,21 +116,21 @@ public class AddUserPage extends JiraAdminAbstractPage
     {
         createButton.click();
 
-        return pageNavigator.build(ViewUserPage.class);
+        return pageBinder.bind(ViewUserPage.class);
     }
 
     public AddUserPage createUserExpectingError()
     {
         createButton.click();
 
-        return pageNavigator.build(AddUserPage.class);
+        return pageBinder.bind(AddUserPage.class);
     }
 
     public UserBrowserPage cancelCreateUser()
     {
         cancelButton.click();
 
-        return pageNavigator.build(UserBrowserPage.class);
+        return pageBinder.bind(UserBrowserPage.class);
     }
 
     public boolean hasError()

@@ -1,6 +1,6 @@
 package com.atlassian.webdriver.confluence.component.sherpa;
 
-import com.atlassian.pageobjects.navigator.Init;
+import com.atlassian.pageobjects.binder.Init;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.utils.Search;
 import org.openqa.selenium.By;

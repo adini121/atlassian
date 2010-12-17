@@ -1,10 +1,8 @@
 package com.atlassian.webdriver.confluence.page;
 
-import com.atlassian.pageobjects.navigator.Init;
-import com.atlassian.webdriver.confluence.ConfluenceTestedProduct;
+import com.atlassian.pageobjects.binder.Init;
 import com.atlassian.webdriver.confluence.component.macro.UserMacro;
 import com.atlassian.webdriver.utils.by.ByJquery;
-import com.atlassian.webdriver.utils.Check;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -39,7 +37,7 @@ public class PeopleDirectoryPage extends ConfluenceAbstractPage
     {
         for (WebElement profile : driver.findElements(By.className("profile-macro")))
         {
-            UserMacro userMacro = pageNavigator.build(UserMacro.class, By.className("vcard"), profile);
+            UserMacro userMacro = pageBinder.bind(UserMacro.class, By.className("vcard"), profile);
             users.put(userMacro.getUsername(), userMacro);
         }
     }
@@ -59,7 +57,7 @@ public class PeopleDirectoryPage extends ConfluenceAbstractPage
             allPeopleLink.click();
         }
 
-        return pageNavigator.build(PeopleDirectoryPage.class);
+        return pageBinder.bind(PeopleDirectoryPage.class);
     }
 
     public PeopleDirectoryPage showAllPeopleWithPersonalSpaces()
@@ -70,7 +68,7 @@ public class PeopleDirectoryPage extends ConfluenceAbstractPage
             peopleWithPersonalSpacesLink.click();
         }
 
-        return pageNavigator.build(PeopleDirectoryPage.class);
+        return pageBinder.bind(PeopleDirectoryPage.class);
 
     }
 

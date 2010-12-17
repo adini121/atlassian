@@ -1,8 +1,8 @@
 package com.atlassian.webdriver.confluence.page;
 
-import com.atlassian.pageobjects.PageNavigator;
-import com.atlassian.pageobjects.navigator.ValidateState;
-import com.atlassian.pageobjects.navigator.WaitUntil;
+import com.atlassian.pageobjects.PageBinder;
+import com.atlassian.pageobjects.binder.ValidateState;
+import com.atlassian.pageobjects.binder.WaitUntil;
 import com.atlassian.pageobjects.page.Page;
 import com.atlassian.pageobjects.page.User;
 import com.atlassian.webdriver.AtlassianWebDriver;
@@ -26,7 +26,7 @@ public abstract class ConfluenceAbstractPage implements UserDiscoverable, Page
     AtlassianWebDriver driver;
     
     @Inject
-    PageNavigator pageNavigator;
+    PageBinder pageBinder;
 
     @Inject
     ConfluenceTestedProduct testedProduct;
@@ -71,7 +71,7 @@ public abstract class ConfluenceAbstractPage implements UserDiscoverable, Page
         // Check for WebSudo
         if (uri != null && !uri.equals(AdministratorAccessPage.URI) && at(AdministratorAccessPage.URI))
         {
-            pageNavigator.build(AdministratorAccessPage.class).login(testedProduct.getLoggedInUser());
+            pageBinder.bind(AdministratorAccessPage.class).login(testedProduct.getLoggedInUser());
         }
     }
 
@@ -86,6 +86,6 @@ public abstract class ConfluenceAbstractPage implements UserDiscoverable, Page
 
     public ConfluenceHeader getHeader()
     {
-        return pageNavigator.build(ConfluenceHeader.class);
+        return pageBinder.bind(ConfluenceHeader.class);
     }
 }

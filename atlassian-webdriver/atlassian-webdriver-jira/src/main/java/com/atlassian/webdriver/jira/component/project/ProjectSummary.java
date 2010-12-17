@@ -1,12 +1,10 @@
 package com.atlassian.webdriver.jira.component.project;
 
-import com.atlassian.pageobjects.navigator.Init;
 import com.atlassian.pageobjects.page.Page;
 import com.atlassian.webdriver.utils.Check;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-import javax.inject.Inject;
 import java.util.List;
 
 /**

@@ -1,6 +1,6 @@
 package com.atlassian.webdriver.confluence.component.header;
 
-import com.atlassian.pageobjects.PageNavigator;
+import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.page.User;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.confluence.component.menu.BrowseMenu;
@@ -24,7 +24,7 @@ public class ConfluenceHeader implements UserDiscoverable
     AtlassianWebDriver driver;
 
     @Inject
-    PageNavigator pageNavigator;
+    PageBinder pageBinder;
     
     @FindBy(id = "header")
     WebElement headerElement;
@@ -59,7 +59,7 @@ public class ConfluenceHeader implements UserDiscoverable
     {
         if (isLoggedIn())
         {
-            return pageNavigator.build(ConfluenceUserMenu.class);
+            return pageBinder.bind(ConfluenceUserMenu.class);
         }
         else
         {
@@ -69,6 +69,6 @@ public class ConfluenceHeader implements UserDiscoverable
 
     public BrowseMenu getBrowseMenu()
     {
-        return pageNavigator.build(BrowseMenu.class);
+        return pageBinder.bind(BrowseMenu.class);
     }
 }

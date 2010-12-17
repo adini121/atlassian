@@ -1,6 +1,7 @@
 package com.atlassian.webdriver.jira.component.header;
 
-import com.atlassian.pageobjects.PageNavigator;
+import com.atlassian.pageobjects.PageBinder;
+import com.atlassian.pageobjects.binder.ValidateState;
 import com.atlassian.pageobjects.page.User;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.jira.component.menu.AdminMenu;
@@ -21,7 +22,7 @@ import javax.inject.Inject;
 public class JiraHeader implements UserDiscoverable
 {
     @Inject
-    PageNavigator pageNavigator;
+    PageBinder pageBinder;
 
     @Inject
     AtlassianWebDriver driver;
@@ -32,17 +33,23 @@ public class JiraHeader implements UserDiscoverable
     @FindBy(id = "header-details-user-fullname")
     private WebElement userFillName;
 
+    @ValidateState
+    public void validate()
+    {
+        userFillName.getText();
+    }
+
     public DashboardMenu getDashboardMenu()
     {
-        return pageNavigator.build(DashboardMenu.class);
+        return pageBinder.bind(DashboardMenu.class);
     }
     public AdminMenu getAdminMenu()
     {
-        return pageNavigator.build(AdminMenu.class);
+        return pageBinder.bind(AdminMenu.class);
     }
     public JiraUserMenu getUserMenu()
     {
-        return pageNavigator.build(JiraUserMenu.class);
+        return pageBinder.bind(JiraUserMenu.class);
     }
 
     public boolean isLoggedIn()

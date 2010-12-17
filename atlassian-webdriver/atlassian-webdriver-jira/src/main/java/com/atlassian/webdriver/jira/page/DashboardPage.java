@@ -1,7 +1,7 @@
 package com.atlassian.webdriver.jira.page;
 
 
-import com.atlassian.pageobjects.navigator.WaitUntil;
+import com.atlassian.pageobjects.binder.WaitUntil;
 import com.atlassian.webdriver.jira.component.dashboard.Gadget;
 import org.openqa.selenium.By;
 
@@ -23,7 +23,7 @@ public class DashboardPage extends JiraAbstractPage
 
     public Gadget getGadget(String gadgetId)
     {
-        return pageNavigator.build(Gadget.class, gadgetId);
+        return pageBinder.bind(Gadget.class, gadgetId);
     }
 
     @WaitUntil

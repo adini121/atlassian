@@ -1,6 +1,6 @@
-package com.atlassian.pageobjects.navigator;
+package com.atlassian.pageobjects.binder;
 
-import com.atlassian.pageobjects.PageNavigator;
+import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.page.LoginPage;
 import com.atlassian.pageobjects.page.Page;
 import com.atlassian.pageobjects.product.ProductInstance;
@@ -14,7 +14,7 @@ import static org.mockito.Mockito.mock;
 class MyTestedProduct implements TestedProduct<MapTester,Page,Page, LoginPage>
 {
     private final MapTester mapTester;
-    private final PageNavigator pageNavigator = mock(PageNavigator.class);
+    private final PageBinder pageBinder = mock(PageBinder.class);
     private final ProductInstance productInstance = mock(ProductInstance.class);
 
     public MyTestedProduct(MapTester mapTester)
@@ -37,9 +37,9 @@ class MyTestedProduct implements TestedProduct<MapTester,Page,Page, LoginPage>
         return null;
     }
 
-    public PageNavigator getPageNavigator()
+    public PageBinder getPageBinder()
     {
-        return pageNavigator;
+        return pageBinder;
     }
 
     public ProductInstance getProductInstance()

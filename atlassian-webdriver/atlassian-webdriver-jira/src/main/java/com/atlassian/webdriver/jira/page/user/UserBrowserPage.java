@@ -1,8 +1,7 @@
 package com.atlassian.webdriver.jira.page.user;
 
-import com.atlassian.pageobjects.navigator.Init;
+import com.atlassian.pageobjects.binder.Init;
 import com.atlassian.pageobjects.page.User;
-import com.atlassian.webdriver.jira.JiraTestedProduct;
 import com.atlassian.webdriver.jira.page.JiraAdminAbstractPage;
 import com.atlassian.webdriver.utils.by.ByJquery;
 import com.atlassian.webdriver.utils.Check;
@@ -10,7 +9,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -87,7 +85,7 @@ public class UserBrowserPage extends JiraAdminAbstractPage
 
             driver.findElement(By.id(editGroupsId)).click();
 
-            return pageNavigator.build(EditUserGroupsPage.class);
+            return pageBinder.bind(EditUserGroupsPage.class);
         }
         else
         {
@@ -125,7 +123,7 @@ public class UserBrowserPage extends JiraAdminAbstractPage
             WebElement userEmailLink = driver.findElement(By.linkText(actualUser.getEmail()));
             userEmailLink.click();
 
-            return pageNavigator.build(ViewUserPage.class);
+            return pageBinder.bind(ViewUserPage.class);
         }
         else
         {
@@ -143,7 +141,7 @@ public class UserBrowserPage extends JiraAdminAbstractPage
         driver.findElement(By.name("userNameFilter")).sendKeys(username);
         filterSubmit.click();
 
-        return pageNavigator.build(UserBrowserPage.class);
+        return pageBinder.bind(UserBrowserPage.class);
     }
 
     /**
@@ -154,7 +152,7 @@ public class UserBrowserPage extends JiraAdminAbstractPage
     {
         addUserLink.click();
 
-        return pageNavigator.build(AddUserPage.class);
+        return pageBinder.bind(AddUserPage.class);
     }
 
     /**

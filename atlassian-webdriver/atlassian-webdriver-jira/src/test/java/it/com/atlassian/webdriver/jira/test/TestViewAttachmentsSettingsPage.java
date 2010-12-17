@@ -35,7 +35,7 @@ public class TestViewAttachmentsSettingsPage
     @Test
     public void testViewAttachmentSettingsPage()
     {
-        JIRA.getPageNavigator().gotoPage(ViewAttachmentsSettingsPage.class);
+        JIRA.getPageBinder().navigateToAndBind(ViewAttachmentsSettingsPage.class);
     }
 
 }

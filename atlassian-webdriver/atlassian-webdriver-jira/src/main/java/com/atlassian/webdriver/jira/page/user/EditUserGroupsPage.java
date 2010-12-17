@@ -1,6 +1,6 @@
 package com.atlassian.webdriver.jira.page.user;
 
-import com.atlassian.pageobjects.navigator.Init;
+import com.atlassian.pageobjects.binder.Init;
 import com.atlassian.pageobjects.page.Page;
 import com.atlassian.webdriver.jira.page.JiraAdminAbstractPage;
 import com.atlassian.webdriver.utils.Check;
@@ -76,7 +76,7 @@ public class  EditUserGroupsPage extends JiraAdminAbstractPage
     {
         returnLink.click();
 
-        return pageNavigator.build(ViewUserPage.class);
+        return pageBinder.bind(ViewUserPage.class);
     }
 
     /**
@@ -91,7 +91,7 @@ public class  EditUserGroupsPage extends JiraAdminAbstractPage
 
         joinButton.click();
 
-        return pageNavigator.build(pageClass);
+        return pageBinder.bind(pageClass);
     }
 
     public EditUserGroupsPage addToGroupsExpectingError(String ... groups)
@@ -105,7 +105,7 @@ public class  EditUserGroupsPage extends JiraAdminAbstractPage
 
         leaveButton.click();
 
-        return pageNavigator.build(pageClass);
+        return pageBinder.bind(pageClass);
     }
 
     public EditUserGroupsPage removeFromGroupsExpectingError(String ... groups)

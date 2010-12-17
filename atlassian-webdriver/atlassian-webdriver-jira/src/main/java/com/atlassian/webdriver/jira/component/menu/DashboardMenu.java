@@ -1,7 +1,7 @@
 package com.atlassian.webdriver.jira.component.menu;
 
-import com.atlassian.pageobjects.PageNavigator;
-import com.atlassian.pageobjects.navigator.Init;
+import com.atlassian.pageobjects.PageBinder;
+import com.atlassian.pageobjects.binder.Init;
 import com.atlassian.webdriver.pageobjects.menu.AuiDropdownMenu;
 import com.atlassian.webdriver.pageobjects.menu.DropdownMenu;
 import com.atlassian.webdriver.utils.by.ByJquery;
@@ -16,14 +16,14 @@ import javax.inject.Inject;
 public class DashboardMenu implements DropdownMenu<DashboardMenu>
 {
     @Inject
-    PageNavigator pageNavigator;
+    PageBinder pageBinder;
 
     private AuiDropdownMenu dashboardMenu;
 
     @Init
     public void initialise()
     {
-        dashboardMenu = pageNavigator.build(AuiDropdownMenu.class, ByJquery.$("#home_link").parent("li"));
+        dashboardMenu = pageBinder.bind(AuiDropdownMenu.class, ByJquery.$("#home_link").parent("li"));
     }
 
     public DashboardMenu open()

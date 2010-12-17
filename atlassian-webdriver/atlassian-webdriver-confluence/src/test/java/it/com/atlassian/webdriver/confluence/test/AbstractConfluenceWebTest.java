@@ -1,8 +1,7 @@
 package it.com.atlassian.webdriver.confluence.test;
 
-import com.atlassian.pageobjects.PageNavigator;
+import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.product.TestedProductFactory;
-import com.atlassian.webdriver.browsers.WebDriverBrowserAutoInstall;
 import com.atlassian.webdriver.confluence.ConfluenceTestedProduct;
 import com.atlassian.webdriver.confluence.page.DashboardPage;
 import org.junit.After;
@@ -20,13 +19,13 @@ public abstract class AbstractConfluenceWebTest
 
     protected DashboardPage dashboard;
 
-    protected PageNavigator pageNavigator;
+    protected PageBinder pageBinder;
 
     @Before
     public void login()
     {
         dashboard = CONFLUENCE.gotoLoginPage().loginAsSysAdmin(DashboardPage.class);
-        pageNavigator = CONFLUENCE.getPageNavigator();
+        pageBinder = CONFLUENCE.getPageBinder();
     }
 
     @After

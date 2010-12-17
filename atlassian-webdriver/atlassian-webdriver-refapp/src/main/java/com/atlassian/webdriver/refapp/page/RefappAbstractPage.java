@@ -1,6 +1,6 @@
 package com.atlassian.webdriver.refapp.page;
 
-import com.atlassian.pageobjects.navigator.WaitUntil;
+import com.atlassian.pageobjects.binder.WaitUntil;
 import com.atlassian.pageobjects.page.Page;
 import com.atlassian.pageobjects.page.User;
 import com.atlassian.webdriver.AtlassianWebDriver;

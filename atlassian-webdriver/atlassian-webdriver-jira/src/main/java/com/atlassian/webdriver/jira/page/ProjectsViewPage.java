@@ -1,6 +1,6 @@
 package com.atlassian.webdriver.jira.page;
 
-import com.atlassian.pageobjects.navigator.Init;
+import com.atlassian.pageobjects.binder.Init;
 import com.atlassian.pageobjects.page.Page;
 import com.atlassian.webdriver.jira.component.project.ProjectSummary;
 import org.openqa.selenium.By;
@@ -52,7 +52,7 @@ public class ProjectsViewPage extends JiraAdminAbstractPage
 
         for(WebElement row : rows)
         {
-            projects.add(pageNavigator.build(ProjectSummary.class, row));
+            projects.add(pageBinder.bind(ProjectSummary.class, row));
         }
 
     }

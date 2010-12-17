@@ -1,6 +1,6 @@
 package com.atlassian.webdriver.confluence;
 
-import com.atlassian.pageobjects.PageNavigator;
+import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.page.User;
 import com.atlassian.pageobjects.product.Defaults;
 import com.atlassian.pageobjects.product.ProductInstance;
@@ -11,7 +11,7 @@ import com.atlassian.webdriver.browsers.pageobjects.AutoInstallWebDriverTester;
 import com.atlassian.webdriver.confluence.page.ConfluenceAdminHomePage;
 import com.atlassian.webdriver.confluence.page.ConfluenceLoginPage;
 import com.atlassian.webdriver.confluence.page.DashboardPage;
-import com.atlassian.webdriver.pageobjects.WebDriverPageNavigator;
+import com.atlassian.webdriver.pageobjects.WebDriverPageBinder;
 import com.atlassian.webdriver.pageobjects.WebDriverTester;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -24,7 +24,7 @@ public class ConfluenceTestedProduct implements TestedProduct<WebDriverTester<At
 {
     private User loggedInUser;
 
-    private final PageNavigator pageNavigator;
+    private final PageBinder pageBinder;
     private final WebDriverTester<AtlassianWebDriver> webDriverTester;
     private final ProductInstance productInstance;
 
@@ -42,27 +42,27 @@ public class ConfluenceTestedProduct implements TestedProduct<WebDriverTester<At
         }
         this.webDriverTester = tester;
         this.productInstance = productInstance;
-        this.pageNavigator = new WebDriverPageNavigator<AtlassianWebDriver>(this);
+        this.pageBinder = new WebDriverPageBinder<AtlassianWebDriver>(this);
     }
 
     public DashboardPage gotoHomePage()
     {
-        return pageNavigator.gotoPage(DashboardPage.class);
+        return pageBinder.navigateToAndBind(DashboardPage.class);
     }
 
     public ConfluenceAdminHomePage gotoAdminHomePage()
     {
-        return pageNavigator.gotoPage(ConfluenceAdminHomePage.class);
+        return pageBinder.navigateToAndBind(ConfluenceAdminHomePage.class);
     }
 
     public ConfluenceLoginPage gotoLoginPage()
     {
-        return pageNavigator.gotoPage(ConfluenceLoginPage.class);
+        return pageBinder.navigateToAndBind(ConfluenceLoginPage.class);
     }
 
-    public PageNavigator getPageNavigator()
+    public PageBinder getPageBinder()
     {
-        return pageNavigator;
+        return pageBinder;
     }
 
     public ProductInstance getProductInstance()

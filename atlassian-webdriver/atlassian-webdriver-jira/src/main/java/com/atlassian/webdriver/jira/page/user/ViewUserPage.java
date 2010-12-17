@@ -59,7 +59,7 @@ public class ViewUserPage extends JiraAdminAbstractPage
     {
         deleteUserLink.click();
 
-        return pageNavigator.build(DeleteUserPage.class);
+        return pageBinder.bind(DeleteUserPage.class);
     }
 
     public Page setPassword()
@@ -81,7 +81,7 @@ public class ViewUserPage extends JiraAdminAbstractPage
     {
         editUserLink.click();
 
-        return pageNavigator.build(EditUserGroupsPage.class);
+        return pageBinder.bind(EditUserGroupsPage.class);
     }
 
     public Page editProperties()
