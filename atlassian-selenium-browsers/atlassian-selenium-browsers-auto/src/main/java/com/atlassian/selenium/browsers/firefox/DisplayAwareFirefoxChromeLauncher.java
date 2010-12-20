@@ -96,12 +96,7 @@ public class DisplayAwareFirefoxChromeLauncher extends AbstractBrowserLauncher
           profilePath
       );
       command.setEnvironmentVariable("NO_EM_RESTART", "1");
-      if (System.getProperty("DISPLAY") != null){
-        System.out.println("Using DISPLAY value of '" + System.getProperty("DISPLAY") + "'");
-        command.setEnvironmentVariable("DISPLAY", System.getProperty("DISPLAY"));
-      } else {
-        System.out.println("No display value used");
-      }
+
       process = command.executeAsync();
     } catch (IOException e) {
       throw new RuntimeException(e);
@@ -136,6 +131,10 @@ public class DisplayAwareFirefoxChromeLauncher extends AbstractBrowserLauncher
                                        && platform.getMajorVersion() <= 10
                                        && platform.getMinorVersion() <= 5)) {
         command.setDynamicLibraryPath(browserInstallation.libraryPath());
+    }
+
+    if (System.getProperty("DISPLAY") != null){
+      command.setEnvironmentVariable("DISPLAY", System.getProperty("DISPLAY"));
     }
 
     return command;
