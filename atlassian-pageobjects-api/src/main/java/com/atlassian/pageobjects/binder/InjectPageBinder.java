@@ -34,9 +34,9 @@ import static java.util.Arrays.asList;
  * <li>Changes the tester to the corrent URL (if {@link #navigateToAndBind(Class, Object...)})</li>
  * <li>Inject all fields annotated with {@link Inject}, including private</li>
  * <li>Execute the supplied {@link PostInjectionProcessor}</li>
- * <li>Call all methods annotated with {@link Init}</li>
  * <li>Call all methods annotated with {@link WaitUntil}</li>
  * <li>Call all methods annotated with {@link ValidateState}</li>
+ * <li>Call all methods annotated with {@link Init}</li>
  * </ol>
  * <p/>
  * <p>When going to a page via the {@link #navigateToAndBind(Class, Object...)} method, the page's URL is retrieved and navigated to

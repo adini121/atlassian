@@ -6,7 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Marks a method that should be called after the object has been constructed and all objects have been injected
+ * Marks a method that should be called after the object has been constructed, all objects have been injected,
+ * and all lifecycle methods have executed.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
