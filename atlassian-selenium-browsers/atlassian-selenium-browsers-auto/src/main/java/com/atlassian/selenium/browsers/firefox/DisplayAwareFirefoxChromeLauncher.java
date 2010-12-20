@@ -1,4 +1,4 @@
-package com.atlassian.selenium.browsers.firefox;/*
+/*
  * Copyright 2006 ThoughtWorks, Inc.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,6 +14,7 @@ package com.atlassian.selenium.browsers.firefox;/*
  *  limitations under the License.
  *
  */
+package com.atlassian.selenium.browsers.firefox;
 
 
 import java.io.File;
@@ -22,6 +23,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.apache.commons.logging.Log;
+import org.apache.log4j.Logger;
 import org.openqa.jetty.log.LogFactory;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.internal.CommandLine;
@@ -37,7 +39,7 @@ import org.openqa.selenium.server.browserlaunchers.locators.Firefox2or3Locator;
 
 public class DisplayAwareFirefoxChromeLauncher extends AbstractBrowserLauncher
 {
-  private static final Log LOGGER = LogFactory.getLog(DisplayAwareFirefoxChromeLauncher.class);
+  private static final Logger LOGGER = Logger.getLogger(DisplayAwareFirefoxChromeLauncher.class);
 
   private File customProfileDir = null;
   private String[] cmdarray;
@@ -94,11 +96,12 @@ public class DisplayAwareFirefoxChromeLauncher extends AbstractBrowserLauncher
           profilePath
       );
       command.setEnvironmentVariable("NO_EM_RESTART", "1");
-
       if (System.getProperty("DISPLAY") != null){
+        System.out.println("Using DISPLAY value of '" + System.getProperty("DISPLAY") + "'");
         command.setEnvironmentVariable("DISPLAY", System.getProperty("DISPLAY"));
+      } else {
+        System.out.println("No display value used");
       }
-
       process = command.executeAsync();
     } catch (IOException e) {
       throw new RuntimeException(e);
