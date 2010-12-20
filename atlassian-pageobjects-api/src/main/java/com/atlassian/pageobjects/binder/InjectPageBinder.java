@@ -8,7 +8,6 @@ import com.atlassian.pageobjects.product.TestedProduct;
 import com.atlassian.pageobjects.util.InjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sun.tools.jar.Manifest;
 
 import javax.inject.Inject;
 import java.lang.annotation.Annotation;
@@ -104,7 +103,8 @@ public final class InjectPageBinder implements PageBinder
                 new InstantiatePhase<P>(pageClass, args),
                 new InjectPhase<P>(),
                 new WaitUntilPhase<P>(),
-                new ValidateStatePhase<P>()));
+                new ValidateStatePhase<P>(),
+                new InitializePhase<P>()));
     }
 
     protected void visitUrl(Page p)
@@ -231,14 +231,6 @@ public final class InjectPageBinder implements PageBinder
         {
             autowireInjectables(t);
             T pageObject = postInjectionProcessor.process(t);
-            try
-            {
-                callLifecycleMethod(pageObject, Init.class);
-            }
-            catch (InvocationTargetException e)
-            {
-                throw new PageBindingException(pageObject, e);
-            }
             return pageObject;
         }
 
@@ -332,6 +324,22 @@ public final class InjectPageBinder implements PageBinder
         }
     }
 
+    private class InitializePhase<T> implements Phase<T>
+    {
+        public T execute(T pageObject)
+        {
+            try
+            {
+                callLifecycleMethod(pageObject, Init.class);
+            }
+            catch (InvocationTargetException e)
+            {
+                throw new PageBindingException(pageObject, e.getTargetException());
+            }
+            return pageObject;
+        }
+    }
+
     private class InjectableDelayedBind<T> implements DelayedBinder<T>
     {
         private final LinkedList<Phase<T>> phases;
@@ -369,7 +377,7 @@ public final class InjectPageBinder implements PageBinder
             if (found)
             {
                 Phase<T> currentPhase = null;
-                while(!phases.isEmpty())
+                while (!phases.isEmpty())
                 {
                     currentPhase = phases.removeFirst();
                     pageObject = currentPhase.execute(pageObject);
@@ -392,7 +400,7 @@ public final class InjectPageBinder implements PageBinder
             return pageObject;
         }
 
-        public DelayedBinder<T> build()
+        public DelayedBinder<T> inject()
         {
             advanceTo(InjectPhase.class);
             return this;
@@ -412,7 +420,7 @@ public final class InjectPageBinder implements PageBinder
 
         public T bind()
         {
-            advanceTo(ValidateStatePhase.class);
+            advanceTo(InitializePhase.class);
             return pageObject;
         }
     }

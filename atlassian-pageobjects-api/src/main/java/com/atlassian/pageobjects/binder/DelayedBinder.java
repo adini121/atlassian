@@ -9,7 +9,7 @@ public interface DelayedBinder<T>
      * Instantiates, injects, and initialises the page object, but doesn't execute its lifecycle methods
      * @return The binder for chaining
      */
-    DelayedBinder<T> build();
+    DelayedBinder<T> inject();
 
     /**
      * Builds the page object and executes its waitfor lifecycle methods
