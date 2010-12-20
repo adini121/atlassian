@@ -53,7 +53,7 @@ public class JiraLoginPage extends JiraAbstractPage implements LoginPage
 
         loginButton.click();
 
-        return pageBinder.navigateToAndBind(nextPage);
+        return DashboardPage.class.isAssignableFrom(nextPage) ? pageBinder.bind(nextPage) : pageBinder.navigateToAndBind(nextPage);
     }
 
 

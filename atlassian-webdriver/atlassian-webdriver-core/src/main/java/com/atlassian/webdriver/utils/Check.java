@@ -61,6 +61,25 @@ public class Check
         }
     }
 
+    public static boolean elementsAreVisible(By by, SearchContext context)
+    {
+        try
+        {
+            for (WebElement lookFor : context.findElements(by))
+            {
+                if (!((RenderedWebElement) lookFor).isDisplayed())
+                {
+                    return false;
+                }
+            }
+        }
+        catch (NoSuchElementException e)
+        {
+            return false;
+        }
+        return false;
+    }
+
     /**
      * Checks to see if a specified element contains a specific class of not.
      */

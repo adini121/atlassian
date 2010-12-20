@@ -110,14 +110,14 @@ public class AtlassianWebDriver implements WebDriver, JavascriptExecutor
         waitUntilElementIsVisibleAt(elementLocator, null);
     }
 
-    public void waitUntilElementIsNotVisbleAt(By elementLocator, WebElement at)
+    public void waitUntilElementIsNotVisibleAt(By elementLocator, WebElement at)
     {
         waitUntil(new ElementNotVisible(elementLocator, at));
     }
 
     public void waitUntilElementIsNotVisible(By elementLocator)
     {
-        waitUntilElementIsNotVisbleAt(elementLocator, null);
+        waitUntilElementIsNotVisibleAt(elementLocator, null);
     }
 
     public void waitUntilElementIsLocatedAt(By elementLocator, WebElement at)

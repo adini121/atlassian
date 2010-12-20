@@ -26,7 +26,8 @@ public class RefappLoginPage extends RefappAbstractPage implements LoginPage
         driver.findElement(By.name("os_username")).sendKeys(user.getUsername());
         driver.findElement(By.name("os_password")).sendKeys(user.getPassword());
         driver.findElement(By.id("os_login")).submit();
-        return (M) pageBinder.navigateToAndBind(RefappHomePage.class);
+
+        return RefappHomePage.class.isAssignableFrom(nextPage) ? pageBinder.bind(nextPage) : pageBinder.navigateToAndBind(nextPage);
     }
 
 

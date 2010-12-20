@@ -40,15 +40,7 @@ public class AutoInstallWebDriverTester implements WebDriverTester<AtlassianWebD
 
     public void gotoUrl(String url)
     {
-        String currentUrl = webDriver.getCurrentUrl();
-        if (!currentUrl.equals(url))
-        {
-            log.debug("Navigating to URL: " + url);
-            webDriver.get(url);
-        }
-        else
-        {
-            log.debug("Already on URL: " + url);
-        }
+        log.debug("Navigating to URL: " + url);
+        webDriver.get(url);
     }
 }

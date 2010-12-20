@@ -55,7 +55,7 @@ public class ConfluenceLoginPage extends ConfluenceAbstractPage implements Login
         loginForm.submit();
         testedProduct.setLoggedInUser(user);
 
-        return pageBinder.navigateToAndBind(nextPage);
+        return DashboardPage.class.isAssignableFrom(nextPage) ? pageBinder.bind(nextPage) : pageBinder.navigateToAndBind(nextPage);
     }
 
 }
