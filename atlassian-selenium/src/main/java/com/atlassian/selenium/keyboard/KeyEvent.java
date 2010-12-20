@@ -1,6 +1,7 @@
 package com.atlassian.selenium.keyboard;
 
 import com.atlassian.selenium.Browser;
+import com.atlassian.webtest.ui.keys.KeyEventType;
 
 import java.util.Set;
 
@@ -15,7 +16,7 @@ public class KeyEvent
     {
     }
 
-    public KeyEvent(final EventTypes eventType, final int code, final Set<Browser> browsers, final boolean shiftKeyDown, final boolean altKeyDown, final boolean ctrlKeyDown, final boolean metaKey, final boolean toKeyCode, final boolean toCharacterCode)
+    public KeyEvent(final KeyEventType eventType, final int code, final Set<Browser> browsers, final boolean shiftKeyDown, final boolean altKeyDown, final boolean ctrlKeyDown, final boolean metaKey, final boolean toKeyCode, final boolean toCharacterCode)
     {
         this.eventType = eventType;
         this.code = code;
@@ -28,13 +29,7 @@ public class KeyEvent
         this.browsers = browsers;
     }
 
-    public enum EventTypes {
-        KEYDOWN,
-        KEYPRESS,
-        KEYUP
-    }
-
-    private EventTypes eventType;
+    private KeyEventType eventType;
     private int code;
     private boolean shiftKeyDown;
     private boolean altKeyDown;
@@ -69,7 +64,7 @@ public class KeyEvent
     }
 
 
-    public EventTypes getEventType()
+    public KeyEventType getEventType()
     {
         return eventType;
     }
