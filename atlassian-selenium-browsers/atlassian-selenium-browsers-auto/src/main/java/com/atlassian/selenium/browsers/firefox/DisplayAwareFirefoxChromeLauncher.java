@@ -1,4 +1,4 @@
-/*
+package com.atlassian.selenium.browsers.firefox;/*
  * Copyright 2006 ThoughtWorks, Inc.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +14,6 @@
  *  limitations under the License.
  *
  */
-package com.atlassian.selenium.browsers.firefox;
 
 
 import java.io.File;
@@ -25,6 +24,7 @@ import java.net.URL;
 import org.apache.commons.logging.Log;
 import org.openqa.jetty.log.LogFactory;
 import org.openqa.selenium.Platform;
+import org.openqa.selenium.internal.CommandLine;
 import org.openqa.selenium.server.ApplicationRegistry;
 import org.openqa.selenium.server.BrowserConfigurationOptions;
 import org.openqa.selenium.server.RemoteControlConfiguration;
@@ -37,7 +37,7 @@ import org.openqa.selenium.server.browserlaunchers.locators.Firefox2or3Locator;
 
 public class DisplayAwareFirefoxChromeLauncher extends AbstractBrowserLauncher
 {
-  private static Log LOGGER = LogFactory.getLog(DisplayAwareFirefoxChromeLauncher.class);
+  private static final Log LOGGER = LogFactory.getLog(DisplayAwareFirefoxChromeLauncher.class);
 
   private File customProfileDir = null;
   private String[] cmdarray;
@@ -45,7 +45,7 @@ public class DisplayAwareFirefoxChromeLauncher extends AbstractBrowserLauncher
   private BrowserInstallation browserInstallation;
   private Process process = null;
 
-  private AsyncExecute shell = new AsyncExecute();
+//  private AsyncExecute shell = new AsyncExecute();
 
   private boolean changeMaxConnections = false;
 
@@ -70,18 +70,6 @@ public class DisplayAwareFirefoxChromeLauncher extends AbstractBrowserLauncher
           "The specified path to the browser executable is invalid.");
     }
     this.browserInstallation = browserInstallation;
-
-    // don't set the library path on Snow Leopard
-    Platform platform = Platform.getCurrent();
-    if (!platform.is(Platform.MAC) || ((platform.is(Platform.MAC)) && platform.getMajorVersion() <= 10 && platform.getMinorVersion() <= 5)) {
-      shell.setLibraryPath(browserInstallation.libraryPath());
-    }
-    // Set MOZ_NO_REMOTE in order to ensure we always get a new Firefox process
-    // http://blog.dojotoolkit.org/2005/12/01/running-multiple-versions-of-firefox-side-by-side
-    shell.setEnvironmentVariable("MOZ_NO_REMOTE", "1");
-    if (System.getProperty("DISPLAY") != null){
-      shell.setEnvironmentVariable("DISPLAY", System.getProperty("DISPLAY"));
-    }
   }
 
 
@@ -93,7 +81,6 @@ public class DisplayAwareFirefoxChromeLauncher extends AbstractBrowserLauncher
   protected void launch(String url) {
     final String profilePath;
     final String homePage;
-    String profile = "";
 
     try {
       homePage = new ChromeUrlConvert().convert(url);
@@ -101,14 +88,18 @@ public class DisplayAwareFirefoxChromeLauncher extends AbstractBrowserLauncher
       populateCustomProfileDirectory(profilePath);
 
       LOGGER.info("Launching Firefox...");
-      cmdarray = new String[]{
+      CommandLine command = prepareCommand(
           browserInstallation.launcherFilePath(),
           "-profile",
           profilePath
-      };
-      shell.setEnvironmentVariable("NO_EM_RESTART", "1");
-      shell.setCommandline(cmdarray);
-      process = shell.asyncSpawn();
+      );
+      command.setEnvironmentVariable("NO_EM_RESTART", "1");
+
+      if (System.getProperty("DISPLAY") != null){
+        command.setEnvironmentVariable("DISPLAY", System.getProperty("DISPLAY"));
+      }
+
+      process = command.executeAsync();
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
@@ -116,22 +107,35 @@ public class DisplayAwareFirefoxChromeLauncher extends AbstractBrowserLauncher
 
   private void populateCustomProfileDirectory(String profilePath) throws IOException {
     /*
-        * The first time we launch Firefox with an empty profile directory,
+    * The first time we launch Firefox with an empty profile directory,
     * Firefox will launch itself, populate the profile directory, then
     * kill/relaunch itself, so our process handle goes out of date.
     * So, the first time we launch Firefox, we'll start it up at an URL
     * that will immediately shut itself down.
     */
-    cmdarray = new String[]{
-        browserInstallation.launcherFilePath(),
-        "-profile",
-        profilePath,
+    CommandLine command = prepareCommand(browserInstallation.launcherFilePath(),
+        "-profile", profilePath,
         "-silent"
-    };
+    );
+    command.setDynamicLibraryPath(browserInstallation.libraryPath());
     LOGGER.info("Preparing Firefox profile...");
-    shell.setCommandline(cmdarray);
-    shell.execute();
+    command.execute();
     waitForFullProfileToBeCreated(20 * 1000);
+  }
+
+  protected CommandLine prepareCommand(String... commands) {
+    CommandLine command = new CommandLine(commands);
+    command.setEnvironmentVariable("MOZ_NO_REMOTE", "1");
+
+    // don't set the library path on Snow Leopard
+    Platform platform = Platform.getCurrent();
+    if (!platform.is(Platform.MAC) || ((platform.is(Platform.MAC))
+                                       && platform.getMajorVersion() <= 10
+                                       && platform.getMinorVersion() <= 5)) {
+        command.setDynamicLibraryPath(browserInstallation.libraryPath());
+    }
+
+    return command;
   }
 
   protected void createCustomProfileDir() {
@@ -172,7 +176,7 @@ public class DisplayAwareFirefoxChromeLauncher extends AbstractBrowserLauncher
 
   protected void extractProfileFromJar() throws IOException {
     ResourceExtractor.extractResourcePath(getClass(), "/customProfileDirCUSTFFCHROME",
-        customProfileDir);
+            customProfileDir);
   }
 
   protected void copySingleFileWithOverwrite(File sourceFile, File destFile) {
@@ -195,14 +199,16 @@ public class DisplayAwareFirefoxChromeLauncher extends AbstractBrowserLauncher
   }
 
   protected void generatePacAndPrefJs(String homePage) throws IOException {
-    LauncherUtils.ProxySetting proxySetting = LauncherUtils.ProxySetting.NO_PROXY;
-    if (browserConfigurationOptions.is("captureNetworkTraffic") || browserConfigurationOptions.is(
-        "addCustomRequestHeaders")) {
-      proxySetting = LauncherUtils.ProxySetting.PROXY_EVERYTHING;
+    browserConfigurationOptions.setProxyRequired(false);
+    if (browserConfigurationOptions.is("captureNetworkTraffic") ||
+        browserConfigurationOptions.is("addCustomRequestHeaders") ||
+        browserConfigurationOptions.is("trustAllSSLCertificates")) {
+      browserConfigurationOptions.setProxyEverything(true);
+      browserConfigurationOptions.setProxyRequired(true);
     }
 
-    LauncherUtils.generatePacAndPrefJs(customProfileDir, getPort(), proxySetting, homePage,
-        changeMaxConnections, getTimeout(), browserConfigurationOptions.is("avoidProxy"));
+    LauncherUtils.generatePacAndPrefJs(customProfileDir, getPort(), homePage,
+        changeMaxConnections, getTimeout(), browserConfigurationOptions);
   }
 
   private String makeCustomProfile(String homePage) throws IOException {
