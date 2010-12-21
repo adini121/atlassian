@@ -18,14 +18,6 @@ public class Check
     private Check() {}
 
     /**
-     * Checks that an element that matches the by exists.
-     */
-    public static boolean elementExists(By by, WebElement element)
-    {
-        return elementExists(by, (SearchContext) element);
-    }
-
-    /**
      * Checks that an element that matches the by param exists within another element.
      */
     public static boolean elementExists(By by, SearchContext el)
@@ -41,11 +33,6 @@ public class Check
         }
 
         return true;
-    }
-
-    public static boolean elementIsVisible(By by, WebElement element)
-    {
-        return elementIsVisible(by, (SearchContext) element);
     }
 
     public static boolean elementIsVisible(By by, SearchContext context)

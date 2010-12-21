@@ -41,15 +41,15 @@ abstract class ElementVisibilityCondition implements ExpectedCondition<Boolean>
         this.visibility = visibility;
     }
 
-    final public Boolean apply(WebDriver driver)
+    final public Boolean apply(WebDriver webDriver)
     {
         if (visibility.equals(Visibility.VISIBLE))
         {
-            return Check.elementIsVisible(by, at);
+            return Check.elementIsVisible(by, at == null ? webDriver : at);
         }
         else
         {
-            return !Check.elementIsVisible(by, at);
+            return !Check.elementIsVisible(by, at == null ? webDriver : at);
         }
     }
 }
