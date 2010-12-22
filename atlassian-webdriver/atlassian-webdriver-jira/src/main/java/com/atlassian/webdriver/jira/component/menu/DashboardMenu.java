@@ -2,8 +2,8 @@ package com.atlassian.webdriver.jira.component.menu;
 
 import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.binder.Init;
-import com.atlassian.webdriver.pageobjects.menu.AuiDropdownMenu;
-import com.atlassian.webdriver.pageobjects.menu.DropdownMenu;
+import com.atlassian.webdriver.pageobjects.components.aui.AuiDropdownMenu;
+import com.atlassian.webdriver.pageobjects.components.DropdownMenu;
 import com.atlassian.webdriver.utils.by.ByJquery;
 
 import javax.inject.Inject;

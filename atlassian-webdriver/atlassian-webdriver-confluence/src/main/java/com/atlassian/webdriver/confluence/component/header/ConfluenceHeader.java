@@ -5,7 +5,7 @@ import com.atlassian.pageobjects.page.User;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.confluence.component.menu.BrowseMenu;
 import com.atlassian.webdriver.confluence.component.menu.ConfluenceUserMenu;
-import com.atlassian.webdriver.pageobjects.page.UserDiscoverable;
+import com.atlassian.webdriver.pageobjects.UserDiscoverable;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;

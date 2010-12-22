@@ -6,7 +6,6 @@ import com.atlassian.pageobjects.product.ProductInstance;
 import com.atlassian.pageobjects.product.TestedProduct;
 import com.atlassian.pageobjects.product.TestedProductFactory;
 import com.atlassian.webdriver.AtlassianWebDriver;
-import com.atlassian.webdriver.browsers.pageobjects.AutoInstallWebDriverTester;
 import com.atlassian.webdriver.pageobjects.WebDriverLink;
 import com.atlassian.webdriver.pageobjects.WebDriverPageBinder;
 import com.atlassian.webdriver.pageobjects.WebDriverTester;
@@ -22,19 +21,19 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  */
 @Defaults(instanceId = "refapp", contextPath = "/refapp", httpPort = 5990)
-public class RefappTestedProduct implements TestedProduct<WebDriverTester<AtlassianWebDriver>, RefappHomePage, RefappAdminHomePage, RefappLoginPage>
+public class RefappTestedProduct implements TestedProduct<WebDriverTester, RefappHomePage, RefappAdminHomePage, RefappLoginPage>
 {
     private final PageBinder pageBinder;
-    private final WebDriverTester<AtlassianWebDriver> webDriverTester;
+    private final WebDriverTester webDriverTester;
     private final ProductInstance productInstance;
 
-    public RefappTestedProduct(TestedProductFactory.TesterFactory<WebDriverTester<AtlassianWebDriver>> testerFactory, ProductInstance productInstance)
+    public RefappTestedProduct(TestedProductFactory.TesterFactory<WebDriverTester> testerFactory, ProductInstance productInstance)
     {
         checkNotNull(productInstance);
-        WebDriverTester<AtlassianWebDriver> tester = null;
+        WebDriverTester tester = null;
         if (testerFactory == null)
         {
-            tester = new AutoInstallWebDriverTester();
+            tester = new WebDriverTester();
         }
         else
         {
@@ -70,7 +69,7 @@ public class RefappTestedProduct implements TestedProduct<WebDriverTester<Atlass
         return productInstance;
     }
 
-    public WebDriverTester<AtlassianWebDriver> getTester()
+    public WebDriverTester getTester()
     {
         return webDriverTester;
     }

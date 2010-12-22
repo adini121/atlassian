@@ -1,4 +1,4 @@
-package com.atlassian.webdriver.pageobjects.page;
+package com.atlassian.webdriver.pageobjects;
 
 import com.atlassian.pageobjects.page.User;
 

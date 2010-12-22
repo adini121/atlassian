@@ -2,10 +2,8 @@ package com.atlassian.webdriver.browsers;
 
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.WebDriverFactory;
-
 import org.openqa.selenium.WebDriverException;
 
-import java.io.File;
 import java.net.SocketException;
 
 /**

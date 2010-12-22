@@ -10,7 +10,7 @@ import com.atlassian.webdriver.confluence.ConfluenceTestedProduct;
 import com.atlassian.webdriver.confluence.component.header.ConfluenceHeader;
 import com.atlassian.webdriver.confluence.component.menu.BrowseMenu;
 import com.atlassian.webdriver.confluence.component.menu.ConfluenceUserMenu;
-import com.atlassian.webdriver.pageobjects.page.UserDiscoverable;
+import com.atlassian.webdriver.pageobjects.UserDiscoverable;
 import org.openqa.selenium.By;
 
 import javax.inject.Inject;

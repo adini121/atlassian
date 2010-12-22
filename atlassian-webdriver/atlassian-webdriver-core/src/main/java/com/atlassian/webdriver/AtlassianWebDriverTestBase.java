@@ -1,7 +1,5 @@
-package com.atlassian.webdriver.test;
+package com.atlassian.webdriver;
 
-import com.atlassian.webdriver.AtlassianWebDriver;
-import com.atlassian.webdriver.WebDriverFactory;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -15,15 +13,14 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 
 
-
 /**
  * TODO: Document this class / interface here
  *
  * @since v1.0
  */
-public abstract class AtlassianWebDriverFuncTestBase
+public abstract class AtlassianWebDriverTestBase
 {
-    private final Logger log = LoggerFactory.getLogger(AtlassianWebDriverFuncTestBase.class);
+    private final Logger log = LoggerFactory.getLogger(AtlassianWebDriverTestBase.class);
 
     protected static AtlassianWebDriver driver;
 

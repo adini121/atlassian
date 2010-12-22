@@ -10,7 +10,7 @@ import com.atlassian.webdriver.jira.component.header.JiraHeader;
 import com.atlassian.webdriver.jira.component.menu.AdminMenu;
 import com.atlassian.webdriver.jira.component.menu.DashboardMenu;
 import com.atlassian.webdriver.jira.component.menu.JiraUserMenu;
-import com.atlassian.webdriver.pageobjects.page.UserDiscoverable;
+import com.atlassian.webdriver.pageobjects.UserDiscoverable;
 import org.openqa.selenium.By;
 
 import javax.inject.Inject;

@@ -48,11 +48,6 @@
             <artifactId>atlassian-webdriver-core</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.atlassian.selenium</groupId>
-            <artifactId>atlassian-webdriver-browsers-auto</artifactId>
-            <version>${project.version}</version>
-        </dependency>
     </dependencies>
 
 </project>

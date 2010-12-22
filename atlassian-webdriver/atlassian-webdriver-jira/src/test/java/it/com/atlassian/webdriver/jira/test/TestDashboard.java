@@ -11,7 +11,7 @@ import com.atlassian.webdriver.jira.component.menu.JiraUserMenu;
 import com.atlassian.webdriver.jira.page.DashboardPage;
 import com.atlassian.webdriver.jira.page.LicenseDetailsPage;
 import com.atlassian.webdriver.jira.page.LogoutPage;
-import com.atlassian.webdriver.pageobjects.menu.UserMenu;
+import com.atlassian.webdriver.pageobjects.components.UserMenu;
 import org.junit.After;
 import org.junit.Test;
 

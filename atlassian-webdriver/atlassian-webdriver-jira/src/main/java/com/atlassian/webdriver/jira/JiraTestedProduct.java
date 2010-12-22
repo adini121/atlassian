@@ -8,14 +8,13 @@ import com.atlassian.pageobjects.product.ProductInstance;
 import com.atlassian.pageobjects.product.TestedProduct;
 import com.atlassian.pageobjects.product.TestedProductFactory;
 import com.atlassian.webdriver.AtlassianWebDriver;
-import com.atlassian.webdriver.browsers.pageobjects.AutoInstallWebDriverTester;
 import com.atlassian.webdriver.jira.component.header.JiraHeader;
 import com.atlassian.webdriver.jira.page.DashboardPage;
 import com.atlassian.webdriver.pageobjects.WebDriverPageBinder;
 import com.atlassian.webdriver.pageobjects.WebDriverTester;
 import com.atlassian.webdriver.jira.page.JiraAdminHomePage;
 import com.atlassian.webdriver.jira.page.JiraLoginPage;
-import com.atlassian.webdriver.pageobjects.menu.UserMenu;
+import com.atlassian.webdriver.pageobjects.components.UserMenu;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -23,19 +22,19 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  */
 @Defaults(instanceId = "jira", contextPath = "/jira", httpPort = 2990)
-public class JiraTestedProduct implements TestedProduct<WebDriverTester<AtlassianWebDriver>, DashboardPage, JiraAdminHomePage, JiraLoginPage>
+public class JiraTestedProduct implements TestedProduct<WebDriverTester, DashboardPage, JiraAdminHomePage, JiraLoginPage>
 {
-    private final WebDriverTester<AtlassianWebDriver> webDriverTester;
+    private final WebDriverTester webDriverTester;
     private final ProductInstance productInstance;
     private final PageBinder pageBinder;
 
-    public JiraTestedProduct(TestedProductFactory.TesterFactory<WebDriverTester<AtlassianWebDriver>> testerFactory, ProductInstance productInstance)
+    public JiraTestedProduct(TestedProductFactory.TesterFactory<WebDriverTester> testerFactory, ProductInstance productInstance)
     {
         checkNotNull(productInstance);
-        WebDriverTester<AtlassianWebDriver> tester = null;
+        WebDriverTester tester = null;
         if (testerFactory == null)
         {
-            tester = new AutoInstallWebDriverTester();
+            tester = new WebDriverTester();
         }
         else
         {

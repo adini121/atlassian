@@ -1,4 +1,4 @@
-package com.atlassian.webdriver.pageobjects.menu;
+package com.atlassian.webdriver.pageobjects.components;
 
 
 /**

@@ -1,9 +1,10 @@
-package com.atlassian.webdriver.pageobjects.menu;
+package com.atlassian.webdriver.pageobjects.components.aui;
 
 import com.atlassian.pageobjects.binder.Init;
 import com.atlassian.pageobjects.page.Page;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.pageobjects.WebDriverLink;
+import com.atlassian.webdriver.pageobjects.components.DropdownMenu;
 import com.atlassian.webdriver.utils.Check;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
