@@ -748,6 +748,9 @@ public class MockSeleniumClient implements SeleniumClient
     {
     }
 
+    public void generateKeyEvent(String locator, KeyEventType eventType, int keyCode, int characterCode, boolean shiftKey, boolean altKey, boolean controlKey, boolean metaKey) {
+    }
+
     public void simulateKeyPressForSpecialKey(String s, int i)
     {
     }
