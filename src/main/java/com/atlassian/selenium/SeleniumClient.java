@@ -187,6 +187,21 @@ public interface SeleniumClient extends Selenium
     public void simulateKeyPressForSpecialKey(final String locator, final int keyCode, Collection<KeyEventType> eventsToFire);
 
     /**
+     * This is a low level function to generate one keyboard event. It would be preferable to use the simulatKeyPress... functions
+     * above.
+     * @param locator - the locator of the element to send the keyevent to
+     * @param eventType - The type of key event
+     * @param keyCode - the keyCode for the keyEvent
+     * @param characterCode - the character code for the key event
+     * @param shiftKey - Is the shift key down?
+     * @param altKey - Is the alt/option key down?
+     * @param controlKey - Is the control key down?
+     * @param metaKey - Is the meta (aka the apple or windows) key down?
+     */
+    public void generateKeyEvent(final String locator, final KeyEventType eventType, final int keyCode, final int characterCode,
+                                 final boolean shiftKey, final boolean altKey, final boolean controlKey, final boolean metaKey);
+
+    /**
      * This will send all the events for a particular special key (for example F1 or the down arrow key)
      * The keyCode matches the codes in java.awt.event.KeyEvent
      *  NOTE: the return key actually fires events with a keyCode of 13 NOT VK_ENTER

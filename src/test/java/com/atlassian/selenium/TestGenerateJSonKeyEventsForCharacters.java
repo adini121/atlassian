@@ -216,6 +216,7 @@ public class TestGenerateJSonKeyEventsForCharacters extends TestCase
         createSymbols(cksl);
         createSpecialKeys(cksl);
         createFNKeys(cksl);
+        createModifierKeys(cksl);
 
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -231,6 +232,34 @@ public class TestGenerateJSonKeyEventsForCharacters extends TestCase
         Map cksMap = gson.fromJson(characterArrayJSON,collectionType);
 //        System.out.println(cksMap.toString());
 
+
+    }
+
+    private void createModifierKeys(Map<String, KeyEventSequence> cksl)
+    {
+        List<KeyEvent> ke = new ArrayList<KeyEvent>();
+        ke.add(shiftKeyDown);
+        ke.add(shiftKeyUp);
+        KeyEventSequence cks = new KeyEventSequence(String.format("0x%x",java.awt.event.KeyEvent.VK_SHIFT),ke);
+        cksl.put(cks.getIdentifier(),cks);
+
+        ke = new ArrayList<KeyEvent>();
+        ke.add(new KeyEvent(KeyEventType.KEYDOWN,java.awt.event.KeyEvent.VK_ALT,allBrowsers,false,true,false,false,true,false));
+        ke.add(new KeyEvent(KeyEventType.KEYUP,java.awt.event.KeyEvent.VK_ALT,allBrowsers,false,false,false,false,true,false));
+        cks = new KeyEventSequence(String.format("0x%x",java.awt.event.KeyEvent.VK_ALT),ke);
+        cksl.put(cks.getIdentifier(),cks);
+
+        ke = new ArrayList<KeyEvent>();
+        ke.add(new KeyEvent(KeyEventType.KEYDOWN,java.awt.event.KeyEvent.VK_CONTROL,allBrowsers,false,false,true,false,true,false));
+        ke.add(new KeyEvent(KeyEventType.KEYUP,java.awt.event.KeyEvent.VK_CONTROL,allBrowsers,false,false,false,false,true,false));
+        cks = new KeyEventSequence(String.format("0x%x",java.awt.event.KeyEvent.VK_CONTROL),ke);
+        cksl.put(cks.getIdentifier(),cks);
+
+        ke = new ArrayList<KeyEvent>();
+        ke.add(new KeyEvent(KeyEventType.KEYDOWN,java.awt.event.KeyEvent.VK_META,allBrowsers,false,false,false,true,true,false));
+        ke.add(new KeyEvent(KeyEventType.KEYUP,java.awt.event.KeyEvent.VK_META,allBrowsers,false,false,false,false,true,false));
+        cks = new KeyEventSequence(String.format("0x%x",java.awt.event.KeyEvent.VK_META),ke);
+        cksl.put(cks.getIdentifier(),cks);
 
     }
 

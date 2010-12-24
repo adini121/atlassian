@@ -293,6 +293,20 @@ public class SingleBrowserSeleniumClient extends DefaultSelenium implements Sele
         simulateKeyPressForIdentifier(locator,String.format("0x%x",keyCode), eventsToFire);
     }
 
+    public void generateKeyEvent(final String locator, final KeyEventType eventType, final int keyCode, final int characterCode,
+                                 final boolean shiftKey, final boolean altKey, final boolean controlKey, final boolean metaKey)
+    {
+        getEval("selenium.generateKeyEvent(\""+locator+"\",'"
+                +eventType.getEventString()+"',"
+                +Integer.toString(keyCode)+","
+                +Integer.toString(characterCode)+","
+                +Boolean.TRUE.toString()+","
+                +Boolean.toString(shiftKey)+","
+                +Boolean.toString(altKey)+","
+                +Boolean.toString(controlKey)+","
+                +Boolean.toString(metaKey)+")");
+    }
+
     private void simulateKeyPressForIdentifier(final String locator, final String identifier, Collection<KeyEventType> eventsToFire)
     {
         if (characterKeySequenceMap.containsKey(identifier))
@@ -307,29 +321,18 @@ public class SingleBrowserSeleniumClient extends DefaultSelenium implements Sele
                 {
                     continue;
                 }
-                toggleShiftKey(ke.isShiftKeyDown());
-                toggleAltKey(ke.isAltKeyDown());
-                toggleControlKey(ke.isCtrlKeyDown());
-                toggleMetaKey(ke.isMetaKey());
-                toggleToKeyCode(ke.isToKeyCode());
-                toggleToCharacterCode(ke.isToCharacterCode());
-                switch (ke.getEventType())
+                int keyCode = 0;
+                int characterCode = 0;
+                if (ke.isToCharacterCode())
                 {
-                    case KEYDOWN:
-                        super.keyDown(locator, "\\" + ke.getCode());
-                        break;
-                    case KEYPRESS:
-                        super.keyPress(locator, "\\" + ke.getCode());
-                        break;
-                    case KEYUP:
-                        super.keyUp(locator, "\\" + ke.getCode());
-                        break;
+                    characterCode = ke.getCode();
                 }
-                // Change them both to true so that subsiquent calls to keyPress etc. worked as they did previously with selenium
-                // that is to say incorrectly.
-                toggleToKeyCode(true);
-                toggleToCharacterCode(true);
-
+                if (ke.isToKeyCode())
+                {
+                   keyCode = ke.getCode();
+                }
+                generateKeyEvent(locator,ke.getEventType(),keyCode,characterCode,
+                        ke.isShiftKeyDown(),ke.isAltKeyDown(),ke.isCtrlKeyDown(),ke.isMetaKey());
             }
         }
     }
@@ -542,7 +545,9 @@ public class SingleBrowserSeleniumClient extends DefaultSelenium implements Sele
     private void addKeyPressJSCorrections() throws IOException
     {
         String keyPressCorrectionsImpl = readFile("KeyPressCorrected.js");
-        addScript(keyPressCorrectionsImpl, "KeyPressCorrected");        
+        String generateKeyPressImpl = readFile("generateKeyEvent.js");
+        addScript(keyPressCorrectionsImpl, "KeyPressCorrected");
+        addScript(generateKeyPressImpl, "generateKeyEvent");
     }
 
     private void loadCharacterKeyEventMap() throws IOException

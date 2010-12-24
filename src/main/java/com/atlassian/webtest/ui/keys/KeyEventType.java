@@ -11,9 +11,19 @@ import java.util.Set;
 */
 public enum KeyEventType
 {
-    KEYDOWN,
-    KEYPRESS,
-    KEYUP;
+    KEYDOWN("keydown"),
+    KEYPRESS("keypress"),
+    KEYUP("keyup");
 
-    public static final Set<KeyEventType> ALL = Collections.unmodifiableSet(EnumSet.allOf(KeyEventType.class));  
+    public static final Set<KeyEventType> ALL = Collections.unmodifiableSet(EnumSet.allOf(KeyEventType.class));
+
+    private final String eventString;
+
+    KeyEventType(String eventString) {
+        this.eventString = eventString;
+    }
+
+    public String getEventString() {
+        return eventString;
+    }
 }
