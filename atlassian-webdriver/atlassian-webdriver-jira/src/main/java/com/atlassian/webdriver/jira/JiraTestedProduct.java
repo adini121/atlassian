@@ -2,6 +2,10 @@ package com.atlassian.webdriver.jira;
 
 import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.binder.DelayedBinder;
+import com.atlassian.pageobjects.page.AdminHomePage;
+import com.atlassian.pageobjects.page.Header;
+import com.atlassian.pageobjects.page.HomePage;
+import com.atlassian.pageobjects.page.LoginPage;
 import com.atlassian.pageobjects.page.User;
 import com.atlassian.pageobjects.product.Defaults;
 import com.atlassian.pageobjects.product.ProductInstance;
@@ -22,7 +26,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  */
 @Defaults(instanceId = "jira", contextPath = "/jira", httpPort = 2990)
-public class JiraTestedProduct implements TestedProduct<WebDriverTester, DashboardPage, JiraAdminHomePage, JiraLoginPage>
+public class JiraTestedProduct implements TestedProduct<WebDriverTester, JiraHeader, DashboardPage, JiraAdminHomePage, JiraLoginPage>
 {
     private final WebDriverTester webDriverTester;
     private final ProductInstance productInstance;
@@ -43,6 +47,11 @@ public class JiraTestedProduct implements TestedProduct<WebDriverTester, Dashboa
         this.webDriverTester = tester;
         this.productInstance = productInstance;
         this.pageBinder = new WebDriverPageBinder<AtlassianWebDriver>(this);
+
+        this.pageBinder.override(Header.class, JiraHeader.class);
+        this.pageBinder.override(HomePage.class, DashboardPage.class);
+        this.pageBinder.override(AdminHomePage.class, JiraAdminHomePage.class);
+        this.pageBinder.override(LoginPage.class, JiraLoginPage.class);
     }
 
     public DashboardPage gotoHomePage()
@@ -58,24 +67,6 @@ public class JiraTestedProduct implements TestedProduct<WebDriverTester, Dashboa
     public JiraLoginPage gotoLoginPage()
     {
         return pageBinder.navigateToAndBind(JiraLoginPage.class);
-    }
-
-    public boolean isLoggedIn()
-    {
-        DelayedBinder<JiraHeader> header = pageBinder.delayedBind(JiraHeader.class);
-        return header.canBind() ? header.bind().isLoggedIn() : false;
-    }
-
-    public boolean isLoggedInAsUser(User user)
-    {
-        DelayedBinder<JiraHeader> header = pageBinder.delayedBind(JiraHeader.class);
-        return header.canBind() ? header.bind().isLoggedInAsUser(user) : false;
-    }
-
-    public boolean isAdmin()
-    {
-        DelayedBinder<JiraHeader> header = pageBinder.delayedBind(JiraHeader.class);
-        return header.canBind() ? header.bind().isAdmin() : false;
     }
 
     public PageBinder getPageBinder()

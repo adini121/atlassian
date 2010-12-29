@@ -1,6 +1,7 @@
 package com.atlassian.webdriver.confluence.component.header;
 
 import com.atlassian.pageobjects.PageBinder;
+import com.atlassian.pageobjects.page.Header;
 import com.atlassian.pageobjects.page.User;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.confluence.component.menu.BrowseMenu;
@@ -17,7 +18,7 @@ import javax.inject.Inject;
  *
  * @since v1.0
  */
-public class ConfluenceHeader implements UserDiscoverable
+public class ConfluenceHeader implements Header, UserDiscoverable
 {
 
     @Inject

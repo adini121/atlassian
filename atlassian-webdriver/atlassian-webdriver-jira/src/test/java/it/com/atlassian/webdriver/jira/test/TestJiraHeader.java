@@ -7,44 +7,50 @@ import com.atlassian.webdriver.jira.JiraTestedProduct;
 import com.atlassian.webdriver.jira.component.header.JiraHeader;
 import com.atlassian.webdriver.jira.component.menu.AdminMenu;
 import com.atlassian.webdriver.jira.page.DashboardPage;
+import com.atlassian.webdriver.jira.page.JiraLoginPage;
 import com.atlassian.webdriver.jira.page.LicenseDetailsPage;
 import com.atlassian.webdriver.jira.page.LogoutPage;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
- *
+ * 
  */
-public class TestJiraTestedProduct
+public class TestJiraHeader
 {
     private static final JiraTestedProduct JIRA = TestedProductFactory.create(JiraTestedProduct.class);
 
     @Test
     public void testLoginInfo()
     {
-        JIRA.gotoLoginPage().loginAsSysAdmin(DashboardPage.class);
-        assertTrue(JIRA.isAdmin());
-        assertTrue(JIRA.isLoggedIn());
-        assertTrue(JIRA.isLoggedInAsUser(new User("admin", "admin", null)));
+        JiraHeader header = JIRA.gotoLoginPage().loginAsSysAdmin(DashboardPage.class).getHeader();
+
+        assertTrue(header.isAdmin());
+        assertTrue(header.isLoggedIn());
+        assertTrue(header.isLoggedInAsUser(new User("admin", "admin", null)));
     }
 
     @Test
     public void testLogout()
     {
-        assertFalse(JIRA.isAdmin());
-        assertFalse(JIRA.isLoggedIn());
-        assertFalse(JIRA.isLoggedInAsUser(new User("admin", "admin", null)));
+        JiraHeader header = JIRA.gotoHomePage().getHeader();
+        assertFalse(header.isAdmin());
+        assertFalse(header.isLoggedIn());
+        assertFalse(header.isLoggedInAsUser(new User("admin", "admin", null)));
     }
 
     @After
+    @Before
     public void logout()
     {
-        if (JIRA.isLoggedIn())
+        if (JIRA.gotoHomePage().isLoggedIn())
         {
             JIRA.getPageBinder().navigateToAndBind(LogoutPage.class).confirmLogout();
         }
     }
+
 }

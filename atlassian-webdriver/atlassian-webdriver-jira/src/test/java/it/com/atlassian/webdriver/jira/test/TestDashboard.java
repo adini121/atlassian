@@ -28,9 +28,9 @@ public class TestDashboard
     public void testDashboard()
     {
         DashboardPage dashboard = JIRA.gotoLoginPage().loginAsSysAdmin(DashboardPage.class);
-        assertTrue(JIRA.isAdmin());
-        assertTrue(JIRA.isLoggedIn());
-        assertTrue(JIRA.isLoggedInAsUser(new User("admin", "admin", null)));
+        assertTrue(dashboard.isAdmin());
+        assertTrue(dashboard.isLoggedIn());
+        assertTrue(dashboard.isLoggedInAsUser(new User("admin", "admin", null)));
     }
 
     @Test
@@ -65,7 +65,7 @@ public class TestDashboard
     @After
     public void logout()
     {
-        if (JIRA.isLoggedIn())
+        if (JIRA.gotoLoginPage().isLoggedIn())
         {
             JIRA.getPageBinder().navigateToAndBind(LogoutPage.class).confirmLogout();
         }

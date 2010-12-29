@@ -1,5 +1,7 @@
 package com.atlassian.webdriver.confluence.page;
 
+import com.atlassian.pageobjects.page.AdminHomePage;
+import com.atlassian.webdriver.confluence.component.header.ConfluenceHeader;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -8,7 +10,7 @@ import org.openqa.selenium.support.FindBy;
  *
  * @since v4.2
  */
-public class ConfluenceAdminHomePage extends ConfluenceAbstractPage
+public class ConfluenceAdminHomePage extends ConfluenceAbstractPage implements AdminHomePage<ConfluenceHeader>
 {
     private static final String URI = "/admin/console.action";
 

@@ -1,7 +1,9 @@
 package com.atlassian.webdriver.jira.component.header;
 
 import com.atlassian.pageobjects.PageBinder;
+import com.atlassian.pageobjects.binder.Init;
 import com.atlassian.pageobjects.binder.ValidateState;
+import com.atlassian.pageobjects.page.Header;
 import com.atlassian.pageobjects.page.User;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.jira.component.menu.AdminMenu;
@@ -19,7 +21,7 @@ import javax.inject.Inject;
  *
  * @since v1.0
  */
-public class JiraHeader implements UserDiscoverable
+public class JiraHeader implements UserDiscoverable, Header
 {
     @Inject
     PageBinder pageBinder;
@@ -30,13 +32,14 @@ public class JiraHeader implements UserDiscoverable
     @FindBy(id="header")
     private WebElement headerElement;
     
-    @FindBy(id = "header-details-user-fullname")
-    private WebElement userFillName;
+    private String userName;
 
-    @ValidateState
-    public void validate()
+    @Init
+    public void init()
     {
-        userFillName.getText();
+        By byId = By.id("header-details-user-fullname");
+
+        userName = driver.elementIsVisible(byId) ? driver.findElement(byId).getText() : null;
     }
 
     public DashboardMenu getDashboardMenu()
@@ -54,17 +57,17 @@ public class JiraHeader implements UserDiscoverable
 
     public boolean isLoggedIn()
     {
-        return !userFillName.getText().equals("Log In");
+        return userName != null;
     }
 
     public boolean isLoggedInAsUser(User user)
     {
-        return userFillName.getText().equals(user.getFullName());
+        return isLoggedIn() && userName.equals(user.getFullName());
     }
 
     public boolean isAdmin()
     {
-        return driver.elementExistsAt(By.id("admin_link"), headerElement);
+        return isLoggedIn() && driver.elementExistsAt(By.id("admin_link"), headerElement);
     }
 
 }

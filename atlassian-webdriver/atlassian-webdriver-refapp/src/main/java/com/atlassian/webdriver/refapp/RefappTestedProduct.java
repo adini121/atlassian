@@ -1,6 +1,10 @@
 package com.atlassian.webdriver.refapp;
 
 import com.atlassian.pageobjects.PageBinder;
+import com.atlassian.pageobjects.page.AdminHomePage;
+import com.atlassian.pageobjects.page.Header;
+import com.atlassian.pageobjects.page.HomePage;
+import com.atlassian.pageobjects.page.LoginPage;
 import com.atlassian.pageobjects.product.Defaults;
 import com.atlassian.pageobjects.product.ProductInstance;
 import com.atlassian.pageobjects.product.TestedProduct;
@@ -9,6 +13,7 @@ import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.pageobjects.WebDriverLink;
 import com.atlassian.webdriver.pageobjects.WebDriverPageBinder;
 import com.atlassian.webdriver.pageobjects.WebDriverTester;
+import com.atlassian.webdriver.refapp.component.RefappHeader;
 import com.atlassian.webdriver.refapp.page.RefappAbstractPage;
 import com.atlassian.webdriver.refapp.page.RefappAdminHomePage;
 import com.atlassian.webdriver.refapp.page.RefappHomePage;
@@ -21,7 +26,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  */
 @Defaults(instanceId = "refapp", contextPath = "/refapp", httpPort = 5990)
-public class RefappTestedProduct implements TestedProduct<WebDriverTester, RefappHomePage, RefappAdminHomePage, RefappLoginPage>
+public class RefappTestedProduct implements TestedProduct<WebDriverTester, RefappHeader, RefappHomePage, RefappAdminHomePage, RefappLoginPage>
 {
     private final PageBinder pageBinder;
     private final WebDriverTester webDriverTester;
@@ -42,6 +47,11 @@ public class RefappTestedProduct implements TestedProduct<WebDriverTester, Refap
         this.webDriverTester = tester;
         this.productInstance = productInstance;
         this.pageBinder = new WebDriverPageBinder<AtlassianWebDriver>(this);
+
+        this.pageBinder.override(Header.class, RefappHeader.class);
+        this.pageBinder.override(HomePage.class, RefappHomePage.class);
+        this.pageBinder.override(AdminHomePage.class, RefappAdminHomePage.class);
+        this.pageBinder.override(LoginPage.class, RefappLoginPage.class);
     }
 
     public RefappHomePage gotoHomePage()

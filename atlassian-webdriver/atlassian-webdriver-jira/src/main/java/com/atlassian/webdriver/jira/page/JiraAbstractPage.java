@@ -2,6 +2,7 @@ package com.atlassian.webdriver.jira.page;
 
 
 import com.atlassian.pageobjects.PageBinder;
+import com.atlassian.pageobjects.binder.DelayedBinder;
 import com.atlassian.pageobjects.binder.WaitUntil;
 import com.atlassian.pageobjects.page.Page;
 import com.atlassian.pageobjects.page.User;
@@ -45,5 +46,23 @@ public abstract class JiraAbstractPage implements Page
     public void doWait()
     {
         driver.waitUntilElementIsLocated(By.className("footer"));
+    }
+
+    public boolean isLoggedIn()
+    {
+        DelayedBinder<JiraHeader> header = pageBinder.delayedBind(JiraHeader.class);
+        return header.canBind() ? header.bind().isLoggedIn() : false;
+    }
+
+    public boolean isLoggedInAsUser(User user)
+    {
+        DelayedBinder<JiraHeader> header = pageBinder.delayedBind(JiraHeader.class);
+        return header.canBind() ? header.bind().isLoggedInAsUser(user) : false;
+    }
+
+    public boolean isAdmin()
+    {
+        DelayedBinder<JiraHeader> header = pageBinder.delayedBind(JiraHeader.class);
+        return header.canBind() ? header.bind().isAdmin() : false;
     }
 }

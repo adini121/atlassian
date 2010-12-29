@@ -21,7 +21,7 @@ public class WebDriverPageBinder<T extends WebDriver> implements PageBinder
 {
     private final InjectPageBinder delegate;
 
-    public WebDriverPageBinder(final TestedProduct<WebDriverTester, ?, ?, ?> testedProduct)
+    public WebDriverPageBinder(final TestedProduct<WebDriverTester, ?, ?, ?, ?> testedProduct)
     {
         this.delegate = new InjectPageBinder(testedProduct, new InjectPageBinder.PostInjectionProcessor()
         {

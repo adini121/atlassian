@@ -1,12 +1,17 @@
 package com.atlassian.webdriver.confluence;
 
 import com.atlassian.pageobjects.PageBinder;
+import com.atlassian.pageobjects.page.AdminHomePage;
+import com.atlassian.pageobjects.page.Header;
+import com.atlassian.pageobjects.page.HomePage;
+import com.atlassian.pageobjects.page.LoginPage;
 import com.atlassian.pageobjects.page.User;
 import com.atlassian.pageobjects.product.Defaults;
 import com.atlassian.pageobjects.product.ProductInstance;
 import com.atlassian.pageobjects.product.TestedProduct;
 import com.atlassian.pageobjects.product.TestedProductFactory;
 import com.atlassian.webdriver.AtlassianWebDriver;
+import com.atlassian.webdriver.confluence.component.header.ConfluenceHeader;
 import com.atlassian.webdriver.confluence.page.ConfluenceAdminHomePage;
 import com.atlassian.webdriver.confluence.page.ConfluenceLoginPage;
 import com.atlassian.webdriver.confluence.page.DashboardPage;
@@ -19,7 +24,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  */
 @Defaults(instanceId = "confluence", contextPath = "/confluence", httpPort = 1990)
-public class ConfluenceTestedProduct implements TestedProduct<WebDriverTester, DashboardPage, ConfluenceAdminHomePage, ConfluenceLoginPage>
+public class ConfluenceTestedProduct implements TestedProduct<WebDriverTester, ConfluenceHeader, DashboardPage, ConfluenceAdminHomePage, ConfluenceLoginPage>
 {
     private User loggedInUser;
 
@@ -42,6 +47,11 @@ public class ConfluenceTestedProduct implements TestedProduct<WebDriverTester, D
         this.webDriverTester = tester;
         this.productInstance = productInstance;
         this.pageBinder = new WebDriverPageBinder<AtlassianWebDriver>(this);
+
+        this.pageBinder.override(Header.class, ConfluenceHeader.class);
+        this.pageBinder.override(HomePage.class, DashboardPage.class);
+        this.pageBinder.override(LoginPage.class, ConfluenceLoginPage.class);
+        this.pageBinder.override(AdminHomePage.class, ConfluenceAdminHomePage.class);
     }
 
     public DashboardPage gotoHomePage()

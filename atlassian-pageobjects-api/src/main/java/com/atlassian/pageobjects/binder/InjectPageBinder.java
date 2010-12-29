@@ -44,7 +44,7 @@ import static java.util.Arrays.asList;
  */
 public final class InjectPageBinder implements PageBinder
 {
-    private final TestedProduct<?, ?, ?, ?> testedProduct;
+    private final TestedProduct<?, ?, ?, ?, ?> testedProduct;
     private final Tester tester;
     private final ProductInstance productInstance;
     private static final Logger log = LoggerFactory.getLogger(InjectPageBinder.class);
@@ -66,12 +66,12 @@ public final class InjectPageBinder implements PageBinder
     private final Map<Class, Class> overrides =
             new HashMap<Class, Class>();
 
-    public InjectPageBinder(TestedProduct<?, ?, ?, ?> testedProduct)
+    public InjectPageBinder(TestedProduct<?, ?, ?, ?, ?> testedProduct)
     {
         this(testedProduct, new NoOpPostInjectionProcessor());
     }
 
-    public InjectPageBinder(TestedProduct<?, ?, ?, ?> testedProduct, PostInjectionProcessor postInjectionProcessor)
+    public InjectPageBinder(TestedProduct<?, ?, ?, ?, ?> testedProduct, PostInjectionProcessor postInjectionProcessor)
     {
         checkNotNull(testedProduct);
         checkNotNull(testedProduct.getProductInstance());
