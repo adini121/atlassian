@@ -51,6 +51,26 @@ public class TestedProductFactory
 
     /**
      * Creates a tested product, allowing the instance to choose its own default {@link Tester} and instance id
+     * @param testedProductClass The tested product class name
+     * @return The created tested product
+     */
+    @SuppressWarnings("unchecked")
+    public static TestedProduct<?> create(String testedProductClass)
+    {
+        Class<TestedProduct<?>> clazz;
+        try
+        {
+            clazz = (Class<TestedProduct<?>>) TestedProductFactory.class.getClassLoader().loadClass(testedProductClass);
+        }
+        catch (ClassNotFoundException e)
+        {
+            throw new IllegalArgumentException("Cannot find tested product class: " + testedProductClass);
+        }
+        return create(clazz);
+    }
+
+    /**
+     * Creates a tested product, allowing the instance to choose its own default {@link Tester} and instance id
      * @param testedProductClass The tested product class
      * @param <P> The tested product type
      * @return The created tested product
