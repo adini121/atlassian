@@ -70,9 +70,9 @@ public class ConfluenceTestedProduct implements TestedProduct<WebDriverTester>
         return pageBinder.navigateToAndBind(ConfluenceLoginPage.class);
     }
 
-    public <P extends Page> P visit(Class<P> pageClass)
+    public <P extends Page> P visit(Class<P> pageClass, Object... args)
     {
-        return pageBinder.navigateToAndBind(pageClass);
+        return pageBinder.navigateToAndBind(pageClass, args);
     }
 
     public PageBinder getPageBinder()

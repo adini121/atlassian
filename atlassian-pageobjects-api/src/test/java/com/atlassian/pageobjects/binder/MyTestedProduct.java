@@ -23,7 +23,7 @@ class MyTestedProduct implements TestedProduct<MapTester>
     }
 
 
-    public <P extends Page> P visit(Class<P> pageClass)
+    public <P extends Page> P visit(Class<P> pageClass, Object... args)
     {
         return null;
     }

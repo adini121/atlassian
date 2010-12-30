@@ -1,6 +1,7 @@
 package com.atlassian.webdriver.refapp.page;
 
 import com.atlassian.pageobjects.PageBinder;
+import com.atlassian.pageobjects.page.HomePage;
 import com.atlassian.pageobjects.page.LoginPage;
 import com.atlassian.pageobjects.Page;
 import org.openqa.selenium.By;
@@ -26,7 +27,7 @@ public class RefappLoginPage extends RefappAbstractPage implements LoginPage
         driver.findElement(By.name("os_password")).sendKeys(password);
         driver.findElement(By.id("os_login")).submit();
 
-        return RefappHomePage.class.isAssignableFrom(nextPage) ? pageBinder.bind(nextPage) : pageBinder.navigateToAndBind(nextPage);
+        return HomePage.class.isAssignableFrom(nextPage) ? pageBinder.bind(nextPage) : pageBinder.navigateToAndBind(nextPage);
     }
 
 

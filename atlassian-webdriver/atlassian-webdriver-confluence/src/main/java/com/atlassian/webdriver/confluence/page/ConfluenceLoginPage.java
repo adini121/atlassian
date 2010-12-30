@@ -1,6 +1,7 @@
 package com.atlassian.webdriver.confluence.page;
 
 import com.atlassian.pageobjects.Page;
+import com.atlassian.pageobjects.page.HomePage;
 import com.atlassian.pageobjects.page.LoginPage;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -54,7 +55,7 @@ public class ConfluenceLoginPage extends ConfluenceAbstractPage implements Login
         loginForm.submit();
         testedProduct.setLoggedInUser(username, password);
 
-        return DashboardPage.class.isAssignableFrom(nextPage) ? pageBinder.bind(nextPage) : pageBinder.navigateToAndBind(nextPage);
+        return HomePage.class.isAssignableFrom(nextPage) ? pageBinder.bind(nextPage) : pageBinder.navigateToAndBind(nextPage);
     }
 
 }
