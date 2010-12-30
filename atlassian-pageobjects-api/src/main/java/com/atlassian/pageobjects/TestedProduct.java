@@ -1,7 +1,7 @@
 package com.atlassian.pageobjects;
 
 /**
- *
+ * The product being tested.  Provides access to key services to be used during testing.
  */
 public interface TestedProduct<T extends Tester>
 {
@@ -14,7 +14,18 @@ public interface TestedProduct<T extends Tester>
      */
     <P extends Page> P visit(Class<P> pageClass, Object... args);
 
+    /**
+     * @return The page binder for visiting pages and binding page objects
+     */
     PageBinder getPageBinder();
+
+    /**
+     * @return Information about the instance being tested
+     */
     ProductInstance getProductInstance();
+
+    /**
+     * @return The tester being used
+     */
     T getTester();
 }

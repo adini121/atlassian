@@ -1,7 +1,7 @@
 package com.atlassian.pageobjects.binder;
 
 /**
- *
+ * Thrown if a problem occurs when waiting for a page binding
  */
 public class PageBindingWaitException extends PageBindingException
 {

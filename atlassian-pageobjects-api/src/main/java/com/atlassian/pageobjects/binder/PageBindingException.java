@@ -1,7 +1,7 @@
 package com.atlassian.pageobjects.binder;
 
 /**
- *
+ * Parent exception for all binding exceptions
  */
 public class PageBindingException extends RuntimeException
 {

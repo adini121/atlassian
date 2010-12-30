@@ -1,7 +1,7 @@
 package com.atlassian.pageobjects.binder;
 
 /**
- *
+ * Thrown if the page was unable to validate its state
  */
 public class InvalidPageStateException extends PageBindingException
 {
