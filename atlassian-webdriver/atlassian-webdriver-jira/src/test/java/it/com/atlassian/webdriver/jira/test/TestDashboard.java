@@ -1,17 +1,13 @@
 package it.com.atlassian.webdriver.jira.test;
 
 import com.atlassian.pageobjects.PageBinder;
-import com.atlassian.pageobjects.binder.DelayedBinder;
-import com.atlassian.pageobjects.page.User;
-import com.atlassian.pageobjects.product.TestedProductFactory;
+import com.atlassian.pageobjects.TestedProductFactory;
 import com.atlassian.webdriver.jira.JiraTestedProduct;
 import com.atlassian.webdriver.jira.component.header.JiraHeader;
 import com.atlassian.webdriver.jira.component.menu.AdminMenu;
-import com.atlassian.webdriver.jira.component.menu.JiraUserMenu;
 import com.atlassian.webdriver.jira.page.DashboardPage;
 import com.atlassian.webdriver.jira.page.LicenseDetailsPage;
 import com.atlassian.webdriver.jira.page.LogoutPage;
-import com.atlassian.webdriver.pageobjects.components.UserMenu;
 import org.junit.After;
 import org.junit.Test;
 
@@ -30,7 +26,6 @@ public class TestDashboard
         DashboardPage dashboard = JIRA.gotoLoginPage().loginAsSysAdmin(DashboardPage.class);
         assertTrue(dashboard.isAdmin());
         assertTrue(dashboard.isLoggedIn());
-        assertTrue(dashboard.isLoggedInAsUser(new User("admin", "admin", null)));
     }
 
     @Test

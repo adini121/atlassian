@@ -1,10 +1,10 @@
 package com.atlassian.webdriver.pageobjects;
 
+import com.atlassian.pageobjects.DelayedBinder;
+import com.atlassian.pageobjects.Page;
 import com.atlassian.pageobjects.PageBinder;
-import com.atlassian.pageobjects.binder.DelayedBinder;
 import com.atlassian.pageobjects.binder.InjectPageBinder;
-import com.atlassian.pageobjects.page.Page;
-import com.atlassian.pageobjects.product.TestedProduct;
+import com.atlassian.pageobjects.TestedProduct;
 import com.atlassian.pageobjects.util.InjectUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -21,7 +21,7 @@ public class WebDriverPageBinder<T extends WebDriver> implements PageBinder
 {
     private final InjectPageBinder delegate;
 
-    public WebDriverPageBinder(final TestedProduct<WebDriverTester, ?, ?, ?, ?> testedProduct)
+    public WebDriverPageBinder(final TestedProduct<WebDriverTester> testedProduct)
     {
         this.delegate = new InjectPageBinder(testedProduct, new InjectPageBinder.PostInjectionProcessor()
         {

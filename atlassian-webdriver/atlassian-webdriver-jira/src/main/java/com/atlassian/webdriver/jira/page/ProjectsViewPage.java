@@ -1,7 +1,7 @@
 package com.atlassian.webdriver.jira.page;
 
+import com.atlassian.pageobjects.Page;
 import com.atlassian.pageobjects.binder.Init;
-import com.atlassian.pageobjects.page.Page;
 import com.atlassian.webdriver.jira.component.project.ProjectSummary;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;

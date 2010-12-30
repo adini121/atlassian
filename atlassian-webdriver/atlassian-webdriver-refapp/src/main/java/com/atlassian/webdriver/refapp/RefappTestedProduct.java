@@ -1,24 +1,22 @@
 package com.atlassian.webdriver.refapp;
 
+import com.atlassian.pageobjects.Defaults;
+import com.atlassian.pageobjects.Page;
 import com.atlassian.pageobjects.PageBinder;
+import com.atlassian.pageobjects.component.Header;
 import com.atlassian.pageobjects.page.AdminHomePage;
-import com.atlassian.pageobjects.page.Header;
 import com.atlassian.pageobjects.page.HomePage;
 import com.atlassian.pageobjects.page.LoginPage;
-import com.atlassian.pageobjects.product.Defaults;
-import com.atlassian.pageobjects.product.ProductInstance;
-import com.atlassian.pageobjects.product.TestedProduct;
-import com.atlassian.pageobjects.product.TestedProductFactory;
+import com.atlassian.pageobjects.ProductInstance;
+import com.atlassian.pageobjects.TestedProduct;
+import com.atlassian.pageobjects.TestedProductFactory;
 import com.atlassian.webdriver.AtlassianWebDriver;
-import com.atlassian.webdriver.pageobjects.WebDriverLink;
 import com.atlassian.webdriver.pageobjects.WebDriverPageBinder;
 import com.atlassian.webdriver.pageobjects.WebDriverTester;
 import com.atlassian.webdriver.refapp.component.RefappHeader;
-import com.atlassian.webdriver.refapp.page.RefappAbstractPage;
 import com.atlassian.webdriver.refapp.page.RefappAdminHomePage;
 import com.atlassian.webdriver.refapp.page.RefappHomePage;
 import com.atlassian.webdriver.refapp.page.RefappLoginPage;
-import org.openqa.selenium.By;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -26,7 +24,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  */
 @Defaults(instanceId = "refapp", contextPath = "/refapp", httpPort = 5990)
-public class RefappTestedProduct implements TestedProduct<WebDriverTester, RefappHeader, RefappHomePage, RefappAdminHomePage, RefappLoginPage>
+public class RefappTestedProduct implements TestedProduct<WebDriverTester>
 {
     private final PageBinder pageBinder;
     private final WebDriverTester webDriverTester;
@@ -69,6 +67,11 @@ public class RefappTestedProduct implements TestedProduct<WebDriverTester, Refap
         return pageBinder.navigateToAndBind(RefappLoginPage.class);
     }
 
+    public <P extends Page> P visit(Class<P> pageClass)
+    {
+        return pageBinder.navigateToAndBind(pageClass);
+    }
+
     public PageBinder getPageBinder()
     {
         return pageBinder;
@@ -82,35 +85,5 @@ public class RefappTestedProduct implements TestedProduct<WebDriverTester, Refap
     public WebDriverTester getTester()
     {
         return webDriverTester;
-    }
-
-    // ---- testing stuff ------------------
-
-    public static final void main(String[] args)
-    {
-        RefappTestedProduct product = TestedProductFactory.create(RefappTestedProduct.class);
-        MyPage page = product.gotoLoginPage()
-                             .loginAsSysAdmin(MyPage.class);
-
-        RefappAdminHomePage adminPage = product.gotoAdminHomePage();
-        MyPage pageViaLink = product.getPageBinder().bind(MyLink.class).activate();
-
-        MyPage myPage = product.getPageBinder().navigateToAndBind(MyPage.class);
-    }
-
-    public static class MyLink extends WebDriverLink<MyPage>
-    {
-        public MyLink()
-        {
-            super(By.id("my-link-id"), MyPage.class);
-        }
-    }
-
-    public static class MyPage extends RefappAbstractPage
-    {
-        public String getUrl()
-        {
-            return "/mypage";
-        }
     }
 }

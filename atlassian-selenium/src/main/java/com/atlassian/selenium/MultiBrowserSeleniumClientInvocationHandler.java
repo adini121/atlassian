@@ -49,7 +49,7 @@ public class MultiBrowserSeleniumClientInvocationHandler implements InvocationHa
     public synchronized Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         Object o;
 
-        List<Future<Object>> futures = new ArrayList(clients.size());
+        List<Future<Object>> futures = new ArrayList<Future<Object>>(clients.size());
 
         for (final SeleniumClient client : clients)
         {

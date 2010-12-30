@@ -1,7 +1,7 @@
 package it.com.atlassian.webdriver.refapp;
 
-import com.atlassian.pageobjects.page.User;
-import com.atlassian.pageobjects.product.TestedProductFactory;
+import com.atlassian.pageobjects.TestedProductFactory;
+import com.atlassian.pageobjects.page.LoginPage;
 import com.atlassian.webdriver.refapp.RefappTestedProduct;
 import com.atlassian.webdriver.refapp.component.RefappHeader;
 import com.atlassian.webdriver.refapp.page.RefappHomePage;
@@ -16,9 +16,8 @@ public class TestRefappHeader
     @Test
     public void testLogin()
     {
-        RefappHeader header = REFAPP.gotoLoginPage().loginAsSysAdmin(RefappHomePage.class).getHeader();
+        RefappHeader header = REFAPP.visit(LoginPage.class).loginAsSysAdmin(RefappHomePage.class).getHeader();
         assertTrue(header.isAdmin());
         assertTrue(header.isLoggedIn());
-        assertTrue(header.isLoggedInAsUser(new User("admin", "admin", null)));
     }
 }

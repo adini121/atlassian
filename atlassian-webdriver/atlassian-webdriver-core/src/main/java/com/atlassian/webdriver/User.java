@@ -1,4 +1,4 @@
-package com.atlassian.pageobjects.page;
+package com.atlassian.webdriver;
 
 /**
  * A class that represents a User

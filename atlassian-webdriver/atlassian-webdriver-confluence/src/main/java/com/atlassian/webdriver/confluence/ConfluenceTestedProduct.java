@@ -1,15 +1,15 @@
 package com.atlassian.webdriver.confluence;
 
+import com.atlassian.pageobjects.Defaults;
+import com.atlassian.pageobjects.Page;
 import com.atlassian.pageobjects.PageBinder;
+import com.atlassian.pageobjects.ProductInstance;
+import com.atlassian.pageobjects.TestedProduct;
+import com.atlassian.pageobjects.TestedProductFactory;
 import com.atlassian.pageobjects.page.AdminHomePage;
-import com.atlassian.pageobjects.page.Header;
+import com.atlassian.pageobjects.component.Header;
 import com.atlassian.pageobjects.page.HomePage;
 import com.atlassian.pageobjects.page.LoginPage;
-import com.atlassian.pageobjects.page.User;
-import com.atlassian.pageobjects.product.Defaults;
-import com.atlassian.pageobjects.product.ProductInstance;
-import com.atlassian.pageobjects.product.TestedProduct;
-import com.atlassian.pageobjects.product.TestedProductFactory;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.confluence.component.header.ConfluenceHeader;
 import com.atlassian.webdriver.confluence.page.ConfluenceAdminHomePage;
@@ -24,9 +24,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  */
 @Defaults(instanceId = "confluence", contextPath = "/confluence", httpPort = 1990)
-public class ConfluenceTestedProduct implements TestedProduct<WebDriverTester, ConfluenceHeader, DashboardPage, ConfluenceAdminHomePage, ConfluenceLoginPage>
+public class ConfluenceTestedProduct implements TestedProduct<WebDriverTester>
 {
-    private User loggedInUser;
+    private String loggedInUsername;
+    private String loggedInPassword;
 
     private final PageBinder pageBinder;
     private final WebDriverTester webDriverTester;
@@ -69,6 +70,11 @@ public class ConfluenceTestedProduct implements TestedProduct<WebDriverTester, C
         return pageBinder.navigateToAndBind(ConfluenceLoginPage.class);
     }
 
+    public <P extends Page> P visit(Class<P> pageClass)
+    {
+        return pageBinder.navigateToAndBind(pageClass);
+    }
+
     public PageBinder getPageBinder()
     {
         return pageBinder;
@@ -84,11 +90,16 @@ public class ConfluenceTestedProduct implements TestedProduct<WebDriverTester, C
         return webDriverTester;
     }
 
-    public User getLoggedInUser() {
-        return loggedInUser;
+    public String getLoggedInUsername() {
+        return loggedInUsername;
     }
 
-    public void setLoggedInUser(User loggedInUser) {
-        this.loggedInUser = loggedInUser;
+    public String getLoggedInPassword() {
+        return loggedInPassword;
+    }
+
+    public void setLoggedInUser(String loggedInUsername, String password) {
+        this.loggedInUsername = loggedInUsername;
+        this.loggedInPassword = password;
     }
 }

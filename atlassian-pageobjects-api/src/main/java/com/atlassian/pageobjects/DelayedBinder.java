@@ -1,4 +1,4 @@
-package com.atlassian.pageobjects.binder;
+package com.atlassian.pageobjects;
 
 /**
  * A delayed binder that gives the caller full control over the creation and lifecycle of the page object.

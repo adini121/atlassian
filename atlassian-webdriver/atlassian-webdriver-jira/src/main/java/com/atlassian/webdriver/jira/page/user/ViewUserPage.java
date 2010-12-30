@@ -1,6 +1,6 @@
 package com.atlassian.webdriver.jira.page.user;
 
-import com.atlassian.pageobjects.page.Page;
+import com.atlassian.pageobjects.Page;
 import com.atlassian.webdriver.jira.page.JiraAdminAbstractPage;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;

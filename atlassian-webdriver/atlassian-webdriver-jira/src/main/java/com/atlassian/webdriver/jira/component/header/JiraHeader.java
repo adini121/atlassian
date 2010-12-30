@@ -2,9 +2,7 @@ package com.atlassian.webdriver.jira.component.header;
 
 import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.binder.Init;
-import com.atlassian.pageobjects.binder.ValidateState;
-import com.atlassian.pageobjects.page.Header;
-import com.atlassian.pageobjects.page.User;
+import com.atlassian.pageobjects.component.Header;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.jira.component.menu.AdminMenu;
 import com.atlassian.webdriver.jira.component.menu.DashboardMenu;
@@ -58,11 +56,6 @@ public class JiraHeader implements UserDiscoverable, Header
     public boolean isLoggedIn()
     {
         return userName != null;
-    }
-
-    public boolean isLoggedInAsUser(User user)
-    {
-        return isLoggedIn() && userName.equals(user.getFullName());
     }
 
     public boolean isAdmin()

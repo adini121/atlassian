@@ -1,8 +1,7 @@
 package com.atlassian.webdriver.jira.page;
 
+import com.atlassian.pageobjects.Page;
 import com.atlassian.pageobjects.page.LoginPage;
-import com.atlassian.pageobjects.page.Page;
-import com.atlassian.pageobjects.page.User;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
@@ -31,20 +30,20 @@ public class JiraLoginPage extends JiraAbstractPage implements LoginPage
         return URI;
     }
 
-    public <M extends Page> M login(User user, Class<M> nextPage)
+    public <M extends Page> M login(String username, String password, Class<M> nextPage)
     {
-        return login(user, false, nextPage);
+        return login(username, password, false, nextPage);
     }
 
     public <M extends Page> M loginAsSysAdmin(Class<M> nextPage)
     {
-        return login(new User("admin", "admin", "fullname", "email"), nextPage);
+        return login("admin", "admin", nextPage);
     }
 
-    public <M extends Page> M login(User user, boolean rememberMe, Class<M> nextPage)
+    public <M extends Page> M login(String username, String password, boolean rememberMe, Class<M> nextPage)
     {
-        usernameField.sendKeys(user.getUsername());
-        passwordField.sendKeys(user.getPassword());
+        usernameField.sendKeys(username);
+        passwordField.sendKeys(password);
 
         if (rememberMe)
         {

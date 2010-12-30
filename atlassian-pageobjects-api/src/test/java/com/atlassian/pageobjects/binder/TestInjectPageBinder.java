@@ -1,10 +1,10 @@
 package com.atlassian.pageobjects.binder;
 
+import com.atlassian.pageobjects.Page;
 import com.atlassian.pageobjects.PageBinder;
+import com.atlassian.pageobjects.ProductInstance;
+import com.atlassian.pageobjects.TestedProduct;
 import com.atlassian.pageobjects.Tester;
-import com.atlassian.pageobjects.page.Page;
-import com.atlassian.pageobjects.product.ProductInstance;
-import com.atlassian.pageobjects.product.TestedProduct;
 import org.junit.Before;
 import org.junit.Test;
 

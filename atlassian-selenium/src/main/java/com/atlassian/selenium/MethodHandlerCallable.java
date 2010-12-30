@@ -3,7 +3,7 @@ package com.atlassian.selenium;
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
 
-public class MethodHandlerCallable implements Callable
+public class MethodHandlerCallable implements Callable<Object>
 {
     protected final SeleniumClient client;
     protected final Method method;

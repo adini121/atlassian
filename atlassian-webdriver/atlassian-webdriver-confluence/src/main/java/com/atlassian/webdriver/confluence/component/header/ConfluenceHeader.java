@@ -1,8 +1,7 @@
 package com.atlassian.webdriver.confluence.component.header;
 
 import com.atlassian.pageobjects.PageBinder;
-import com.atlassian.pageobjects.page.Header;
-import com.atlassian.pageobjects.page.User;
+import com.atlassian.pageobjects.component.Header;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.confluence.component.menu.BrowseMenu;
 import com.atlassian.webdriver.confluence.component.menu.ConfluenceUserMenu;
@@ -37,18 +36,6 @@ public class ConfluenceHeader implements Header, UserDiscoverable
     public boolean isLoggedIn()
     {
         return driver.elementExistsAt(USER_MENU_LOCATOR, headerElement);
-    }
-
-    public boolean isLoggedInAsUser(final User user)
-    {
-        if (isLoggedIn())
-        {
-            return headerElement.findElement(USER_MENU_LOCATOR)
-                    .getText()
-                    .equals(user.getFullName());
-        }
-
-        return false;
     }
 
     public boolean isAdmin()

@@ -1,6 +1,6 @@
 package com.atlassian.webdriver.jira.component.project;
 
-import com.atlassian.pageobjects.page.Page;
+import com.atlassian.pageobjects.Page;
 import com.atlassian.webdriver.utils.Check;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;

@@ -1,6 +1,5 @@
 package it.com.atlassian.webdriver.confluence.test;
 
-import com.atlassian.pageobjects.page.User;
 import com.atlassian.webdriver.confluence.page.ConfluenceAdminHomePage;
 import com.atlassian.webdriver.confluence.page.DashboardPage;
 import com.atlassian.webdriver.confluence.page.LogoutPage;
@@ -21,7 +20,6 @@ public class TestDashboard extends AbstractConfluenceWebTest
         DashboardPage dashboard = CONFLUENCE.gotoHomePage();
         assertTrue(dashboard.isAdmin());
         assertTrue(dashboard.isLoggedIn());
-        assertTrue(dashboard.isLoggedInAsUser(new User("admin", "admin", null)));
 
         pageBinder.navigateToAndBind(LogoutPage.class);
     }

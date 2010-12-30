@@ -1,7 +1,7 @@
 package com.atlassian.webdriver.pageobjects;
 
 import com.atlassian.pageobjects.PageBinder;
-import com.atlassian.pageobjects.page.Page;
+import com.atlassian.pageobjects.Page;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.ElementNotVisibleException;

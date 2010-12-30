@@ -2,16 +2,12 @@ package com.atlassian.webdriver.jira.page;
 
 
 import com.atlassian.pageobjects.PageBinder;
-import com.atlassian.pageobjects.binder.DelayedBinder;
+import com.atlassian.pageobjects.DelayedBinder;
 import com.atlassian.pageobjects.binder.WaitUntil;
-import com.atlassian.pageobjects.page.Page;
-import com.atlassian.pageobjects.page.User;
+import com.atlassian.pageobjects.Page;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.jira.component.header.JiraHeader;
-import com.atlassian.webdriver.jira.component.menu.AdminMenu;
 import com.atlassian.webdriver.jira.component.menu.DashboardMenu;
-import com.atlassian.webdriver.jira.component.menu.JiraUserMenu;
-import com.atlassian.webdriver.pageobjects.UserDiscoverable;
 import org.openqa.selenium.By;
 
 import javax.inject.Inject;
@@ -52,12 +48,6 @@ public abstract class JiraAbstractPage implements Page
     {
         DelayedBinder<JiraHeader> header = pageBinder.delayedBind(JiraHeader.class);
         return header.canBind() ? header.bind().isLoggedIn() : false;
-    }
-
-    public boolean isLoggedInAsUser(User user)
-    {
-        DelayedBinder<JiraHeader> header = pageBinder.delayedBind(JiraHeader.class);
-        return header.canBind() ? header.bind().isLoggedInAsUser(user) : false;
     }
 
     public boolean isAdmin()

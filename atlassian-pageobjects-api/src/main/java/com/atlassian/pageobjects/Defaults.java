@@ -1,12 +1,15 @@
-package com.atlassian.pageobjects.product;
+package com.atlassian.pageobjects;
 
+import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * The default values for a {@link TestedProduct}
+ * The default values for a {@link com.atlassian.pageobjects.TestedProduct}
  */
 @Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
 public @interface Defaults {
 
     /**

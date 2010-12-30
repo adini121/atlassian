@@ -1,4 +1,4 @@
-package com.atlassian.pageobjects.page;
+package com.atlassian.pageobjects;
 
 /**
  * The implementation for a PageObject

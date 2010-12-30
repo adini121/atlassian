@@ -1,8 +1,8 @@
 package com.atlassian.webdriver.confluence.component.menu;
 
+import com.atlassian.pageobjects.Page;
 import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.binder.Init;
-import com.atlassian.pageobjects.page.Page;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.pageobjects.ClickableLink;
 import com.atlassian.webdriver.pageobjects.WebDriverLink;

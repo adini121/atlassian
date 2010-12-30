@@ -1,10 +1,9 @@
 package com.atlassian.webdriver.confluence.page;
 
+import com.atlassian.pageobjects.Page;
 import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.binder.ValidateState;
 import com.atlassian.pageobjects.binder.WaitUntil;
-import com.atlassian.pageobjects.page.Page;
-import com.atlassian.pageobjects.page.User;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.confluence.ConfluenceTestedProduct;
 import com.atlassian.webdriver.confluence.component.header.ConfluenceHeader;
@@ -41,11 +40,6 @@ public abstract class ConfluenceAbstractPage implements UserDiscoverable, Page
         return getHeader().isLoggedIn();
     }
 
-    public boolean isLoggedInAsUser(final User user)
-    {
-        return getHeader().isLoggedInAsUser(user);
-    }
-
     public BrowseMenu getBrowseMenu()
     {
         return getHeader().getBrowseMenu();
@@ -71,7 +65,7 @@ public abstract class ConfluenceAbstractPage implements UserDiscoverable, Page
         // Check for WebSudo
         if (uri != null && !uri.equals(AdministratorAccessPage.URI) && at(AdministratorAccessPage.URI))
         {
-            pageBinder.bind(AdministratorAccessPage.class).login(testedProduct.getLoggedInUser());
+            pageBinder.bind(AdministratorAccessPage.class).login(testedProduct.getLoggedInPassword());
         }
     }
 

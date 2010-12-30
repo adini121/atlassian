@@ -2,8 +2,8 @@ package com.atlassian.webdriver.pageobjects.page;
 
 import com.atlassian.pageobjects.binder.ValidateState;
 import com.atlassian.pageobjects.binder.WaitUntil;
-import com.atlassian.pageobjects.page.Page;
-import com.atlassian.pageobjects.product.ProductInstance;
+import com.atlassian.pageobjects.Page;
+import com.atlassian.pageobjects.ProductInstance;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.utils.by.ByHelper;
 

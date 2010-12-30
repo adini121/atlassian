@@ -1,7 +1,7 @@
 package com.atlassian.webdriver.pageobjects.components.aui;
 
 import com.atlassian.pageobjects.binder.Init;
-import com.atlassian.pageobjects.page.Page;
+import com.atlassian.pageobjects.Page;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.pageobjects.WebDriverLink;
 import com.atlassian.webdriver.pageobjects.components.DropdownMenu;

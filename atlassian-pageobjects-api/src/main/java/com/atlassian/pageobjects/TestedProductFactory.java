@@ -1,6 +1,5 @@
-package com.atlassian.pageobjects.product;
+package com.atlassian.pageobjects;
 
-import com.atlassian.pageobjects.Tester;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,7 +55,7 @@ public class TestedProductFactory
      * @param <P> The tested product type
      * @return The created tested product
      */
-    public static <P extends TestedProduct<?,?,?,?,?>> P create(Class<P> testedProductClass)
+    public static <P extends TestedProduct<?>> P create(Class<P> testedProductClass)
     {
         return create(testedProductClass, getDefaultInstanceId(testedProductClass), null);
     }
@@ -69,7 +68,7 @@ public class TestedProductFactory
      * @param <P> The tested product type
      * @return The created tested product
      */
-    public static <P extends TestedProduct<?,?,?,?,?>> P create(Class<P> testedProductClass, String instanceId, TesterFactory<?> testerFactory)
+    public static <P extends TestedProduct<?>> P create(Class<P> testedProductClass, String instanceId, TesterFactory<?> testerFactory)
     {
         final String contextPath, baseUrl;
         final int httpPort;
@@ -89,7 +88,7 @@ public class TestedProductFactory
             contextPath = defaults.contextPath();
             baseUrl = "http://" + getLocalHostName() + ":" + httpPort + contextPath;
         }
-        instance = new ProductInstance(instanceId, httpPort, contextPath, baseUrl);
+        instance = new DefaultProductInstance(instanceId, httpPort, contextPath, baseUrl);
         return create(testedProductClass, instance, testerFactory);
     }
 
@@ -109,7 +108,7 @@ public class TestedProductFactory
         return annotation;
     }
 
-    private static <P extends TestedProduct<?,?,?,?,?>> P create(Class<P> testedProductClass, ProductInstance instance, TesterFactory<?> testerFactory) {
+    private static <P extends TestedProduct<?>> P create(Class<P> testedProductClass, ProductInstance instance, TesterFactory<?> testerFactory) {
         try
         {
             Constructor<P> c = testedProductClass.getConstructor(TesterFactory.class, ProductInstance.class);
@@ -140,6 +139,45 @@ public class TestedProductFactory
             return InetAddress.getLocalHost().getHostName();
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Information representing the product instance being tested
+     */
+    private static class DefaultProductInstance implements ProductInstance
+    {
+        private final String baseUrl;
+        private final String instanceId;
+        private final int httpPort;
+        private final String contextPath;
+
+
+        public DefaultProductInstance(final String instanceId, final int httpPort, final String contextPath, final String baseUrl)
+        {
+            this.instanceId = instanceId;
+            this.httpPort = httpPort;
+            this.contextPath = contextPath;
+            this.baseUrl = baseUrl;
+        }
+
+        public String getBaseUrl()
+        {
+            return baseUrl.toLowerCase();
+        }
+
+        public int getHttpPort()
+        {
+            return httpPort;
+        }
+
+        public String getContextPath()
+        {
+            return contextPath;
+        }
+
+        public String getInstanceId() {
+            return instanceId;
         }
     }
 }

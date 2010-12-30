@@ -1,10 +1,12 @@
 package com.atlassian.pageobjects.binder;
 
+import com.atlassian.pageobjects.DelayedBinder;
+import com.atlassian.pageobjects.Page;
 import com.atlassian.pageobjects.PageBinder;
+import com.atlassian.pageobjects.ProductInstance;
+import com.atlassian.pageobjects.TestedProductFactory;
 import com.atlassian.pageobjects.Tester;
-import com.atlassian.pageobjects.page.Page;
-import com.atlassian.pageobjects.product.ProductInstance;
-import com.atlassian.pageobjects.product.TestedProduct;
+import com.atlassian.pageobjects.TestedProduct;
 import com.atlassian.pageobjects.util.InjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +46,7 @@ import static java.util.Arrays.asList;
  */
 public final class InjectPageBinder implements PageBinder
 {
-    private final TestedProduct<?, ?, ?, ?, ?> testedProduct;
+    private final TestedProduct<?> testedProduct;
     private final Tester tester;
     private final ProductInstance productInstance;
     private static final Logger log = LoggerFactory.getLogger(InjectPageBinder.class);
@@ -66,12 +68,12 @@ public final class InjectPageBinder implements PageBinder
     private final Map<Class, Class> overrides =
             new HashMap<Class, Class>();
 
-    public InjectPageBinder(TestedProduct<?, ?, ?, ?, ?> testedProduct)
+    public InjectPageBinder(TestedProduct<?> testedProduct)
     {
         this(testedProduct, new NoOpPostInjectionProcessor());
     }
 
-    public InjectPageBinder(TestedProduct<?, ?, ?, ?, ?> testedProduct, PostInjectionProcessor postInjectionProcessor)
+    public InjectPageBinder(TestedProduct<?> testedProduct, PostInjectionProcessor postInjectionProcessor)
     {
         checkNotNull(testedProduct);
         checkNotNull(testedProduct.getProductInstance());
@@ -156,6 +158,7 @@ public final class InjectPageBinder implements PageBinder
             this.args = args;
         }
 
+        @SuppressWarnings("unchecked")
         public T execute(T t)
         {
             T instance;
@@ -184,6 +187,7 @@ public final class InjectPageBinder implements PageBinder
             return instance;
         }
 
+        @SuppressWarnings("unchecked")
         private T instantiate(Class<T> clazz, Object[] args)
                 throws InstantiationException, IllegalAccessException, InvocationTargetException
         {
@@ -376,7 +380,7 @@ public final class InjectPageBinder implements PageBinder
 
             if (found)
             {
-                Phase<T> currentPhase = null;
+                Phase<T> currentPhase;
                 while (!phases.isEmpty())
                 {
                     currentPhase = phases.removeFirst();

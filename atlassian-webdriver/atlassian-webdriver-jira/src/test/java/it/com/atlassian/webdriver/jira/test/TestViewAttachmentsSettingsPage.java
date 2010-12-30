@@ -1,6 +1,6 @@
 package it.com.atlassian.webdriver.jira.test;
 
-import com.atlassian.pageobjects.product.TestedProductFactory;
+import com.atlassian.pageobjects.TestedProductFactory;
 import com.atlassian.webdriver.jira.JiraTestedProduct;
 import com.atlassian.webdriver.jira.page.DashboardPage;
 import com.atlassian.webdriver.jira.page.ViewAttachmentsSettingsPage;

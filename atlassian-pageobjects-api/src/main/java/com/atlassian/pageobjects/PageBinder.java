@@ -1,8 +1,5 @@
 package com.atlassian.pageobjects;
 
-import com.atlassian.pageobjects.binder.DelayedBinder;
-import com.atlassian.pageobjects.page.Page;
-
 /**
  * Creates and binds the page objects to the page.  Also supports special page navigation.  Implementations should use
  * any defined overrides in preference to passed class instances.

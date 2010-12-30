@@ -1,7 +1,7 @@
 package it.com.atlassian.webdriver.confluence.test;
 
 import com.atlassian.pageobjects.PageBinder;
-import com.atlassian.pageobjects.product.TestedProductFactory;
+import com.atlassian.pageobjects.TestedProductFactory;
 import com.atlassian.webdriver.confluence.ConfluenceTestedProduct;
 import com.atlassian.webdriver.confluence.page.DashboardPage;
 import org.junit.After;

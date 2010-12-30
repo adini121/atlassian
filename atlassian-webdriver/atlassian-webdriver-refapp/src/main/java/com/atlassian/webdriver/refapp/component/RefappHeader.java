@@ -1,8 +1,8 @@
 package com.atlassian.webdriver.refapp.component;
 
-import com.atlassian.pageobjects.page.Header;
-import com.atlassian.pageobjects.page.User;
+import com.atlassian.pageobjects.component.Header;
 import com.atlassian.webdriver.AtlassianWebDriver;
+import com.atlassian.webdriver.User;
 import org.openqa.selenium.By;
 
 import javax.inject.Inject;
@@ -18,11 +18,6 @@ public class RefappHeader implements Header
     public boolean isLoggedIn()
     {
         return driver.findElement(By.id("login")).getText().equals("Logout");
-    }
-
-    public boolean isLoggedInAsUser(User user)
-    {
-        return isLoggedIn() && driver.findElement(By.id("user")).getText().contains(user.getFullName());
     }
 
     public boolean isAdmin()

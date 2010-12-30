@@ -7,7 +7,7 @@ import java.util.List;
 public class TimeRecorder {
 
     private String testName;
-    private List<EventTime> events = new ArrayList();
+    private List<EventTime> events = new ArrayList<EventTime>();
 
 
     public TimeRecorder(String testName)

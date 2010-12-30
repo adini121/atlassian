@@ -1,19 +1,17 @@
 package com.atlassian.pageobjects.binder;
 
 import com.atlassian.pageobjects.PageBinder;
-import com.atlassian.pageobjects.page.AdminHomePage;
-import com.atlassian.pageobjects.page.HomePage;
-import com.atlassian.pageobjects.page.LoginPage;
-import com.atlassian.pageobjects.page.Page;
-import com.atlassian.pageobjects.product.ProductInstance;
-import com.atlassian.pageobjects.product.TestedProduct;
+import com.atlassian.pageobjects.Page;
+import com.atlassian.pageobjects.ProductInstance;
+import com.atlassian.pageobjects.TestedProduct;
+import com.atlassian.pageobjects.TestedProductFactory;
 
 import static org.mockito.Mockito.mock;
 
 /**
 *
 */
-class MyTestedProduct implements TestedProduct<MapTester, MyHeader, HomePage<MyHeader>, AdminHomePage<MyHeader>, LoginPage>
+class MyTestedProduct implements TestedProduct<MapTester>
 {
     private final MapTester mapTester;
     private final PageBinder pageBinder = mock(PageBinder.class);
@@ -24,17 +22,8 @@ class MyTestedProduct implements TestedProduct<MapTester, MyHeader, HomePage<MyH
         this.mapTester = mapTester;
     }
 
-    public HomePage<MyHeader> gotoHomePage()
-    {
-        return null;
-    }
 
-    public AdminHomePage<MyHeader> gotoAdminHomePage()
-    {
-        return null;
-    }
-
-    public LoginPage gotoLoginPage()
+    public <P extends Page> P visit(Class<P> pageClass)
     {
         return null;
     }

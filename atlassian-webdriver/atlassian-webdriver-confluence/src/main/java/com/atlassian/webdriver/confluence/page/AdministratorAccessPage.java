@@ -1,6 +1,5 @@
 package com.atlassian.webdriver.confluence.page;
 
-import com.atlassian.pageobjects.page.User;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -25,9 +24,9 @@ public class AdministratorAccessPage extends ConfluenceAbstractPage
         return URI;
     }
 
-    public void login(User user)
+    public void login(String password)
     {
-        passwordField.sendKeys(user.getPassword());
+        passwordField.sendKeys(password);
         authenticationForm.submit();
     }
 }
