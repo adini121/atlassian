@@ -1,5 +1,6 @@
 package com.atlassian.webdriver.browsers;
 
+import com.atlassian.browsers.BrowserConfig;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.WebDriverFactory;
 import org.openqa.selenium.WebDriverException;
@@ -14,12 +15,10 @@ public enum WebDriverBrowserAutoInstall
 {
     INSTANCE;
 
-    private AutoInstallConfiguration config;
     private AtlassianWebDriver driver;
 
     WebDriverBrowserAutoInstall() {
-        this.config = new AutoInstallConfiguration();
-
+        BrowserConfig browserConfig = AutoInstallConfiguration.setupBrowser();
         Runtime.getRuntime().addShutdownHook(new Thread()
         {
             @Override
@@ -42,7 +41,7 @@ public enum WebDriverBrowserAutoInstall
             }
         });
 
-        driver = WebDriverFactory.getDriver();
+        driver = WebDriverFactory.getDriver(browserConfig);
 
     }
 

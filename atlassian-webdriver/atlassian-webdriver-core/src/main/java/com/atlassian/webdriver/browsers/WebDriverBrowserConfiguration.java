@@ -12,7 +12,6 @@ import java.io.File;
  */
 public class WebDriverBrowserConfiguration implements BrowserConfiguration
 {
-    public static final String BROWSER = System.getProperty("webdriver.browser", BrowserVersion.FIREFOX_3_5.getBrowserName());
     private final File targetDir = new File("target");
     private final File webdriverDir = new File(targetDir, "webdriverTmp");
 
@@ -25,6 +24,6 @@ public class WebDriverBrowserConfiguration implements BrowserConfiguration
 
     public String getBrowserName()
     {
-        return BROWSER;
+        return System.getProperty("webdriver.browser", BrowserVersion.FIREFOX_3_5.getBrowserName());
     }
 }

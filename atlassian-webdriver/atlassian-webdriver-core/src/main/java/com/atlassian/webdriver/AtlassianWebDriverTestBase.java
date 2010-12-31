@@ -1,5 +1,6 @@
 package com.atlassian.webdriver;
 
+import com.atlassian.webdriver.browsers.AutoInstallConfiguration;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -83,7 +84,7 @@ public abstract class AtlassianWebDriverTestBase
 
     @BeforeClass
     public static void startUp() {
-        driver = WebDriverFactory.getDriver();
+        driver = WebDriverFactory.getDriver(AutoInstallConfiguration.setupBrowser());
     }
 
     @AfterClass

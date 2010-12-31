@@ -1,5 +1,6 @@
 package com.atlassian.webdriver;
 
+import com.atlassian.browsers.BrowserConfig;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -22,27 +23,24 @@ public class WebDriverFactory
 
     public static AtlassianWebDriver getDriver()
     {
+        return getDriver(null);
+    }
+
+    public static AtlassianWebDriver getDriver(BrowserConfig browserConfig)
+    {
         WebDriver driver;
 
         String BROWSER = System.getProperty("webdriver.browser", "firefox-3.5");
 
         if (BROWSER.startsWith("firefox"))
         {
-            FirefoxBinary firefox = new FirefoxBinary();
+            FirefoxBinary firefox = new FirefoxBinary(new File(browserConfig.getBinaryPath()));
             if (System.getProperty("DISPLAY") != null){
                 firefox.setEnvironmentProperty("DISPLAY", System.getProperty("DISPLAY"));
             }
             FirefoxProfile profile = null;
-            /*
-             *  Doesn't work like you'd think.  Need to investigate            
-            final String profilePath = System.getProperty("webdriver.firefox.profile");
-            if (profilePath != null)
-            {
-                profile = new FirefoxProfile(new File(profilePath))
-                {
-                };
-            }
-            */
+
+            //profile = new FirefoxProfile(new File(browserConfig.getProfilePath()));
 
             driver = new FirefoxDriver(firefox, profile);
         }

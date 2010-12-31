@@ -2,6 +2,7 @@ package com.atlassian.webdriver.test;
 
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.WebDriverFactory;
+import com.atlassian.webdriver.browsers.AutoInstallConfiguration;
 import com.atlassian.webdriver.utils.by.ByJquery;
 import com.google.common.collect.ImmutableMap;
 import org.junit.AfterClass;

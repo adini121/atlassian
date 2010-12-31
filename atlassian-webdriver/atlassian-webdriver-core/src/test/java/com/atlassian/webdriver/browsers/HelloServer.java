@@ -51,7 +51,7 @@ class HelloServer
             {
                 response.setContentType("text/html");
                 response.setStatus(HttpServletResponse.SC_OK);
-                response.getWriter().println("<h1>Hello</h1>");
+                response.getWriter().println("<html><h1>Hello</h1><div>" + request.getHeader("User-Agent") + "</div></html>");
                 ((Request)request).setHandled(true);
             }
         };
