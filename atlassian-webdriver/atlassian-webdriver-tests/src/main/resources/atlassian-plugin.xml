@@ -5,11 +5,11 @@
         <vendor name="Atlassian"></vendor>
     </plugin-info>
    
-   <servlet name="AUI Components" class="it.com.atlassian.webdriver.product.AUIServlet" key="auipage">
+   <servlet name="AUI Components" class="com.atlassian.webdriver.product.product.AUIServlet" key="auipage">
         <url-pattern>/webdriver/auipage</url-pattern>
     </servlet>
 
-    <servlet name="JQuery  Components" class="it.com.atlassian.webdriver.product.JQueryServlet" key="jquerypage">
+    <servlet name="JQuery  Components" class="com.atlassian.webdriver.product.product.JQueryServlet" key="jquerypage">
         <url-pattern>/webdriver/jquerypage</url-pattern>
     </servlet>
 
