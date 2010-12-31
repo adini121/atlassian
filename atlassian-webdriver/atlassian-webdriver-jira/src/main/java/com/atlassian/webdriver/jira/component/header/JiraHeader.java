@@ -7,7 +7,7 @@ import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.jira.component.menu.AdminMenu;
 import com.atlassian.webdriver.jira.component.menu.DashboardMenu;
 import com.atlassian.webdriver.jira.component.menu.JiraUserMenu;
-import com.atlassian.webdriver.pageobjects.UserDiscoverable;
+import com.atlassian.webdriver.jira.component.UserDiscoverable;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;

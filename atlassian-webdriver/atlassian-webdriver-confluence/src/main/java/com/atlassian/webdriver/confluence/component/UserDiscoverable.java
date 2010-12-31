@@ -1,4 +1,4 @@
-package com.atlassian.webdriver.pageobjects;
+package com.atlassian.webdriver.confluence.component;
 
 /**
  *

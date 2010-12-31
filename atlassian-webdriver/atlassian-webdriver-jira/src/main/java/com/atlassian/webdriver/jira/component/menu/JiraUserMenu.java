@@ -4,7 +4,7 @@ import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.binder.Init;
 import com.atlassian.webdriver.pageobjects.ClickableLink;
 import com.atlassian.webdriver.pageobjects.WebDriverLink;
-import com.atlassian.webdriver.pageobjects.components.aui.AuiDropdownMenu;
+import com.atlassian.webdriver.pageobjects.components.aui.v3_0.AuiDropdownMenu;
 import com.atlassian.webdriver.pageobjects.components.DropdownMenu;
 import com.atlassian.webdriver.pageobjects.components.UserMenu;
 import com.atlassian.webdriver.jira.page.LogoutPage;

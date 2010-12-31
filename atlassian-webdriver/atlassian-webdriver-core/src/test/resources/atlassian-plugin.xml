@@ -1,0 +1,23 @@
+<atlassian-plugin name="Plugin for integration tests" key="integration-tests" plugins-version="2">
+    <plugin-info>
+        <version>1</version>
+        <description>Plugin that contains UI elements to test</description>
+        <vendor name="Atlassian"></vendor>
+    </plugin-info>
+   
+   <servlet name="AUI Components" class="it.com.atlassian.webdriver.product.AUIServlet" key="auipage">
+        <url-pattern>/webdriver/auipage</url-pattern>
+    </servlet>
+
+    <servlet name="JQuery  Components" class="it.com.atlassian.webdriver.product.JQueryServlet" key="jquerypage">
+        <url-pattern>/webdriver/jquerypage</url-pattern>
+    </servlet>
+
+    <web-resource key="jquery-js">
+        <resource type="download" name="jquery.js" location="js/jquery-1.4.1.min.js"></resource>
+    </web-resource>
+
+    <component-import key="templateRenderer" interface="com.atlassian.templaterenderer.TemplateRenderer"></component-import>
+
+    
+</atlassian-plugin>
