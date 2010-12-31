@@ -26,7 +26,7 @@
 
     <properties>
         <jdkLevel>1.5</jdkLevel>
-        <atlassian-browsers-version>1.1-SNAPSHOT</atlassian-browsers-version>
+        <atlassian-browsers-version>1.1-beta3</atlassian-browsers-version>
         <selenium.version>2.0a7</selenium.version>
     </properties>
 
