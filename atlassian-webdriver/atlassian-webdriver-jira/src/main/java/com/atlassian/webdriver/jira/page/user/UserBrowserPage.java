@@ -1,7 +1,7 @@
 package com.atlassian.webdriver.jira.page.user;
 
 import com.atlassian.pageobjects.binder.Init;
-import com.atlassian.webdriver.User;
+import com.atlassian.webdriver.jira.data.User;
 import com.atlassian.webdriver.jira.page.JiraAdminAbstractPage;
 import com.atlassian.webdriver.utils.by.ByJquery;
 import com.atlassian.webdriver.utils.Check;

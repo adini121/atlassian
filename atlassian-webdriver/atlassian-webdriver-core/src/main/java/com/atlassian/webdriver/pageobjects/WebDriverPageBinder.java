@@ -5,14 +5,8 @@ import com.atlassian.pageobjects.Page;
 import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.binder.InjectPageBinder;
 import com.atlassian.pageobjects.TestedProduct;
-import com.atlassian.pageobjects.util.InjectUtils;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
-
-import java.lang.reflect.Field;
-
-import static com.atlassian.pageobjects.util.InjectUtils.forEachFieldWithAnnotation;
 
 /**
  *
@@ -28,57 +22,9 @@ public class WebDriverPageBinder<T extends WebDriver> implements PageBinder
             public <P> P process(P pageObject)
             {
                 PageFactory.initElements(testedProduct.getTester().getDriver(), pageObject);
-                injectWebLinks(pageObject);
                 return pageObject;
             }
         });
-    }
-
-    private void injectWebLinks(final Object instance)
-    {
-        forEachFieldWithAnnotation(instance, ClickableLink.class, new InjectUtils.FieldVisitor<ClickableLink>()
-        {
-            public void visit(Field field, ClickableLink annotation)
-            {
-                WebDriverLink link = createLink(annotation);
-                try
-                {
-                    field.setAccessible(true);
-                    field.set(instance, link);
-                }
-                catch (IllegalAccessException e)
-                {
-                    throw new RuntimeException(e);
-                }
-            }
-        });
-    }
-    
-    private WebDriverLink createLink(ClickableLink clickableLink)
-    {
-        By by;
-        if (clickableLink.className().length() > 0)
-        {
-            by = By.className(clickableLink.className());
-        }
-        else if (clickableLink.id().length() > 0)
-        {
-            by = By.id(clickableLink.id());
-        }
-        else if (clickableLink.linkText().length() > 0)
-        {
-            by = By.linkText(clickableLink.linkText());
-        }
-        else if (clickableLink.partialLinkText().length() > 0)
-        {
-            by = By.partialLinkText(clickableLink.partialLinkText());
-        }
-        else
-        {
-            throw new IllegalArgumentException("No selector found");
-        }
-
-        return bind(WebDriverLink.class, by, clickableLink.nextPage());
     }
 
     public <P extends Page> P navigateToAndBind(Class<P> pageClass, Object... args)

@@ -13,7 +13,6 @@ import com.atlassian.pageobjects.TestedProduct;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.jira.component.header.JiraHeader;
 import com.atlassian.webdriver.jira.page.DashboardPage;
-import com.atlassian.webdriver.pageobjects.WebDriverPageBinder;
 import com.atlassian.webdriver.pageobjects.WebDriverTester;
 import com.atlassian.webdriver.jira.page.JiraAdminHomePage;
 import com.atlassian.webdriver.jira.page.JiraLoginPage;

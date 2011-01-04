@@ -2,16 +2,13 @@ package com.atlassian.webdriver.jira.component.menu;
 
 import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.binder.Init;
+import com.atlassian.webdriver.jira.component.ClickableLink;
+import com.atlassian.webdriver.jira.component.WebDriverLink;
 import com.atlassian.webdriver.jira.page.LicenseDetailsPage;
 import com.atlassian.webdriver.jira.page.PluginsPage;
 import com.atlassian.webdriver.jira.page.ProjectsViewPage;
 import com.atlassian.webdriver.jira.page.user.UserBrowserPage;
-import com.atlassian.webdriver.pageobjects.ClickableLink;
-import com.atlassian.webdriver.pageobjects.WebDriverLink;
-import com.atlassian.webdriver.pageobjects.components.aui.v3_0.AuiDropdownMenu;
-import com.atlassian.webdriver.pageobjects.components.DropdownMenu;
 import com.atlassian.webdriver.utils.by.ByJquery;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -21,7 +18,7 @@ import javax.inject.Inject;
  * Object for interacting with the Admin menu in the JIRA header.
  * TODO: extend for all available links.
  */
-public class AdminMenu implements DropdownMenu<AdminMenu>
+public class AdminMenu
 {
 
     @Inject

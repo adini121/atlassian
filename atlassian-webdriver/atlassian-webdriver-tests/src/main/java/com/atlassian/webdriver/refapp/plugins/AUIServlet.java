@@ -1,4 +1,4 @@
-package com.atlassian.webdriver.product.product;
+package com.atlassian.webdriver.refapp.plugins;
 
 import com.atlassian.plugin.webresource.WebResourceManager;
 import com.atlassian.templaterenderer.TemplateRenderer;

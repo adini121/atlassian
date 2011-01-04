@@ -1,10 +1,7 @@
-package com.atlassian.webdriver.pageobjects.components.ajs;
+package com.atlassian.webdriver.confluence.component.menu;
 
 import com.atlassian.pageobjects.binder.Init;
-import com.atlassian.pageobjects.Page;
 import com.atlassian.webdriver.AtlassianWebDriver;
-import com.atlassian.webdriver.pageobjects.WebDriverLink;
-import com.atlassian.webdriver.pageobjects.components.DropdownMenu;
 import com.atlassian.webdriver.utils.Check;
 import com.atlassian.webdriver.utils.MouseEvents;
 import org.openqa.selenium.By;
@@ -15,7 +12,7 @@ import javax.inject.Inject;
 /**
  *
  */
-public class AjsDropdownMenu implements DropdownMenu<AjsDropdownMenu>
+public class AjsDropdownMenu
 {
 
     @Inject
@@ -39,10 +36,6 @@ public class AjsDropdownMenu implements DropdownMenu<AjsDropdownMenu>
     public boolean isOpen()
     {
         return Check.hasClass("opened", menuItem);
-    }
-
-    public <T extends Page> T activate(WebDriverLink<T> link) {
-        return link.activate(menuItem);
     }
 
     public AjsDropdownMenu open()

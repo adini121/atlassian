@@ -1,6 +1,6 @@
 package it.com.atlassian.webdriver.confluence.test;
 
-import com.atlassian.webdriver.User;
+import com.atlassian.webdriver.confluence.data.User;
 import com.atlassian.webdriver.confluence.page.PeopleDirectoryPage;
 import org.junit.Test;
 

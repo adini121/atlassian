@@ -1,17 +1,26 @@
 package com.atlassian.webdriver.pageobjects.components;
 
-import com.atlassian.webdriver.pageobjects.AbstractWebDriverPageObject;
+import com.atlassian.pageobjects.PageBinder;
+import com.atlassian.webdriver.AtlassianWebDriver;
 import com.google.common.base.Function;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.ElementNotDisplayedException;
 
+import javax.inject.Inject;
+
 /**
  * Represents a collapsible menu component.
  */
-public abstract class AbstractWebDriverMenu<P extends AbstractWebDriverMenu<P>> extends AbstractWebDriverPageObject
+public abstract class AbstractWebDriverMenu<P extends AbstractWebDriverMenu<P>>
 {
+    @Inject
+    protected AtlassianWebDriver driver;
+
+    @Inject
+    protected PageBinder pageBinder;
+
     private final By rootElementLocator;
     private WebElement rootElement;
     private boolean rootElementLocated = false;

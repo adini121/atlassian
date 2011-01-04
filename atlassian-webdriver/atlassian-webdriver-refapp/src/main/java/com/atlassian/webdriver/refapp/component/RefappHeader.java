@@ -2,7 +2,6 @@ package com.atlassian.webdriver.refapp.component;
 
 import com.atlassian.pageobjects.component.Header;
 import com.atlassian.webdriver.AtlassianWebDriver;
-import com.atlassian.webdriver.User;
 import org.openqa.selenium.By;
 
 import javax.inject.Inject;

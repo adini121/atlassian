@@ -1,4 +1,4 @@
-package com.atlassian.webdriver.pageobjects;
+package com.atlassian.webdriver.jira.component;
 
 import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.Page;

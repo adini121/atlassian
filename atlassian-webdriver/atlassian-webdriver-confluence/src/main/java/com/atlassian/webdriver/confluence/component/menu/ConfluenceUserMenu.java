@@ -2,16 +2,12 @@ package com.atlassian.webdriver.confluence.component.menu;
 
 import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.binder.Init;
-import com.atlassian.pageobjects.Page;
 import com.atlassian.webdriver.AtlassianWebDriver;
-import com.atlassian.webdriver.pageobjects.ClickableLink;
-import com.atlassian.webdriver.pageobjects.WebDriverLink;
-import com.atlassian.webdriver.pageobjects.components.ajs.AjsDropdownMenu;
-import com.atlassian.webdriver.pageobjects.components.DropdownMenu;
-import com.atlassian.webdriver.pageobjects.components.UserMenu;
 import com.atlassian.webdriver.confluence.page.LogoutPage;
 import com.atlassian.webdriver.utils.by.ByJquery;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
 import javax.inject.Inject;
 
@@ -20,7 +16,7 @@ import javax.inject.Inject;
  *
  * @since v4.2
  */
-public class ConfluenceUserMenu implements DropdownMenu<ConfluenceUserMenu>, UserMenu
+public class ConfluenceUserMenu
 {
     private final By USER_MENU_LOCATOR = ByJquery.$("#user-menu-link").parent("li");
 
@@ -30,8 +26,8 @@ public class ConfluenceUserMenu implements DropdownMenu<ConfluenceUserMenu>, Use
     @Inject
     PageBinder pageBinder;
 
-    @ClickableLink(id = "logout-link", nextPage = LogoutPage.class)
-    WebDriverLink<LogoutPage> logoutLink;
+    @FindBy(id="logout-link")
+    private WebElement logoutLink;
 
 
     private AjsDropdownMenu userMenu;
@@ -44,12 +40,8 @@ public class ConfluenceUserMenu implements DropdownMenu<ConfluenceUserMenu>, Use
 
     public LogoutPage logout()
     {
-        return logoutLink.activate();
-    }
-
-    public <T extends Page> T activate(final WebDriverLink<T> link)
-    {
-        return userMenu.activate(link);
+        logoutLink.click();
+        return pageBinder.bind(LogoutPage.class);
     }
 
     public ConfluenceUserMenu open()

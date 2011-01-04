@@ -1,7 +1,7 @@
 package com.atlassian.webdriver.jira.component.menu;
 
 import com.atlassian.pageobjects.Page;
-import com.atlassian.webdriver.pageobjects.WebDriverLink;
+import com.atlassian.webdriver.jira.component.WebDriverLink;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 

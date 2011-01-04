@@ -2,11 +2,8 @@ package com.atlassian.webdriver.jira.component.menu;
 
 import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.binder.Init;
-import com.atlassian.webdriver.pageobjects.ClickableLink;
-import com.atlassian.webdriver.pageobjects.WebDriverLink;
-import com.atlassian.webdriver.pageobjects.components.aui.v3_0.AuiDropdownMenu;
-import com.atlassian.webdriver.pageobjects.components.DropdownMenu;
-import com.atlassian.webdriver.pageobjects.components.UserMenu;
+import com.atlassian.webdriver.jira.component.ClickableLink;
+import com.atlassian.webdriver.jira.component.WebDriverLink;
 import com.atlassian.webdriver.jira.page.LogoutPage;
 import org.openqa.selenium.By;
 
@@ -15,7 +12,7 @@ import javax.inject.Inject;
 /**
  * Object for interacting with the User Menu in the JIRA Header.
  */
-public class JiraUserMenu implements DropdownMenu<JiraUserMenu>, UserMenu
+public class JiraUserMenu
 {
     @Inject
     PageBinder pageBinder;

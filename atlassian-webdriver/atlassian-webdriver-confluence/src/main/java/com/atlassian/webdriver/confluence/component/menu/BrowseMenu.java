@@ -1,16 +1,13 @@
 package com.atlassian.webdriver.confluence.component.menu;
 
-import com.atlassian.pageobjects.Page;
 import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.binder.Init;
 import com.atlassian.webdriver.AtlassianWebDriver;
-import com.atlassian.webdriver.pageobjects.ClickableLink;
-import com.atlassian.webdriver.pageobjects.WebDriverLink;
-import com.atlassian.webdriver.pageobjects.components.ajs.AjsDropdownMenu;
-import com.atlassian.webdriver.pageobjects.components.DropdownMenu;
 import com.atlassian.webdriver.confluence.page.ConfluenceAdminHomePage;
 import com.atlassian.webdriver.confluence.page.PeopleDirectoryPage;
 import com.atlassian.webdriver.utils.by.ByJquery;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
 import javax.inject.Inject;
 
@@ -19,7 +16,7 @@ import javax.inject.Inject;
  *
  * @since v4.2
  */
-public class BrowseMenu implements DropdownMenu<BrowseMenu>
+public class BrowseMenu
 {
     @Inject
     AtlassianWebDriver driver;
@@ -27,11 +24,11 @@ public class BrowseMenu implements DropdownMenu<BrowseMenu>
     @Inject
     PageBinder pageBinder;
 
-    @ClickableLink(id = "administration-link", nextPage = ConfluenceAdminHomePage.class)
-    WebDriverLink<ConfluenceAdminHomePage> adminPageLink;
+    @FindBy(id="administration-link")
+    private WebElement adminPageLink;
 
-    @ClickableLink(id = "people-directory-link", nextPage = PeopleDirectoryPage.class)
-    WebDriverLink<PeopleDirectoryPage> peopleDirectoryLink;
+    @FindBy(id="people-directory-link")
+    private WebElement peopleDirectoryLink;
 
     private AjsDropdownMenu browseMenu;
 
@@ -43,17 +40,14 @@ public class BrowseMenu implements DropdownMenu<BrowseMenu>
 
     public ConfluenceAdminHomePage gotoAdminPage()
     {
-        return adminPageLink.activate();
+        adminPageLink.click();
+        return pageBinder.bind(ConfluenceAdminHomePage.class);
     }
 
     public PeopleDirectoryPage gotoPeopleDirectoryPage()
     {
-        return peopleDirectoryLink.activate();
-    }
-
-    public <T extends Page> T activate(final WebDriverLink<T> link)
-    {
-        return browseMenu.activate(link);
+        peopleDirectoryLink.click();
+        return pageBinder.bind(PeopleDirectoryPage.class);
     }
 
     public BrowseMenu open()
