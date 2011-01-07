@@ -8,6 +8,7 @@ import com.atlassian.pageobjects.TestedProductFactory;
 import com.atlassian.pageobjects.Tester;
 import com.atlassian.pageobjects.TestedProduct;
 import com.atlassian.pageobjects.util.InjectUtils;
+import org.apache.commons.lang.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -201,7 +202,7 @@ public final class InjectPageBinder implements PageBinder
                         boolean match = true;
                         for (int x = 0; x < args.length; x++)
                         {
-                            if (args[x] != null && !paramTypes[x].isAssignableFrom(args[x].getClass()))
+                            if (args[x] != null && !ClassUtils.isAssignable(args[x].getClass(), paramTypes[x], true /*autoboxing*/))
                             {
                                 match = false;
                                 break;

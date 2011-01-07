@@ -11,6 +11,7 @@ import org.junit.Test;
 import javax.inject.Inject;
 
 import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -64,6 +65,15 @@ public class TestInjectPageBinder
     }
 
     @Test
+    public void testInstantiateWithPrimitiveArguments()
+    {
+        ConstructorArgumentPrimitive object = binder.bind(ConstructorArgumentPrimitive.class, 5, true);
+        assertNotNull(object);
+        assertEquals(5, object.intField);
+        assertTrue(object.booleanField);
+    }
+
+    @Test
     public void testInjectWithArgumentSubclass()
     {
         ConstructorArgumentPage page = binder.bind(ConstructorArgumentPage.class, 43);
@@ -100,6 +110,19 @@ public class TestInjectPageBinder
         @Inject
         private String name;
     }
+
+    static class ConstructorArgumentPrimitive
+    {
+        private final int intField;
+        private final boolean booleanField;
+
+        public ConstructorArgumentPrimitive(int intArg, boolean booleanArg)
+        {
+            this.intField = intArg;
+            this.booleanField = booleanArg;
+        }
+    }
+
 
     static class ConstructorArgumentPage extends AbstractPage
     {
