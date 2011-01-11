@@ -13,6 +13,10 @@
         <url-pattern>/webdriver/jquerypage</url-pattern>
     </servlet>
 
+    <servlet name="HTML  Components" class="com.atlassian.webdriver.refapp.plugins.HtmlServlet" key="htmlpage">
+        <url-pattern>/webdriver/htmlpage</url-pattern>
+    </servlet>
+
     <web-resource key="jquery-js">
         <resource type="download" name="jquery.js" location="js/jquery-1.4.1.min.js"></resource>
     </web-resource>

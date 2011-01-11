@@ -1,6 +1,7 @@
 package com.atlassian.webdriver.utils.element;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -17,7 +18,7 @@ public class ElementIsVisible extends ElementVisibilityCondition
         super(by, Visibility.VISIBLE);
     }
 
-    public ElementIsVisible(By by, WebElement el)
+    public ElementIsVisible(By by, SearchContext el)
     {
         super(by, el, Visibility.VISIBLE);
     }

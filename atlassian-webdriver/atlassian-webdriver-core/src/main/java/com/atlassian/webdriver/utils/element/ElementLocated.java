@@ -1,6 +1,7 @@
 package com.atlassian.webdriver.utils.element;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -16,7 +17,7 @@ public class ElementLocated extends ElementLocationCondition
         super(by, Locatable.LOCATED);
     }
 
-    public ElementLocated(By by, WebElement el)
+    public ElementLocated(By by, SearchContext el)
     {
         super(by, el, Locatable.LOCATED);
     }
