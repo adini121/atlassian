@@ -20,6 +20,14 @@ public interface TimedElement
      * or timeout expires.
      */
     TimedQuery<Boolean> isVisible();
+ 
+    /**
+     * Query representing whether this element has the given classname set.
+     * @param className The name of the class to check
+     * @return TimedQuery that returns true if element has given classname set, false if element does not have the
+     * given classname set or timeout expires.
+     */
+    TimedQuery<Boolean> hasClass(String className);
 
     /**
      * Query representingt the element's given attribute.

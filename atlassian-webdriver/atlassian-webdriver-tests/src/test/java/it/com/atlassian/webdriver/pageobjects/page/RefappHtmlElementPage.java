@@ -2,20 +2,18 @@ package it.com.atlassian.webdriver.pageobjects.page;
 
 import com.atlassian.pageobjects.binder.WaitUntil;
 import com.atlassian.webdriver.pageobjects.element.Element;
-import com.atlassian.webdriver.pageobjects.element.DelayedBy;
+import com.atlassian.webdriver.pageobjects.element.ElementBy;
 import com.atlassian.webdriver.utils.by.ByJquery;
 
 /**
- * TODO: Document this class / interface here
- *
- * @since v4.3
+ * Represents the page returned by the HtmlServlet plugin that is deployed to RefApp
  */
 public class RefappHtmlElementPage extends RefappAbstractPage
 {
-    @DelayedBy(id="test1_addElementsButton")
+    @ElementBy(id="test1_addElementsButton")
     private Element test1_addElementsButton;
 
-    @DelayedBy(id="test1_delayedSpan")
+    @ElementBy(id="test1_delayedSpan")
     private Element test1_delayedSpan;
 
     public String getUrl()

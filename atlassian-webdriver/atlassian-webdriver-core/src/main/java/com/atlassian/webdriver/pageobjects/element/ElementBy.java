@@ -7,11 +7,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Injects delayed elements into the field.
+ * Injects an Element into the field.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface DelayedBy
+public @interface ElementBy
 {
     String id() default "";
 

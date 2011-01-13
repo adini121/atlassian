@@ -39,9 +39,9 @@ public class WebDriverPageBinder<T extends WebDriver> implements PageBinder
 
     private void injectElements(final Object instance)
     {
-        forEachFieldWithAnnotation(instance, DelayedBy.class, new InjectUtils.FieldVisitor<DelayedBy>()
+        forEachFieldWithAnnotation(instance, ElementBy.class, new InjectUtils.FieldVisitor<ElementBy>()
         {
-            public void visit(Field field, DelayedBy annotation)
+            public void visit(Field field, ElementBy annotation)
             {
                 Element element = createElement(annotation);
                 try
@@ -57,48 +57,48 @@ public class WebDriverPageBinder<T extends WebDriver> implements PageBinder
         });
     }
 
-    private Element createElement(DelayedBy delayedBy)
+    private Element createElement(ElementBy elementBy)
     {
         By by;
 
-        if (delayedBy.className().length() > 0)
+        if (elementBy.className().length() > 0)
         {
-            by = By.className(delayedBy.className());
+            by = By.className(elementBy.className());
         }
-        else if (delayedBy.id().length() > 0)
+        else if (elementBy.id().length() > 0)
         {
-            by = By.id(delayedBy.id());
+            by = By.id(elementBy.id());
         }
-        else if (delayedBy.linkText().length() > 0)
+        else if (elementBy.linkText().length() > 0)
         {
-            by = By.linkText(delayedBy.linkText());
+            by = By.linkText(elementBy.linkText());
         }
-        else if (delayedBy.partialLinkText().length() > 0)
+        else if (elementBy.partialLinkText().length() > 0)
         {
-            by = By.partialLinkText(delayedBy.partialLinkText());
+            by = By.partialLinkText(elementBy.partialLinkText());
         }
-        else if(delayedBy.cssSelector().length() >0)
+        else if(elementBy.cssSelector().length() >0)
         {
-            by = By.cssSelector(delayedBy.cssSelector());
+            by = By.cssSelector(elementBy.cssSelector());
         }
-        else if(delayedBy.name().length() > 0)
+        else if(elementBy.name().length() > 0)
         {
-            by = By.name(delayedBy.name());
+            by = By.name(elementBy.name());
         }
-        else if(delayedBy.xpath().length() > 0)
+        else if(elementBy.xpath().length() > 0)
         {
-            by = By.xpath(delayedBy.xpath());
+            by = By.xpath(elementBy.xpath());
         }
-        else if(delayedBy.tagName().length() > 0)
+        else if(elementBy.tagName().length() > 0)
         {
-            by = By.tagName(delayedBy.tagName());
+            by = By.tagName(elementBy.tagName());
         }
         else
         {
             throw new IllegalArgumentException("No selector found");
         }
         
-        return bind(WebDriverDelayedElement.class, by, WebDriverDelayedElement.DEFAULT_TIMEOUT_SECONDS);
+        return bind(WebDriverDelayedElement.class, by);
     }
 
     public <P extends Page> P navigateToAndBind(Class<P> pageClass, Object... args)

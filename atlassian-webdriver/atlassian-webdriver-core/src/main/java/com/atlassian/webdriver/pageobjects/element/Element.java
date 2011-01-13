@@ -2,6 +2,8 @@ package com.atlassian.webdriver.pageobjects.element;
 
 import org.openqa.selenium.By;
 
+import java.util.List;
+
 /**
  * Represents an HTML element that is expected on a DOM of a page
  */
@@ -20,6 +22,13 @@ public interface Element
      * @return true if this element is visible on the page, false otherwise.
      */
     boolean isVisible();
+
+    /**
+     * Whether this element has the given class set
+     * @param className The name of the class to check
+     * @return true if this element's class attribute contains the given classname, false otherwise.
+     */
+    boolean hasClass(String className);
 
     /**
      * Get the value of a the given attribute of this element.
@@ -56,12 +65,19 @@ public interface Element
     void type(CharSequence... keysToSend);
 
     /**
-     * Creates a delated element that will be located within this element.
+     * Returns a list of element's that match the given locator within this element
+     * @param locator The locator mecharnism
+     * @return A list of elements that are located within this element.
+     */
+    List<Element> findAll(By locator);
+
+    /**
+     * Returns an element that will match the given locator within this element.
      *
      * @param locator The locator mechanism
-     * @return A delayed element that will be located within this element.
+     * @return An element that will be located within this element.
      */
-    Element findDelayed(By locator);
+    Element find(By locator);
 
     /**
      * Creates a timed element based on this element's locator.
@@ -69,4 +85,10 @@ public interface Element
      * @return A TimedElement that is based on this element's locator.
      */
     TimedElement timed();
+
+    /**
+     * Gets a MouseEvents object for this element
+     * @return MouseEvents object that can dispatch javascript events to this element.
+     */
+    WebDriverMouseEvents mouseEvents();
 }

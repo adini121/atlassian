@@ -26,10 +26,17 @@ public class AUIServlet extends HttpServlet
       @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
     {
-        webResourceManager.requireResource("com.atlassian.auiplugin:ajs");
-        
         res.setContentType("text/html; charset=utf-8");
-        templateRenderer.render("templates/auipage.vm", res.getWriter());
 
+        String view =req.getParameter("view");
+        if(view != null && !view.isEmpty())
+        {
+            templateRenderer.render(String.format("templates/%s.vm", view), res.getWriter());
+        }
+        else
+        {
+            webResourceManager.requireResource("com.atlassian.auiplugin:ajs");
+            templateRenderer.render("templates/auipage.vm", res.getWriter());
+        }
     }
 }

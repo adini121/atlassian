@@ -1,98 +1,82 @@
 package com.atlassian.webdriver.pageobjects.element;
 
+import com.atlassian.pageobjects.PageBinder;
+import com.atlassian.pageobjects.binder.Init;
+import com.atlassian.webdriver.AtlassianWebDriver;
+import com.atlassian.webdriver.utils.element.ElementLocated;
 import com.google.common.base.Function;
-import org.openqa.selenium.By;
-import org.openqa.selenium.SearchContext;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.*;
+
+import javax.inject.Inject;
 
 /**
  * Implementation of TimedElement based on WebDriver
  */
-public class WebDriverTimedElement extends AbstractWebDriverElement implements TimedElement
+public class WebDriverTimedElement implements TimedElement
 {
-    /**
-     * Creates a WebDriverTimedElement within the driver's search context and default timeout.
-     * @param locator The locator mechanism to use.
-     */
-    public WebDriverTimedElement(By locator)
-    {
-        this(locator, WebDriverDelayedElement.DEFAULT_TIMEOUT_SECONDS);
-    }
+    @Inject
+    private AtlassianWebDriver driver;
+
+    private final int timeoutInSeconds;
+    private final WebDriverDelayedElement element;
 
     /**
-     * Creates a WebDriverTimedElement within the driver's search context and given timeout.
-     * @param locator The locator mechanism to use.
-     * @param timeout Timeout in seconds to use while locating this element
+     * Create a WebDriverTimedElement with the given timeout
+     * @param element The WebDriverDelayedElement that has immediate implementations for all checks.
+     * @param timeoutInSeconds The timeout in seconds to use when creating the TimedQueries.
      */
-    public WebDriverTimedElement(By locator, int timeout)
+    public WebDriverTimedElement(WebDriverDelayedElement element, int timeoutInSeconds)
     {
-        super(locator, timeout);
-
+        this.element = element;
+        this.timeoutInSeconds = timeoutInSeconds;
     }
-
-    /**
-     * Creates a WebDriverTimedElement within a given search context and default timeout.
-     * @param locator The locator mechanism to use.
-     * @param searchContext The SearchContext to use.
-     */
-    public WebDriverTimedElement(By locator, SearchContext searchContext)
-    {
-        this(locator, searchContext, WebDriverDelayedElement.DEFAULT_TIMEOUT_SECONDS);        
-    }
-
-    /**
-     * Creates a WebDriverTimedElement within a given search context and timeout.
-     * @param locator The locator mechanism to use.
-     * @param searchContext The SearchContext to use.
-     * @param timeout Timeout in seconds to use while locating this element
-     */
-    public WebDriverTimedElement(By locator, SearchContext searchContext, int timeout)
-    {
-        super(locator, searchContext, timeout);
-    }
-
+    
     public TimedQuery<Boolean> isPresent()
     {
-        return new WebDriverTimedQuery<Boolean>(driver, WebDriverDelayedElement.DEFAULT_TIMEOUT_SECONDS,
+        return new WebDriverTimedQuery<Boolean>(driver, timeoutInSeconds,
                 new Function<WebDriver, Boolean>(){
                     public Boolean apply(WebDriver webDriver) {
-                        return driver.elementExistsAt(locator, searchContext);
+                        return element.isPresent();
                     }
         });
     }
 
     public TimedQuery<Boolean> isVisible()
     {
-        this.waitForWebElement();
-
         return new WebDriverTimedQuery<Boolean>(driver, WebDriverDelayedElement.DEFAULT_TIMEOUT_SECONDS,
                 new Function<WebDriver, Boolean>(){
                     public Boolean apply(WebDriver webDriver) {
-                        return driver.elementIsVisibleAt(locator, searchContext);
+                        return element.isVisible();
+                    }
+        });
+    }
+
+    public TimedQuery<Boolean> hasClass(final String className)
+    {
+        return new WebDriverTimedQuery<Boolean>(driver, WebDriverDelayedElement.DEFAULT_TIMEOUT_SECONDS,
+                new Function<WebDriver, Boolean>(){
+                    public Boolean apply(WebDriver webDriver) {
+                        return element.hasClass(className);
                     }
         });
     }
 
     public TimedQuery<String> attribute(final String name)
     {
-        this.waitForWebElement();
-
         return new WebDriverTimedQuery<String>(driver, WebDriverDelayedElement.DEFAULT_TIMEOUT_SECONDS,
                 new Function<WebDriver, String>(){
                     public String apply(WebDriver webDriver) {
-                        return driver.findElement(locator).getAttribute(name);
+                        return element.attribute(name);
                     }
         });
     }
 
     public TimedQuery<String> text()
     {
-        this.waitForWebElement();
-
         return new WebDriverTimedQuery<String>(driver, WebDriverDelayedElement.DEFAULT_TIMEOUT_SECONDS,
                 new Function<WebDriver, String>(){
                     public String apply(WebDriver webDriver) {
-                        return searchContext.findElement(locator).getText();
+                        return element.text();
                     }
         });
     }

@@ -234,7 +234,7 @@ public class AtlassianWebDriver implements WebDriver, JavascriptExecutor
      * @param by Locator mechanism to use
      * @return Element that waits until its present in the DOM before executing actions. 
      */
-    public Element findDelayed(final By by)
+    public Element find(final By by)
     {
         checkNotNull(pageBinder);
         return pageBinder.bind(WebDriverDelayedElement.class, by);
