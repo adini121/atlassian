@@ -280,6 +280,11 @@ public class AtlassianWebDriver implements WebDriver, JavascriptExecutor
         return ((JavascriptExecutor)driver).executeScript(script, args);
     }
 
+    public Object executeAsyncScript(String s, Object... objects)
+    {
+        return ((JavascriptExecutor) driver).executeScript(s, objects);
+    }
+
     public boolean isJavascriptEnabled()
     {
         return ((JavascriptExecutor)driver).isJavascriptEnabled();
