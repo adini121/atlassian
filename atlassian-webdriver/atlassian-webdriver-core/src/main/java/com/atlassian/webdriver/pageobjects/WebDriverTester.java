@@ -17,10 +17,15 @@ public class WebDriverTester implements Tester
 {
     private final AtlassianWebDriver webDriver;
     private static final Logger log = LoggerFactory.getLogger(WebDriverTester.class);
+    private Map<Class<?>, Object> injectables;
 
     public WebDriverTester()
     {
         webDriver = WebDriverBrowserAutoInstall.INSTANCE.getDriver();
+        injectables = new HashMap<Class<?>, Object>() {{
+            put(WebDriver.class, webDriver);
+            put(AtlassianWebDriver.class, webDriver);
+        }};
     }
 
     public AtlassianWebDriver getDriver()
@@ -30,10 +35,7 @@ public class WebDriverTester implements Tester
 
     public Map<Class<?>, Object> getInjectables()
     {
-        return new HashMap<Class<?>, Object>() {{
-            put(WebDriver.class, webDriver);
-            put(AtlassianWebDriver.class, webDriver);
-        }};
+        return injectables;
     }
 
     public void gotoUrl(String url)

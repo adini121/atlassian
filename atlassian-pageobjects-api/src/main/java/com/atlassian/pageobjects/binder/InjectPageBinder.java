@@ -78,6 +78,7 @@ public final class InjectPageBinder implements PageBinder
     {
         checkNotNull(testedProduct);
         checkNotNull(testedProduct.getProductInstance());
+        checkNotNull(testedProduct.getTester());
         checkNotNull(postInjectionProcessor);
         this.testedProduct = testedProduct;
         this.tester = testedProduct.getTester();

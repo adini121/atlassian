@@ -1,0 +1,60 @@
+package com.atlassian.pageobjects.framework.test.pageobjects.component.aui;
+
+import com.atlassian.pageobjects.binder.Init;
+import com.atlassian.pageobjects.framework.ElementPageBinder;
+import com.atlassian.pageobjects.framework.component.ActivatedComponent;
+import com.atlassian.pageobjects.framework.element.Element;
+import org.openqa.selenium.By;
+
+import javax.inject.Inject;
+
+/**
+ * Represents an inline dialog created via AUI.
+ *
+ * This is an example of a reusable component.
+ */
+public class AuiInlineDialog implements ActivatedComponent<AuiInlineDialog>
+{
+    @Inject
+    private ElementPageBinder pageBinder;
+
+    private final By triggerLocator;
+    private final String identifier;
+    private Element triggerElement;
+    private Element viewElement;
+
+    public AuiInlineDialog(By triggerLocator, String identifier)
+    {
+        this.triggerLocator = triggerLocator;
+        this.identifier = identifier;
+    }
+
+    @Init
+    public void initialize()
+    {
+        triggerElement = pageBinder.find(triggerLocator);
+        viewElement = pageBinder.find(By.id("inline-dialog-" + identifier));
+    }
+
+    public Element trigger()
+    {
+        return triggerElement;
+    }
+
+    public Element view()
+    {
+        return viewElement;
+    }
+
+    public AuiInlineDialog open()
+    {
+        triggerElement.mouseEvents().click();
+        viewElement.timed().isVisible().waitFor(true);
+        return this;
+    }
+
+    public boolean isOpen()
+    {
+        return viewElement.isPresent() && viewElement.isVisible();
+    }
+}

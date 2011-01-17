@@ -14,7 +14,6 @@
 
     <modules>
         <module>atlassian-webdriver-core</module>
-        <module>atlassian-webdriver-tests</module>
         <module>atlassian-webdriver-jira</module>
         <module>atlassian-webdriver-confluence</module>
         <module>atlassian-webdriver-greenhopper</module>

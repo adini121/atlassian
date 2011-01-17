@@ -33,6 +33,7 @@
     <modules>
         <module>atlassian-performance</module>
         <module>atlassian-pageobjects-api</module>
+        <module>atlassian-pageobjects-framework</module>
         <module>atlassian-selenium</module>
         <module>atlassian-selenium-browsers</module>
         <module>atlassian-webdriver</module>

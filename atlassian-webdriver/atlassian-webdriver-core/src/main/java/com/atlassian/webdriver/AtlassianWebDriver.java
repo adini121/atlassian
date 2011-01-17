@@ -1,8 +1,6 @@
 package com.atlassian.webdriver;
 
 import com.atlassian.pageobjects.PageBinder;
-import com.atlassian.webdriver.pageobjects.element.WebDriverDelayedElement;
-import com.atlassian.webdriver.pageobjects.element.Element;
 import com.atlassian.webdriver.utils.Check;
 import com.atlassian.webdriver.utils.by.ByHelper;
 import com.atlassian.webdriver.utils.by.ByJquery;
@@ -33,8 +31,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 /**
  * Exposes a set of common functions to use.
  */
@@ -43,7 +39,6 @@ public class AtlassianWebDriver implements WebDriver, JavascriptExecutor
 
     private static final Logger log = LoggerFactory.getLogger(AtlassianWebDriver.class);
 
-    private PageBinder pageBinder;
     private final WebDriver driver;
     private static final int WAIT_TIME = 60;
 
@@ -52,14 +47,6 @@ public class AtlassianWebDriver implements WebDriver, JavascriptExecutor
         this.driver = driver;
         ByJquery.init(driver);
         DeferredBy.init(driver);
-    }
-
-    /**
-     * Sets the pagebinder to use when creating elements
-     */
-    public void setPageBinder(PageBinder pageBinder)
-    {
-        this.pageBinder = pageBinder;
     }
 
     public WebDriver getDriver()
@@ -229,17 +216,7 @@ public class AtlassianWebDriver implements WebDriver, JavascriptExecutor
         return driver.findElement(by);
     }
 
-    /**
-     * Creates a WebDriverDelayedElement using the specified locator
-     * @param by Locator mechanism to use
-     * @return Element that waits until its present in the DOM before executing actions. 
-     */
-    public Element find(final By by)
-    {
-        checkNotNull(pageBinder);
-        return pageBinder.bind(WebDriverDelayedElement.class, by);
-    }
-
+    
     public String getPageSource()
     {
         return driver.getPageSource();
