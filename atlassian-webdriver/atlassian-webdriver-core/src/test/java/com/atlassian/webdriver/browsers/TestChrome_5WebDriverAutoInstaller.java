@@ -23,7 +23,6 @@ public class TestChrome_5WebDriverAutoInstaller extends WebDriverAutoInstallerTe
         driver.waitUntilElementIsLocated(By.tagName("h1"));
 
         assertEquals(driver.findElement(By.tagName("h1")).getText(), "Hello");
-        //driver.quit();
     }
 
 }

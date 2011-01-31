@@ -3,7 +3,13 @@ package com.atlassian.webdriver.utils;
 
 public enum Browser
 {
-    FIREFOX("firefox"), OPERA("opera"), SAFARI("safari"), UNKNOWN("unkown"), IE("ie"), CHROME("chrome");
+    FIREFOX("firefox"),
+    OPERA("opera"),
+    SAFARI("safari"),
+    UNKNOWN("unkown"),
+    IE("ie"),
+    CHROME("chrome"),
+    HTMLUNIT("htmlunit");
 
     private final String name;
 
@@ -21,12 +27,12 @@ public enum Browser
     {
         for (Browser browser : Browser.values())
         {
-            if (browserStartString.contains(browser.getName()))
+            if (browserStartString.startsWith(browser.getName()))
             {
                 return browser;
             }
         }
-        return null;
+        return UNKNOWN;
     }
 
 }
