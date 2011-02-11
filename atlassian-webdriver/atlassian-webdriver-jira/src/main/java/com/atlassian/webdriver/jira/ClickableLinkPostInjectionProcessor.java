@@ -1,18 +1,13 @@
 package com.atlassian.webdriver.jira;
 
-import com.atlassian.pageobjects.DelayedBinder;
-import com.atlassian.pageobjects.Page;
 import com.atlassian.pageobjects.PageBinder;
-import com.atlassian.pageobjects.TestedProduct;
-import com.atlassian.pageobjects.binder.InjectPageBinder;
+import com.atlassian.pageobjects.binder.PostInjectionProcessor;
 import com.atlassian.pageobjects.util.InjectUtils;
 import com.atlassian.webdriver.jira.component.ClickableLink;
 import com.atlassian.webdriver.jira.component.WebDriverLink;
-import com.atlassian.webdriver.pageobjects.WebDriverTester;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.PageFactory;
 
+import javax.inject.Inject;
 import java.lang.reflect.Field;
 
 import static com.atlassian.pageobjects.util.InjectUtils.forEachFieldWithAnnotation;
@@ -20,21 +15,15 @@ import static com.atlassian.pageobjects.util.InjectUtils.forEachFieldWithAnnotat
 /**
  *
  */
-public class WebDriverPageBinder<T extends WebDriver> implements PageBinder
+public class ClickableLinkPostInjectionProcessor implements PostInjectionProcessor
 {
-    private final InjectPageBinder delegate;
+    @Inject
+    PageBinder pageBinder;
 
-    public WebDriverPageBinder(final TestedProduct<WebDriverTester> testedProduct)
+    public <T> T process(T pageObject)
     {
-        this.delegate = new InjectPageBinder(testedProduct, new InjectPageBinder.PostInjectionProcessor()
-        {
-            public <P> P process(P pageObject)
-            {
-                PageFactory.initElements(testedProduct.getTester().getDriver(), pageObject);
-                injectWebLinks(pageObject);
-                return pageObject;
-            }
-        });
+        injectWebLinks(pageObject);
+        return pageObject;
     }
 
     private void injectWebLinks(final Object instance)
@@ -56,7 +45,7 @@ public class WebDriverPageBinder<T extends WebDriver> implements PageBinder
             }
         });
     }
-    
+
     private WebDriverLink createLink(ClickableLink clickableLink)
     {
         By by;
@@ -81,26 +70,6 @@ public class WebDriverPageBinder<T extends WebDriver> implements PageBinder
             throw new IllegalArgumentException("No selector found");
         }
 
-        return bind(WebDriverLink.class, by, clickableLink.nextPage());
-    }
-
-    public <P extends Page> P navigateToAndBind(Class<P> pageClass, Object... args)
-    {
-        return delegate.navigateToAndBind(pageClass, args);
-    }
-
-    public <P> P bind(Class<P> pageClass, Object... args)
-    {
-        return delegate.bind(pageClass, args);
-    }
-
-    public <P> DelayedBinder<P> delayedBind(Class<P> pageClass, Object... args)
-    {
-        return delegate.delayedBind(pageClass, args);
-    }
-
-    public <P> void override(Class<P> oldClass, Class<? extends P> newClass)
-    {
-        delegate.override(oldClass, newClass);
+        return pageBinder.bind(WebDriverLink.class, by, clickableLink.nextPage());
     }
 }

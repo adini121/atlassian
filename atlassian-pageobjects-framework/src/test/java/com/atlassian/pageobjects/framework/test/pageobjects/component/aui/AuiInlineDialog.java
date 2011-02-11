@@ -1,7 +1,8 @@
 package com.atlassian.pageobjects.framework.test.pageobjects.component.aui;
 
+import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.binder.Init;
-import com.atlassian.pageobjects.framework.ElementPageBinder;
+import com.atlassian.pageobjects.framework.ElementFinder;
 import com.atlassian.pageobjects.framework.component.ActivatedComponent;
 import com.atlassian.pageobjects.framework.element.Element;
 import org.openqa.selenium.By;
@@ -16,7 +17,10 @@ import javax.inject.Inject;
 public class AuiInlineDialog implements ActivatedComponent<AuiInlineDialog>
 {
     @Inject
-    private ElementPageBinder pageBinder;
+    protected PageBinder pageBinder;
+
+    @Inject
+    protected ElementFinder elementFinder;
 
     private final By triggerLocator;
     private final String identifier;
@@ -32,8 +36,8 @@ public class AuiInlineDialog implements ActivatedComponent<AuiInlineDialog>
     @Init
     public void initialize()
     {
-        triggerElement = pageBinder.find(triggerLocator);
-        viewElement = pageBinder.find(By.id("inline-dialog-" + identifier));
+        triggerElement = elementFinder.find(triggerLocator);
+        viewElement = elementFinder.find(By.id("inline-dialog-" + identifier));
     }
 
     public Element trigger()

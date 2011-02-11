@@ -19,4 +19,13 @@
         <module>atlassian-selenium-browsers-auto</module>
     </modules>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.5.11</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
 </project>

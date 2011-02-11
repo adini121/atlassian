@@ -1,8 +1,9 @@
 package com.atlassian.pageobjects.framework.test.pageobjects.page;
 
 import com.atlassian.pageobjects.Page;
+import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.binder.WaitUntil;
-import com.atlassian.pageobjects.framework.ElementPageBinder;
+import com.atlassian.pageobjects.framework.ElementFinder;
 import com.atlassian.pageobjects.framework.test.pageobjects.component.InlineDialog;
 import com.atlassian.pageobjects.framework.test.pageobjects.component.LinksMenu;
 import com.atlassian.pageobjects.framework.test.pageobjects.component.UserRoleTabs;
@@ -17,12 +18,15 @@ import javax.inject.Inject;
 public class AuiPage implements Page
 {
     @Inject
-    protected ElementPageBinder pageBinder;
+    protected PageBinder pageBinder;
+
+    @Inject
+    protected ElementFinder elementFinder;
 
     @WaitUntil
     public void doWait()
     {
-        pageBinder.find(ByJquery.$("h2:contains(AUIDropDown)")).timed().isPresent().waitFor(true);
+        elementFinder.find(ByJquery.$("h2:contains(AUIDropDown)")).timed().isPresent().waitFor(true);
     }
     
     public String getUrl()

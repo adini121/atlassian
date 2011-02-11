@@ -4,22 +4,21 @@ import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.Page;
 import com.atlassian.pageobjects.ProductInstance;
 import com.atlassian.pageobjects.TestedProduct;
-import com.atlassian.pageobjects.TestedProductFactory;
 
 import static org.mockito.Mockito.mock;
 
 /**
 *
 */
-class MyTestedProduct implements TestedProduct<MapTester>
+class MyTestedProduct implements TestedProduct<SetTester>
 {
-    private final MapTester mapTester;
+    private final SetTester setTester;
     private final PageBinder pageBinder = mock(PageBinder.class);
     private final ProductInstance productInstance = mock(ProductInstance.class);
 
-    public MyTestedProduct(MapTester mapTester)
+    public MyTestedProduct(SetTester setTester)
     {
-        this.mapTester = mapTester;
+        this.setTester = setTester;
     }
 
 
@@ -38,9 +37,9 @@ class MyTestedProduct implements TestedProduct<MapTester>
         return productInstance;
     }
 
-    public MapTester getTester()
+    public SetTester getTester()
     {
-        return mapTester;
+        return setTester;
     }
 
 }

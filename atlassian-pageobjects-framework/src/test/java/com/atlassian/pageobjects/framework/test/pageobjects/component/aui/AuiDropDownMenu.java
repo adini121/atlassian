@@ -2,7 +2,7 @@ package com.atlassian.pageobjects.framework.test.pageobjects.component.aui;
 
 import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.binder.Init;
-import com.atlassian.pageobjects.framework.ElementPageBinder;
+import com.atlassian.pageobjects.framework.ElementFinder;
 import com.atlassian.pageobjects.framework.component.ActivatedComponent;
 import com.atlassian.pageobjects.framework.element.Element;
 import com.atlassian.webdriver.AtlassianWebDriver;
@@ -20,7 +20,10 @@ import java.util.List;
 public class AuiDropDownMenu implements ActivatedComponent<AuiDropDownMenu>
 {
     @Inject
-    private ElementPageBinder pageBinder;
+    protected PageBinder pageBinder;
+
+    @Inject
+    protected ElementFinder elementFinder;
     
     private final By locator;
     private Element rootElement;
@@ -35,7 +38,7 @@ public class AuiDropDownMenu implements ActivatedComponent<AuiDropDownMenu>
     @Init
     public void initialize()
     {
-        rootElement = pageBinder.find(locator);
+        rootElement = elementFinder.find(locator);
         triggerElement = rootElement.find(By.className("aui-dd-trigger"));
         viewElement = rootElement.find(By.className("aui-dropdown"));
     }

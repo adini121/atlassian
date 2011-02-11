@@ -4,10 +4,15 @@ import com.atlassian.pageobjects.DelayedBinder;
 import com.atlassian.pageobjects.Page;
 import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.ProductInstance;
-import com.atlassian.pageobjects.TestedProductFactory;
 import com.atlassian.pageobjects.Tester;
-import com.atlassian.pageobjects.TestedProduct;
-import com.atlassian.pageobjects.util.InjectUtils;
+import com.google.common.collect.Lists;
+import com.google.inject.Binder;
+import com.google.inject.Binding;
+import com.google.inject.ConfigurationException;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Module;
+import com.google.inject.TypeLiteral;
 import org.apache.commons.lang.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +20,6 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -23,9 +27,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import static com.atlassian.pageobjects.util.InjectUtils.forEachFieldWithAnnotation;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Iterables.concat;
 import static java.util.Arrays.asList;
+import static java.util.Collections.singleton;
+import static java.util.Collections.unmodifiableList;
 
 /**
  * Page navigator that builds page objects from classes, then injects them with dependencies and calls lifecycle methods.
@@ -47,43 +53,38 @@ import static java.util.Arrays.asList;
  */
 public final class InjectPageBinder implements PageBinder
 {
-    private final TestedProduct<?> testedProduct;
     private final Tester tester;
     private final ProductInstance productInstance;
     private static final Logger log = LoggerFactory.getLogger(InjectPageBinder.class);
 
-    public static interface PostInjectionProcessor
-    {
-        <T> T process(T pageObject);
-    }
-
-    private static class NoOpPostInjectionProcessor implements PostInjectionProcessor
-    {
-        public <T> T process(T pageObject)
-        {
-            return pageObject;
-        }
-    }
-
-    private final PostInjectionProcessor postInjectionProcessor;
     private final Map<Class, Class> overrides =
             new HashMap<Class, Class>();
+    private final Injector injector;
+    private final List<Binding<PostInjectionProcessor>> postInjectionProcessors;
 
-    public InjectPageBinder(TestedProduct<?> testedProduct)
+    public InjectPageBinder(ProductInstance productInstance, Tester tester, Module... modules)
     {
-        this(testedProduct, new NoOpPostInjectionProcessor());
-    }
-
-    public InjectPageBinder(TestedProduct<?> testedProduct, PostInjectionProcessor postInjectionProcessor)
-    {
-        checkNotNull(testedProduct);
-        checkNotNull(testedProduct.getProductInstance());
-        checkNotNull(testedProduct.getTester());
-        checkNotNull(postInjectionProcessor);
-        this.testedProduct = testedProduct;
-        this.tester = testedProduct.getTester();
-        this.productInstance = testedProduct.getProductInstance();
-        this.postInjectionProcessor = postInjectionProcessor;
+        checkNotNull(productInstance);
+        checkNotNull(tester);
+        checkNotNull(modules);
+        this.tester = tester;
+        this.productInstance = productInstance;
+        this.injector = Guice.createInjector(concat(asList(modules), singleton(new Module()
+        {
+            public void configure(Binder binder)
+            {
+                binder.bind(PageBinder.class).toInstance(InjectPageBinder.this);
+            }
+        })));
+        List<Binding<PostInjectionProcessor>> procs = Lists.newArrayList();
+        for (Binding binding : injector.getAllBindings().values())
+        {
+            if (PostInjectionProcessor.class.isAssignableFrom(binding.getKey().getTypeLiteral().getRawType()))
+            {
+                procs.add(binding);
+            }
+        }
+        postInjectionProcessors = unmodifiableList(procs);
     }
 
     public <P extends Page> P navigateToAndBind(Class<P> pageClass, Object... args)
@@ -236,49 +237,24 @@ public final class InjectPageBinder implements PageBinder
         public T execute(T t)
         {
             autowireInjectables(t);
-            T pageObject = postInjectionProcessor.process(t);
+            T pageObject = t;
+            for (Binding<PostInjectionProcessor> binding : postInjectionProcessors)
+            {
+                pageObject = binding.getProvider().get().process(pageObject);
+            }
             return pageObject;
         }
 
         private void autowireInjectables(final Object instance)
         {
-            final Map<Class<?>, Object> injectables = new HashMap<Class<?>, Object>();
-
-            injectables.put(TestedProduct.class, testedProduct);
-            injectables.put(testedProduct.getClass(), testedProduct);
-
-            injectables.put(Tester.class, tester);
-            injectables.put(tester.getClass(), tester);
-
-            injectables.put(ProductInstance.class, productInstance);
-
-            injectables.put(PageBinder.class, InjectPageBinder.this);
-
-            injectables.putAll(tester.getInjectables());
-
-            forEachFieldWithAnnotation(instance, Inject.class, new InjectUtils.FieldVisitor<Inject>()
+            try
             {
-                public void visit(Field field, Inject annotation)
-                {
-                    Object val = injectables.get(field.getType());
-                    if (val != null)
-                    {
-                        try
-                        {
-                            field.setAccessible(true);
-                            field.set(instance, val);
-                        }
-                        catch (IllegalAccessException e)
-                        {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                    else
-                    {
-                        throw new IllegalArgumentException("Injectable for class " + field.getType() + " not found");
-                    }
-                }
-            });
+                injector.injectMembers(instance);
+            }
+            catch (ConfigurationException ex)
+            {
+                throw new IllegalArgumentException(ex);
+            }
         }
     }
 

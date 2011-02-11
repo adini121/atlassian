@@ -3,7 +3,7 @@ package com.atlassian.pageobjects.framework.test.pageobjects.component.aui;
 import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.binder.Init;
 import com.atlassian.pageobjects.binder.InvalidPageStateException;
-import com.atlassian.pageobjects.framework.ElementPageBinder;
+import com.atlassian.pageobjects.framework.ElementFinder;
 import com.atlassian.pageobjects.framework.component.TabbedComponent;
 import com.atlassian.pageobjects.framework.element.Element;
 import com.atlassian.webdriver.AtlassianWebDriver;
@@ -20,7 +20,10 @@ import java.util.List;
 public class AuiTabs implements TabbedComponent
 {
     @Inject
-    private ElementPageBinder pageBinder;
+    protected PageBinder pageBinder;
+
+    @Inject
+    protected ElementFinder elementFinder;
 
     private final By rootLocator;
 
@@ -36,7 +39,7 @@ public class AuiTabs implements TabbedComponent
     @Init
     public void initialize()
     {
-        this.rootElement = pageBinder.find(rootLocator);
+        this.rootElement = elementFinder.find(rootLocator);
     }
 
     public Element selectedTab()

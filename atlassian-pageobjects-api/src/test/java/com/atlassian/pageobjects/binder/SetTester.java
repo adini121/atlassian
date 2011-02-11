@@ -3,16 +3,18 @@ package com.atlassian.pageobjects.binder;
 import com.atlassian.pageobjects.Tester;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
 *
 */
-class MapTester implements Tester
+class SetTester implements Tester
 {
-    private final Map<Class<?>,Object> injectables = new HashMap<Class<?>, Object>();
+    private final Set<Object> injectables = new HashSet<Object>();
 
-    public Map<Class<?>, Object> getInjectables()
+    public Iterable<Object> getInjectables()
     {
         return injectables;
     }
@@ -22,9 +24,9 @@ class MapTester implements Tester
 
     }
 
-    public MapTester add(Class<?> key, Object value)
+    public SetTester add(Object value)
     {
-        injectables.put(key, value);
+        injectables.add(value);
         return this;
     }
 }

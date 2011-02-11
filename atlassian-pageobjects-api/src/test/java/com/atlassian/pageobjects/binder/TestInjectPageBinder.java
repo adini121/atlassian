@@ -5,48 +5,73 @@ import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.ProductInstance;
 import com.atlassian.pageobjects.TestedProduct;
 import com.atlassian.pageobjects.Tester;
+import com.google.inject.Binder;
+import com.google.inject.Module;
 import org.junit.Before;
 import org.junit.Test;
 
 import javax.inject.Inject;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
+
+import static com.google.common.collect.Lists.asList;
+import static java.util.Collections.singletonMap;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
 
 /**
  *
  */
 public class TestInjectPageBinder
 {
-    private MapTester tester;
     private MyTestedProduct product;
-    private InjectPageBinder binder;
 
     @Before
     public void setUp() throws Exception
     {
-        tester = new MapTester();
-        product = new MyTestedProduct(tester);
-        binder = new InjectPageBinder(product);
+        product = new MyTestedProduct(new SetTester());
+    }
+
+    private InjectPageBinder createBinder()
+    {
+        return createBinder(null, null);
+    }
+    private InjectPageBinder createBinder(final Class key, final Class impl)
+    {
+        return new InjectPageBinder(mock(ProductInstance.class), mock(Tester.class), new StandardModule(product),
+                new Module()
+                {
+                    public void configure(Binder binder)
+                    {
+                        if (key != null)
+                        {
+                            binder.bind(key).to(impl);
+                        }
+                    }
+                });
     }
 
     @Test
     public void testInject()
     {
-        tester.add(String.class, "Bob");
+        PageBinder binder = createBinder(StringField.class, StringFieldImpl.class);
         OneFieldPage page = binder.bind(OneFieldPage.class);
-        assertEquals("Bob", page.name);
+        assertEquals("Bob", page.name.getValue());
     }
 
     @Test
     public void testInjectDefaults()
     {
+        PageBinder binder = createBinder();
         DefaultsPage page = binder.bind(DefaultsPage.class);
         assertNotNull(page.testedProduct);
         assertNotNull(page.myTestedProduct);
         assertNotNull(page.tester);
-        assertNotNull(page.mapTester);
+        assertNotNull(page.setTester);
         assertNotNull(page.pageBinder);
         assertNotNull(page.productInstance);
     }
@@ -54,12 +79,15 @@ public class TestInjectPageBinder
     @Test(expected = IllegalArgumentException.class)
     public void testInjectMissing()
     {
-        binder.bind(OneFieldPage.class);
+        PageBinder binder = createBinder();
+        OneFieldPage page = binder.bind(OneFieldPage.class);
+        int x = 0;
     }
 
     @Test
     public void testInjectWithArgument()
     {
+        PageBinder binder = createBinder();
         ConstructorArgumentPage page = binder.bind(ConstructorArgumentPage.class, "foo");
         assertEquals("foo", page.name);
     }
@@ -67,6 +95,7 @@ public class TestInjectPageBinder
     @Test
     public void testInstantiateWithPrimitiveArguments()
     {
+        PageBinder binder = createBinder();
         ConstructorArgumentPrimitive object = binder.bind(ConstructorArgumentPrimitive.class, 5, true);
         assertNotNull(object);
         assertEquals(5, object.intField);
@@ -76,6 +105,7 @@ public class TestInjectPageBinder
     @Test
     public void testInjectWithArgumentSubclass()
     {
+        PageBinder binder = createBinder();
         ConstructorArgumentPage page = binder.bind(ConstructorArgumentPage.class, 43);
         assertEquals(43, page.age);
     }
@@ -83,7 +113,7 @@ public class TestInjectPageBinder
     @Test
     public void testInitAfterInject()
     {
-        tester.add(String.class, "Bob");
+        PageBinder binder = createBinder(StringField.class, StringFieldImpl.class);
         OneFieldWithInitPage page = binder.bind(OneFieldWithInitPage.class);
         assertEquals("Bob Jones", page.name);
     }
@@ -91,9 +121,9 @@ public class TestInjectPageBinder
     @Test
     public void testParentInject()
     {
-        tester.add(String.class, "Bob");
+        PageBinder binder = createBinder(StringField.class, StringFieldImpl.class);
         ChildNoNamePage page = binder.bind(ChildNoNamePage.class);
-        assertEquals("Bob", page.name);
+        assertEquals("Bob", page.name.getValue());
     }
 
 
@@ -108,7 +138,7 @@ public class TestInjectPageBinder
     static class OneFieldPage extends AbstractPage
     {
         @Inject
-        private String name;
+        private StringField name;
     }
 
     static class ConstructorArgumentPrimitive
@@ -145,7 +175,7 @@ public class TestInjectPageBinder
     static class ParentNamePage extends AbstractPage
     {
         @Inject
-        protected String name;
+        protected StringField name;
     }
 
     static class ChildNoNamePage extends ParentNamePage
@@ -167,7 +197,7 @@ public class TestInjectPageBinder
         private Tester tester;
 
         @Inject
-        private MapTester mapTester;
+        private SetTester setTester;
 
         @Inject
         private PageBinder pageBinder;
@@ -176,12 +206,26 @@ public class TestInjectPageBinder
     static class OneFieldWithInitPage extends AbstractPage
     {
         @Inject
-        private String name;
+        private StringField field;
 
+        private String name;
         @Init
         public void init()
         {
-            name += " Jones";
+            name = field.getValue() + " Jones";
+        }
+    }
+
+    static interface StringField
+    {
+        String getValue();
+    }
+
+    static class StringFieldImpl implements StringField
+    {
+        public String getValue()
+        {
+            return "Bob";
         }
     }
 

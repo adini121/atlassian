@@ -6,16 +6,18 @@ import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.ProductInstance;
 import com.atlassian.pageobjects.TestedProduct;
 import com.atlassian.pageobjects.TestedProductFactory;
+import com.atlassian.pageobjects.binder.InjectPageBinder;
+import com.atlassian.pageobjects.binder.StandardModule;
 import com.atlassian.pageobjects.page.AdminHomePage;
 import com.atlassian.pageobjects.component.Header;
 import com.atlassian.pageobjects.page.HomePage;
 import com.atlassian.pageobjects.page.LoginPage;
-import com.atlassian.webdriver.AtlassianWebDriver;
+import com.atlassian.webdriver.AtlassianWebDriverModule;
 import com.atlassian.webdriver.confluence.component.header.ConfluenceHeader;
 import com.atlassian.webdriver.confluence.page.ConfluenceAdminHomePage;
 import com.atlassian.webdriver.confluence.page.ConfluenceLoginPage;
 import com.atlassian.webdriver.confluence.page.DashboardPage;
-import com.atlassian.webdriver.pageobjects.WebDriverPageBinder;
+import com.atlassian.webdriver.pageobjects.DefaultWebDriverTester;
 import com.atlassian.webdriver.pageobjects.WebDriverTester;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -39,7 +41,7 @@ public class ConfluenceTestedProduct implements TestedProduct<WebDriverTester>
         WebDriverTester tester = null;
         if (testerFactory == null)
         {
-            tester = new WebDriverTester();
+            tester = new DefaultWebDriverTester();
         }
         else
         {
@@ -47,7 +49,7 @@ public class ConfluenceTestedProduct implements TestedProduct<WebDriverTester>
         }
         this.webDriverTester = tester;
         this.productInstance = productInstance;
-        this.pageBinder = new WebDriverPageBinder<AtlassianWebDriver>(this);
+        this.pageBinder = new InjectPageBinder(productInstance, tester, new StandardModule(this), new AtlassianWebDriverModule(this));
 
         this.pageBinder.override(Header.class, ConfluenceHeader.class);
         this.pageBinder.override(HomePage.class, DashboardPage.class);

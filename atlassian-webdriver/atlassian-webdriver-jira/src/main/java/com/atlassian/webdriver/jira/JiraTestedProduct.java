@@ -4,18 +4,24 @@ import com.atlassian.pageobjects.Defaults;
 import com.atlassian.pageobjects.Page;
 import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.ProductInstance;
+import com.atlassian.pageobjects.TestedProduct;
 import com.atlassian.pageobjects.TestedProductFactory;
+import com.atlassian.pageobjects.binder.InjectPageBinder;
+import com.atlassian.pageobjects.binder.PostInjectionProcessor;
+import com.atlassian.pageobjects.binder.StandardModule;
 import com.atlassian.pageobjects.component.Header;
 import com.atlassian.pageobjects.page.AdminHomePage;
 import com.atlassian.pageobjects.page.HomePage;
 import com.atlassian.pageobjects.page.LoginPage;
-import com.atlassian.pageobjects.TestedProduct;
-import com.atlassian.webdriver.AtlassianWebDriver;
+import com.atlassian.webdriver.AtlassianWebDriverModule;
 import com.atlassian.webdriver.jira.component.header.JiraHeader;
 import com.atlassian.webdriver.jira.page.DashboardPage;
-import com.atlassian.webdriver.pageobjects.WebDriverTester;
 import com.atlassian.webdriver.jira.page.JiraAdminHomePage;
 import com.atlassian.webdriver.jira.page.JiraLoginPage;
+import com.atlassian.webdriver.pageobjects.DefaultWebDriverTester;
+import com.atlassian.webdriver.pageobjects.WebDriverTester;
+import com.google.inject.Binder;
+import com.google.inject.Module;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -35,7 +41,7 @@ public class JiraTestedProduct implements TestedProduct<WebDriverTester>
         WebDriverTester tester = null;
         if (testerFactory == null)
         {
-            tester = new WebDriverTester();
+            tester = new DefaultWebDriverTester();
         }
         else
         {
@@ -43,7 +49,14 @@ public class JiraTestedProduct implements TestedProduct<WebDriverTester>
         }
         this.webDriverTester = tester;
         this.productInstance = productInstance;
-        this.pageBinder = new WebDriverPageBinder<AtlassianWebDriver>(this);
+        this.pageBinder = new InjectPageBinder(productInstance, webDriverTester, new StandardModule(this), new AtlassianWebDriverModule(this),
+                new Module()
+                {
+                    public void configure(Binder binder)
+                    {
+                        binder.bind(PostInjectionProcessor.class).to(ClickableLinkPostInjectionProcessor.class);
+                    }
+                });
 
         this.pageBinder.override(Header.class, JiraHeader.class);
         this.pageBinder.override(HomePage.class, DashboardPage.class);

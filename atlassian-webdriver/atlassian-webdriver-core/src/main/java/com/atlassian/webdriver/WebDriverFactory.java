@@ -96,6 +96,6 @@ public class WebDriverFactory
 
         }
 
-        return new AtlassianWebDriver(driver);
+        return new DefaultAtlassianWebDriver(driver);
     }
 }
