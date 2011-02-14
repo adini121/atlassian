@@ -1,7 +1,5 @@
 package com.atlassian.pageobjects.framework.query;
 
-import junit.framework.AssertionFailedError;
-
 /**
  * Strategies for handling expired timeouts of the {@link TimedQuery}.
  *
@@ -43,7 +41,7 @@ public interface ExpirationHandler
     {
         public <T> T expired(TimedQuery<T> query, T currentValue, long timeout)
         {
-            throw new AssertionFailedError("Timeout <" + timeout + "> expired for: " + query);
+            throw new AssertionError("Timeout <" + timeout + "> expired for: " + query);
         }
     };
 
