@@ -11,7 +11,9 @@ Selenium.prototype.generateKeyEvent = function(locator, eventType, keyCode, char
     canBubble = (typeof(canBubble) == undefined) ? true : canBubble;
     if (element.fireEvent && element.ownerDocument && element.ownerDocument.createEventObject) { // IE
         var keyEvent = createEventObject(element, controlKeyDown, altKeyDown, shiftKeyDown, metaKeyDown);
-        keyEvent.keyCode = potentialCode;
+        keyEvent.keyCode = keyCode;
+        keyEvent.characterCode = characterCode;
+
         element.fireEvent('on' + eventType, keyEvent);
     }
     else {

@@ -331,8 +331,14 @@ public class SingleBrowserSeleniumClient extends DefaultSelenium implements Sele
                 {
                    keyCode = ke.getCode();
                 }
-                generateKeyEvent(locator,ke.getEventType(),keyCode,characterCode,
-                        ke.isShiftKeyDown(),ke.isAltKeyDown(),ke.isCtrlKeyDown(),ke.isMetaKey());
+                generateKeyEvent(locator,
+                        ke.getEventType(),
+                        keyCode,
+                        characterCode,
+                        ke.isCtrlKeyDown(),
+                        ke.isAltKeyDown(),
+                        ke.isShiftKeyDown(),
+                        ke.isMetaKey());
             }
         }
     }
