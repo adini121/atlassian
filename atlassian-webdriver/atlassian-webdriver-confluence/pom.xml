@@ -16,7 +16,7 @@
             <plugin>
                 <groupId>com.atlassian.maven.plugins</groupId>
                 <artifactId>maven-confluence-plugin</artifactId>
-                <version>3.3-m1</version>
+                <version>3.3-m8</version>
                 <executions>
                     <execution>
                         <goals>
@@ -26,6 +26,7 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <productDataVersion>3.0</productDataVersion>
                     <productVersion>3.3</productVersion>
                     <systemPropertyVariables>
                         <xvfb.enable>${xvfb.enable}</xvfb.enable>

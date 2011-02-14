@@ -26,6 +26,7 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <productDataVersion>4.1.1</productDataVersion>
                     <productVersion>4.2</productVersion>
                     <systemPropertyVariables>
                         <xvfb.enable>${xvfb.enable}</xvfb.enable>
