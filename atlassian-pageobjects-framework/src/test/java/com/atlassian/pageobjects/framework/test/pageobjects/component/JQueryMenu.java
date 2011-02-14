@@ -11,6 +11,9 @@ import org.openqa.selenium.By;
 
 import javax.inject.Inject;
 
+import static com.atlassian.pageobjects.framework.query.TimedAssertions.assertFalseByDefaultTimeout;
+import static com.atlassian.pageobjects.framework.query.TimedAssertions.assertTrueByDefaultTimeout;
+
 /**
  * Represents the JQuery menu that is present on the jquery.html page. 
  */
@@ -61,7 +64,7 @@ public class JQueryMenu implements ActivatedComponent<JQueryMenu>
         if(!isOpen())
         {
             trigger().click();
-            view().timed().isVisible().waitFor(true);
+            assertTrueByDefaultTimeout(view().timed().isVisible());
         }
         return this;
     }
@@ -71,7 +74,7 @@ public class JQueryMenu implements ActivatedComponent<JQueryMenu>
         if(isOpen())
         {
             trigger().click();
-            view().timed().isVisible().waitFor(false);
+            assertFalseByDefaultTimeout(view().timed().isVisible());
         }
 
         return this;

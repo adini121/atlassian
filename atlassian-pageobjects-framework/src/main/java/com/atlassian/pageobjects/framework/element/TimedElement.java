@@ -1,6 +1,6 @@
 package com.atlassian.pageobjects.framework.element;
 
-import com.atlassian.pageobjects.framework.TimedQuery;
+import com.atlassian.pageobjects.framework.query.TimedQuery;
 
 /**
  * Represents an HTML element that is expected in the DOM of a page, all queries return TimedQueries. 

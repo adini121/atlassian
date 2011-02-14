@@ -9,6 +9,8 @@ import org.openqa.selenium.By;
 
 import javax.inject.Inject;
 
+import static com.atlassian.pageobjects.framework.query.TimedAssertions.assertTrueByDefaultTimeout;
+
 /**
  * Represents an inline dialog created via AUI.
  *
@@ -53,7 +55,7 @@ public class AuiInlineDialog implements ActivatedComponent<AuiInlineDialog>
     public AuiInlineDialog open()
     {
         triggerElement.mouseEvents().click();
-        viewElement.timed().isVisible().waitFor(true);
+        assertTrueByDefaultTimeout(viewElement.timed().isVisible());
         return this;
     }
 

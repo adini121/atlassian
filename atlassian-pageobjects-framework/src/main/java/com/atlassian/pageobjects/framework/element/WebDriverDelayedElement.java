@@ -2,6 +2,8 @@ package com.atlassian.pageobjects.framework.element;
 
 import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.binder.Init;
+import com.atlassian.pageobjects.framework.timeout.TimeoutType;
+import com.atlassian.pageobjects.framework.timeout.Timeouts;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.utils.Check;
 import com.atlassian.webdriver.utils.element.ElementLocated;
@@ -10,22 +12,28 @@ import org.openqa.selenium.RenderedWebElement;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 
-import javax.inject.Inject;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+import javax.inject.Inject;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Implementation of Element that waits for element to be present before executing each actions.
+ * Implementation of {@link com.atlassian.pageobjects.framework.element.Element} that waits for element to be
+ * present before executing each actions.
+ * 
  */
 public class WebDriverDelayedElement implements Element
 {
-    public static final int DEFAULT_TIMEOUT_SECONDS = 5;    
-
     @Inject
     protected AtlassianWebDriver driver;
 
     @Inject
     protected PageBinder pageBinder;
+
+    @Inject
+    protected Timeouts timeouts;
 
     protected By locator;
     protected SearchContext searchContext;
@@ -33,6 +41,7 @@ public class WebDriverDelayedElement implements Element
     private WebElementHolder webElementHolder;
     private WebElement webElement;
     private boolean webElementLocated = false;
+    private final TimeoutType defaultTimeout;
 
     /**
      * Creates a WebDriverDelayedElement within the driver's search context and default timeout
@@ -40,27 +49,77 @@ public class WebDriverDelayedElement implements Element
      */
     public WebDriverDelayedElement(By locator)
     {
-        this(locator, null);
+        this(locator, null, TimeoutType.DEFAULT);
     }
 
     /**
-     * Creates a WebDriverDelayedElement within a given search context and default timeout
+     * Creates a WebDriverDelayedElement within the driver's search context and default timeout.
+     * 
+     * @param locator The locator mechanism to use.
+     * @param defaultTimeout default timeout of this element
+     */
+    public WebDriverDelayedElement(By locator, TimeoutType defaultTimeout)
+    {
+        this(locator, null, defaultTimeout);
+    }
+
+    /**
+     * Creates a WebDriverDelayedElement within a given search context and default timeout.
+     *
      * @param locator The locator mechanism to use.
      * @param searchContext The SearchContext to use.
      */
     public WebDriverDelayedElement(By locator, SearchContext searchContext)
     {
-        this.locator = locator;
-        this.searchContext = searchContext;
+        this(locator, searchContext, TimeoutType.DEFAULT);
     }
 
     /**
-     * Creates a WebDriverDelayedElement with the given WebElement
+     * Creates a WebDriverDelayedElement within a given search context and default timeout.
+     *
+     * @param locator The locator mechanism to use.
+     * @param searchContext The SearchContext to use.
+     * @param defaultTimeout default timeout of this element
+     */
+    public WebDriverDelayedElement(By locator, SearchContext searchContext, TimeoutType defaultTimeout)
+    {
+        this.locator = locator;
+        this.searchContext = searchContext;
+        this.defaultTimeout = checkNotNull(defaultTimeout);
+    }
+
+    /**
+     * Creates a WebDriverDelayedElement with the given WebElement and default timeout.
+     *
+     * @param webElement The WebElement to wrap in a delayed element.
+     * @param defaultTimeout default timeout of this element
+     */
+    public WebDriverDelayedElement(WebElement webElement, TimeoutType defaultTimeout)
+    {
+        this.webElementHolder = new WebElementHolder(webElement);
+        this.defaultTimeout = checkNotNull(defaultTimeout);
+    }
+
+
+    /**
+     * Creates a WebDriverDelayedElement with the given WebElement.
+     *
      * @param webElement The WebElement to wrap in a delayed element.
      */
     public WebDriverDelayedElement(WebElement webElement)
     {
-        this.webElementHolder = new WebElementHolder(webElement);
+        this(webElement, TimeoutType.DEFAULT);
+    }
+
+    protected long timeout()
+    {
+        return timeouts.timeoutFor(defaultTimeout);
+    }
+
+    protected int timeoutInSeconds()
+    {
+        // sucks sucks sucks sucks sucks....
+        return (int) TimeUnit.MILLISECONDS.toSeconds(timeout());
     }
 
     @Init
@@ -97,16 +156,17 @@ public class WebDriverDelayedElement implements Element
     }
 
     /**
-     * Waits until WebElement is present
+     * Waits until WebElement is present.
+     * 
      * @return The WebElement or throws exception if not found.
      */
     protected WebElement waitForWebElement()
     {
         if(!webElementLocated)
         {
-            if(!driver.elementExistsAt(locator, searchContext) && DEFAULT_TIMEOUT_SECONDS > 0)
+            if(!driver.elementExistsAt(locator, searchContext) && timeoutInSeconds() > 0)
             {
-                driver.waitUntil(new ElementLocated(locator, searchContext), DEFAULT_TIMEOUT_SECONDS);
+                driver.waitUntil(new ElementLocated(locator, searchContext), timeoutInSeconds());
             }
 
             webElement = searchContext.findElement(locator);
@@ -159,7 +219,7 @@ public class WebDriverDelayedElement implements Element
 
     public TimedElement timed()
     {
-       return pageBinder.bind(WebDriverTimedElement.class, this, DEFAULT_TIMEOUT_SECONDS);
+       return pageBinder.bind(WebDriverTimedElement.class, locator, defaultTimeout);
     }
 
     public WebDriverMouseEvents mouseEvents()

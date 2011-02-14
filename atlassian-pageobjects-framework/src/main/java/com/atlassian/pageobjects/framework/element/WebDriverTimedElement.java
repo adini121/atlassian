@@ -1,12 +1,14 @@
 package com.atlassian.pageobjects.framework.element;
 
-import com.atlassian.pageobjects.framework.TimedQuery;
-import com.atlassian.pageobjects.framework.WebDriverTimedQuery;
+import com.atlassian.pageobjects.framework.query.TimedQuery;
+import com.atlassian.pageobjects.framework.query.webdriver.WebDriverQueryFactory;
+import com.atlassian.pageobjects.framework.timeout.TimeoutType;
 import com.atlassian.webdriver.AtlassianWebDriver;
-import com.google.common.base.Function;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.By;
 
 import javax.inject.Inject;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Implementation of TimedElement based on WebDriver
@@ -16,72 +18,50 @@ public class WebDriverTimedElement implements TimedElement
     @Inject
     private AtlassianWebDriver driver;
 
-    private final int timeoutInSeconds;
-    private final WebDriverDelayedElement element;
+    @Inject
+    private WebDriverQueryFactory queryFactory;
+
+    private final By locator;
+    private final TimeoutType defaultTimeout;
 
     /**
      * Create a WebDriverTimedElement with the given timeout
-     * @param element The WebDriverDelayedElement that has immediate implementations for all checks.
-     * @param timeoutInSeconds The timeout in seconds to use when creating the TimedQueries.
+     * @param defaultTimeout default timeout of this element
+     * @param locator
      */
-    public WebDriverTimedElement(WebDriverDelayedElement element, int timeoutInSeconds)
+    public WebDriverTimedElement(final By locator, final TimeoutType defaultTimeout)
     {
-        this.element = element;
-        this.timeoutInSeconds = timeoutInSeconds;
+        this.locator = checkNotNull(locator);
+        this.defaultTimeout = checkNotNull(defaultTimeout);
     }
     
     public TimedQuery<Boolean> isPresent()
     {
-        return new WebDriverTimedQuery<Boolean>(driver, timeoutInSeconds,
-                new Function<WebDriver, Boolean>(){
-                    public Boolean apply(WebDriver webDriver) {
-                        return element.isPresent();
-                    }
-        });
+        return queryFactory.isPresent(locator, defaultTimeout);
     }
 
     public TimedQuery<Boolean> isVisible()
     {
-        return new WebDriverTimedQuery<Boolean>(driver, WebDriverDelayedElement.DEFAULT_TIMEOUT_SECONDS,
-                new Function<WebDriver, Boolean>(){
-                    public Boolean apply(WebDriver webDriver) {
-                        return element.isVisible();
-                    }
-        });
+        return queryFactory.isVisible(locator, defaultTimeout);
     }
 
     public TimedQuery<Boolean> hasClass(final String className)
     {
-        return new WebDriverTimedQuery<Boolean>(driver, WebDriverDelayedElement.DEFAULT_TIMEOUT_SECONDS,
-                new Function<WebDriver, Boolean>(){
-                    public Boolean apply(WebDriver webDriver) {
-                        return element.hasClass(className);
-                    }
-        });
+        return queryFactory.hasClass(locator, className, defaultTimeout);
     }
 
     public TimedQuery<String> attribute(final String name)
     {
-        return new WebDriverTimedQuery<String>(driver, WebDriverDelayedElement.DEFAULT_TIMEOUT_SECONDS,
-                new Function<WebDriver, String>(){
-                    public String apply(WebDriver webDriver) {
-                        return element.attribute(name);
-                    }
-        });
+        return queryFactory.getAttribute(locator, name, defaultTimeout);
     }
 
     public TimedQuery<String> text()
     {
-        return new WebDriverTimedQuery<String>(driver, WebDriverDelayedElement.DEFAULT_TIMEOUT_SECONDS,
-                new Function<WebDriver, String>(){
-                    public String apply(WebDriver webDriver) {
-                        return element.text();
-                    }
-        });
+        return queryFactory.getText(locator, defaultTimeout);
     }
 
     public TimedQuery<String> value()
     {
-        return attribute("value");
+        return queryFactory.getValue(locator, defaultTimeout);
     }
 }

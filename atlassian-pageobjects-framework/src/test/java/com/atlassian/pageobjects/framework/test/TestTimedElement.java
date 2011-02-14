@@ -1,15 +1,18 @@
 package com.atlassian.pageobjects.framework.test;
 
-import com.atlassian.pageobjects.framework.TimedQuery;
 import com.atlassian.pageobjects.framework.element.TimedElement;
 import com.atlassian.pageobjects.framework.test.pageobjects.page.ElementsPage;
 import org.junit.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.support.ui.TimeoutException;
 
-import static junit.framework.Assert.assertTrue;
+import static com.atlassian.pageobjects.framework.query.TimedAssertions.assertEqualsByDefaultTimeout;
+import static com.atlassian.pageobjects.framework.query.TimedAssertions.assertFalseByDefaultTimeout;
+import static com.atlassian.pageobjects.framework.query.TimedAssertions.assertThat;
+import static com.atlassian.pageobjects.framework.query.TimedAssertions.assertTrueByDefaultTimeout;
+import static com.atlassian.pageobjects.framework.query.TimedAssertions.byDefaultTimeout;
+import static org.hamcrest.Matchers.equalToIgnoringCase;
 
-public class TestTimedElement  extends AbstractFileBasedServerTest
+public class TestTimedElement extends AbstractFileBasedServerTest
 {
     @Test
     public void testIsPresent()
@@ -17,19 +20,19 @@ public class TestTimedElement  extends AbstractFileBasedServerTest
         product.visit(ElementsPage.class);
 
         // Positive - verify element that exists
-        product.find(By.id("test1_addElementsButton")).timed().isPresent().waitFor(true);
+        assertTrueByDefaultTimeout(product.find(By.id("test1_addElementsButton")).timed().isPresent());
 
         // Negative - verify element that does not exist
-        product.find(By.id("non_present_element")).timed().isPresent().waitFor(false);
+        assertFalseByDefaultTimeout(product.find(By.id("non_present_element")).timed().isPresent());
 
         // Delayed presence & Delayed positive - click on button that adds a span with delay, verify isPresent waits.
         product.find(By.id("test1_addElementsButton")).click();
-        product.find(By.id("test1_delayedSpan")).timed().isPresent().waitFor(true);
+        assertTrueByDefaultTimeout(product.find(By.id("test1_delayedSpan")).timed().isPresent());
 
         // Delayed Negative
     }
 
-     @Test
+    @Test
     public void testIsVisible()
     {
         product.visit(ElementsPage.class);
@@ -37,41 +40,44 @@ public class TestTimedElement  extends AbstractFileBasedServerTest
         TimedElement testInput = product.find(By.id("test2_input")).timed();
 
         // Positive - verify input that is visible
-        testInput.isVisible().waitFor(true);
+        assertTrueByDefaultTimeout(testInput.isVisible());
 
         // Negative - click on button to make input invisible and verify
         product.find(By.id("test2_toggleInputVisibility")).click();
-        testInput.isVisible().waitFor(false);
+        assertFalseByDefaultTimeout(testInput.isVisible());
 
         // Delayed presence - click on a button that adds an element with delay, verify isVisible waits
         product.find(By.id("test2_addElementsButton")).click();
-        product.find(By.id("test2_delayedSpan")).timed().isVisible().waitFor(true);
+        assertTrueByDefaultTimeout(product.find(By.id("test2_delayedSpan")).timed().isVisible());
 
         // Delayed positive - click on button to make input visible with delay and verify
         product.find(By.id("test2_toggleInputVisibilityWithDelay")).click();
-        testInput.isVisible().waitFor(true);
+        assertTrueByDefaultTimeout(testInput.isVisible());
 
         // Delayed Negative
     }
 
-     @Test
+    @Test
     public void testText()
     {
         product.visit(ElementsPage.class);
 
         // Positive - verify span with text
-        product.find(By.id("test3_span")).timed().text().waitFor("Span Value");
+        assertEqualsByDefaultTimeout("Span Value", product.find(By.id("test3_span")).timed().text());
+
+        // check non-case-sensitive
+        assertThat(product.find(By.id("test3_span")).timed().text(), equalToIgnoringCase("span value"), byDefaultTimeout());
 
         // Negative - verify a span that has no text
-        product.find(By.id("test3_spanEmpty")).timed().text().waitFor("");
+        assertEqualsByDefaultTimeout("", product.find(By.id("test3_spanEmpty")).timed().text());
 
         // Delayed presence - click on button that adds a span with delay, verify getText waits
         product.find(By.id("test3_addElementsButton")).click();
-        product.find(By.id("test3_delayedSpan")).timed().text().waitFor("Delayed Span");
+        assertEqualsByDefaultTimeout("Delayed Span", product.find(By.id("test3_delayedSpan")).timed().text());
 
         // Delayed postive - click on button that sets the text of span with delay, verify getText waits
         product.find(By.id("test3_setTextButton")).click();
-        product.find(By.id("test3_spanEmpty")).timed().text().waitFor("Delayed Text");
+        assertEqualsByDefaultTimeout("Delayed Text", product.find(By.id("test3_spanEmpty")).timed().text());
 
         // Delayed negative
     }
@@ -82,17 +88,17 @@ public class TestTimedElement  extends AbstractFileBasedServerTest
         product.visit(ElementsPage.class);
 
         // Positive - verify class attribute of span
-        product.find(By.id("test5_input")).timed().attribute("class").waitFor("test5-input-class");
+        assertEqualsByDefaultTimeout("test5-input-class", product.find(By.id("test5_input")).timed().attribute("class"));
 
         // Negative
 
         // Delayed presence - click on button that adds a span with delay, verify getAtribute waits
         product.find(By.id("test5_addElementsButton")).click();
-        product.find(By.id("test5_delayedSpan")).timed().attribute("class").waitFor("test5-span-delayed");
+        assertEqualsByDefaultTimeout("test5-span-delayed", product.find(By.id("test5_delayedSpan")).timed().attribute("class"));
 
         // Delayed positive - click on a button that adds attribute of a span, verify getAttribute waits
         product.find(By.id("test5_addAttribute")).click();
-        product.find(By.id("test5_input")).timed().attribute("value").waitFor("test5-input-value");
+        assertEqualsByDefaultTimeout("test5-input-value", product.find(By.id("test5_input")).timed().attribute("value"));
 
         // Delayed negative
     }

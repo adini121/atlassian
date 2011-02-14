@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import java.util.List;
 
+import static com.atlassian.pageobjects.framework.query.TimedAssertions.assertFalseByDefaultTimeout;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
@@ -65,7 +66,7 @@ public class TestComponents extends AbstractFileBasedServerTest
 
         // click somewhere else and verify dialog is not visible.
         auipage.roleTabs().openUserTab();
-        auipage.inlineDialog().view().timed().isVisible().waitFor(false);
+        assertFalseByDefaultTimeout(auipage.inlineDialog().view().timed().isVisible());
 
     }
 
@@ -74,7 +75,7 @@ public class TestComponents extends AbstractFileBasedServerTest
     {
         JQueryPage jquerypage = product.visit(JQueryPage.class);
 
-         // verify admin menu is present
+        // verify admin menu is present
         assertTrue(jquerypage.jqueryMenu().trigger().isPresent());
 
         // verify admin menu is not opened
@@ -93,6 +94,6 @@ public class TestComponents extends AbstractFileBasedServerTest
         // verify high level interactions
         jquerypage = product.visit(JQueryPage.class);
         jquerypage.openJqueryMenu().gotoElementsPage();
-        
+
     }
 }

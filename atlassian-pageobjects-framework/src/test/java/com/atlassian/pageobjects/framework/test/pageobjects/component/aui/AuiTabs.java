@@ -6,11 +6,12 @@ import com.atlassian.pageobjects.binder.InvalidPageStateException;
 import com.atlassian.pageobjects.framework.ElementFinder;
 import com.atlassian.pageobjects.framework.component.TabbedComponent;
 import com.atlassian.pageobjects.framework.element.Element;
-import com.atlassian.webdriver.AtlassianWebDriver;
 import org.openqa.selenium.By;
 
-import javax.inject.Inject;
 import java.util.List;
+import javax.inject.Inject;
+
+import static com.atlassian.pageobjects.framework.query.TimedAssertions.assertTrueByDefaultTimeout;
 
 /**
  * Represents a tabbed content area created via AUI.
@@ -92,7 +93,7 @@ public class AuiTabs implements TabbedComponent
                 // find the pane and wait until it has class "active-pane"
                 String tabViewClassName = listItem.attribute("href").substring(1);
                 Element pane = rootElement.find(By.id(tabViewClassName));
-                pane.timed().hasClass("active-pane").waitFor(true);
+                assertTrueByDefaultTimeout(pane.timed().hasClass("active-pane"));
 
                 return pane;
             }

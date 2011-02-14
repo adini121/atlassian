@@ -5,6 +5,7 @@ import com.atlassian.pageobjects.framework.test.pageobjects.page.ElementsPage;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
+import static com.atlassian.pageobjects.framework.query.TimedAssertions.assertTrueByDefaultTimeout;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
@@ -20,7 +21,7 @@ public class TestDelayedElement extends AbstractFileBasedServerTest
        elementsPage.test1_addElementsButton().click();
 
        // verify delayed element that was injected via @ElementBy waits
-       elementsPage.test1_delayedSpan().timed().isPresent().waitFor(true);
+       assertTrueByDefaultTimeout(elementsPage.test1_delayedSpan().timed().isPresent());
    }
 
 
@@ -95,7 +96,7 @@ public class TestDelayedElement extends AbstractFileBasedServerTest
 
         //wait for presence on an element within another
         product.find(By.id("test4_addElementsButton")).click();
-        leafList.find(By.linkText("Item 4")).timed().isPresent().waitFor(true);
+        assertTrueByDefaultTimeout(leafList.find(By.linkText("Item 4")).timed().isPresent());
 
         //wait for text on an element within another
         driver.get(rootUrl + "/html/elements.html");

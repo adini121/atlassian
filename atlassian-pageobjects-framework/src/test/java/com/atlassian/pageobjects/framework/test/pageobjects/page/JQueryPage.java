@@ -5,10 +5,11 @@ import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.binder.WaitUntil;
 import com.atlassian.pageobjects.framework.ElementFinder;
 import com.atlassian.pageobjects.framework.test.pageobjects.component.JQueryMenu;
-import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.utils.by.ByJquery;
 
 import javax.inject.Inject;
+
+import static com.atlassian.pageobjects.framework.query.TimedAssertions.assertTrueByDefaultTimeout;
 
 /**
  * Represents the jquery.html
@@ -29,7 +30,7 @@ public class JQueryPage implements Page
     @WaitUntil
     public void doWait()
     {
-        elementFinder.find(ByJquery.$("h2:contains(JQuery DropDown Menu)")).timed().isPresent().waitFor(true);
+        assertTrueByDefaultTimeout(elementFinder.find(ByJquery.$("h2:contains(JQuery DropDown Menu)")).timed().isPresent());
     }
 
     public JQueryMenu jqueryMenu()

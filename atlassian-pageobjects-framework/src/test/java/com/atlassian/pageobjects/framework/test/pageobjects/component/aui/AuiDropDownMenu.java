@@ -5,12 +5,13 @@ import com.atlassian.pageobjects.binder.Init;
 import com.atlassian.pageobjects.framework.ElementFinder;
 import com.atlassian.pageobjects.framework.component.ActivatedComponent;
 import com.atlassian.pageobjects.framework.element.Element;
-import com.atlassian.webdriver.AtlassianWebDriver;
 import org.openqa.selenium.By;
 
-import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import javax.inject.Inject;
+
+import static com.atlassian.pageobjects.framework.query.TimedAssertions.assertTrueByDefaultTimeout;
 
 /**
  * Represents a DropDown built via AUI.
@@ -58,7 +59,7 @@ public class AuiDropDownMenu implements ActivatedComponent<AuiDropDownMenu>
         if(!isOpen())
         {
             triggerElement.click();
-            viewElement.timed().isVisible().waitFor(true);
+            assertTrueByDefaultTimeout(viewElement.timed().isVisible());
         }
         return this;
     }
@@ -68,7 +69,7 @@ public class AuiDropDownMenu implements ActivatedComponent<AuiDropDownMenu>
         if(isOpen())
         {
             triggerElement.click();
-            viewElement.timed().isVisible().waitFor(false);
+            assertTrueByDefaultTimeout(viewElement.timed().isVisible());
         }
         return this;
     }

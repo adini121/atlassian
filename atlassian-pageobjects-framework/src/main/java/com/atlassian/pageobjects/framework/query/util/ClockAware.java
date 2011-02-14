@@ -1,0 +1,17 @@
+package com.atlassian.pageobjects.framework.query.util;
+
+/**
+ * Marks classes that perform time computations and are using {@link Clock}s.
+ *
+ * @since v4.3
+ */
+public interface ClockAware
+{
+
+    /**
+     * Clock used by this instance.
+     *
+     * @return clock
+     */
+    Clock clock();
+}

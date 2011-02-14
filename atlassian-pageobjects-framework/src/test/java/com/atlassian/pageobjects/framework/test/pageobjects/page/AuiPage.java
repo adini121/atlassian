@@ -7,10 +7,11 @@ import com.atlassian.pageobjects.framework.ElementFinder;
 import com.atlassian.pageobjects.framework.test.pageobjects.component.InlineDialog;
 import com.atlassian.pageobjects.framework.test.pageobjects.component.LinksMenu;
 import com.atlassian.pageobjects.framework.test.pageobjects.component.UserRoleTabs;
-import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.utils.by.ByJquery;
 
 import javax.inject.Inject;
+
+import static com.atlassian.pageobjects.framework.query.TimedAssertions.assertTrueByDefaultTimeout;
 
 /**
  * Represents the page returned by the AUIServlet plugin that is deployed to RefApp
@@ -26,7 +27,7 @@ public class AuiPage implements Page
     @WaitUntil
     public void doWait()
     {
-        elementFinder.find(ByJquery.$("h2:contains(AUIDropDown)")).timed().isPresent().waitFor(true);
+        assertTrueByDefaultTimeout(elementFinder.find(ByJquery.$("h2:contains(AUIDropDown)")).timed().isPresent());
     }
     
     public String getUrl()
