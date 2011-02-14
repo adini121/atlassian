@@ -10,16 +10,16 @@
     <groupId>com.atlassian.selenium</groupId>
     <artifactId>atlassian-selenium</artifactId>
     <name>Atlassian Selenium</name>
-    <version>1.27</version>
+    <version>1.28-SNAPSHOT</version>
     <description>
         A suite of tools to help with Selenium test harness, assertions
         etc.
     </description>
 
     <scm>
-        <connection>scm:svn:https://studio.atlassian.com/svn/SELENIUM/tags/atlassian-selenium-1.27</connection>
-	<developerConnection>scm:svn:https://studio.atlassian.com/svn/SELENIUM/tags/atlassian-selenium-1.27</developerConnection>
-	<url>https://studio.atlassian.com/svn/SELENIUM/tags/atlassian-selenium-1.27</url>
+        <connection>scm:svn:https://studio.atlassian.com/svn/SELENIUM/branches/atlassian-selenium-1.x/</connection>
+	<developerConnection>scm:svn:https://studio.atlassian.com/svn/SELENIUM/branches/atlassian-selenium-1.x/</developerConnection>
+	<url>https://studio.atlassian.com/svn/SELENIUM/branches/atlassian-selenium-1.x/</url>
     </scm>
 
     <properties>
