@@ -228,7 +228,7 @@ public class SeleniumAssertions
 
     public void byTimeout(Condition condition, long maxWaitTime)
     {
-        byTimeout(new ByTimeoutConfiguration(condition, null, maxWaitTime, conditionCheckInterval, null));
+        byTimeout(new ByTimeoutConfiguration(condition, null, true, maxWaitTime, conditionCheckInterval, null));
     }
 
 
