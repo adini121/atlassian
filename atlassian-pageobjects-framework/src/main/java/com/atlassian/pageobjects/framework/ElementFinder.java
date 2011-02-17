@@ -8,7 +8,7 @@ import org.openqa.selenium.By;
 import javax.inject.Inject;
 
 /**
- *
+ * Class that can be used in PageObjects to find delayed Elements
  */
 public class ElementFinder
 {

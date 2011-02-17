@@ -3,7 +3,6 @@ package com.atlassian.pageobjects.framework.element;
 import com.atlassian.pageobjects.framework.query.TimedQuery;
 import com.atlassian.pageobjects.framework.query.webdriver.WebDriverQueryFactory;
 import com.atlassian.pageobjects.framework.timeout.TimeoutType;
-import com.atlassian.webdriver.AtlassianWebDriver;
 import org.openqa.selenium.By;
 
 import javax.inject.Inject;
@@ -16,18 +15,14 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class WebDriverTimedElement implements TimedElement
 {
     @Inject
-    private AtlassianWebDriver driver;
-
-    @Inject
     private WebDriverQueryFactory queryFactory;
-
     private final By locator;
     private final TimeoutType defaultTimeout;
 
     /**
      * Create a WebDriverTimedElement with the given timeout
      * @param defaultTimeout default timeout of this element
-     * @param locator
+     * @param locator The locator mechanism to use.
      */
     public WebDriverTimedElement(final By locator, final TimeoutType defaultTimeout)
     {

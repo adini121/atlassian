@@ -14,7 +14,7 @@ import java.lang.reflect.Field;
 import static com.atlassian.pageobjects.util.InjectUtils.forEachFieldWithAnnotation;
 
 /**
- *
+ * Find fields marked with @ElementBy annotation and set them to instances of WebDriverDelayedElement
  */
 public class ElementByPostInjectionProcessor implements PostInjectionProcessor
 {

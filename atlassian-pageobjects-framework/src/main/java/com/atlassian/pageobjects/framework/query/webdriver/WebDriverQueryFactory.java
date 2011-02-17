@@ -19,15 +19,11 @@ import static com.google.common.base.Preconditions.checkState;
 @NotThreadSafe
 public class WebDriverQueryFactory
 {
-    @Inject
     private WebDriver driver;
 
-    @Inject
     private Timeouts timeouts;
 
-    public WebDriverQueryFactory() {}
-
-    public WebDriverQueryFactory(WebDriver webDriver, Timeouts timeouts)
+    public @Inject WebDriverQueryFactory(WebDriver webDriver, Timeouts timeouts)
     {
         this.driver = checkNotNull(webDriver);
         this.timeouts = checkNotNull(timeouts);
