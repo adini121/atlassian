@@ -7,9 +7,8 @@ import org.openqa.selenium.By;
 
 import static com.atlassian.pageobjects.framework.query.TimedAssertions.assertEqualsByDefaultTimeout;
 import static com.atlassian.pageobjects.framework.query.TimedAssertions.assertFalseByDefaultTimeout;
-import static com.atlassian.pageobjects.framework.query.TimedAssertions.assertThat;
+import static com.atlassian.pageobjects.framework.query.TimedAssertions.assertThatByDefaultTimeout;
 import static com.atlassian.pageobjects.framework.query.TimedAssertions.assertTrueByDefaultTimeout;
-import static com.atlassian.pageobjects.framework.query.TimedAssertions.byDefaultTimeout;
 import static org.hamcrest.Matchers.equalToIgnoringCase;
 
 public class TestTimedElement extends AbstractFileBasedServerTest
@@ -66,7 +65,7 @@ public class TestTimedElement extends AbstractFileBasedServerTest
         assertEqualsByDefaultTimeout("Span Value", product.find(By.id("test3_span")).timed().text());
 
         // check non-case-sensitive
-        assertThat(product.find(By.id("test3_span")).timed().text(), equalToIgnoringCase("span value"), byDefaultTimeout());
+        assertThatByDefaultTimeout(product.find(By.id("test3_span")).timed().text(), equalToIgnoringCase("span value"));
 
         // Negative - verify a span that has no text
         assertEqualsByDefaultTimeout("", product.find(By.id("test3_spanEmpty")).timed().text());

@@ -20,7 +20,6 @@ import static com.google.common.base.Preconditions.checkState;
 public class WebDriverQueryFactory
 {
     private WebDriver driver;
-
     private Timeouts timeouts;
 
     public @Inject WebDriverQueryFactory(WebDriver webDriver, Timeouts timeouts)
@@ -41,10 +40,10 @@ public class WebDriverQueryFactory
         return interval;
     }
 
-    public TimedQuery<Boolean> isPresent(By locator, TimeoutType timeout)
+    public TimedQuery<Boolean> isPresent(By locator, TimeoutType timeoutType)
     {
         return new GenericWebDriverTimedQuery<Boolean>(WebDriverQueryFunctions.isPresent(driver, locator),
-                timeouts.timeoutFor(timeout), interval());
+                timeouts.timeoutFor(timeoutType), interval());
     }
 
     public TimedQuery<Boolean> isPresent(By locator)
@@ -52,10 +51,10 @@ public class WebDriverQueryFactory
         return isPresent(locator, TimeoutType.DEFAULT);
     }
 
-    public TimedQuery<Boolean> isVisible(By locator, TimeoutType timeout)
+    public TimedQuery<Boolean> isVisible(By locator, TimeoutType timeoutType)
     {
         return new WebElementBasedTimedQuery<Boolean>(driver, locator, WebDriverQueryFunctions.isVisible(),
-                timeouts.timeoutFor(timeout), interval());
+                timeouts.timeoutFor(timeoutType), interval());
     }
 
     public TimedQuery<Boolean> isVisible(By locator)
@@ -63,10 +62,10 @@ public class WebDriverQueryFactory
         return isVisible(locator, TimeoutType.DEFAULT);
     }
 
-    public TimedQuery<String> getText(By locator, TimeoutType timeout)
+    public TimedQuery<String> getText(By locator, TimeoutType timeoutType)
     {
         return new WebElementBasedTimedQuery<String>(driver, locator, WebDriverQueryFunctions.getText(),
-                timeouts.timeoutFor(timeout), interval());
+                timeouts.timeoutFor(timeoutType), interval());
     }
 
     public TimedQuery<String> getText(By locator)
@@ -74,10 +73,10 @@ public class WebDriverQueryFactory
         return getText(locator, TimeoutType.DEFAULT);
     }
 
-    public TimedQuery<String> getValue(By locator, TimeoutType timeout)
+    public TimedQuery<String> getValue(By locator, TimeoutType timeoutType)
     {
         return new WebElementBasedTimedQuery<String>(driver, locator, WebDriverQueryFunctions.getValue(),
-                timeouts.timeoutFor(timeout), interval());
+                timeouts.timeoutFor(timeoutType), interval());
     }
 
     public TimedQuery<String> getValue(By locator)
@@ -85,10 +84,10 @@ public class WebDriverQueryFactory
         return getValue(locator, TimeoutType.DEFAULT);
     }
 
-    public TimedQuery<Boolean> hasAttribute(By locator, String attributeName, String expectedValue, TimeoutType timeout)
+    public TimedQuery<Boolean> hasAttribute(By locator, String attributeName, String expectedValue, TimeoutType timeoutType)
     {
         return new WebElementBasedTimedQuery<Boolean>(driver, locator, WebDriverQueryFunctions.hasAttribute(attributeName, expectedValue),
-                timeouts.timeoutFor(timeout), interval());
+                timeouts.timeoutFor(timeoutType), interval());
     }
 
     public TimedQuery<Boolean> hasAttribute(By locator, String attributeName, String expectedValue)
@@ -96,10 +95,10 @@ public class WebDriverQueryFactory
         return hasAttribute(locator, attributeName, expectedValue, TimeoutType.DEFAULT);
     }
 
-    public TimedQuery<String> getAttribute(By locator, String attributeName, TimeoutType timeout)
+    public TimedQuery<String> getAttribute(By locator, String attributeName, TimeoutType timeoutType)
     {
         return new WebElementBasedTimedQuery<String>(driver, locator, WebDriverQueryFunctions.getAttribute(attributeName),
-                timeouts.timeoutFor(timeout), interval());
+                timeouts.timeoutFor(timeoutType), interval());
     }
 
     public TimedQuery<String> getAttribute(By locator, String attributeName)
@@ -108,10 +107,10 @@ public class WebDriverQueryFactory
     }
 
 
-    public TimedQuery<Boolean> hasClass(By locator, String className, TimeoutType timeout)
+    public TimedQuery<Boolean> hasClass(By locator, String className, TimeoutType timeoutType)
     {
         return new WebElementBasedTimedQuery<Boolean>(driver, locator, WebDriverQueryFunctions.hasClass(className),
-                timeouts.timeoutFor(timeout), interval());
+                timeouts.timeoutFor(timeoutType), interval());
     }
 
     public TimedQuery<Boolean> hasClass(By locator, String className)

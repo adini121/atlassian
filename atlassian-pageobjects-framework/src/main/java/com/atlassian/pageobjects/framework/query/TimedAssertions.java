@@ -26,7 +26,6 @@ public final class TimedAssertions
         throw new AssertionError("Don't instantiate me");
     }
 
-
     /**
      * Assert that <tt>condition</tt> is <code>true</code> by default timeout
      *
@@ -34,7 +33,7 @@ public final class TimedAssertions
      */
     public static void assertTrueByDefaultTimeout(TimedQuery<Boolean> condition)
     {
-        assertThat(condition, is(true), byDefaultTimeout());
+        assertThatByDefaultTimeout(condition, is(true));
     }
 
     /**
@@ -45,7 +44,7 @@ public final class TimedAssertions
      */
     public static void assertTrueByDefaultTimeout(String message, TimedQuery<Boolean> condition)
     {
-        assertThat(condition, is(true), byDefaultTimeout());
+        assertThatByDefaultTimeout(condition, is(true));
     }
 
     /**
@@ -55,7 +54,7 @@ public final class TimedAssertions
      */
     public static void assertFalseByDefaultTimeout(TimedQuery<Boolean> condition)
     {
-        assertThat(condition, is(false), byDefaultTimeout());
+        assertThatByDefaultTimeout(condition, is(false));
     }
 
     /**
@@ -66,7 +65,7 @@ public final class TimedAssertions
      */
     public static void assertFalseByDefaultTimeout(String message, TimedQuery<Boolean> condition)
     {
-        assertThat(condition, is(false), byDefaultTimeout());
+        assertThatByDefaultTimeout(condition, is(false));
     }
 
     /**
@@ -77,7 +76,7 @@ public final class TimedAssertions
      */
     public static <T> void assertEqualsByDefaultTimeout(T expectedValue, TimedQuery<T> query)
     {
-        assertThat(query, equalTo(expectedValue), byDefaultTimeout());
+        assertThatByDefaultTimeout(query, equalTo(expectedValue));
     }
 
     /**
@@ -90,7 +89,24 @@ public final class TimedAssertions
      */
     public static <T> void assertEqualsByDefaultTimeout(String message, T expectedValue, TimedQuery<T> query)
     {
-        assertThat(query, equalTo(expectedValue), byDefaultTimeout());
+        assertThatByDefaultTimeout(query, equalTo(expectedValue));
+    }
+
+    /**
+     * <p>
+     * Assert that result of given <tt>query</tt> fulfils certain condition specified by given the <tt>matcher</tt>, by
+     * default timeout of the <tt>query</tt>.
+     *
+     * <p>
+     * Use any matcher available from the libraries (e.g. Hamcrest, JUnit etc.), or a custom one.
+     *
+     * @param query timed query to verify
+     * @param matcher a matcher representing the assertion condition
+     * @see Matcher
+     */
+    public static <T> void assertThatByDefaultTimeout(TimedQuery<T> query, Matcher<T> matcher)
+    {
+        assertThat(null, query, matcher, byDefaultTimeout());
     }
 
 
