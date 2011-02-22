@@ -12,12 +12,10 @@ import com.google.inject.ConfigurationException;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
-import com.google.inject.TypeLiteral;
 import org.apache.commons.lang.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -26,6 +24,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import javax.inject.Inject;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.concat;
@@ -404,6 +403,16 @@ public final class InjectPageBinder implements PageBinder
         {
             advanceTo(InitializePhase.class);
             return pageObject;
+        }
+
+        /**
+         * Injector used by this binder.
+         *
+         * @return injector used by this binder.
+         */
+        public Injector injector()
+        {
+            return injector;
         }
     }
 }

@@ -62,7 +62,8 @@ public class WebDriverFactory
                     firefox = new FirefoxBinary(new File(browserPath));
                 }
 
-                if (System.getProperty("DISPLAY") != null){
+                if (System.getProperty("DISPLAY") != null)
+                {
                     firefox.setEnvironmentProperty("DISPLAY", System.getProperty("DISPLAY"));
                 }
                 FirefoxProfile profile = null;
