@@ -86,6 +86,17 @@ public final class InjectPageBinder implements PageBinder
         postInjectionProcessors = unmodifiableList(procs);
     }
 
+
+    /**
+     * Injector used by this binder.
+     *
+     * @return injector used by this binder.
+     */
+    public Injector injector()
+    {
+        return injector;
+    }
+
     public <P extends Page> P navigateToAndBind(Class<P> pageClass, Object... args)
     {
         checkNotNull(pageClass);
@@ -405,14 +416,6 @@ public final class InjectPageBinder implements PageBinder
             return pageObject;
         }
 
-        /**
-         * Injector used by this binder.
-         *
-         * @return injector used by this binder.
-         */
-        public Injector injector()
-        {
-            return injector;
-        }
     }
+
 }
