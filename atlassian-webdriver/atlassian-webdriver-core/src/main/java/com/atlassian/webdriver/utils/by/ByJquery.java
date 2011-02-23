@@ -1,15 +1,12 @@
 package com.atlassian.webdriver.utils.by;
 
 import com.atlassian.webdriver.utils.JavaScriptUtils;
-import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.Validate;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.remote.RemoteWebDriver;
-import org.openqa.selenium.remote.RemoteWebElement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -119,8 +116,8 @@ public abstract class ByJquery extends By
                 case PARENTS:
                 case CHILDREN:
                 case PREV:
-                    // CHROME BUG (http://code.google.com/p/selenium/issues/detail?id=934):
-                    // if pass in elements in the args object then chrome fails to run the selector properly.
+                    // HTMLUNIT BUG (http://code.google.com/p/selenium/issues/detail?id=1280):
+                    // if pass in elements in the args object then html unit fails to run the selector properly.
                     // So intead have to iterate over the elements and run the selector one at a time.
                     List<WebElement> newElements = new ArrayList<WebElement>();
                     for (WebElement element : elements)
@@ -133,9 +130,10 @@ public abstract class ByJquery extends By
                     elements = new ArrayList<WebElement>();
                     elements.addAll(newElements);
 
-                    //args = new Object[]{"WD.byJquery.$(context)." + selector.type.name().toLowerCase() + "(" + selectorStr + ")", newElements };
-                    //elements = JavaScriptUtils.execute("return WD.byJquery.execute(arguments[0],arguments[1])", driver, args);
-
+                    /*
+                    args = new Object[]{"WD.byJquery.$(context)." + selector.type.name().toLowerCase() + "(" + selectorStr + ")", elements };
+                    elements = JavaScriptUtils.execute("return WD.byJquery.execute(arguments[0],arguments[1])", driver, args);
+                    */
                     break;
 
                 default:

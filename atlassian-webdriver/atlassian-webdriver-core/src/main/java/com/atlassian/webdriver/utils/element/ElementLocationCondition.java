@@ -1,12 +1,10 @@
 package com.atlassian.webdriver.utils.element;
 
 import com.atlassian.webdriver.utils.Check;
-import com.atlassian.webdriver.utils.by.ByHelper;
 import org.apache.commons.lang.Validate;
 import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 
 /**

@@ -3,13 +3,18 @@ package com.atlassian.webdriver.test;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.WebDriverFactory;
 import com.atlassian.webdriver.browsers.AutoInstallConfiguration;
+import com.atlassian.webdriver.utils.JavaScriptUtils;
 import com.atlassian.webdriver.utils.by.ByJquery;
+import com.gargoylesoftware.htmlunit.javascript.background.JavaScriptExecutor;
 import com.google.common.collect.ImmutableMap;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -87,6 +92,17 @@ public class TestByJquery
         assertEquals("Inner block test", el.getText());
     }
 
-    //TODO: more tests!
+    @Test
+    public void testMultipleElementsByClassName()
+    {
+        List<WebElement> els = driver.findElements(ByJquery.$("div.block2").children());
+        assertTrue(els.size() == 2);
+
+
+        for (WebElement el : els)
+        {
+            assertEquals("span", el.getTagName());
+        }
+    }
 
 }

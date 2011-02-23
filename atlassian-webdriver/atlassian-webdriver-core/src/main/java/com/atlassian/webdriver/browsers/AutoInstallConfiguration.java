@@ -8,9 +8,9 @@ import java.util.concurrent.atomic.AtomicReference;
 
 
 /**
- * TODO: Document this class / interface here
+ * 
  *
- * @since v4.2
+ * @since 2.0
  */
 public class AutoInstallConfiguration
 {

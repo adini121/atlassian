@@ -1,7 +1,6 @@
 package com.atlassian.webdriver;
 
 import com.atlassian.webdriver.utils.Check;
-import com.atlassian.webdriver.utils.by.ByHelper;
 import com.atlassian.webdriver.utils.by.ByJquery;
 import com.atlassian.webdriver.utils.by.DeferredBy;
 import com.atlassian.webdriver.utils.element.ElementIsVisible;
@@ -105,6 +104,7 @@ public class DefaultAtlassianWebDriver implements AtlassianWebDriver
 
     /**
      * Wait utilities
+     * TODO: extract out into a wait utility
      */
 
     public void waitUntilElementIsVisibleAt(By elementLocator, WebElement at)
@@ -149,6 +149,7 @@ public class DefaultAtlassianWebDriver implements AtlassianWebDriver
 
     /**
      * Check Methods
+     * TODO: remove.
      */
 
     public boolean elementExists(By locator)
@@ -169,11 +170,6 @@ public class DefaultAtlassianWebDriver implements AtlassianWebDriver
     public boolean elementIsVisibleAt(By locator, SearchContext context)
     {
         return Check.elementIsVisible(locator, context);
-    }
-
-    public WebElement getBody()
-    {
-        return ByHelper.getBody(driver);
     }
 
     public void sleep(final long timeout)

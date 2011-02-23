@@ -30,7 +30,6 @@
                     <productVersion>4.2</productVersion>
                     <systemPropertyVariables>
                         <xvfb.enable>${xvfb.enable}</xvfb.enable>
-                        <!--webdriver.browser>chrome-5</webdriver.browser-->
                     </systemPropertyVariables>
                 </configuration>
             </plugin>

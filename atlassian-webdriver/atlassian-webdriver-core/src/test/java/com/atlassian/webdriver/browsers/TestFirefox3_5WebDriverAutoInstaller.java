@@ -29,7 +29,4 @@ public class TestFirefox3_5WebDriverAutoInstaller extends WebDriverAutoInstaller
         driver.quit();
 
     }
-
-
-
 }

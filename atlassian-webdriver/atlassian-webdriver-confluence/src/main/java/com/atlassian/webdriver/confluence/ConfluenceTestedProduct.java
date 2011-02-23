@@ -19,6 +19,7 @@ import com.atlassian.webdriver.confluence.page.ConfluenceLoginPage;
 import com.atlassian.webdriver.confluence.page.DashboardPage;
 import com.atlassian.webdriver.pageobjects.DefaultWebDriverTester;
 import com.atlassian.webdriver.pageobjects.WebDriverTester;
+import org.openqa.selenium.support.FindBy;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

@@ -14,22 +14,22 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>atlassian-browsers</groupId>
+                <groupId>com.atlassian.browsers</groupId>
                 <artifactId>atlassian-browsers-auto</artifactId>
                 <version>${atlassian-browsers-version}</version>
             </dependency>
             <dependency>
-                <groupId>atlassian-browsers</groupId>
+                <groupId>com.atlassian.browsers</groupId>
                 <artifactId>atlassian-browsers-linux</artifactId>
                 <version>${atlassian-browsers-version}</version>
             </dependency>
             <dependency>
-                <groupId>atlassian-browsers</groupId>
+                <groupId>com.atlassian.browsers</groupId>
                 <artifactId>atlassian-browsers-osx</artifactId>
                 <version>${atlassian-browsers-version}</version>
             </dependency>
             <dependency>
-                <groupId>atlassian-browsers</groupId>
+                <groupId>com.atlassian.browsers</groupId>
                 <artifactId>atlassian-browsers-windows</artifactId>
                 <version>${atlassian-browsers-version}</version>
             </dependency>
@@ -46,7 +46,7 @@
             </activation>
             <dependencies>
                 <dependency>
-                    <groupId>atlassian-browsers</groupId>
+                    <groupId>com.atlassian.browsers</groupId>
                     <artifactId>atlassian-browsers-windows</artifactId>
                 </dependency>
             </dependencies>
@@ -64,7 +64,7 @@
             </properties>
             <dependencies>
                 <dependency>
-                    <groupId>atlassian-browsers</groupId>
+                    <groupId>com.atlassian.browsers</groupId>
                     <artifactId>atlassian-browsers-linux</artifactId>
                 </dependency>
             </dependencies>
@@ -78,7 +78,7 @@
             </activation>
             <dependencies>
                 <dependency>
-                    <groupId>atlassian-browsers</groupId>
+                    <groupId>com.atlassian.browsers</groupId>
                     <artifactId>atlassian-browsers-osx</artifactId>
                 </dependency>
             </dependencies>
@@ -108,7 +108,7 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>atlassian-browsers</groupId>
+            <groupId>com.atlassian.browsers</groupId>
             <artifactId>atlassian-browsers-auto</artifactId>
         </dependency>
         <dependency>

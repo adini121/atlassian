@@ -50,7 +50,5 @@ public interface AtlassianWebDriver extends WebDriver, JavascriptExecutor
 
     boolean elementIsVisibleAt(By locator, SearchContext context);
 
-    WebElement getBody();
-
     void sleep(long timeout);
 }

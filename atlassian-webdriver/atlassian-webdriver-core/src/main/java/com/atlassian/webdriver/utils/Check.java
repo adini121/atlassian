@@ -1,11 +1,9 @@
 package com.atlassian.webdriver.utils;
 
-import com.atlassian.webdriver.utils.by.ByHelper;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.RenderedWebElement;
 import org.openqa.selenium.SearchContext;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 
