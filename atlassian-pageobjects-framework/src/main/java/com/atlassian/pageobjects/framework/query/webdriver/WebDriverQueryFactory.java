@@ -53,7 +53,7 @@ public class WebDriverQueryFactory
 
     public TimedQuery<Boolean> isVisible(By locator, TimeoutType timeoutType)
     {
-        return new WebElementBasedTimedQuery<Boolean>(driver, locator, WebDriverQueryFunctions.isVisible(),
+        return new WebElementBasedTimedCondition(driver, locator, WebDriverQueryFunctions.isVisible(),
                 timeouts.timeoutFor(timeoutType), interval());
     }
 
@@ -86,7 +86,7 @@ public class WebDriverQueryFactory
 
     public TimedQuery<Boolean> hasAttribute(By locator, String attributeName, String expectedValue, TimeoutType timeoutType)
     {
-        return new WebElementBasedTimedQuery<Boolean>(driver, locator, WebDriverQueryFunctions.hasAttribute(attributeName, expectedValue),
+        return new WebElementBasedTimedCondition(driver, locator, WebDriverQueryFunctions.hasAttribute(attributeName, expectedValue),
                 timeouts.timeoutFor(timeoutType), interval());
     }
 
@@ -109,7 +109,7 @@ public class WebDriverQueryFactory
 
     public TimedQuery<Boolean> hasClass(By locator, String className, TimeoutType timeoutType)
     {
-        return new WebElementBasedTimedQuery<Boolean>(driver, locator, WebDriverQueryFunctions.hasClass(className),
+        return new WebElementBasedTimedCondition(driver, locator, WebDriverQueryFunctions.hasClass(className),
                 timeouts.timeoutFor(timeoutType), interval());
     }
 

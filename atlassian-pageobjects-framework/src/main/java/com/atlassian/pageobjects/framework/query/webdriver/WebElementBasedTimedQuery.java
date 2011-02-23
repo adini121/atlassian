@@ -31,6 +31,12 @@ public class WebElementBasedTimedQuery<T> extends GenericWebDriverTimedQuery<T>
         super(new WebElementSupplier<T>(driver, by, valueProvider), timeout, interval);
     }
 
+    public WebElementBasedTimedQuery(WebDriver driver, By by, final Function<WebElement, T> valueProvider, long timeout,
+            long interval, T invalidValue)
+    {
+        super(new WebElementSupplier<T>(driver, by, valueProvider, invalidValue), timeout, interval);
+    }
+
     public WebElementBasedTimedQuery(WebElementBasedTimedQuery<T> origin, long timeout)
     {
         super(origin.webElementSupplier(), timeout, origin.interval);
@@ -46,12 +52,20 @@ public class WebElementBasedTimedQuery<T> extends GenericWebDriverTimedQuery<T>
         private final WebDriver webDriver;
         private final By by;
         private final Function<WebElement, S> valueProvider;
+        private final S invalidValue;
 
-        public WebElementSupplier(final WebDriver webDriver, final By by, final Function<WebElement, S> valueProvider)
+         public WebElementSupplier(final WebDriver webDriver, final By by, final Function<WebElement, S> valueProvider,
+                 S invalid)
         {
             this.valueProvider = valueProvider;
             this.webDriver = checkNotNull(webDriver);
             this.by = checkNotNull(by);
+            this.invalidValue = invalid;
+        }
+
+        public WebElementSupplier(final WebDriver webDriver, final By by, final Function<WebElement, S> valueProvider)
+        {
+            this(webDriver, by, valueProvider, null);
         }
 
         public S get()
@@ -62,7 +76,7 @@ public class WebElementBasedTimedQuery<T> extends GenericWebDriverTimedQuery<T>
             }
             catch (NoSuchElementException e)
             {
-                throw new InvalidValue();
+                throw new InvalidValue(invalidValue);
             }
         }
     }

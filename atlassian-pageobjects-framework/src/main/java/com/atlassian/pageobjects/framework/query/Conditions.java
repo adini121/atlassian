@@ -203,7 +203,7 @@ public final class Conditions
 
     }
 
-    
+
     private abstract static class AbstractConditionDecorator extends AbstractTimedCondition
     {
         protected final TimedQuery<Boolean> wrapped;
@@ -278,7 +278,9 @@ public final class Conditions
             boolean result = true;
             for (TimedQuery<Boolean> condition : conditions)
             {
-                result &= condition.now();
+                // null should not really happen if TimedCondition contract is observed
+                final boolean next = condition.now() != null ? condition.now() : false;
+                result &= next;
                 if (!result)
                 {
                     log.debug(asString("[And] Condition <",condition,"> returned false"));
@@ -329,7 +331,9 @@ public final class Conditions
             boolean result = false;
             for (TimedQuery<Boolean> condition : conditions)
             {
-                result |= condition.now();
+                // null should not really happen if TimedCondition contract is observed
+                final boolean next = condition.now() != null ? condition.now() : false;
+                result |= next;
                 if (result)
                 {
                     break;

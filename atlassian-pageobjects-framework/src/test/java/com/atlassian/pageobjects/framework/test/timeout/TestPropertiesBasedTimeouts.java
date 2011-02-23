@@ -30,8 +30,9 @@ public class TestPropertiesBasedTimeouts
         assertEquals(500L, tested.timeoutFor(TimeoutType.DEFAULT));
         assertEquals(300L, tested.timeoutFor(TimeoutType.UI_ACTION));
         assertEquals(400L, tested.timeoutFor(TimeoutType.PAGE_LOAD));
+        // default for interval is hardcoded
+        assertEquals(100L, tested.timeoutFor(TimeoutType.EVALUATION_INTERVAL));
         // the rest should be default
-        assertEquals(500L, tested.timeoutFor(TimeoutType.EVALUATION_INTERVAL));
         assertEquals(500L, tested.timeoutFor(TimeoutType.SLOW_PAGE_LOAD));
         assertEquals(500L, tested.timeoutFor(TimeoutType.DIALOG_LOAD));
         assertEquals(500L, tested.timeoutFor(TimeoutType.COMPONENT_LOAD));

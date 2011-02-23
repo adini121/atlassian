@@ -52,7 +52,7 @@ public class AuiDropdownMenu
 
     public boolean isOpen()
     {
-         return Check.hasClass("active", rootElement)
+        return Check.hasClass("active", rootElement)
                 && !Check.elementExists(By.className("loading"), rootElement)
                 && Check.elementExists(By.tagName("li"), rootElement);
     }
@@ -61,8 +61,8 @@ public class AuiDropdownMenu
     {
         if(isOpen())
         {
-           rootElement.findElement(By.cssSelector("a.drop")).click();
-           waitUntilClose();
+            rootElement.findElement(By.cssSelector("a.drop")).click();
+            waitUntilClose();
         }
         return this;
     }
@@ -70,18 +70,18 @@ public class AuiDropdownMenu
     public void waitUntilOpen()
     {
         driver.waitUntil(new Function<WebDriver,Boolean>(){
-        public Boolean apply( WebDriver webDriver) {
-            return isOpen();
+            public Boolean apply( WebDriver webDriver) {
+                return isOpen();
             }
         });
     }
 
     public void waitUntilClose()
-     {
-         driver.waitUntil(new Function<WebDriver,Boolean>(){
-             public Boolean apply( WebDriver webDriver) {
+    {
+        driver.waitUntil(new Function<WebDriver,Boolean>(){
+            public Boolean apply( WebDriver webDriver) {
                 return !isOpen();
-             }
-         });
-     }
+            }
+        });
+    }
 }

@@ -71,12 +71,26 @@ public class GenericWebDriverTimedQuery<T> extends AbstractTimedQuery<T>
         catch (InvalidValue e)
         {
             invalidValue = true;
-            return null;
+            return (T)e.value;
         }
     }
 
     public static final class InvalidValue extends RuntimeException
     {
         private static final long serialVersionUID = -4972134972343443297L;
+
+        private final Object value;
+
+        public InvalidValue(final Object value)
+        {
+            this.value = value;
+        }
+
+        @Override
+        public Throwable fillInStackTrace()
+        {
+            return this;
+        }
+        
     }
 }

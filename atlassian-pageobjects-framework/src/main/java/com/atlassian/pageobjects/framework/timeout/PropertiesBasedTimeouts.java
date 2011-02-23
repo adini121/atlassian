@@ -156,7 +156,7 @@ public class PropertiesBasedTimeouts implements Timeouts
         String timeout = properties.get(propKey(timeoutType));
         if (timeout == null)
         {
-            return defaultValue;
+            return defaultValue(timeoutType);
         }
         try
         {
@@ -169,5 +169,14 @@ public class PropertiesBasedTimeouts implements Timeouts
                     .appendValue(defaultValue).toString());
             return defaultValue;
         }
+    }
+
+    private long defaultValue(final TimeoutType timeoutType)
+    {
+        if (TimeoutType.EVALUATION_INTERVAL == timeoutType)
+        {
+            return Timeouts.DEFAULT_INTERVAL;
+        }
+        return defaultValue;
     }
 }

@@ -46,6 +46,10 @@ public class MapBasedTimeouts implements Timeouts
         {
             return timeout;
         }
+        else if (TimeoutType.EVALUATION_INTERVAL == timeoutType)
+        {
+            return Timeouts.DEFAULT_INTERVAL;
+        }
         else
         {
             return defaultValue;
