@@ -55,7 +55,7 @@ public final class Conditions
      *
      * @see TimedCondition#interval()
      */
-    public static CombinableCondition and(TimedCondition... conditions)
+    public static CombinableCondition and(TimedQuery<Boolean>... conditions)
     {
         return new And(conditions);
     }
@@ -74,7 +74,7 @@ public final class Conditions
      *
      * @see TimedCondition#interval()
      */
-    public static CombinableCondition and(List<TimedCondition> conditions)
+    public static CombinableCondition and(List<TimedQuery<Boolean>> conditions)
     {
         return and(conditions.toArray(new TimedCondition[conditions.size()]));
     }
@@ -93,7 +93,7 @@ public final class Conditions
      * 
      * @see TimedCondition#interval()
      */
-    public static CombinableCondition or(TimedCondition... conditions)
+    public static CombinableCondition or(TimedQuery<Boolean>... conditions)
     {
         return new Or(conditions);
     }
@@ -112,7 +112,7 @@ public final class Conditions
      *
      * @see TimedCondition#interval()
      */
-    public static CombinableCondition or(List<TimedCondition> conditions)
+    public static CombinableCondition or(List<TimedQuery<Boolean>> conditions)
     {
         return or(conditions.toArray(new TimedCondition[conditions.size()]));
     }
