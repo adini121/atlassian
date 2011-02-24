@@ -1,5 +1,7 @@
 package com.atlassian.pageobjects.framework.element;
 
+import com.atlassian.pageobjects.framework.timeout.TimeoutType;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -27,4 +29,6 @@ public @interface ElementBy
     String xpath() default "";
 
     String tagName() default "";
+
+    TimeoutType timeoutType() default TimeoutType.DEFAULT;
 }

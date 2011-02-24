@@ -8,8 +8,8 @@ import com.atlassian.pageobjects.framework.element.WebDriverDelayedElement;
 import com.atlassian.pageobjects.util.InjectUtils;
 import org.openqa.selenium.By;
 
-import javax.inject.Inject;
 import java.lang.reflect.Field;
+import javax.inject.Inject;
 
 import static com.atlassian.pageobjects.util.InjectUtils.forEachFieldWithAnnotation;
 
@@ -88,6 +88,6 @@ public class ElementByPostInjectionProcessor implements PostInjectionProcessor
             throw new IllegalArgumentException("No selector found");
         }
 
-        return pageBinder.bind(WebDriverDelayedElement.class, by);
+        return pageBinder.bind(WebDriverDelayedElement.class, by, elementBy.timeoutType());
     }
 }
