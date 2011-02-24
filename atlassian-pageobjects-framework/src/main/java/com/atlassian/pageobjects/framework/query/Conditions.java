@@ -3,6 +3,7 @@ package com.atlassian.pageobjects.framework.query;
 import com.google.common.base.Supplier;
 import org.apache.commons.lang.ArrayUtils;
 import org.hamcrest.Matcher;
+import org.hamcrest.StringDescription;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
@@ -434,6 +435,13 @@ public final class Conditions
         {
             lastValue = query.now();
             return matcher.matches(lastValue);
+        }
+
+        @Override
+        public String toString()
+        {
+            return super.toString() + new StringDescription().appendText("[query=").appendValue(query)
+                    .appendText("][matcher=").appendDescriptionOf(matcher).appendText("]");
         }
     }
 }
