@@ -1,5 +1,6 @@
 package com.atlassian.pageobjects.framework.element;
 
+import com.atlassian.pageobjects.framework.query.TimedCondition;
 import com.atlassian.pageobjects.framework.query.TimedQuery;
 import com.atlassian.pageobjects.framework.query.webdriver.WebDriverQueryFactory;
 import com.atlassian.pageobjects.framework.timeout.TimeoutType;
@@ -30,17 +31,17 @@ public class WebDriverTimedElement implements TimedElement
         this.defaultTimeout = checkNotNull(defaultTimeout);
     }
     
-    public TimedQuery<Boolean> isPresent()
+    public TimedCondition isPresent()
     {
         return queryFactory.isPresent(locator, defaultTimeout);
     }
 
-    public TimedQuery<Boolean> isVisible()
+    public TimedCondition isVisible()
     {
         return queryFactory.isVisible(locator, defaultTimeout);
     }
 
-    public TimedQuery<Boolean> hasClass(final String className)
+    public TimedCondition hasClass(final String className)
     {
         return queryFactory.hasClass(locator, className, defaultTimeout);
     }

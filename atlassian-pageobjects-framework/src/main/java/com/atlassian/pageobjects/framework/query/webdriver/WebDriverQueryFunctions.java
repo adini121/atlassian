@@ -37,6 +37,18 @@ public final class WebDriverQueryFunctions
         };
     }
 
+    public static Function<WebElement, Boolean> isPresent()
+    {
+        return new Function<WebElement, Boolean>()
+        {
+            public Boolean apply(@Nullable final WebElement from)
+            {
+                // if we're here, the element was found
+                return true;
+            }
+        };
+    }
+
     public static Function<WebElement, Boolean> isVisible()
     {
         return new Function<WebElement, Boolean>()

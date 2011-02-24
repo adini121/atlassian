@@ -1,5 +1,6 @@
 package com.atlassian.pageobjects.framework.query.webdriver;
 
+import com.atlassian.pageobjects.framework.query.TimedCondition;
 import com.atlassian.pageobjects.framework.query.TimedQuery;
 import com.atlassian.pageobjects.framework.timeout.TimeoutType;
 import com.atlassian.pageobjects.framework.timeout.Timeouts;
@@ -40,24 +41,24 @@ public class WebDriverQueryFactory
         return interval;
     }
 
-    public TimedQuery<Boolean> isPresent(By locator, TimeoutType timeoutType)
+    public TimedCondition isPresent(By locator, TimeoutType timeoutType)
     {
-        return new GenericWebDriverTimedQuery<Boolean>(WebDriverQueryFunctions.isPresent(driver, locator),
+        return new WebElementBasedTimedCondition(driver, locator, WebDriverQueryFunctions.isPresent(),
                 timeouts.timeoutFor(timeoutType), interval());
     }
 
-    public TimedQuery<Boolean> isPresent(By locator)
+    public TimedCondition isPresent(By locator)
     {
         return isPresent(locator, TimeoutType.DEFAULT);
     }
 
-    public TimedQuery<Boolean> isVisible(By locator, TimeoutType timeoutType)
+    public TimedCondition isVisible(By locator, TimeoutType timeoutType)
     {
         return new WebElementBasedTimedCondition(driver, locator, WebDriverQueryFunctions.isVisible(),
                 timeouts.timeoutFor(timeoutType), interval());
     }
 
-    public TimedQuery<Boolean> isVisible(By locator)
+    public TimedCondition isVisible(By locator)
     {
         return isVisible(locator, TimeoutType.DEFAULT);
     }
@@ -84,13 +85,13 @@ public class WebDriverQueryFactory
         return getValue(locator, TimeoutType.DEFAULT);
     }
 
-    public TimedQuery<Boolean> hasAttribute(By locator, String attributeName, String expectedValue, TimeoutType timeoutType)
+    public TimedCondition hasAttribute(By locator, String attributeName, String expectedValue, TimeoutType timeoutType)
     {
         return new WebElementBasedTimedCondition(driver, locator, WebDriverQueryFunctions.hasAttribute(attributeName, expectedValue),
                 timeouts.timeoutFor(timeoutType), interval());
     }
 
-    public TimedQuery<Boolean> hasAttribute(By locator, String attributeName, String expectedValue)
+    public TimedCondition hasAttribute(By locator, String attributeName, String expectedValue)
     {
         return hasAttribute(locator, attributeName, expectedValue, TimeoutType.DEFAULT);
     }
@@ -107,13 +108,13 @@ public class WebDriverQueryFactory
     }
 
 
-    public TimedQuery<Boolean> hasClass(By locator, String className, TimeoutType timeoutType)
+    public TimedCondition hasClass(By locator, String className, TimeoutType timeoutType)
     {
         return new WebElementBasedTimedCondition(driver, locator, WebDriverQueryFunctions.hasClass(className),
                 timeouts.timeoutFor(timeoutType), interval());
     }
 
-    public TimedQuery<Boolean> hasClass(By locator, String className)
+    public TimedCondition hasClass(By locator, String className)
     {
         return hasClass(locator, className, TimeoutType.DEFAULT);
     }

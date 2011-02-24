@@ -1,9 +1,11 @@
 package com.atlassian.pageobjects.framework.element;
 
+import com.atlassian.pageobjects.framework.query.TimedCondition;
 import com.atlassian.pageobjects.framework.query.TimedQuery;
 
 /**
- * Represents an HTML element that is expected in the DOM of a page, all queries return TimedQueries. 
+ * Represents an HTML element that is expected in the DOM of a page, all queries return TimedQueries.
+ * 
  */
 public interface TimedElement
 {
@@ -13,7 +15,7 @@ public interface TimedElement
      * @return TimedQuery that true if element is present on the page, false if element is not visible or timeout
      * expires.
      */
-    TimedQuery<Boolean> isPresent();
+    TimedCondition isPresent();
 
     /**
      * Query representing visibility of this element on a page.
@@ -21,7 +23,7 @@ public interface TimedElement
      * @return TimedQuery that returns true if element is visible on the page, false if element is not visible 
      * or timeout expires.
      */
-    TimedQuery<Boolean> isVisible();
+    TimedCondition isVisible();
  
     /**
      * Query representing whether this element has the given classname set.
@@ -29,7 +31,7 @@ public interface TimedElement
      * @return TimedQuery that returns true if element has given classname set, false if element does not have the
      * given classname set or timeout expires.
      */
-    TimedQuery<Boolean> hasClass(String className);
+    TimedCondition hasClass(String className);
 
     /**
      * Query representingt the element's given attribute.
