@@ -2,6 +2,7 @@ package com.atlassian.pageobjects.framework.query;
 
 import com.google.common.base.Supplier;
 import org.apache.commons.lang.ArrayUtils;
+import org.hamcrest.Matcher;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
@@ -168,6 +169,29 @@ public final class Conditions
     public static TimedCondition dependantCondition(TimedQuery<Boolean> original, Supplier<TimedQuery<Boolean>> dependant)
     {
         return new DependantCondition(original, dependant);
+    }
+
+
+    /**
+     * <p>
+     * Return condition that will be <code>true</code>, if given <tt>matcher</tt> will match the  <tt>query</tt>. Any
+     * Hamcrest matcher implementation may be used.
+     *
+     * <p>
+     * Example:<br>
+     *
+     * <code>
+     *     TimedCondition textEquals = Conditions.forMatcher(element.getText(), isEqualTo("blah"));
+     * </code>
+     *
+     * @param query timed query to match
+     * @param matcher matcher for the query
+     * @param <T> type of the result
+     * @return new matching condition
+     */
+    public static <T> TimedCondition forMatcher(TimedQuery<T> query, Matcher<T> matcher)
+    {
+        return new MatchingCondition<T>(query, matcher);
     }
 
 
@@ -390,4 +414,26 @@ public final class Conditions
         }
     }
 
+
+    static final class MatchingCondition<T> extends AbstractTimedCondition
+    {
+        final TimedQuery<T> query;
+        final Matcher<T> matcher;
+
+        T lastValue;
+
+        public MatchingCondition(final TimedQuery<T> query, final Matcher<T> matcher)
+        {
+            super(query);
+            this.query = checkNotNull(query);
+            this.matcher = checkNotNull(matcher);
+        }
+
+        @Override
+        protected Boolean currentValue()
+        {
+            lastValue = query.now();
+            return matcher.matches(lastValue);
+        }
+    }
 }

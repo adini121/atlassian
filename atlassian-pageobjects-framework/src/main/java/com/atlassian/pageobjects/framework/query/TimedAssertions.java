@@ -158,14 +158,14 @@ public final class TimedAssertions
     public static <T> void assertThat(String message, TimedQuery<T> query, Matcher<T> matcher, AssertionTimeout timeout)
     {
         checkNotNull(timeout);
-        final AssertingCondition<T> assertion = new AssertingCondition<T>(query, matcher);
+        final Conditions.MatchingCondition<T> assertion = new Conditions.MatchingCondition<T>(query, matcher);
         if (!timeout.evaluate(assertion))
         {
             throw new AssertionError(buildMessage(message, assertion, matcher, timeout));
         }
     }
 
-    private static <T> String buildMessage(String message, AssertingCondition<T> assertion, Matcher<T> matcher, AssertionTimeout timeout)
+    private static <T> String buildMessage(String message, Conditions.MatchingCondition<T> assertion, Matcher<T> matcher, AssertionTimeout timeout)
     {
         final Description answer = new StringDescription();
         if (StringUtils.isNotEmpty(message))
@@ -177,27 +177,7 @@ public final class TimedAssertions
                 .appendText("\nGot (last value): ").appendValue(assertion.lastValue).toString();
     }
 
-    private static final class AssertingCondition<T> extends AbstractTimedCondition
-    {
-        private final TimedQuery<T> query;
-        private final Matcher<T> matcher;
 
-        private T lastValue;
-
-        public AssertingCondition(final TimedQuery<T> query, final Matcher<T> matcher)
-        {
-            super(query);
-            this.query = checkNotNull(query);
-            this.matcher = checkNotNull(matcher);
-        }
-
-        @Override
-        protected Boolean currentValue()
-        {
-            lastValue = query.now();
-            return matcher.matches(lastValue);
-        }
-    }
 
 
     public static abstract class AssertionTimeout
