@@ -60,9 +60,9 @@ public interface Element
     /**
      * Simulate typing into an element
      * 
-     * @param keysToSend 
+     * @param keys keys to type
      */
-    void type(CharSequence... keysToSend);
+    void type(CharSequence... keys);
 
     /**
      * Returns a list of element's that match the given locator within this element
