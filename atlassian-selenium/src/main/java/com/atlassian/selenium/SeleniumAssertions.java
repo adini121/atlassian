@@ -156,7 +156,7 @@ public class SeleniumAssertions
     
     public void elementNotPresentByTimeout(String locator)
     {
-        elementPresentByTimeout(locator, defaultMaxWait);
+        elementNotPresentByTimeout(locator, defaultMaxWait);
     }
 
     public void elementNotPresentByTimeout(PageElement element)
