@@ -33,17 +33,17 @@ public final class StringConcat
         }
         if (length == 1)
         {
-            asString(elements[0]);
+            singleAsString(elements[0]);
         }
         StringBuilder answer = new StringBuilder(length * EXPECTED_ELEMENT_LENGTH);
         for (Object elem : elements)
         {
-            answer.append(asString(elem));
+            answer.append(singleAsString(elem));
         }
         return answer.toString();
     }
 
-    private static String asString(Object obj)
+    private static String singleAsString(Object obj)
     {
         return obj != null ? obj.toString() : "null";
     }
