@@ -7,13 +7,11 @@ import com.atlassian.pageobjects.framework.timeout.Timeouts;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.utils.Check;
 import com.atlassian.webdriver.utils.element.ElementLocated;
-import org.openqa.selenium.By;
-import org.openqa.selenium.RenderedWebElement;
-import org.openqa.selenium.SearchContext;
-import org.openqa.selenium.WebElement;
+import org.hamcrest.StringDescription;
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.TimeoutException;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 
@@ -166,7 +164,18 @@ public class WebDriverDelayedElement implements Element
         {
             if(!driver.elementExistsAt(locator, searchContext) && timeoutInSeconds() > 0)
             {
-                driver.waitUntil(new ElementLocated(locator, searchContext), timeoutInSeconds());
+                try
+                {
+                    driver.waitUntil(new ElementLocated(locator, searchContext), timeoutInSeconds());
+                }
+                catch(TimeoutException e)
+                {
+                    throw new org.openqa.selenium.NoSuchElementException(new StringDescription()
+                            .appendText("Unable to locate element after timeout.")
+                            .appendText("\nLocator: ").appendValue(locator)
+                            .appendText("\nTimeout: ").appendValue(timeoutInSeconds()).appendText(" seconds.")
+                            .toString(), e);
+                }
             }
 
             webElement = searchContext.findElement(locator);
@@ -207,14 +216,28 @@ public class WebDriverDelayedElement implements Element
         return waitForWebElement().getValue();
     }
 
-    public void click()
+    public Element click()
     {
         waitForWebElement().click();
+        return this;
     }
 
-    public void type(CharSequence... keysToSend)
+    public Element type(CharSequence... keysToSend)
     {
         waitForWebElement().sendKeys(keysToSend);
+        return this;
+    }
+
+    public Element select()
+    {
+        waitForWebElement().setSelected();
+        return this;
+    }
+
+    public Element clear()
+    {
+        waitForWebElement().clear();
+        return this;
     }
 
     public TimedElement timed()

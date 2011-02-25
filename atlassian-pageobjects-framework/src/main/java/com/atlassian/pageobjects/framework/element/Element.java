@@ -54,15 +54,32 @@ public interface Element
 
     /**
      * Click this element
+     *
+     * @return The eleemnt that got clicked.
      */
-    void click();
+    Element click();
 
     /**
-     * Simulate typing into an element
+     * Simulate typing into this element. This will append the keystrokes to the end of the text entry element.
      * 
      * @param keys keys to type
+     * @return The Element that got typed in.
      */
-    void type(CharSequence... keys);
+    Element type(CharSequence... keys);
+
+    /**
+     * Select an element. This method will work against radio buttons, "option" elements within a "select" and checkboxes
+     *
+     * @return The Element that got selected
+     */
+    Element select();
+
+    /**
+     * Clear the value of the text entry element.
+     *
+     * @return The Element that got cleared.
+     */
+    Element clear();
 
     /**
      * Returns a list of element's that match the given locator within this element
