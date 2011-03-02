@@ -1,12 +1,11 @@
 package com.atlassian.webdriver;
 
 import com.atlassian.pageobjects.TestedProduct;
-import com.atlassian.pageobjects.binder.PostInjectionProcessor;
 import com.atlassian.webdriver.pageobjects.PageFactoryPostInjectionProcessor;
 import com.atlassian.webdriver.pageobjects.WebDriverTester;
 import com.google.inject.Binder;
 import com.google.inject.Module;
-import com.google.inject.Provider;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -25,6 +24,7 @@ public class AtlassianWebDriverModule implements Module
     {
         binder.bind(AtlassianWebDriver.class).toInstance(testedProduct.getTester().getDriver());
         binder.bind(WebDriver.class).toInstance(testedProduct.getTester().getDriver());
+        binder.bind(SearchContext.class).toInstance(testedProduct.getTester().getDriver());
         binder.bind(PageFactoryPostInjectionProcessor.class);
     }
 }

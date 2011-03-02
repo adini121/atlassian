@@ -102,4 +102,12 @@ public class TestTimedElement extends AbstractFileBasedServerTest
         // Delayed negative
     }
 
+    @Test
+    public void testTimedElementLocatesElementWithinAContext()
+    {
+        product.visit(ElementsPage.class);
+
+        product.find(By.id("test6_hideSpanButton")).click();
+        assertFalseByDefaultTimeout(product.find(By.id("test6_Div")).find(By.className("test6_class")).timed().isVisible());
+    }
 }

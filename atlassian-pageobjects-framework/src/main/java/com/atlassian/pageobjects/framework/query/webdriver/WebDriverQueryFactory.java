@@ -5,7 +5,7 @@ import com.atlassian.pageobjects.framework.query.TimedQuery;
 import com.atlassian.pageobjects.framework.timeout.TimeoutType;
 import com.atlassian.pageobjects.framework.timeout.Timeouts;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.SearchContext;
 
 import javax.annotation.concurrent.NotThreadSafe;
 import javax.inject.Inject;
@@ -20,12 +20,12 @@ import static com.google.common.base.Preconditions.checkState;
 @NotThreadSafe
 public class WebDriverQueryFactory
 {
-    private WebDriver driver;
-    private Timeouts timeouts;
+    private final SearchContext searchContext;
+    private final Timeouts timeouts;
 
-    public @Inject WebDriverQueryFactory(WebDriver webDriver, Timeouts timeouts)
+    public @Inject WebDriverQueryFactory(SearchContext searchContext, Timeouts timeouts)
     {
-        this.driver = checkNotNull(webDriver);
+        this.searchContext = checkNotNull(searchContext);
         this.timeouts = checkNotNull(timeouts);
     }
 
@@ -43,7 +43,7 @@ public class WebDriverQueryFactory
 
     public TimedCondition isPresent(By locator, TimeoutType timeoutType)
     {
-        return new WebElementBasedTimedCondition(driver, locator, WebDriverQueryFunctions.isPresent(),
+        return new WebElementBasedTimedCondition(searchContext, locator, WebDriverQueryFunctions.isPresent(),
                 timeouts.timeoutFor(timeoutType), interval());
     }
 
@@ -54,7 +54,7 @@ public class WebDriverQueryFactory
 
     public TimedCondition isVisible(By locator, TimeoutType timeoutType)
     {
-        return new WebElementBasedTimedCondition(driver, locator, WebDriverQueryFunctions.isVisible(),
+        return new WebElementBasedTimedCondition(searchContext, locator, WebDriverQueryFunctions.isVisible(),
                 timeouts.timeoutFor(timeoutType), interval());
     }
 
@@ -63,9 +63,31 @@ public class WebDriverQueryFactory
         return isVisible(locator, TimeoutType.DEFAULT);
     }
 
+    public TimedCondition isEnabled(By locator, TimeoutType timeoutType)
+    {
+        return new WebElementBasedTimedCondition(searchContext, locator, WebDriverQueryFunctions.isEnabled(),
+                timeouts.timeoutFor(timeoutType), interval());
+    }
+
+    public TimedCondition isEnabled(By locator)
+    {
+        return isEnabled(locator, TimeoutType.DEFAULT);
+    }
+
+    public TimedCondition isSelected(By locator, TimeoutType timeoutType)
+    {
+        return new WebElementBasedTimedCondition(searchContext, locator, WebDriverQueryFunctions.isSelected(),
+                timeouts.timeoutFor(timeoutType), interval());
+    }
+
+    public TimedCondition isSelected(By locator)
+    {
+        return isSelected(locator);
+    }
+
     public TimedQuery<String> getText(By locator, TimeoutType timeoutType)
     {
-        return new WebElementBasedTimedQuery<String>(driver, locator, WebDriverQueryFunctions.getText(),
+        return new WebElementBasedTimedQuery<String>(searchContext, locator, WebDriverQueryFunctions.getText(),
                 timeouts.timeoutFor(timeoutType), interval());
     }
 
@@ -76,7 +98,7 @@ public class WebDriverQueryFactory
 
     public TimedQuery<String> getValue(By locator, TimeoutType timeoutType)
     {
-        return new WebElementBasedTimedQuery<String>(driver, locator, WebDriverQueryFunctions.getValue(),
+        return new WebElementBasedTimedQuery<String>(searchContext, locator, WebDriverQueryFunctions.getValue(),
                 timeouts.timeoutFor(timeoutType), interval());
     }
 
@@ -87,7 +109,7 @@ public class WebDriverQueryFactory
 
     public TimedCondition hasAttribute(By locator, String attributeName, String expectedValue, TimeoutType timeoutType)
     {
-        return new WebElementBasedTimedCondition(driver, locator, WebDriverQueryFunctions.hasAttribute(attributeName, expectedValue),
+        return new WebElementBasedTimedCondition(searchContext, locator, WebDriverQueryFunctions.hasAttribute(attributeName, expectedValue),
                 timeouts.timeoutFor(timeoutType), interval());
     }
 
@@ -98,7 +120,7 @@ public class WebDriverQueryFactory
 
     public TimedQuery<String> getAttribute(By locator, String attributeName, TimeoutType timeoutType)
     {
-        return new WebElementBasedTimedQuery<String>(driver, locator, WebDriverQueryFunctions.getAttribute(attributeName),
+        return new WebElementBasedTimedQuery<String>(searchContext, locator, WebDriverQueryFunctions.getAttribute(attributeName),
                 timeouts.timeoutFor(timeoutType), interval());
     }
 
@@ -110,7 +132,7 @@ public class WebDriverQueryFactory
 
     public TimedCondition hasClass(By locator, String className, TimeoutType timeoutType)
     {
-        return new WebElementBasedTimedCondition(driver, locator, WebDriverQueryFunctions.hasClass(className),
+        return new WebElementBasedTimedCondition(searchContext, locator, WebDriverQueryFunctions.hasClass(className),
                 timeouts.timeoutFor(timeoutType), interval());
     }
 

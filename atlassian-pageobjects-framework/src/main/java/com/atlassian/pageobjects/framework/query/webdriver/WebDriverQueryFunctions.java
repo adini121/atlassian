@@ -4,10 +4,7 @@ import com.atlassian.webdriver.utils.Check;
 import com.google.common.base.Function;
 import com.google.common.base.Supplier;
 import org.apache.commons.lang.StringUtils;
-import org.openqa.selenium.By;
-import org.openqa.selenium.RenderedWebElement;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 
 import javax.annotation.Nullable;
 
@@ -26,13 +23,13 @@ public final class WebDriverQueryFunctions
         throw new AssertionError("Don't instantiate me");
     }
 
-    public static Supplier<Boolean> isPresent(final WebDriver webDriver, final By locator)
+    public static Supplier<Boolean> isPresent(final SearchContext searchContext, final By locator)
     {
         return new Supplier<Boolean>()
         {
             public Boolean get()
             {
-                return Check.elementExists(locator, webDriver);
+                return Check.elementExists(locator, searchContext);
             }
         };
     }
@@ -63,6 +60,29 @@ public final class WebDriverQueryFunctions
             }
         };
     }
+
+    public static Function<WebElement, Boolean> isEnabled()
+    {
+        return new Function<WebElement, Boolean>()
+        {
+            public Boolean apply(@Nullable final WebElement from)
+            {
+                return from.isEnabled();
+            }
+        };
+    }
+
+    public static Function<WebElement, Boolean> isSelected()
+    {
+       return new Function<WebElement, Boolean>()
+        {
+            public Boolean apply(@Nullable final WebElement from)
+            {
+                return from.isSelected();
+            }
+        };
+    }
+
 
     public static Function<WebElement, String> getText()
     {
@@ -140,6 +160,4 @@ public final class WebDriverQueryFunctions
             }
         };
     }
-
-
 }

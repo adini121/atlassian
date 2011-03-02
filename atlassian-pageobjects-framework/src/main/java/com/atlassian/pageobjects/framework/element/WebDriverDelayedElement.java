@@ -196,6 +196,16 @@ public class WebDriverDelayedElement implements Element
         return ((RenderedWebElement) element).isDisplayed();
     }
 
+    public boolean isEnabled()
+    {
+        return waitForWebElement().isEnabled();
+    }
+
+    public boolean isSelected()
+    {
+        return waitForWebElement().isSelected();
+    }
+
     public boolean hasClass(String className)
     {
         return Check.hasClass(className, waitForWebElement());
@@ -242,7 +252,7 @@ public class WebDriverDelayedElement implements Element
 
     public TimedElement timed()
     {
-       return pageBinder.bind(WebDriverTimedElement.class, locator, defaultTimeout);
+       return pageBinder.bind(WebDriverTimedElement.class, locator, searchContext, defaultTimeout);
     }
 
     public WebDriverMouseEvents mouseEvents()

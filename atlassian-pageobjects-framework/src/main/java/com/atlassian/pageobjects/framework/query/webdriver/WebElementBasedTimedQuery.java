@@ -2,10 +2,7 @@ package com.atlassian.pageobjects.framework.query.webdriver;
 
 import com.google.common.base.Function;
 import com.google.common.base.Supplier;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -25,16 +22,16 @@ public class WebElementBasedTimedQuery<T> extends GenericWebDriverTimedQuery<T>
         super(new WebElementSupplier<T>(driver, by, valueProvider), timeout);
     }
 
-    public WebElementBasedTimedQuery(WebDriver driver, By by, final Function<WebElement, T> valueProvider, long timeout,
+    public WebElementBasedTimedQuery(SearchContext searchContext, By by, final Function<WebElement, T> valueProvider, long timeout,
             long interval)
     {
-        super(new WebElementSupplier<T>(driver, by, valueProvider), timeout, interval);
+        super(new WebElementSupplier<T>(searchContext, by, valueProvider), timeout, interval);
     }
 
-    public WebElementBasedTimedQuery(WebDriver driver, By by, final Function<WebElement, T> valueProvider, long timeout,
+    public WebElementBasedTimedQuery(SearchContext searchContext, By by, final Function<WebElement, T> valueProvider, long timeout,
             long interval, T invalidValue)
     {
-        super(new WebElementSupplier<T>(driver, by, valueProvider, invalidValue), timeout, interval);
+        super(new WebElementSupplier<T>(searchContext, by, valueProvider, invalidValue), timeout, interval);
     }
 
     public WebElementBasedTimedQuery(WebElementBasedTimedQuery<T> origin, long timeout)
@@ -49,30 +46,30 @@ public class WebElementBasedTimedQuery<T> extends GenericWebDriverTimedQuery<T>
 
     private static class WebElementSupplier<S> implements Supplier<S>
     {
-        private final WebDriver webDriver;
+        private final SearchContext searchContext;
         private final By by;
         private final Function<WebElement, S> valueProvider;
         private final S invalidValue;
 
-         public WebElementSupplier(final WebDriver webDriver, final By by, final Function<WebElement, S> valueProvider,
+         public WebElementSupplier(final SearchContext searchContext, final By by, final Function<WebElement, S> valueProvider,
                  S invalid)
         {
             this.valueProvider = valueProvider;
-            this.webDriver = checkNotNull(webDriver);
+            this.searchContext = checkNotNull(searchContext);
             this.by = checkNotNull(by);
             this.invalidValue = invalid;
         }
 
-        public WebElementSupplier(final WebDriver webDriver, final By by, final Function<WebElement, S> valueProvider)
+        public WebElementSupplier(final SearchContext searchContext, final By by, final Function<WebElement, S> valueProvider)
         {
-            this(webDriver, by, valueProvider, null);
+            this(searchContext, by, valueProvider, null);
         }
 
         public S get()
         {
             try
             {
-                return valueProvider.apply(webDriver.findElement(by));
+                return valueProvider.apply(searchContext.findElement(by));
             }
             catch (NoSuchElementException e)
             {

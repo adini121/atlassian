@@ -129,7 +129,7 @@
     </script>
 
     <h2>5. Test for attribute()</h2>
-    <input type="textbox" id="test5_input" class="test5-input-class" empty="" />
+    <input type="text" id="test5_input" class="test5-input-class" empty="" />
     <input type="button" id="test5_addAttribute" value="Add attribute with delay" /> <br />
     <input type="button" id="test5_addElementsButton" value="Add Elements With Delay" /><br />
     <div id="test5_delayedDiv"></div>
@@ -157,6 +157,26 @@
 
     </script>
 
-    <h2>6. Next Test</h2>
+    <h2>6. Test for timed() within context</h2>
+    <span class="test6_class">Test6_Span</span>
+    <div id="test6_Div">
+        <span class="test6_class" id="test6_Inner_Span">Test6_Inner_Span</span>
+        <input type="button" id="test6_hideSpanButton" value="Hide Inner Span With Delay" /><br />
+    </div>
+
+    <script type="text/javascript ">
+        $(document).ready(function(){
+           $('#test6_hideSpanButton').click(function(){
+               setTimeout('test6_hideElements()', delayInMilliseconds);
+           });
+        });
+
+       function test6_hideElements()
+       {
+            $('#test6_Inner_Span').hide();
+       }
+   </script>
+
+    <h2>7. Next test</h2>
 </body>
 </html>

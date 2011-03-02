@@ -24,6 +24,22 @@ public interface TimedElement
      * or timeout expires.
      */
     TimedCondition isVisible();
+
+    /**
+     * Query representing whether this element is enabled on a page.
+     *
+     * @return TimedQuery that returns true if element is enabled on the page, false if element is disabled or
+     * timeout expires.
+     */
+    TimedCondition isEnabled();
+
+    /**
+     * Query representing whether this element is selected on a page.
+     *
+     * @return TimedQuery that returns true if element is selected on the page, false if element is not selected or
+     * timeout expires.
+     */
+    TimedCondition isSelected();
  
     /**
      * Query representing whether this element has the given classname set.

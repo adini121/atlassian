@@ -24,6 +24,20 @@ public interface Element
     boolean isVisible();
 
     /**
+     * Whether this element is enabled on the page
+     *
+     * @return True if this element is enabled, false otherwise.
+     */
+    boolean isEnabled();
+
+    /**
+     * Whether this element is selected on the page
+     *
+     * @return True if this element is selected, false otheriwse.
+     */
+    boolean isSelected();
+
+    /**
      * Whether this element has the given class set
      * @param className The name of the class to check
      * @return true if this element's class attribute contains the given classname, false otherwise.

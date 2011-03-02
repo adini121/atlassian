@@ -1,10 +1,14 @@
 package com.atlassian.pageobjects.framework.element;
 
+import com.atlassian.pageobjects.PageBinder;
+import com.atlassian.pageobjects.binder.Init;
 import com.atlassian.pageobjects.framework.query.TimedCondition;
 import com.atlassian.pageobjects.framework.query.TimedQuery;
 import com.atlassian.pageobjects.framework.query.webdriver.WebDriverQueryFactory;
 import com.atlassian.pageobjects.framework.timeout.TimeoutType;
+import com.atlassian.pageobjects.framework.timeout.Timeouts;
 import org.openqa.selenium.By;
+import org.openqa.selenium.SearchContext;
 
 import javax.inject.Inject;
 
@@ -16,19 +20,33 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class WebDriverTimedElement implements TimedElement
 {
     @Inject
+    PageBinder pageBinder;
+
+    @Inject
+    Timeouts timeouts;
+    
     private WebDriverQueryFactory queryFactory;
     private final By locator;
+    private final SearchContext searchContext;
     private final TimeoutType defaultTimeout;
 
     /**
      * Create a WebDriverTimedElement with the given timeout
      * @param defaultTimeout default timeout of this element
      * @param locator The locator mechanism to use.
+     * @param searchContext The search context to use.
      */
-    public WebDriverTimedElement(final By locator, final TimeoutType defaultTimeout)
+    public WebDriverTimedElement(final By locator, final SearchContext searchContext, final TimeoutType defaultTimeout)
     {
         this.locator = checkNotNull(locator);
+        this.searchContext = checkNotNull(searchContext);
         this.defaultTimeout = checkNotNull(defaultTimeout);
+    }
+
+    @Init
+    public void initialize()
+    {
+        queryFactory = pageBinder.bind(WebDriverQueryFactory.class, searchContext, timeouts);
     }
     
     public TimedCondition isPresent()
@@ -39,6 +57,16 @@ public class WebDriverTimedElement implements TimedElement
     public TimedCondition isVisible()
     {
         return queryFactory.isVisible(locator, defaultTimeout);
+    }
+
+    public TimedCondition isEnabled()
+    {
+        return queryFactory.isEnabled(locator, defaultTimeout);
+    }
+
+    public TimedCondition isSelected()
+    {
+        return queryFactory.isSelected(locator, defaultTimeout);
     }
 
     public TimedCondition hasClass(final String className)
