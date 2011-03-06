@@ -3,8 +3,8 @@ package com.atlassian.pageobjects.framework.test.pageobjects.component;
 import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.binder.Init;
 import com.atlassian.pageobjects.framework.component.ActivatedComponent;
+import com.atlassian.pageobjects.framework.component.aui.AuiInlineDialog;
 import com.atlassian.pageobjects.framework.element.Element;
-import com.atlassian.pageobjects.framework.test.pageobjects.component.aui.AuiInlineDialog;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import org.openqa.selenium.By;
 

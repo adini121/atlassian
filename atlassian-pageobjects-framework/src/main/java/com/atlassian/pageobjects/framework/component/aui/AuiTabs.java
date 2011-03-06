@@ -1,4 +1,4 @@
-package com.atlassian.pageobjects.framework.test.pageobjects.component.aui;
+package com.atlassian.pageobjects.framework.component.aui;
 
 import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.binder.Init;
@@ -8,8 +8,8 @@ import com.atlassian.pageobjects.framework.component.TabbedComponent;
 import com.atlassian.pageobjects.framework.element.Element;
 import org.openqa.selenium.By;
 
-import java.util.List;
 import javax.inject.Inject;
+import java.util.List;
 
 import static com.atlassian.pageobjects.framework.query.TimedAssertions.assertTrueByDefaultTimeout;
 

@@ -1,4 +1,4 @@
-package com.atlassian.pageobjects.framework.test.pageobjects.component.aui;
+package com.atlassian.pageobjects.framework.component.aui;
 
 import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.binder.Init;
