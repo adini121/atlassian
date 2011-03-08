@@ -109,6 +109,23 @@ public final class TimedAssertions
         assertThat(null, query, matcher, byDefaultTimeout());
     }
 
+    /**
+     * <p>
+     * Assert that result of given <tt>query</tt> fulfils certain condition specified by given the <tt>matcher</tt>, by
+     * default timeout of the <tt>query</tt>.
+     *
+     * <p>
+     * Use any matcher available from the libraries (e.g. Hamcrest, JUnit etc.), or a custom one.
+     *
+     * @param message message displayed for dailed assertions
+     * @param query timed query to verify
+     * @param matcher a matcher representing the assertion condition
+     * @see Matcher
+     */
+    public static <T> void assertThatByDefaultTimeout(String message, TimedQuery<T> query, Matcher<T> matcher)
+    {
+        assertThat(message, query, matcher, byDefaultTimeout());
+    }
 
     /**
      * <p>
