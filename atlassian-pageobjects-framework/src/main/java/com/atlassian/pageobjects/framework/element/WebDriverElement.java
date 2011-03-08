@@ -22,7 +22,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * present before executing each actions.
  * 
  */
-public class WebDriverDelayedElement implements Element
+public class WebDriverElement implements Element
 {
     @Inject
     protected AtlassianWebDriver driver;
@@ -42,44 +42,44 @@ public class WebDriverDelayedElement implements Element
     private final TimeoutType defaultTimeout;
 
     /**
-     * Creates a WebDriverDelayedElement within the driver's search context and default timeout
+     * Creates a WebDriverElement within the driver's search context and default timeout
      * @param locator The locator mechanism to use.
      */
-    public WebDriverDelayedElement(By locator)
+    public WebDriverElement(By locator)
     {
         this(locator, null, TimeoutType.DEFAULT);
     }
 
     /**
-     * Creates a WebDriverDelayedElement within the driver's search context and default timeout.
+     * Creates a WebDriverElement within the driver's search context and default timeout.
      * 
      * @param locator The locator mechanism to use.
      * @param defaultTimeout default timeout of this element
      */
-    public WebDriverDelayedElement(By locator, TimeoutType defaultTimeout)
+    public WebDriverElement(By locator, TimeoutType defaultTimeout)
     {
         this(locator, null, defaultTimeout);
     }
 
     /**
-     * Creates a WebDriverDelayedElement within a given search context and default timeout.
+     * Creates a WebDriverElement within a given search context and default timeout.
      *
      * @param locator The locator mechanism to use.
      * @param searchContext The SearchContext to use.
      */
-    public WebDriverDelayedElement(By locator, SearchContext searchContext)
+    public WebDriverElement(By locator, SearchContext searchContext)
     {
         this(locator, searchContext, TimeoutType.DEFAULT);
     }
 
     /**
-     * Creates a WebDriverDelayedElement within a given search context and default timeout.
+     * Creates a WebDriverElement within a given search context and default timeout.
      *
      * @param locator The locator mechanism to use.
      * @param searchContext The SearchContext to use.
      * @param defaultTimeout default timeout of this element
      */
-    public WebDriverDelayedElement(By locator, SearchContext searchContext, TimeoutType defaultTimeout)
+    public WebDriverElement(By locator, SearchContext searchContext, TimeoutType defaultTimeout)
     {
         this.locator = locator;
         this.searchContext = searchContext;
@@ -87,12 +87,12 @@ public class WebDriverDelayedElement implements Element
     }
 
     /**
-     * Creates a WebDriverDelayedElement with the given WebElement and default timeout.
+     * Creates a WebDriverElement with the given WebElement and default timeout.
      *
      * @param webElement The WebElement to wrap in a delayed element.
      * @param defaultTimeout default timeout of this element
      */
-    public WebDriverDelayedElement(WebElement webElement, TimeoutType defaultTimeout)
+    public WebDriverElement(WebElement webElement, TimeoutType defaultTimeout)
     {
         this.webElementHolder = new WebElementHolder(webElement);
         this.defaultTimeout = checkNotNull(defaultTimeout);
@@ -100,11 +100,11 @@ public class WebDriverDelayedElement implements Element
 
 
     /**
-     * Creates a WebDriverDelayedElement with the given WebElement.
+     * Creates a WebDriverElement with the given WebElement.
      *
      * @param webElement The WebElement to wrap in a delayed element.
      */
-    public WebDriverDelayedElement(WebElement webElement)
+    public WebDriverElement(WebElement webElement)
     {
         this(webElement, TimeoutType.DEFAULT);
     }
@@ -135,7 +135,7 @@ public class WebDriverDelayedElement implements Element
     }
 
     /**
-     * Class that holds a reference to a WebElement, used so that WebDriverDelayedElement can be instantiated with
+     * Class that holds a reference to a WebElement, used so that WebDriverElement can be instantiated with
      * an exisiting instance of WebElment. Otherwise it would be overriden by the pageinjector.
      */
     private class WebElementHolder
@@ -266,13 +266,13 @@ public class WebDriverDelayedElement implements Element
         List<WebElement> webElements = waitForWebElement().findElements(locator);
         for(WebElement e: webElements)
         {
-            elements.add(pageBinder.bind(WebDriverDelayedElement.class, e));
+            elements.add(pageBinder.bind(WebDriverElement.class, e));
         }
         return elements;
     }
 
     public Element find(By locator)
     {
-        return pageBinder.bind(WebDriverDelayedElement.class, locator, waitForWebElement());
+        return pageBinder.bind(WebDriverElement.class, locator, waitForWebElement());
     }
 }

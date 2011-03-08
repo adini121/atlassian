@@ -2,9 +2,7 @@ package com.atlassian.pageobjects.framework;
 
 import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.binder.PostInjectionProcessor;
-import com.atlassian.pageobjects.framework.element.Element;
-import com.atlassian.pageobjects.framework.element.ElementBy;
-import com.atlassian.pageobjects.framework.element.WebDriverDelayedElement;
+import com.atlassian.pageobjects.framework.element.*;
 import com.atlassian.pageobjects.util.InjectUtils;
 import org.openqa.selenium.By;
 
@@ -14,7 +12,7 @@ import javax.inject.Inject;
 import static com.atlassian.pageobjects.util.InjectUtils.forEachFieldWithAnnotation;
 
 /**
- * Find fields marked with @ElementBy annotation and set them to instances of WebDriverDelayedElement
+ * Find fields marked with @ElementBy annotation and set them to instances of WebDriverElement
  */
 public class ElementByPostInjectionProcessor implements PostInjectionProcessor
 {
@@ -33,7 +31,7 @@ public class ElementByPostInjectionProcessor implements PostInjectionProcessor
         {
             public void visit(Field field, ElementBy annotation)
             {
-                Element element = createElement(annotation);
+                Element element = createElement(field, annotation);
                 try
                 {
                     field.setAccessible(true);
@@ -47,7 +45,7 @@ public class ElementByPostInjectionProcessor implements PostInjectionProcessor
         });
     }
 
-    private Element createElement(ElementBy elementBy)
+    private Element createElement(Field field, ElementBy elementBy)
     {
         By by;
 
@@ -88,6 +86,18 @@ public class ElementByPostInjectionProcessor implements PostInjectionProcessor
             throw new IllegalArgumentException("No selector found");
         }
 
-        return pageBinder.bind(WebDriverDelayedElement.class, by, elementBy.timeoutType());
+        if(SelectElement.class.isAssignableFrom(field.getType()))
+        {
+            return pageBinder.bind(WebDriverSelectElement.class, by, elementBy.timeoutType());
+        }
+        else if(MultiSelectElement.class.isAssignableFrom(field.getType()))
+        {
+            return pageBinder.bind(WebDriverMultiSelectElement.class, by, elementBy.timeoutType());
+        }
+        else
+        {
+            return pageBinder.bind(WebDriverElement.class, by, elementBy.timeoutType());
+        }
+
     }
 }

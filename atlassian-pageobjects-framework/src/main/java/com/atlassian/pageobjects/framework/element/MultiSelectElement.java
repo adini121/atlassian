@@ -1,13 +1,12 @@
-package com.atlassian.pageobjects.framework.component;
+package com.atlassian.pageobjects.framework.element;
 
 import java.util.List;
 
 /**
- * Represents a standard multi-select HTML component.
+ * Represents a standard multi-select HTML element.
  *
- * @since v4.3
  */
-public interface MultiSelect
+public interface MultiSelectElement
 {
     /**
      * All options
@@ -24,34 +23,33 @@ public interface MultiSelect
     List<Option> selected();
 
     /**
-     * Add given <tt>options</tt> to the current selection.
+     * Add given option to the current selection.
      *
-     * @param options options to add
+     * @param option option to add
      * @return this multi-select instance
      */
-    public MultiSelect select(Option... options);
-
+    public MultiSelectElement select(Option option);
 
     /**
-     * Remove given <tt>options</tt> from the current selection
+     * Remove given option from the current selection
      *
-     * @param options options to remove
+     * @param option option to remove
      * @return this multi-select instance
      */
-    public MultiSelect unselect(Option... options);
+    public MultiSelectElement unselect(Option option);
 
     /**
      * Add all options to the current selection.
      *
      * @return this multi-select instance
      */
-    public MultiSelect selectAll();
+    public MultiSelectElement selectAll();
 
     /**
      * Remove all options from the current selection
      *
      * @return this multi-select instance
      */
-    public MultiSelect unselectAll();
+    public MultiSelectElement unselectAll();
 
 }

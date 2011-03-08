@@ -1,13 +1,11 @@
-package com.atlassian.pageobjects.framework.component;
+package com.atlassian.pageobjects.framework.element;
 
 import java.util.List;
 
 /**
  * Represents a standard select HTML component.
- *
- * @since v4.3
  */
-public interface Select
+public interface SelectElement
 {
     /**
      * All options
@@ -29,14 +27,6 @@ public interface Select
      * @param option option to select
      * @return this select instance
      */
-    public Select select(Option option);
-
-
-    /**
-     * Select default '-1' option of this select.
-     *
-     * @return this select instance
-     */
-    public Select selectDefault();
+    public SelectElement select(Option option);
     
 }

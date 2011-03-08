@@ -13,7 +13,7 @@ import javax.inject.Inject;
 import static com.atlassian.pageobjects.framework.query.TimedAssertions.assertTrueByDefaultTimeout;
 
 /**
- * Represents the jquery.html
+ * Represents the elements.html
  */
 public class ElementsPage implements Page
 {
@@ -29,7 +29,8 @@ public class ElementsPage implements Page
     @ElementBy(id="test1_delayedSpan")
     private Element test1_delayedSpan;
 
-    public String getUrl() {
+    public String getUrl()
+    {
         return "/html/elements.html";
     }
 

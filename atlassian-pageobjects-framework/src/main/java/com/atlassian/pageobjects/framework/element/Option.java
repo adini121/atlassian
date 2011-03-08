@@ -1,13 +1,9 @@
-package com.atlassian.pageobjects.framework.component;
+package com.atlassian.pageobjects.framework.element;
 
 /**
  * An option in select and multi-select components. Depending on the context, not all
- * of the option properties may be set, but at least one of: id/value/label should not be <code>null</code>.
+ * of the option properties may be set, but at least one of: id/value/text should not be <code>null</code>.
  *
- * @see Select
- * @see MultiSelect
- *
- * @since v4.3
  */
 public interface Option
 {
@@ -27,10 +23,9 @@ public interface Option
     String value();
 
     /**
-     * User-visible label of the option.
+     * Text between the option tags
      *
-     * @return label
+     * @return text
      */
-    String label();
-
+    String text();
 }

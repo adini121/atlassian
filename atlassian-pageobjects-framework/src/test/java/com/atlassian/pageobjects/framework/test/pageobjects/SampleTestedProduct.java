@@ -10,7 +10,7 @@ import com.atlassian.pageobjects.binder.InjectPageBinder;
 import com.atlassian.pageobjects.binder.StandardModule;
 import com.atlassian.pageobjects.framework.ElementModule;
 import com.atlassian.pageobjects.framework.element.Element;
-import com.atlassian.pageobjects.framework.element.WebDriverDelayedElement;
+import com.atlassian.pageobjects.framework.element.WebDriverElement;
 import com.atlassian.pageobjects.framework.timeout.PropertiesBasedTimeouts;
 import com.atlassian.pageobjects.framework.timeout.Timeouts;
 import com.atlassian.pageobjects.framework.timeout.TimeoutsModule;
@@ -27,21 +27,20 @@ public class SampleTestedProduct  implements TestedProduct<WebDriverTester>
     private final PageBinder pageBinder;
     private final WebDriverTester  webDriverTester;
     private final ProductInstance productInstance;
-    private final Timeouts timeouts;
 
     public SampleTestedProduct(TestedProductFactory.TesterFactory<WebDriverTester> testerFactory, ProductInstance productInstance)
     {
         checkNotNull(productInstance);
         this.productInstance = productInstance;
         this.webDriverTester =  new DefaultWebDriverTester();
-        this.timeouts = PropertiesBasedTimeouts.fromClassPath("com/atlassian/timeout/pageobjects-timeouts.properties");
+        Timeouts timeouts = PropertiesBasedTimeouts.fromClassPath("com/atlassian/timeout/pageobjects-timeouts.properties");
         this.pageBinder = new InjectPageBinder(productInstance, webDriverTester, new StandardModule(this),
                 new AtlassianWebDriverModule(this), new ElementModule(), new TimeoutsModule(timeouts));
     }
 
     public Element find(final By by)
     {
-        return getPageBinder().bind(WebDriverDelayedElement.class, by);
+        return getPageBinder().bind(WebDriverElement.class, by);
     }
 
     public <P extends Page> P visit(Class<P> pageClass, Object... args)

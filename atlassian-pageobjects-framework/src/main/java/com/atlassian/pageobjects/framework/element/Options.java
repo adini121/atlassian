@@ -1,28 +1,27 @@
-package com.atlassian.pageobjects.framework.component;
+package com.atlassian.pageobjects.framework.element;
 
+import com.atlassian.pageobjects.framework.element.Option;
 import com.atlassian.pageobjects.framework.util.StringConcat;
 
 /**
- * {@link Option} objects factory.
+ * {@link com.atlassian.pageobjects.framework.element.Option} objects factory.
  *
  */
 public final class Options
 {
-    public static final String DEFAULT_OPTION_VALUE = StringConcat.asString("-1");
-
     static abstract class AbstractOption implements Option
     {
-        private final String id, label, value;
+        private final String id, value, text;
 
-        public AbstractOption(String id, String value, String label)
+        public AbstractOption(String id, String value, String text)
         {
-            if (value == null && label == null && id == null)
+            if (value == null && id == null && text == null)
             {
                 throw new IllegalArgumentException("One of the option identifiers must be non-null");
             }
             this.value = value;
-            this.label = label;
             this.id = id;
+            this.text = text;
         }
 
         public String id()
@@ -35,9 +34,9 @@ public final class Options
             return value;
         }
 
-        public String label()
+        public String text()
         {
-            return label;
+            return text;
         }
 
         @Override
@@ -47,7 +46,7 @@ public final class Options
             {
                 return false;
             }
-            if (obj.getClass() != getClass())
+            if (!Option.class.isAssignableFrom(obj.getClass()))
             {
                 return false;
             }
@@ -60,7 +59,7 @@ public final class Options
             {
                 return false;
             }
-            if (label != null && !label.equals(other.label))
+            if(text != null && !text.equals(other.text))
             {
                 return false;
             }
@@ -72,7 +71,7 @@ public final class Options
         {
             int result = id != null ? id.hashCode() : 0;
             result = 31 * result + (value != null ? value.hashCode() : 0);
-            result = 31 * result + (label != null ? label.hashCode() : 0);
+            result = 31 * result + (text != null ? text.hashCode(): 0);
             return result;
         }
     }
@@ -89,14 +88,14 @@ public final class Options
         ValueOption(String value) { super(null, value, null); }
     }
 
-    public static class LabelOption extends AbstractOption
+    public static class TextOption extends AbstractOption
     {
-        LabelOption(String label) { super(null, null, label); }
+        TextOption(String text) { super(null,null,text); }
     }
 
     public static class FullOption extends AbstractOption
     {
-        FullOption(String id, String value, String label) { super(id, value, label); }
+        FullOption(String id, String value, String text) { super(id, value, text); }
     }
 
     /**
@@ -122,16 +121,15 @@ public final class Options
     }
 
     /**
-     * New option distinguishable by its UI label.
+     * New option distinguishable by its text between tags
      *
-     * @param label label of the option visible in the UI
+     * @param text Text between the option tags
      * @return new option
      */
-    public static LabelOption label(String label)
+    public static TextOption text(String text)
     {
-        return new LabelOption(label);
+        return new TextOption(text);
     }
-
 
     /**
      * New option distinguishable all identifiers. Some of the identifiers may be <code>null</code>, but at least
@@ -139,22 +137,11 @@ public final class Options
      *
      * @param id HTML id of the option
      * @param value HTML value attribute of the option
-     * @param label label of the option visible in the UI
+     * @param text Text between the option tags
      * @return new option
      */
-    public static Option full(String id, String value, String label)
+    public static Option full(String id, String value, String text)
     {
-        return new FullOption(id, value, label);
-    }
-
-    /**
-     * New option with default option value.
-     *
-     * @return new default option
-     * @see #DEFAULT_OPTION_VALUE
-     */
-    public static Option defaultValue()
-    {
-        return value(DEFAULT_OPTION_VALUE);
+        return new FullOption(id, value, text);
     }
 }
