@@ -4,6 +4,7 @@ import com.atlassian.browsers.BrowserConfig;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.WebDriverFactory;
 import org.openqa.selenium.WebDriverException;
+import org.slf4j.LoggerFactory;
 
 import java.net.SocketException;
 
@@ -18,7 +19,17 @@ public enum WebDriverBrowserAutoInstall
     private AtlassianWebDriver driver;
 
     WebDriverBrowserAutoInstall() {
-        BrowserConfig browserConfig = AutoInstallConfiguration.setupBrowser();
+        try {
+            BrowserConfig browserConfig = AutoInstallConfiguration.setupBrowser();
+            addShutdownHook();
+            driver = WebDriverFactory.getDriver(browserConfig);
+        } catch (RuntimeException error) {
+            LoggerFactory.getLogger(WebDriverBrowserAutoInstall.class).error("Unable to setup browser", error);
+            throw error;
+        }
+    }
+
+    private void addShutdownHook() {
         Runtime.getRuntime().addShutdownHook(new Thread()
         {
             @Override
@@ -40,9 +51,6 @@ public enum WebDriverBrowserAutoInstall
                 }
             }
         });
-
-        driver = WebDriverFactory.getDriver(browserConfig);
-
     }
 
     public AtlassianWebDriver getDriver()
