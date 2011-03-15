@@ -39,13 +39,14 @@ public interface Element
 
     /**
      * Whether this element has the given class set
+     * 
      * @param className The name of the class to check
      * @return true if this element's class attribute contains the given classname, false otherwise.
      */
     boolean hasClass(String className);
 
     /**
-     * Get the value of a the given attribute of this element.
+     * Get the value of the given attribute of this element.
      *
      * @param name The name of the attribute.
      * @return The attribute's current value, or null if the value is not set
@@ -119,6 +120,7 @@ public interface Element
 
     /**
      * Gets a MouseEvents object for this element
+     * 
      * @return MouseEvents object that can dispatch javascript events to this element.
      */
     WebDriverMouseEvents mouseEvents();

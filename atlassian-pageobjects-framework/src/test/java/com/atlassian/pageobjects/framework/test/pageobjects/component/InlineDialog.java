@@ -32,18 +32,18 @@ public class InlineDialog implements ActivatedComponent<InlineDialog>
 
     public String content()
     {
-        return view().find(By.id("dialog-content")).text();
+        return getView().find(By.id("dialog-content")).text();
     }
 
 
-    public Element trigger()
+    public Element getTrigger()
     {
-        return dialog.trigger();
+        return dialog.getTrigger();
     }
 
-    public Element view()
+    public Element getView()
     {
-        return dialog.view();
+        return dialog.getView();
     }
 
     public InlineDialog open()

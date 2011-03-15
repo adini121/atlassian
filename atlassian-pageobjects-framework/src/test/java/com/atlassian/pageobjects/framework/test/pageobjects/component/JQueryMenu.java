@@ -49,12 +49,12 @@ public class JQueryMenu implements ActivatedComponent<JQueryMenu>
     }
 
 
-    public Element trigger()
+    public Element getTrigger()
     {
         return triggerElement;
     }
 
-    public Element view()
+    public Element getView()
     {
         return viewElement;
     }
@@ -63,8 +63,8 @@ public class JQueryMenu implements ActivatedComponent<JQueryMenu>
     {
         if(!isOpen())
         {
-            trigger().click();
-            assertTrueByDefaultTimeout(view().timed().isVisible());
+            getTrigger().click();
+            assertTrueByDefaultTimeout(getView().timed().isVisible());
         }
         return this;
     }
@@ -73,8 +73,8 @@ public class JQueryMenu implements ActivatedComponent<JQueryMenu>
     {
         if(isOpen())
         {
-            trigger().click();
-            assertFalseByDefaultTimeout(view().timed().isVisible());
+            getTrigger().click();
+            assertFalseByDefaultTimeout(getView().timed().isVisible());
         }
 
         return this;
@@ -82,6 +82,6 @@ public class JQueryMenu implements ActivatedComponent<JQueryMenu>
 
     public boolean isOpen()
     {
-        return view().isVisible();
+        return getView().isVisible();
     }
 }

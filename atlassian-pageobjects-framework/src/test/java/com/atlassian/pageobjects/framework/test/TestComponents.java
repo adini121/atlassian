@@ -58,15 +58,15 @@ public class TestComponents extends AbstractFileBasedServerTest
         AuiPage auipage = product.visit(AuiPage.class);
 
         // verify dialog is not.
-        assertFalse(auipage.inlineDialog().view().isPresent());
+        assertFalse(auipage.inlineDialog().getView().isPresent());
 
         // Invoke dialog and verify contents and is visible
         assertEquals("AUI Inline Dialog", auipage.openInlineDialog().content());
-        assertTrue(auipage.inlineDialog().view().isVisible());
+        assertTrue(auipage.inlineDialog().getView().isVisible());
 
         // click somewhere else and verify dialog is not visible.
         auipage.roleTabs().openUserTab();
-        assertFalseByDefaultTimeout(auipage.inlineDialog().view().timed().isVisible());
+        assertFalseByDefaultTimeout(auipage.inlineDialog().getView().timed().isVisible());
 
     }
 
@@ -76,7 +76,7 @@ public class TestComponents extends AbstractFileBasedServerTest
         JQueryPage jquerypage = product.visit(JQueryPage.class);
 
         // verify admin menu is present
-        assertTrue(jquerypage.jqueryMenu().trigger().isPresent());
+        assertTrue(jquerypage.jqueryMenu().getTrigger().isPresent());
 
         // verify admin menu is not opened
         assertFalse(jquerypage.jqueryMenu().isOpen());

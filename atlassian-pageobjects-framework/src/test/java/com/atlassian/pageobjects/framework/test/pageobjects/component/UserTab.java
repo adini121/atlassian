@@ -19,15 +19,15 @@ public class UserTab implements ActivatedComponent<UserTab>
 
     public String header()
     {
-        return view().find(By.tagName("h4")).text();
+        return getView().find(By.tagName("h4")).text();
     }
 
-    public Element trigger()
+    public Element getTrigger()
     {
         return tabs.selectedTab();
     }
 
-    public Element view()
+    public Element getView()
     {
         return tabs.selectedView();
     }

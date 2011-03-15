@@ -8,22 +8,30 @@ import com.atlassian.pageobjects.framework.element.Element;
 public interface ActivatedComponent<T>
 {
     /**
-     * Element that when activated opens the view of this component.
+     * Gets the element that when activated opens the view of this component.
+     *
+     * @return Element
      */
-    Element trigger();
+    Element getTrigger();
 
     /**
      * The view Element, hidden or not present until activated.
+     *
+     * @return Element
      */
-    Element view();
+    Element getView();
 
     /**
      * Opens the view and waits until UI is ready for interaction.
+     *
+     * @return T
      */
     T open();
 
     /**
      * Whether the view is currently opened.
+     *
+     * @return true is component is open/activated, false otherwise.
      */
     boolean isOpen();
 }

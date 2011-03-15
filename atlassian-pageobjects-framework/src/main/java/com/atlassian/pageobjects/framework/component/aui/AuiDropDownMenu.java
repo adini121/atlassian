@@ -44,12 +44,12 @@ public class AuiDropDownMenu implements ActivatedComponent<AuiDropDownMenu>
         viewElement = rootElement.find(By.className("aui-dropdown"));
     }
 
-    public Element trigger()
+    public Element getTrigger()
     {
         return triggerElement;
     }
 
-    public Element view()
+    public Element getView()
     {
         return viewElement;
     }

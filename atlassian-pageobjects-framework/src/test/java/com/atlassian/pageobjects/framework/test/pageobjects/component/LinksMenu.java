@@ -32,14 +32,14 @@ public class LinksMenu implements ActivatedComponent<LinksMenu>
         auiMenu = pageBinder.bind(AuiDropDownMenu.class, By.id("dropDown-standard"));
     }
 
-    public Element trigger()
+    public Element getTrigger()
     {
-        return auiMenu.trigger();
+        return auiMenu.getTrigger();
     }
 
-    public Element view()
+    public Element getView()
     {
-        return auiMenu.view();
+        return auiMenu.getView();
     }
 
     public LinksMenu open()
@@ -66,7 +66,7 @@ public class LinksMenu implements ActivatedComponent<LinksMenu>
 
     public JQueryPage gotoJQueryPage()
     {
-        view().find(By.linkText("JQuery Page")).click();
+        getView().find(By.linkText("JQuery Page")).click();
         return pageBinder.bind(JQueryPage.class);
     }
 }

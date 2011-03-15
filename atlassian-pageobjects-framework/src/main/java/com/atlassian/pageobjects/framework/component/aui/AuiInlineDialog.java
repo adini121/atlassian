@@ -42,12 +42,12 @@ public class AuiInlineDialog implements ActivatedComponent<AuiInlineDialog>
         viewElement = elementFinder.find(By.id("inline-dialog-" + identifier));
     }
 
-    public Element trigger()
+    public Element getTrigger()
     {
         return triggerElement;
     }
 
-    public Element view()
+    public Element getView()
     {
         return viewElement;
     }
