@@ -11,7 +11,7 @@ import com.atlassian.pageobjects.binder.StandardModule;
 import com.atlassian.pageobjects.elements.ElementModule;
 import com.atlassian.pageobjects.elements.Element;
 import com.atlassian.pageobjects.elements.WebDriverElement;
-import com.atlassian.pageobjects.elements.timeout.PropertiesBasedTimeouts;
+import com.atlassian.pageobjects.elements.timeout.DefaultTimeouts;
 import com.atlassian.pageobjects.elements.timeout.Timeouts;
 import com.atlassian.pageobjects.elements.timeout.TimeoutsModule;
 import com.atlassian.webdriver.AtlassianWebDriverModule;
@@ -33,7 +33,7 @@ public class SampleTestedProduct  implements TestedProduct<WebDriverTester>
         checkNotNull(productInstance);
         this.productInstance = productInstance;
         this.webDriverTester =  new DefaultWebDriverTester();
-        Timeouts timeouts = PropertiesBasedTimeouts.fromClassPath("com/atlassian/timeout/pageobjects-timeouts.properties");
+        Timeouts timeouts = new DefaultTimeouts();
         this.pageBinder = new InjectPageBinder(productInstance, webDriverTester, new StandardModule(this),
                 new AtlassianWebDriverModule(this), new ElementModule(), new TimeoutsModule(timeouts));
     }
