@@ -14,6 +14,11 @@ public class TimeoutsModule implements Module
 {
     private final Timeouts timeouts;
 
+    public TimeoutsModule()
+    {
+        this(new DefaultTimeouts());
+    }
+
     public TimeoutsModule(final Timeouts timeouts)
     {
         this.timeouts = checkNotNull(timeouts);

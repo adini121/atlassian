@@ -33,9 +33,8 @@ public class SampleTestedProduct  implements TestedProduct<WebDriverTester>
         checkNotNull(productInstance);
         this.productInstance = productInstance;
         this.webDriverTester =  new DefaultWebDriverTester();
-        Timeouts timeouts = new DefaultTimeouts();
         this.pageBinder = new InjectPageBinder(productInstance, webDriverTester, new StandardModule(this),
-                new AtlassianWebDriverModule(this), new ElementModule(), new TimeoutsModule(timeouts));
+                new AtlassianWebDriverModule(this), new ElementModule(), new TimeoutsModule());
     }
 
     public Element find(final By by)
