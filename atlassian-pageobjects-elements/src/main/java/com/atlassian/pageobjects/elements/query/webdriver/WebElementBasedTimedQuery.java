@@ -4,6 +4,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Supplier;
 import org.openqa.selenium.*;
 
+import static com.atlassian.pageobjects.elements.util.StringConcat.asString;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -17,31 +18,43 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class WebElementBasedTimedQuery<T> extends GenericWebDriverTimedQuery<T>
 {
+    private final By by;
+
     public WebElementBasedTimedQuery(WebDriver driver, By by, final Function<WebElement, T> valueProvider, long timeout)
     {
         super(new WebElementSupplier<T>(driver, by, valueProvider), timeout);
+        this.by = by;
     }
 
     public WebElementBasedTimedQuery(SearchContext searchContext, By by, final Function<WebElement, T> valueProvider, long timeout,
             long interval)
     {
         super(new WebElementSupplier<T>(searchContext, by, valueProvider), timeout, interval);
+        this.by = by;
     }
 
     public WebElementBasedTimedQuery(SearchContext searchContext, By by, final Function<WebElement, T> valueProvider, long timeout,
             long interval, T invalidValue)
     {
         super(new WebElementSupplier<T>(searchContext, by, valueProvider, invalidValue), timeout, interval);
+        this.by = by;
     }
 
     public WebElementBasedTimedQuery(WebElementBasedTimedQuery<T> origin, long timeout)
     {
         super(origin.webElementSupplier(), timeout, origin.interval);
+        this.by = null;
     }
 
     WebElementSupplier<T> webElementSupplier()
     {
         return (WebElementSupplier<T>) valueSupplier; 
+    }
+
+    @Override
+    public String toString()
+    {
+        return asString(super.toString(), "[locator=", by, "]");
     }
 
     private static class WebElementSupplier<S> implements Supplier<S>

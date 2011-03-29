@@ -60,7 +60,7 @@
         </dependency>
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium</artifactId>
+            <artifactId>selenium-server</artifactId>
             <version>${selenium.version}</version>
 			<exclusions>
 				<exclusion>

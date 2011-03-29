@@ -33,6 +33,6 @@ public class LogoutPage extends JiraAbstractPage
     @WaitUntil
     public void doWait()
     {
-        driver.waitUntilElementIsLocated(ByJquery.$("h2:contains(Logout)"));
+        driver.waitUntilElementIsLocated(ByJquery.$("h2:contains(ogout)")); /*in one page is Logout in the other is logout*/
     }
 }

@@ -27,7 +27,7 @@ public class AuiPage implements Page
     @WaitUntil
     public void doWait()
     {
-        assertTrueByDefaultTimeout(elementFinder.find(ByJquery.$("h2:contains(AUIDropDown)")).timed().isPresent());
+        assertTrueByDefaultTimeout(elementFinder.find(ByJquery.$("h2:contains(AuiDropDown)")).timed().isPresent());
     }
     
     public String getUrl()
