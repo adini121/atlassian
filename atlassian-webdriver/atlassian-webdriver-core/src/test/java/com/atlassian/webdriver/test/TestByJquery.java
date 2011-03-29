@@ -2,19 +2,14 @@ package com.atlassian.webdriver.test;
 
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.WebDriverFactory;
-import com.atlassian.webdriver.browsers.AutoInstallConfiguration;
-import com.atlassian.webdriver.utils.JavaScriptUtils;
 import com.atlassian.webdriver.utils.by.ByJquery;
-import com.gargoylesoftware.htmlunit.javascript.background.JavaScriptExecutor;
 import com.google.common.collect.ImmutableMap;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -105,4 +100,31 @@ public class TestByJquery
         }
     }
 
+    @Test
+    public void testSingleSelector_ElementNotFound_ShouldThrowException()
+    {
+        try
+        {
+            driver.findElement(ByJquery.$("#NonExistant"));
+            throw new IllegalStateException("Should throw exception");
+        }
+        catch(NoSuchElementException e)
+        {
+            assertTrue(e.getMessage(), e.getMessage().startsWith("jQuery selector: #NonExistant"));
+        }
+    }
+
+    @Test
+    public void testMultipleSelector_ElementNotFound_ShouldThrowException()
+    {
+        try
+        {
+            driver.findElement(ByJquery.$("#id2 .nonExistant"));
+            throw new IllegalStateException("Should throw exception");
+        }
+        catch(NoSuchElementException e)
+        {
+            assertTrue(e.getMessage(), e.getMessage().startsWith("jQuery selector: #id2 .nonExistant"));
+        }
+    }
 }

@@ -283,7 +283,14 @@ public abstract class ByJquery extends By
             public WebElement findElement(final SearchContext context)
             {
                 List<WebElement> els = findElementsWithSelectors(element);
-                return els.isEmpty() ? null : els.get(0);
+                if(!els.isEmpty())
+                {
+                    return els.get(0);
+                }
+                else
+                {
+                    throw new NoSuchElementException("Element not found by jQuery.");
+                }
             }
 
         };
@@ -309,7 +316,14 @@ public abstract class ByJquery extends By
             public WebElement findElement(final SearchContext context)
             {
                 List<WebElement> els = findElementsWithSelectors(context);
-                return els.isEmpty() ? null : els.get(0);
+                if(!els.isEmpty())
+                {
+                    return els.get(0);
+                }
+                else
+                {
+                    throw new NoSuchElementException(this.toString());
+                }
             }
 
             @Override
