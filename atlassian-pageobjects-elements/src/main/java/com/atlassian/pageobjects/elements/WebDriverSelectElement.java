@@ -42,7 +42,7 @@ public class WebDriverSelectElement extends WebDriverElement implements SelectEl
             option.getText());
     }
 
-    public List<Option> all()
+    public List<Option> getAllOptions()
     {
         List<Option> optionList = new ArrayList<Option>();
 
@@ -54,7 +54,7 @@ public class WebDriverSelectElement extends WebDriverElement implements SelectEl
         return optionList;
     }
 
-    public Option selected()
+    public Option getSelected()
     {
         return buildOption(new Select(waitForWebElement()).getFirstSelectedOption());
     }

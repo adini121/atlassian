@@ -211,17 +211,17 @@ public class WebDriverElement implements Element
         return Check.hasClass(className, waitForWebElement());
     }
 
-    public String attribute(String name)
+    public String getAttribute(String name)
     {
         return waitForWebElement().getAttribute(name);
     }
 
-    public String text()
+    public String getText()
     {
         return waitForWebElement().getText();
     }
 
-    public String value()
+    public String getValue()
     {
         return waitForWebElement().getValue();
     }

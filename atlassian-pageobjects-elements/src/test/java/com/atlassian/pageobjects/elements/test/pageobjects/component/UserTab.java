@@ -19,7 +19,7 @@ public class UserTab implements ActivatedComponent<UserTab>
 
     public String header()
     {
-        return getView().find(By.tagName("h4")).text();
+        return getView().find(By.tagName("h4")).getText();
     }
 
     public Element getTrigger()
@@ -40,6 +40,6 @@ public class UserTab implements ActivatedComponent<UserTab>
 
     public boolean isOpen()
     {
-        return tabs.selectedTab().text().equals(tabTitle);
+        return tabs.selectedTab().getText().equals(tabTitle);
     }
 }

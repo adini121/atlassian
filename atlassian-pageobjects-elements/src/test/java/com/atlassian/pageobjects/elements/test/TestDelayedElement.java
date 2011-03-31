@@ -68,15 +68,15 @@ public class TestDelayedElement extends AbstractFileBasedServerTest
         product.visit(ElementsPage.class);
 
         // Positive - verify span with text
-        assertEquals("Span Value", product.find(By.id("test3_span")).text());
+        assertEquals("Span Value", product.find(By.id("test3_span")).getText());
 
         // Delayed presence - click on button that adds a span with delay, verify getText waits
         product.find(By.id("test3_addElementsButton")).click();
-        assertEquals("Delayed Span", product.find(By.id("test3_delayedSpan")).text());
+        assertEquals("Delayed Span", product.find(By.id("test3_delayedSpan")).getText());
 
         // Delayed postive - click on button that sets the text of span with delay, verify getText does not wait
         product.find(By.id("test3_setTextButton")).click();
-        assertEquals("", product.find(By.id("test3_spanEmpty")).text());
+        assertEquals("", product.find(By.id("test3_spanEmpty")).getText());
     }
 
     @Test
@@ -86,13 +86,13 @@ public class TestDelayedElement extends AbstractFileBasedServerTest
 
         // find a delayed elements within another
         Element childList = product.find(By.id("test4_parentList")).find(By.tagName("ul"));
-        assertEquals("test4_childList", childList.attribute("id"));
+        assertEquals("test4_childList", childList.getAttribute("id"));
 
         Element leafList = childList.find(By.tagName("ul"));
-        assertEquals("test4_leafList", leafList.attribute("id"));
+        assertEquals("test4_leafList", leafList.getAttribute("id"));
 
         Element listItem = leafList.find(By.tagName("li"));
-        assertEquals("Item 1", listItem.text());
+        assertEquals("Item 1", listItem.getText());
 
         //wait for presence on an element within another
         product.find(By.id("test4_addElementsButton")).click();
@@ -102,6 +102,6 @@ public class TestDelayedElement extends AbstractFileBasedServerTest
         driver.get(rootUrl + "/html/elements.html");
 
         product.find(By.id("test4_addElementsButton")).click();
-        assertEquals("Item 5", product.find(By.className("listitem-active")).text());
+        assertEquals("Item 5", product.find(By.className("listitem-active")).getText());
     }
 }

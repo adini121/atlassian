@@ -32,7 +32,7 @@ public class InlineDialog implements ActivatedComponent<InlineDialog>
 
     public String content()
     {
-        return getView().find(By.id("dialog-content")).text();
+        return getView().find(By.id("dialog-content")).getText();
     }
 
 

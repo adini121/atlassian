@@ -51,21 +51,21 @@ public interface Element
      * @param name The name of the attribute.
      * @return The attribute's current value, or null if the value is not set
      */
-    String attribute(String name);
+    String getAttribute(String name);
 
     /**
      * Get the visible innerText of this element, including sub-elements, without any leading or trailing whitespaces.
      *
      * @return The innerText of this element.
      */
-    String text();
+    String getText();
 
     /**
      * Get the value of this element's "value" attribute.
      *
      * @return The value of this element's "value" attribute, or null if the value is not set.
      */
-    String value();
+    String getValue();
 
     /**
      * Click this element

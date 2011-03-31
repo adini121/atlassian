@@ -85,13 +85,13 @@ public class AuiTabs implements TabbedComponent
 
         for(int i = 0; i < tabs.size(); i++)
         {
-            if(tabs.get(i).text().equals(tabText))
+            if(tabs.get(i).getText().equals(tabText))
             {
                 Element listItem = tabs.get(i);
                 listItem.click();
 
                 // find the pane and wait until it has class "active-pane"
-                String tabViewClassName = listItem.attribute("href").substring(1);
+                String tabViewClassName = listItem.getAttribute("href").substring(1);
                 Element pane = rootElement.find(By.id(tabViewClassName));
                 assertTrueByDefaultTimeout(pane.timed().hasClass("active-pane"));
 
@@ -104,7 +104,7 @@ public class AuiTabs implements TabbedComponent
 
     public Element openTab(Element tab)
     {
-        String tabIdentifier = tab.text();
+        String tabIdentifier = tab.getText();
         return openTab(tabIdentifier);
     }
 }

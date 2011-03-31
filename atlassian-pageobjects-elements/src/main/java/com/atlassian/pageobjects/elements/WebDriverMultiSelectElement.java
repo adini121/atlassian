@@ -42,7 +42,7 @@ public class WebDriverMultiSelectElement extends WebDriverElement implements Mul
             option.getText());
     }
 
-    public List<Option> all()
+    public List<Option> getAllOptions()
     {
         List<Option> optionList = new ArrayList<Option>();
 
@@ -55,7 +55,7 @@ public class WebDriverMultiSelectElement extends WebDriverElement implements Mul
     }
 
 
-    public List<Option> selected()
+    public List<Option> getSelected()
     {
         List<Option> selectedOptions = new ArrayList<Option>();
 

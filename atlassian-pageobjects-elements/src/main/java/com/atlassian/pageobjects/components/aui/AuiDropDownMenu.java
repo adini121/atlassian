@@ -84,7 +84,7 @@ public class AuiDropDownMenu implements ActivatedComponent<AuiDropDownMenu>
         List<String> items = new ArrayList<String>();
         for(Element e: viewElement.findAll(By.tagName("li")))
         {
-            items.add(e.text());
+            items.add(e.getText());
         }
 
         return items;

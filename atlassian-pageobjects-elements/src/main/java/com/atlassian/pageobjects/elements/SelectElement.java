@@ -12,14 +12,14 @@ public interface SelectElement extends Element
      *
      * @return all options of this select
      */
-    List<Option> all();
+    List<Option> getAllOptions();
 
     /**
      * Selected option of this select.
      *
      * @return selected option of this select
      */
-    Option selected();
+    Option getSelected();
 
     /**
      * Select given <tt>option</tt>.

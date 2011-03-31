@@ -13,14 +13,14 @@ public interface MultiSelectElement extends Element
      *
      * @return all options of this multi-select
      */
-    List<Option> all();
+    List<Option> getAllOptions();
 
     /**
      * Selected options.
      *
      * @return selected options of this multi-select
      */
-    List<Option> selected();
+    List<Option> getSelected();
 
     /**
      * Add given option to the current selection.
