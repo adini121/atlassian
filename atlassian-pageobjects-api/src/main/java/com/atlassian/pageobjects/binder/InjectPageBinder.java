@@ -20,6 +20,8 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -137,19 +139,39 @@ public final class InjectPageBinder implements PageBinder
         overrides.put(oldClass, newClass);
     }
 
+    /**
+     * Iterates over all superclasses in reverse order and the class of the instance and
+     * checks public, protected and private methods for the provided annotation.
+     * @param instance the page object to check for the annotation
+     * @param annotation the annotation to find
+     * @throws InvocationTargetException
+     */
     private void callLifecycleMethod(Object instance, Class<? extends Annotation> annotation) throws InvocationTargetException
     {
-        for (Method method : instance.getClass().getMethods())
+        Class clazz = instance.getClass();
+        List<Class> classes = ClassUtils.getAllSuperclasses(clazz);
+        Collections.reverse(classes);
+        classes.add(clazz);
+
+        for (Class cl : classes)
         {
-            if (method.getAnnotation(annotation) != null)
+            for (Method method : cl.getDeclaredMethods())
             {
-                try
+                if (method.getAnnotation(annotation) != null)
                 {
-                    method.invoke(instance);
-                }
-                catch (IllegalAccessException e)
-                {
-                    throw new RuntimeException(e);
+                    try
+                    {
+                        if (!method.isAccessible())
+                        {
+                            method.setAccessible(true);
+                        }
+
+                        method.invoke(instance);
+                    }
+                    catch (IllegalAccessException e)
+                    {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
         }

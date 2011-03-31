@@ -7,6 +7,7 @@ import com.atlassian.pageobjects.TestedProduct;
 import com.atlassian.pageobjects.Tester;
 import com.google.inject.Binder;
 import com.google.inject.Module;
+import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -119,6 +120,31 @@ public class TestInjectPageBinder
     }
 
     @Test
+    public void testPrivateInitAfterInject()
+    {
+        PageBinder binder = createBinder(StringField.class, StringFieldImpl.class);
+        OneFieldWithPrivateInitPage page = binder.bind(OneFieldWithPrivateInitPage.class);
+        assertEquals("Bob Private", page.name);
+    }
+
+    @Test
+    public void testOneFieldWithSuperClassInit()
+    {
+        PageBinder binder = createBinder(StringField.class, StringFieldImpl.class);
+        OneFieldWithSuperClassInitPage page = binder.bind(OneFieldWithSuperClassInitPage.class);
+        assertEquals("Bob Private", page.getName());
+
+    }
+
+    @Test
+    public void testProtectedInitAfterInject()
+    {
+        PageBinder binder = createBinder(StringField.class, StringFieldImpl.class);
+        OneFieldWithProtectedInitPage page = binder.bind(OneFieldWithProtectedInitPage.class);
+        assertEquals("Bob Protected", page.name);
+    }
+
+    @Test
     public void testParentInject()
     {
         PageBinder binder = createBinder(StringField.class, StringFieldImpl.class);
@@ -228,5 +254,43 @@ public class TestInjectPageBinder
             return "Bob";
         }
     }
+
+    static class OneFieldWithPrivateInitPage extends AbstractPage
+    {
+        @Inject
+        private StringField field;
+
+        private String name;
+
+        @Init
+        private void init()
+        {
+            name = field.getValue() + " Private";
+        }
+
+        public String getName()
+        {
+            return name;
+        }
+    }
+
+    static class OneFieldWithProtectedInitPage extends AbstractPage
+    {
+        @Inject
+        private StringField field;
+
+        private String name;
+
+        @Init
+        protected void init()
+        {
+            name = field.getValue() + " Protected";
+        }
+    }
+
+    static class OneFieldWithSuperClassInitPage extends OneFieldWithPrivateInitPage
+    {
+    }
+
 
 }
