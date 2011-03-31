@@ -11,6 +11,7 @@ import org.openqa.selenium.By;
 import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
 
 public class TestSelectElemet extends AbstractFileBasedServerTest
 {
@@ -18,9 +19,9 @@ public class TestSelectElemet extends AbstractFileBasedServerTest
     public void testUseAnnotationToLocateSelectElements()
     {
         SelectElementPage page = product.visit(SelectElementPage.class);
-
+        assertTrue(page.getSelectElement1().isPresent());
+        assertTrue(page.getMultiSelectElement4().isPresent());
         assertEquals(3, page.getSelectElement1().all().size());
-
     }
 
     @Test

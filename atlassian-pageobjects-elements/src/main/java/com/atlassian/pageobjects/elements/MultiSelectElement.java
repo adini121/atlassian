@@ -6,7 +6,7 @@ import java.util.List;
  * Represents a standard multi-select HTML element.
  *
  */
-public interface MultiSelectElement
+public interface MultiSelectElement extends Element
 {
     /**
      * All options

@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Represents a standard select HTML components.
  */
-public interface SelectElement
+public interface SelectElement extends Element
 {
     /**
      * All options
