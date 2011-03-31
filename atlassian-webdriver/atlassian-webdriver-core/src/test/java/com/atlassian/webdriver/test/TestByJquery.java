@@ -100,31 +100,15 @@ public class TestByJquery
         }
     }
 
-    @Test
+    @Test(expected = NoSuchElementException.class)
     public void testSingleSelector_ElementNotFound_ShouldThrowException()
     {
-        try
-        {
-            driver.findElement(ByJquery.$("#NonExistant"));
-            throw new IllegalStateException("Should throw exception");
-        }
-        catch(NoSuchElementException e)
-        {
-            assertTrue(e.getMessage(), e.getMessage().startsWith("jQuery selector: #NonExistant"));
-        }
+        driver.findElement(ByJquery.$("#NonExistant"));
     }
 
-    @Test
+    @Test(expected = NoSuchElementException.class)
     public void testMultipleSelector_ElementNotFound_ShouldThrowException()
     {
-        try
-        {
-            driver.findElement(ByJquery.$("#id2 .nonExistant"));
-            throw new IllegalStateException("Should throw exception");
-        }
-        catch(NoSuchElementException e)
-        {
-            assertTrue(e.getMessage(), e.getMessage().startsWith("jQuery selector: #id2 .nonExistant"));
-        }
+        driver.findElement(ByJquery.$("#id2 .nonExistant"));
     }
 }
