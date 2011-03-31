@@ -24,6 +24,7 @@
                     <systemPropertyVariables>
                         <xvfb.enable>${xvfb.enable}</xvfb.enable>
                         <testedproduct.app>refapp</testedproduct.app>
+                        <webdriver.browser>${webdriver.browser}</webdriver.browser>
                     </systemPropertyVariables>
                     <instructions>
                         <Spring-Context>
