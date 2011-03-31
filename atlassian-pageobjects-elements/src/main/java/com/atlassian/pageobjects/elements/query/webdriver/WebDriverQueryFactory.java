@@ -151,4 +151,15 @@ public class WebDriverQueryFactory
     {
         return getTagName(locator, TimeoutType.DEFAULT);
     }
+
+    public TimedCondition hasText(By locator, String text, TimeoutType timeoutType)
+    {
+        return new WebElementBasedTimedCondition(searchContext, locator, WebDriverQueryFunctions.hasText(text),
+                timeouts.timeoutFor(timeoutType), interval());
+    }
+
+    public TimedCondition hasText(By locator, String text)
+    {
+        return hasText(locator, text, TimeoutType.DEFAULT);
+    }
 }

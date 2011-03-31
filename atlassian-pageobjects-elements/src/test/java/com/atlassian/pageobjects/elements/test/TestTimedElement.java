@@ -82,6 +82,22 @@ public class TestTimedElement extends AbstractFileBasedServerTest
     }
 
     @Test
+    public void testHasText()
+    {
+        product.visit(ElementsPage.class);
+
+        // Positive - verify span with text
+        assertTrueByDefaultTimeout(product.find(By.id("test3_span")).timed().hasText("Span Value"));
+
+        // Negative - verify span with wrong text
+        assertFalseByDefaultTimeout(product.find(By.id("test3_spanEmpty")).timed().hasText("foo"));
+
+        // Delayed presence - click on button that adds a span with delay, verify getText waits
+        product.find(By.id("test3_addElementsButton")).click();
+        assertTrueByDefaultTimeout(product.find(By.id("test3_delayedSpan")).timed().hasText("Delayed Span"));
+    }
+
+    @Test
     public void testAttribute()
     {
         product.visit(ElementsPage.class);
@@ -119,4 +135,22 @@ public class TestTimedElement extends AbstractFileBasedServerTest
         product.find(By.id("test1_addElementsButton")).click();
         assertEqualsByDefaultTimeout("span", product.find(By.id("test1_delayedSpan")).timed().getTagName());
     }
+
+    @Test
+    public void testHasAttribute()
+    {
+        product.visit(ElementsPage.class);
+
+        // Delayed presence
+        product.find(By.id("test1_addElementsButton")).click();
+        assertTrueByDefaultTimeout(product.find(By.id("test1_delayedSpan")).timed().hasAttribute("class", "testClass"));
+
+        // incorrect attribute
+        assertFalseByDefaultTimeout(product.find(By.id("test1_delayedSpan")).timed().hasAttribute("class", "foo"));
+
+        // attribute not present
+        assertFalseByDefaultTimeout(product.find(By.id("test1_delayedSpan")).timed().hasAttribute("nonexistant", "foo"));
+    }
+
+
 }

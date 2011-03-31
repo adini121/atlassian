@@ -216,6 +216,11 @@ public class WebDriverElement implements Element
         return waitForWebElement().getAttribute(name);
     }
 
+    public boolean hasAttribute(String name, String value)
+    {
+        return value.equals(getAttribute(name));
+    }
+
     public String getText()
     {
         return waitForWebElement().getText();

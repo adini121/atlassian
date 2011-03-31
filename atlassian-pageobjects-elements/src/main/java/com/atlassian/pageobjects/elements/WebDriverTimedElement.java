@@ -79,9 +79,19 @@ public class WebDriverTimedElement implements TimedElement
         return queryFactory.getAttribute(locator, name, defaultTimeout);
     }
 
+    public TimedCondition hasAttribute(final String name, final String value)
+    {
+        return queryFactory.hasAttribute(locator, name, value, defaultTimeout);
+    }
+
     public TimedQuery<String> getText()
     {
         return queryFactory.getText(locator, defaultTimeout);
+    }
+
+    public TimedCondition hasText(String text)
+    {
+        return queryFactory.hasText(locator, text, defaultTimeout);
     }
 
     public TimedQuery<String> getTagName()

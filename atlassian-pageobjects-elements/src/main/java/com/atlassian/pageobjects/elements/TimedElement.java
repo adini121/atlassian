@@ -50,7 +50,7 @@ public interface TimedElement
     TimedCondition hasClass(String className);
 
     /**
-     * Query representingt the element's given attribute.
+     * Query representing the element's given attribute.
      *
      * @param name Name of the attribute
      *
@@ -60,12 +60,29 @@ public interface TimedElement
     TimedQuery<String> getAttribute(String name);
 
     /**
+     * Query representing whether this element has the given attribute set
+     * @param name Name of the attribute
+     * @param value expected attribute value
+     * @return TimedQuery that returns true if element has given attribute set, false if element does not  have the
+     * given attribute set or timeout expires
+     */
+    TimedCondition hasAttribute(String name, String value);
+
+    /**
      * Query representing the element's inner text.
      *
      * @return TimedQuery that returns the inner text of the element, null if element does not have inner text
      * or timeout expires.
      */
     TimedQuery<String> getText();
+
+     /**
+     * Query representing whether this element's innerText is equals to the provided string
+     * @param text The expected innerText string
+     * @return TimedQuery that returns true if this element has given innerText set, false if element does not have the
+      * given attribute set or timeout expires
+     */
+    TimedCondition hasText(String text);
 
     /**
      * Query representing the element's tag name

@@ -110,8 +110,21 @@ public class TestElement extends AbstractFileBasedServerTest
     {
         ElementsPage elementsPage = product.visit(ElementsPage.class);
 
-        //element check
         assertEquals("input", elementsPage.test1_addElementsButton().getTagName());
-       
+    }
+
+    @Test
+    public void testHasAttribute()
+    {
+        ElementsPage elementsPage = product.visit(ElementsPage.class);
+
+        // positive
+        assertTrue(elementsPage.test1_addElementsButton().hasAttribute("type", "button"));
+
+        // incorrect attribute
+        assertFalse(elementsPage.test1_addElementsButton().hasAttribute("type", "bar"));
+
+        // attribute not present
+        assertFalse(elementsPage.test1_addElementsButton().hasAttribute("nonexistant", "foo"));
     }
 }

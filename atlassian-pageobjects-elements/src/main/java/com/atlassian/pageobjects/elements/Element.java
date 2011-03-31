@@ -54,6 +54,14 @@ public interface Element
     String getAttribute(String name);
 
     /**
+     * Whether this element has an attribute set to a specific value
+     * @param name The attribute name
+     * @param value The expected value
+     * @return true if attribute is set to the specific value, false otherwise or if attribute is not present
+     */
+    boolean hasAttribute(String name, String value);
+
+    /**
      * Get the visible innerText of this element, including sub-elements, without any leading or trailing whitespaces.
      *
      * @return The innerText of this element.

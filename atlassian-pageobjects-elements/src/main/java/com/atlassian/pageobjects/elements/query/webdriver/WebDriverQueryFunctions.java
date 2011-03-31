@@ -171,5 +171,15 @@ public final class WebDriverQueryFunctions
         };
     }
 
-
+    public static Function<WebElement, Boolean> hasText(final String text)
+    {
+        checkNotNull(text);
+        return new Function<WebElement, Boolean>()
+        {
+            public Boolean apply(@Nullable final WebElement from)
+            {
+                return text.equals(from.getText());
+            }
+        };
+    }
 }
