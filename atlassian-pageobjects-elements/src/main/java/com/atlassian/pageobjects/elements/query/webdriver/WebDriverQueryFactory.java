@@ -140,4 +140,15 @@ public class WebDriverQueryFactory
     {
         return hasClass(locator, className, TimeoutType.DEFAULT);
     }
+
+    public TimedQuery<String> getTagName(By locator, TimeoutType timeoutType)
+    {
+        return new WebElementBasedTimedQuery<String>(searchContext, locator, WebDriverQueryFunctions.getTagName(),
+                timeouts.timeoutFor(timeoutType), interval());
+    }
+
+    public TimedQuery<String> getTagName(By locator)
+    {
+        return getTagName(locator, TimeoutType.DEFAULT);
+    }
 }

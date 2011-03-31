@@ -83,6 +83,16 @@ public final class WebDriverQueryFunctions
         };
     }
 
+    public static Function<WebElement, String> getTagName()
+    {
+        return new Function<WebElement, String>()
+        {
+            public String apply(@Nullable final WebElement from)
+            {
+                return from.getTagName();
+            }
+        };
+    }
 
     public static Function<WebElement, String> getText()
     {
@@ -160,4 +170,6 @@ public final class WebDriverQueryFunctions
             }
         };
     }
+
+
 }

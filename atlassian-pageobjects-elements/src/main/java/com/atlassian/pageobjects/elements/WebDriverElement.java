@@ -221,6 +221,11 @@ public class WebDriverElement implements Element
         return waitForWebElement().getText();
     }
 
+    public String getTagName()
+    {
+        return waitForWebElement().getTagName();
+    }
+
     public String getValue()
     {
         return waitForWebElement().getValue();
@@ -241,6 +246,12 @@ public class WebDriverElement implements Element
     public Element select()
     {
         waitForWebElement().setSelected();
+        return this;
+    }
+
+    public Element toggle()
+    {
+        waitForWebElement().toggle();
         return this;
     }
 

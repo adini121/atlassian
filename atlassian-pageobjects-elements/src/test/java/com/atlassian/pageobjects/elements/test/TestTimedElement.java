@@ -110,4 +110,13 @@ public class TestTimedElement extends AbstractFileBasedServerTest
         product.find(By.id("test6_hideSpanButton")).click();
         assertFalseByDefaultTimeout(product.find(By.id("test6_Div")).find(By.className("test6_class")).timed().isVisible());
     }
+
+    @Test
+    public void testGetTagName()
+    {
+        product.visit(ElementsPage.class);
+
+        product.find(By.id("test1_addElementsButton")).click();
+        assertEqualsByDefaultTimeout("span", product.find(By.id("test1_delayedSpan")).timed().getTagName());
+    }
 }

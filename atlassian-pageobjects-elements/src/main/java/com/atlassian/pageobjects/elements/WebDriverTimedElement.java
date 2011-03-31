@@ -84,6 +84,13 @@ public class WebDriverTimedElement implements TimedElement
         return queryFactory.getText(locator, defaultTimeout);
     }
 
+    public TimedQuery<String> getTagName()
+    {
+        /* Even though the tagname can't change, the reason why we go through the same query mechanism is to
+        get the polling for finding the element */
+        return queryFactory.getTagName(locator, defaultTimeout);
+    }
+
     public TimedQuery<String> getValue()
     {
         return queryFactory.getValue(locator, defaultTimeout);

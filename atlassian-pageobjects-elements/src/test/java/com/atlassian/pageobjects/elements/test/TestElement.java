@@ -10,7 +10,7 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 
-public class TestDelayedElement extends AbstractFileBasedServerTest
+public class TestElement extends AbstractFileBasedServerTest
 {
     @Test
     public void testFieldInjection()
@@ -63,7 +63,7 @@ public class TestDelayedElement extends AbstractFileBasedServerTest
 
 
     @Test
-    public void testText()
+    public void testGetText()
     {
         product.visit(ElementsPage.class);
 
@@ -80,7 +80,7 @@ public class TestDelayedElement extends AbstractFileBasedServerTest
     }
 
     @Test
-    public void testfindDelayed()
+    public void testfind()
     {
         product.visit(ElementsPage.class);
 
@@ -103,5 +103,15 @@ public class TestDelayedElement extends AbstractFileBasedServerTest
 
         product.find(By.id("test4_addElementsButton")).click();
         assertEquals("Item 5", product.find(By.className("listitem-active")).getText());
+    }
+
+    @Test
+    public void testGetTagName()
+    {
+        ElementsPage elementsPage = product.visit(ElementsPage.class);
+
+        //element check
+        assertEquals("input", elementsPage.test1_addElementsButton().getTagName());
+       
     }
 }

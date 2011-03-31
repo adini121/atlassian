@@ -61,6 +61,12 @@ public interface Element
     String getText();
 
     /**
+     * Get the tag name of this element
+     * @return The tag name
+     */
+    String getTagName();
+
+    /**
      * Get the value of this element's "value" attribute.
      *
      * @return The value of this element's "value" attribute, or null if the value is not set.
@@ -88,6 +94,13 @@ public interface Element
      * @return The Element that got selected
      */
     Element select();
+
+    /**
+     * If the element is a checkbox this will toggle the elements state from selected to not selected, or from not selected to selected.
+     * 
+     * @return The Element that got toggled
+     */
+    Element toggle();
 
     /**
      * Clear the value of the text entry element.

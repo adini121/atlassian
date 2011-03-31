@@ -68,6 +68,13 @@ public interface TimedElement
     TimedQuery<String> getText();
 
     /**
+     * Query representing the element's tag name
+     *
+     * @return TimedQuery that returns the tagname of the element
+     */
+    TimedQuery<String> getTagName();
+
+    /**
      * Query representing the element's 'value' attribute
      *
      * @return TimedQuery that returns the value of the 'value' attribute, null if element does not have a 'value'
