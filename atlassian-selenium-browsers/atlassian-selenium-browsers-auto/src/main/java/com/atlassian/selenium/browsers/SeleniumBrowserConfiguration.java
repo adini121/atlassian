@@ -12,8 +12,8 @@ import java.io.File;
 public class SeleniumBrowserConfiguration implements BrowserConfiguration
 {
     public static final String BROWSER = System.getProperty("selenium.browser", BrowserVersion.FIREFOX_3_5.getBrowserName());
-    private final File targetDir = new File("target");
-    private final File seleniumDir = new File(targetDir, "seleniumTmp");
+    private final File targetDir = new File("target").getAbsoluteFile();
+    private final File seleniumDir = new File(targetDir, "seleniumTmp").getAbsoluteFile();
 
     public SeleniumBrowserConfiguration(){}
 

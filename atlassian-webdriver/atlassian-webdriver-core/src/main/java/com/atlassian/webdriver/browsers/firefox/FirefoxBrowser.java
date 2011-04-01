@@ -111,6 +111,7 @@ public final class FirefoxBrowser
         }
 
         // Fall back on default firefox driver
+        log.info("Browser path was null, falling back to default firefox driver.");
         return getFirefoxDriver();
     }
 
