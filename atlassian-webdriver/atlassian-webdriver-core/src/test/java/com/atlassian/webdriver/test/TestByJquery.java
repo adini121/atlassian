@@ -101,13 +101,13 @@ public class TestByJquery
     }
 
     @Test(expected = NoSuchElementException.class)
-    public void testSingleSelector_ElementNotFound_ShouldThrowException()
+    public void testSingleSelectorElementNotFoundShouldThrowException()
     {
         driver.findElement(ByJquery.$("#NonExistant"));
     }
 
     @Test(expected = NoSuchElementException.class)
-    public void testMultipleSelector_ElementNotFound_ShouldThrowException()
+    public void testMultipleSelectorElementNotFoundShouldThrowException()
     {
         driver.findElement(ByJquery.$("#id2 .nonExistant"));
     }
