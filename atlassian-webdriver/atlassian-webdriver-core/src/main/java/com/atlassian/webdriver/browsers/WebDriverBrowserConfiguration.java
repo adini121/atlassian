@@ -12,8 +12,8 @@ import java.io.File;
  */
 public class WebDriverBrowserConfiguration implements BrowserConfiguration
 {
-    private final File targetDir = new File("target").getAbsoluteFile();
-    private final File webdriverDir = new File(targetDir, "webdriverTmp").getAbsoluteFile();
+    private final File targetDir = new File("target");
+    private final File webdriverDir = new File(targetDir, "webdriverTmp");
 
     public WebDriverBrowserConfiguration() {}
 
