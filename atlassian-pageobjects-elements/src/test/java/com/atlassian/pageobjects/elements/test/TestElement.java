@@ -6,9 +6,7 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 
 import static com.atlassian.pageobjects.elements.query.TimedAssertions.assertTrueByDefaultTimeout;
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.*;
 
 public class TestElement extends AbstractFileBasedServerTest
 {
@@ -80,7 +78,7 @@ public class TestElement extends AbstractFileBasedServerTest
     }
 
     @Test
-    public void testfind()
+    public void testFind()
     {
         product.visit(ElementsPage.class);
 
