@@ -51,14 +51,14 @@ public class WebDriverElement implements Element
     }
 
     /**
-     * Creates a WebDriverElement within the driver's search context and default timeout.
+     * Creates a WebDriverElement within the driver's search context and given timeout type.
      * 
      * @param locator The locator mechanism to use.
-     * @param defaultTimeout default timeout of this element
+     * @param timeoutType default timeout of this element
      */
-    public WebDriverElement(By locator, TimeoutType defaultTimeout)
+    public WebDriverElement(By locator, TimeoutType timeoutType)
     {
-        this(locator, null, defaultTimeout);
+        this(locator, null, timeoutType);
     }
 
     /**
@@ -73,29 +73,29 @@ public class WebDriverElement implements Element
     }
 
     /**
-     * Creates a WebDriverElement within a given search context and default timeout.
+     * Creates a WebDriverElement within a given search context and given timeout type.
      *
      * @param locator The locator mechanism to use.
      * @param searchContext The SearchContext to use.
-     * @param defaultTimeout default timeout of this element
+     * @param timeoutType default timeout of this element
      */
-    public WebDriverElement(By locator, SearchContext searchContext, TimeoutType defaultTimeout)
+    public WebDriverElement(By locator, SearchContext searchContext, TimeoutType timeoutType)
     {
         this.locator = locator;
         this.searchContext = searchContext;
-        this.defaultTimeout = checkNotNull(defaultTimeout);
+        this.defaultTimeout = checkNotNull(timeoutType);
     }
 
     /**
-     * Creates a WebDriverElement with the given WebElement and default timeout.
+     * Creates a WebDriverElement with the given WebElement and given timeout type.
      *
      * @param webElement The WebElement to wrap in a delayed element.
-     * @param defaultTimeout default timeout of this element
+     * @param timeoutType default timeout of this element
      */
-    public WebDriverElement(WebElement webElement, TimeoutType defaultTimeout)
+    public WebDriverElement(WebElement webElement, TimeoutType timeoutType)
     {
         this.webElementHolder = new WebElementHolder(webElement);
-        this.defaultTimeout = checkNotNull(defaultTimeout);
+        this.defaultTimeout = checkNotNull(timeoutType);
     }
 
 

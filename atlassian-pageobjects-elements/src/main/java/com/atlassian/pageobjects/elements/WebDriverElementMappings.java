@@ -1,4 +1,4 @@
-package com.atlassian.pageobjects;
+package com.atlassian.pageobjects.elements;
 
 import com.atlassian.pageobjects.elements.*;
 import com.google.common.collect.ImmutableMap;

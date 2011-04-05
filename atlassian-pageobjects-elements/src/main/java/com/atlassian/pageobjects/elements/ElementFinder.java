@@ -1,7 +1,7 @@
 package com.atlassian.pageobjects.elements;
 
 import com.atlassian.pageobjects.PageBinder;
-import com.atlassian.pageobjects.WebDriverElementMappings;
+import com.atlassian.pageobjects.elements.WebDriverElementMappings;
 import org.openqa.selenium.By;
 
 import javax.inject.Inject;
