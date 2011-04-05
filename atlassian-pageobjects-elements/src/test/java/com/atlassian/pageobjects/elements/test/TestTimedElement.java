@@ -1,5 +1,6 @@
 package com.atlassian.pageobjects.elements.test;
 
+import com.atlassian.pageobjects.elements.Element;
 import com.atlassian.pageobjects.elements.TimedElement;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.ElementsPage;
 import org.junit.Test;
@@ -152,5 +153,14 @@ public class TestTimedElement extends AbstractFileBasedServerTest
         assertFalseByDefaultTimeout(product.find(By.id("test1_delayedSpan")).timed().hasAttribute("nonexistant", "foo"));
     }
 
-
+    @Test(expected = IllegalArgumentException.class)
+    public void testTimedElementWithFindAll()
+    {
+        product.visit(ElementsPage.class);
+        Element leafList = product.find(By.id("test4_leafList"));
+        for (Element li : leafList.findAll(By.tagName("li")))
+        {
+            assertTrueByDefaultTimeout(li.timed().isPresent());
+        }
+    }
 }

@@ -38,7 +38,12 @@ public class WebDriverTimedElement implements TimedElement
      */
     public WebDriverTimedElement(final By locator, final SearchContext searchContext, final TimeoutType defaultTimeout)
     {
-        this.locator = checkNotNull(locator);
+        if(locator == null)
+        {
+            throw new IllegalStateException("TimedElement requires the element to be uniquely locatable on the page.");
+        }
+
+        this.locator = locator;
         this.searchContext = checkNotNull(searchContext);
         this.defaultTimeout = checkNotNull(defaultTimeout);
     }
