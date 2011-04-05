@@ -8,6 +8,8 @@ import com.atlassian.pageobjects.TestedProduct;
 import com.atlassian.pageobjects.TestedProductFactory;
 import com.atlassian.pageobjects.binder.InjectPageBinder;
 import com.atlassian.pageobjects.binder.StandardModule;
+import com.atlassian.pageobjects.elements.ElementModule;
+import com.atlassian.pageobjects.elements.timeout.TimeoutsModule;
 import com.atlassian.pageobjects.page.AdminHomePage;
 import com.atlassian.pageobjects.component.Header;
 import com.atlassian.pageobjects.page.HomePage;
@@ -50,7 +52,8 @@ public class ConfluenceTestedProduct implements TestedProduct<WebDriverTester>
         }
         this.webDriverTester = tester;
         this.productInstance = productInstance;
-        this.pageBinder = new InjectPageBinder(productInstance, tester, new StandardModule(this), new AtlassianWebDriverModule(this));
+        this.pageBinder = new InjectPageBinder(productInstance, tester, new StandardModule(this), new AtlassianWebDriverModule(this),
+                new ElementModule(), new TimeoutsModule());
 
         this.pageBinder.override(Header.class, ConfluenceHeader.class);
         this.pageBinder.override(HomePage.class, DashboardPage.class);
