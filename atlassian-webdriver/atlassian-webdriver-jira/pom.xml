@@ -47,10 +47,10 @@
     <dependencies>
         <dependency>
             <groupId>com.atlassian.selenium</groupId>
-            <artifactId>atlassian-webdriver-core</artifactId>
+            <artifactId>atlassian-pageobjects-elements</artifactId>
             <version>${project.version}</version>
         </dependency>
-
+        
     </dependencies>
 
 

@@ -10,6 +10,8 @@ import com.atlassian.pageobjects.binder.InjectPageBinder;
 import com.atlassian.pageobjects.binder.PostInjectionProcessor;
 import com.atlassian.pageobjects.binder.StandardModule;
 import com.atlassian.pageobjects.component.Header;
+import com.atlassian.pageobjects.elements.ElementModule;
+import com.atlassian.pageobjects.elements.timeout.TimeoutsModule;
 import com.atlassian.pageobjects.page.AdminHomePage;
 import com.atlassian.pageobjects.page.HomePage;
 import com.atlassian.pageobjects.page.LoginPage;
@@ -50,6 +52,7 @@ public class JiraTestedProduct implements TestedProduct<WebDriverTester>
         this.webDriverTester = tester;
         this.productInstance = productInstance;
         this.pageBinder = new InjectPageBinder(productInstance, webDriverTester, new StandardModule(this), new AtlassianWebDriverModule(this),
+                new ElementModule(), new TimeoutsModule(),
                 new Module()
                 {
                     public void configure(Binder binder)
