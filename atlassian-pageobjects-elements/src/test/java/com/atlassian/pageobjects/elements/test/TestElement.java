@@ -1,7 +1,12 @@
 package com.atlassian.pageobjects.elements.test;
 
 import com.atlassian.pageobjects.elements.Element;
+import com.atlassian.pageobjects.elements.ElementFinder;
+import com.atlassian.pageobjects.elements.Options;
+import com.atlassian.pageobjects.elements.SelectElement;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.ElementsPage;
+import com.atlassian.webdriver.utils.by.ByJquery;
+import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
@@ -10,6 +15,14 @@ import static junit.framework.Assert.*;
 
 public class TestElement extends AbstractFileBasedServerTest
 {
+    private ElementFinder elementFinder;
+
+    @Before
+    public void initFinder()
+    {
+        elementFinder = product.getPageBinder().bind(ElementFinder.class);
+    }
+
     @Test
     public void testFieldInjection()
    {
@@ -124,5 +137,19 @@ public class TestElement extends AbstractFileBasedServerTest
 
         // attribute not present
         assertFalse(elementsPage.test1_addElementsButton().hasAttribute("nonexistant", "foo"));
+    }
+
+    @Test
+    public void shouldFindElementByJquery()
+    {
+        product.visit(ElementsPage.class);
+        final Element awesomeDiv = product.find(By.id("awesome-div"));
+        final Element awesomeSpan = awesomeDiv.find(ByJquery.$("span:contains(Awesome)"));
+        assertNotNull(awesomeSpan);
+        assertEquals("awesome-span", awesomeSpan.getAttribute("id"));
+
+        final SelectElement awesomeSelect = elementFinder.find(By.id("awesome-select"), SelectElement.class);
+        awesomeSelect.find(ByJquery.$("option:contains(Volvo)")).select();
+        assertEquals(Options.value("volvo"), awesomeSelect.getSelected());
     }
 }

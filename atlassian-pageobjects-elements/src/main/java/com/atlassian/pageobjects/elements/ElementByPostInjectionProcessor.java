@@ -1,14 +1,16 @@
 package com.atlassian.pageobjects.elements;
 
 import com.atlassian.pageobjects.PageBinder;
+import com.atlassian.pageobjects.WebDriverElementMappings;
 import com.atlassian.pageobjects.binder.PostInjectionProcessor;
 import com.atlassian.pageobjects.util.InjectUtils;
 import org.openqa.selenium.By;
 
-import java.lang.reflect.Field;
 import javax.inject.Inject;
+import java.lang.reflect.Field;
 
 import static com.atlassian.pageobjects.util.InjectUtils.forEachFieldWithAnnotation;
+import static com.google.common.base.Preconditions.checkArgument;
 
 /**
  * Find fields marked with @ElementBy annotation and set them to instances of WebDriverElement
@@ -84,19 +86,15 @@ public class ElementByPostInjectionProcessor implements PostInjectionProcessor
         {
             throw new IllegalArgumentException("No selector found");
         }
+        Class<? extends Element> fieldType = getFieldType(field);
+        return pageBinder.bind(WebDriverElementMappings.findMapping(fieldType), by, elementBy.timeoutType());
+    }
 
-        if(SelectElement.class.isAssignableFrom(field.getType()))
-        {
-            return pageBinder.bind(WebDriverSelectElement.class, by, elementBy.timeoutType());
-        }
-        else if(MultiSelectElement.class.isAssignableFrom(field.getType()))
-        {
-            return pageBinder.bind(WebDriverMultiSelectElement.class, by, elementBy.timeoutType());
-        }
-        else
-        {
-            return pageBinder.bind(WebDriverElement.class, by, elementBy.timeoutType());
-        }
-
+    @SuppressWarnings({"unchecked"})
+    private Class<? extends Element> getFieldType(Field field) {
+        Class<?> realType = field.getType();
+        checkArgument(Element.class.isAssignableFrom(realType), "Field type " + realType.getName()
+                + " does not implement " + Element.class.getName());
+        return (Class<? extends Element>) realType;
     }
 }

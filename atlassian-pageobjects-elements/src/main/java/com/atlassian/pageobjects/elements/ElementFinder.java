@@ -1,6 +1,7 @@
 package com.atlassian.pageobjects.elements;
 
 import com.atlassian.pageobjects.PageBinder;
+import com.atlassian.pageobjects.WebDriverElementMappings;
 import org.openqa.selenium.By;
 
 import javax.inject.Inject;
@@ -30,8 +31,8 @@ public class ElementFinder
      * @param elementClass The class of the element to create
      * @return An instance of specified WebDriverElement
      */
-    public <T> T find(final By by, Class<T> elementClass)
+    public <T extends Element> T find(final By by, Class<T> elementClass)
     {
-        return pageBinder.bind(elementClass, by);
+        return pageBinder.bind(WebDriverElementMappings.findMapping(elementClass), by);
     }
 }
