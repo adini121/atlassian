@@ -1,6 +1,8 @@
 package com.atlassian.webdriver.utils.by;
 
 import com.atlassian.webdriver.utils.JavaScriptUtils;
+
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -168,7 +170,7 @@ public abstract class ByJquery extends By
     {
         if (matcher.matches())
             {
-                if (matcher.group(2).trim().isEmpty())
+                if (StringUtils.isEmpty(matcher.group(2)))
                 {
                     return context.findElements(by);
                 }

@@ -1,9 +1,10 @@
 package com.atlassian.pageobjects.elements.mock.clock;
 
-import com.atlassian.pageobjects.elements.query.util.Clock;
-import com.google.common.collect.Maps;
+import java.util.SortedMap;
 
-import java.util.NavigableMap;
+import com.atlassian.pageobjects.elements.query.util.Clock;
+
+import com.google.common.collect.Maps;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -15,7 +16,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class CompositeClock implements Clock
 {
-    private final NavigableMap<Integer, Clock> clocks = Maps.newTreeMap();
+    private final SortedMap<Integer, Clock> clocks = Maps.newTreeMap();
     private int currentCall = 1;
 
 
@@ -40,9 +41,10 @@ public class CompositeClock implements Clock
 
     private Clock findClock()
     {
-        if (currentCall >= clocks.lastKey())
+        Integer lastKey = clocks.lastKey();
+        if (currentCall >= lastKey)
         {
-            return clocks.lastEntry().getValue();
+            return clocks.get(lastKey);
         }
         int clockKey = clocks.firstKey();
         for (int startFromCall : clocks.keySet())

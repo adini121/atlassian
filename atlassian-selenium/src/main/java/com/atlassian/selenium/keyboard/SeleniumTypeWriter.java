@@ -163,7 +163,7 @@ public final class SeleniumTypeWriter extends AbstractSeleniumDriver
 
     private void lastCharType(CharacterKeySequence sequence)
     {
-        if (sequence.string().isEmpty())
+        if (sequence.string().length() == 0)
         {
             bareInsert(sequence);
             return;

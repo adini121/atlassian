@@ -6,6 +6,7 @@ import org.hamcrest.StringDescription;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -62,14 +63,13 @@ public class PropertiesBasedTimeouts implements Timeouts
     public static PropertiesBasedTimeouts fromClassPath(String path, ClassLoader loader)
     {
         InputStream is = loader.getResourceAsStream(path);
-        Reader reader = new InputStreamReader(checkNotNull(is));
         try
         {
-            return new PropertiesBasedTimeouts(reader);
+            return new PropertiesBasedTimeouts(checkNotNull(is));
         }
         finally
         {
-            IOUtils.closeQuietly(reader);
+            IOUtils.closeQuietly(is);
         }
     }
 
@@ -104,12 +104,12 @@ public class PropertiesBasedTimeouts implements Timeouts
      *
      * @param reader reader to load properties from
      */
-    public PropertiesBasedTimeouts(final Reader reader)
+    public PropertiesBasedTimeouts(final InputStream reader)
     {
         this(loadFromReader(reader));
     }
 
-    private static Properties loadFromReader(Reader reader)
+    private static Properties loadFromReader(InputStream reader)
     {
         try
         {
@@ -125,10 +125,10 @@ public class PropertiesBasedTimeouts implements Timeouts
 
     private static Properties loadFromFile(String path)
     {
-        Reader reader = null;
+        InputStream reader = null;
         try
         {
-            reader = new FileReader(path);
+            reader = new FileInputStream(path);
             Properties answer = new Properties();
             answer.load(reader);
             return answer;
