@@ -14,6 +14,7 @@ import com.atlassian.pageobjects.elements.timeout.TimeoutsModule;
 import com.atlassian.pageobjects.page.AdminHomePage;
 import com.atlassian.pageobjects.page.HomePage;
 import com.atlassian.pageobjects.page.LoginPage;
+import com.atlassian.pageobjects.page.WebSudoPage;
 import com.atlassian.webdriver.AtlassianWebDriverModule;
 import com.atlassian.webdriver.pageobjects.DefaultWebDriverTester;
 import com.atlassian.webdriver.pageobjects.WebDriverTester;
@@ -21,6 +22,7 @@ import com.atlassian.webdriver.refapp.component.RefappHeader;
 import com.atlassian.webdriver.refapp.page.RefappAdminHomePage;
 import com.atlassian.webdriver.refapp.page.RefappHomePage;
 import com.atlassian.webdriver.refapp.page.RefappLoginPage;
+import com.atlassian.webdriver.refapp.page.RefappWebSudoPage;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -55,6 +57,7 @@ public class RefappTestedProduct implements TestedProduct<WebDriverTester>
         this.pageBinder.override(HomePage.class, RefappHomePage.class);
         this.pageBinder.override(AdminHomePage.class, RefappAdminHomePage.class);
         this.pageBinder.override(LoginPage.class, RefappLoginPage.class);
+        this.pageBinder.override(WebSudoPage.class, RefappWebSudoPage.class);
     }
 
     public RefappHomePage gotoHomePage()
