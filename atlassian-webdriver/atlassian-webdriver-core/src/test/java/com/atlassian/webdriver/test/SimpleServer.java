@@ -1,6 +1,5 @@
 package com.atlassian.webdriver.test;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.Validate;
 import org.mortbay.jetty.Handler;
@@ -8,14 +7,13 @@ import org.mortbay.jetty.Request;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.handler.AbstractHandler;
 
-import java.io.File;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.ServerSocket;
 import java.util.Map;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * Simple server for serving up html pages.
@@ -64,25 +62,20 @@ public class SimpleServer
                     String filename = urlMappings.get(uri);
 
                     InputStream is = getClass().getClassLoader().getResourceAsStream(filename);
-                    String contents = IOUtils.toString(is);
-
-                    if (is != null && contents != null)
+                    if (is == null)
                     {
-                        //String contents = FileUtils.readFileToString();
-                        response.getWriter().print(contents);
+                        response.getWriter().println("<h1>Cannot read file at: " + filename + "</h1>");
                     }
                     else
                     {
-                        response.getWriter().println("<h1>Cannot read file at: " + filename + "</h1>");
+                        response.getWriter().print(IOUtils.toString(is));
                     }
                 }
                 else
                 {
                     response.getWriter().println("<h1>File not found at: " + uri + "</h1>");
                 }
-
                 response.setStatus(HttpServletResponse.SC_OK);
-
                 ((Request)request).setHandled(true);
             }
         };

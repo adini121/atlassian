@@ -1,0 +1,40 @@
+<html>
+    <head>
+        <title>JavaScriptUtils test page</title>
+        <link type="text/css" rel="stylesheet" href="/js-utils.css">
+        <script type="text/javascript" src="/jquery.js"></script>
+    </head>
+    <body>
+
+        <h1>JavaScriptUtils test page</h1>
+
+        <div id="hovering-element">
+            HOVERING ELEMENT
+            <ul>
+                <li id="child-element-one" class="child-element">one</li>
+                <li id="child-element-two" class="child-element">two</li>
+                <li id="child-element-three" class="child-element">three</li>
+            </ul>
+        </div>
+
+        <div id="hovering-jquery-element">
+            HOVERING ELEMENT
+            <ul>
+                <li id="child-jquery-element-one" class="child-element">one</li>
+                <li id="child-jquery-element-two" class="child-element">two</li>
+                <li id="child-jquery-element-three" class="child-element">three</li>
+            </ul>
+        </div>
+
+        <script type="text/javascript">
+            jQuery("#hovering-jquery-element").find(".child-element").hide();
+            jQuery("#hovering-jquery-element").mouseover(function() {
+                jQuery("#hovering-jquery-element").find(".child-element").show();
+            });
+            jQuery("#hovering-jquery-element").mouseout(function() {
+                jQuery("#hovering-jquery-element").find(".child-element").hide();
+            });
+        </script>
+
+    </body>
+</html>
