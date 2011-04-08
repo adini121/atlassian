@@ -49,7 +49,7 @@ public class TestJavaScriptUtils
         driver.quit();
     }
 
-    @Ignore
+    @Ignore("doesn't work")
     @Test
     public void testCssHoverRespondsToMouseover()
     {
