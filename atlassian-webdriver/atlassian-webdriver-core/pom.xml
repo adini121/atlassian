@@ -106,6 +106,9 @@
                     <excludes>
                         <exclude>**/WebDriverAutoInstallerTest.java</exclude>
                     </excludes>
+                    <systemPropertyVariables>
+                        <xvfb.enable>${xvfb.enable}</xvfb.enable>
+                    </systemPropertyVariables>
                 </configuration>
             </plugin>
         </plugins>
@@ -114,12 +117,9 @@
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
-                    <systemProperties>
-                        <property>
-                            <name>xvfb.enable</name>
-                            <value>${xvfb.enable}</value>
-                        </property>
-                    </systemProperties>
+                    <systemPropertyVariables>
+                        <xvfb.enable>${xvfb.enable}</xvfb.enable>
+                    </systemPropertyVariables>
                 </configuration>
             </plugin>
         </plugins>
