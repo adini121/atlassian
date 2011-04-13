@@ -106,9 +106,12 @@
                     <excludes>
                         <exclude>**/WebDriverAutoInstallerTest.java</exclude>
                     </excludes>
-                    <systemPropertyVariables>
-                        <xvfb.enable>${xvfb.enable}</xvfb.enable>
-                    </systemPropertyVariables>
+                     <systemProperties>
+                        <property>
+                            <name>xvfb.enable</name>
+                            <value>${xvfb.enable}</value>
+                        </property>
+                    </systemProperties>
                 </configuration>
             </plugin>
         </plugins>
@@ -170,9 +173,12 @@
                             <excludes>
                                 <exclude>**/*Chrome*.java</exclude>
                             </excludes>
-                            <systemPropertyVariables>
-                                <xvfb.enable>${xvfb.enable}</xvfb.enable>
-                            </systemPropertyVariables>
+                            <systemProperties>
+                                <property>
+                                    <name>xvfb.enable</name>
+                                    <value>${xvfb.enable}</value>
+                                </property>
+                            </systemProperties>
                         </configuration>
                     </plugin>
                 </plugins>
