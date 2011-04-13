@@ -112,18 +112,6 @@
                 </configuration>
             </plugin>
         </plugins>
-      <pluginManagement>
-        <plugins>
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <systemPropertyVariables>
-                        <xvfb.enable>${xvfb.enable}</xvfb.enable>
-                    </systemPropertyVariables>
-                </configuration>
-            </plugin>
-        </plugins>
-      </pluginManagement>
     </build>
     <profiles>
         <profile>
@@ -182,6 +170,9 @@
                             <excludes>
                                 <exclude>**/*Chrome*.java</exclude>
                             </excludes>
+                            <systemPropertyVariables>
+                                <xvfb.enable>${xvfb.enable}</xvfb.enable>
+                            </systemPropertyVariables>
                         </configuration>
                     </plugin>
                 </plugins>
