@@ -2,10 +2,8 @@ package com.atlassian.webdriver.confluence.page;
 
 import com.atlassian.pageobjects.Page;
 import com.atlassian.pageobjects.PageBinder;
-import com.atlassian.pageobjects.binder.ValidateState;
 import com.atlassian.pageobjects.binder.WaitUntil;
 import com.atlassian.webdriver.AtlassianWebDriver;
-import com.atlassian.webdriver.confluence.ConfluenceTestedProduct;
 import com.atlassian.webdriver.confluence.component.header.ConfluenceHeader;
 import com.atlassian.webdriver.confluence.component.menu.BrowseMenu;
 import com.atlassian.webdriver.confluence.component.menu.ConfluenceUserMenu;
@@ -15,9 +13,7 @@ import org.openqa.selenium.By;
 import javax.inject.Inject;
 
 /**
- * TODO: Document this class / interface here
- *
- * @since v4.2
+ * Base class for all Confluence pages.
  */
 public abstract class ConfluenceAbstractPage implements UserDiscoverable, Page
 {
@@ -26,9 +22,6 @@ public abstract class ConfluenceAbstractPage implements UserDiscoverable, Page
     
     @Inject
     PageBinder pageBinder;
-
-    @Inject
-    ConfluenceTestedProduct testedProduct;
 
     public boolean isAdmin()
     {

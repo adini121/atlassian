@@ -8,9 +8,6 @@ import org.junit.After;
 import org.junit.Before;
 
 /**
- * TODO: Document this class / interface here
- *
- * @since v1.0
  */
 public abstract class AbstractConfluenceWebTest
 {

@@ -7,9 +7,6 @@ import org.junit.Test;
 import static org.junit.Assert.assertNotNull;
 
 /**
- * TODO: Document this class / interface here
- *
- * @since v1.0
  */
 public class TestPeopleDirectoryPage extends AbstractConfluenceWebTest
 {
