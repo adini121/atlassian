@@ -53,7 +53,7 @@ public class AddUserPage extends JiraAdminAbstractPage
     @Init
     public void checkForErrors()
     {
-        List<WebElement> errorElements = driver.findElements(By.className(".errMsg"));
+        List<WebElement> errorElements = driver.findElements(By.className("errMsg"));
 
         for (WebElement errEl : errorElements)
         {
