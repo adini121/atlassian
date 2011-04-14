@@ -1,7 +1,9 @@
 package com.atlassian.webdriver.test;
 
+import com.atlassian.browsers.BrowserConfig;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.WebDriverFactory;
+import com.atlassian.webdriver.browsers.AutoInstallConfiguration;
 import com.atlassian.webdriver.utils.JavaScriptUtils;
 import com.google.common.collect.ImmutableMap;
 import org.junit.AfterClass;
@@ -38,7 +40,10 @@ public class TestJavaScriptUtils
 
         TEST_URL = "http://localhost:" + server.getPort() + "/";
 
-        driver = WebDriverFactory.getDriver();
+        System.setProperty("webdriver.browser", "firefox-3.5");
+        BrowserConfig browserConfig = AutoInstallConfiguration.setupBrowser();
+        
+        driver = WebDriverFactory.getDriver(browserConfig);
         driver.get(TEST_URL + CONTEXT);
     }
 
