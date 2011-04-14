@@ -13,6 +13,8 @@ import javax.inject.Inject;
  */
 public class ConfluenceWebSudoPage implements WebSudoPage
 {
+    private static final String URI = "/authenticate.action";
+
     @Inject
     private PageBinder pageBinder;
 
@@ -24,7 +26,7 @@ public class ConfluenceWebSudoPage implements WebSudoPage
 
     public String getUrl()
     {
-        return "/authenticate.action";
+        return URI;
     }
     
     public <T extends Page> T confirm(Class<T> targetPage)

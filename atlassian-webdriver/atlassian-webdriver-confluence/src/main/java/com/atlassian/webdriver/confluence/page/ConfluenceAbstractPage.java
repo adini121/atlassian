@@ -56,28 +56,6 @@ public abstract class ConfluenceAbstractPage implements UserDiscoverable, Page
         driver.waitUntilElementIsLocated(By.id("footer"));
     }
 
-    @ValidateState
-    public void doCheck()
-    {
-
-        String uri = getUrl();
-
-        // Check for WebSudo
-        if (uri != null && !uri.equals(AdministratorAccessPage.URI) && at(AdministratorAccessPage.URI))
-        {
-            pageBinder.bind(AdministratorAccessPage.class).login(testedProduct.getLoggedInPassword());
-        }
-    }
-
-    protected boolean at(String uri)
-    {
-        String currentUrl = driver.getCurrentUrl();
-        String updatedCurrentUrl = currentUrl.replace("!default", "");
-        String urlToCheck = testedProduct.getProductInstance().getBaseUrl() + uri;
-
-        return currentUrl.startsWith(urlToCheck) || updatedCurrentUrl.startsWith(urlToCheck);
-    }
-
     public ConfluenceHeader getHeader()
     {
         return pageBinder.bind(ConfluenceHeader.class);
