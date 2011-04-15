@@ -4,6 +4,7 @@ import com.atlassian.pageobjects.elements.Element;
 import com.atlassian.pageobjects.elements.ElementFinder;
 import com.atlassian.pageobjects.elements.Options;
 import com.atlassian.pageobjects.elements.SelectElement;
+import com.atlassian.pageobjects.elements.test.pageobjects.page.DynamicPage;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.ElementsPage;
 import com.atlassian.webdriver.utils.by.ByJquery;
 import org.junit.Before;
@@ -12,6 +13,7 @@ import org.openqa.selenium.By;
 
 import static com.atlassian.pageobjects.elements.query.TimedAssertions.assertTrueByDefaultTimeout;
 import static junit.framework.Assert.*;
+import static junit.framework.Assert.assertEquals;
 
 public class TestElement extends AbstractFileBasedServerTest
 {
@@ -151,5 +153,85 @@ public class TestElement extends AbstractFileBasedServerTest
         final SelectElement awesomeSelect = elementFinder.find(By.id("awesome-select"), SelectElement.class);
         awesomeSelect.find(ByJquery.$("option:contains(Volvo)")).select();
         assertEquals(Options.value("volvo"), awesomeSelect.getSelected());
+    }
+
+    @Test
+    public void shouldRebindElementIfStale_whenLocatedByAnnotation()
+    {
+        DynamicPage page = product.visit(DynamicPage.class);
+
+        assertEquals("Hello Tester!", page.createFieldSet().helloWorld("Tester").getMessage());
+        assertEquals("Hello Developer!", page.createFieldSet().helloWorld("Developer").getMessage());
+
+    }
+
+    @Test
+    public void shouldRebindElementIfStale_whenLocatedByElementFinder()
+    {
+        DynamicPage page = product.visit(DynamicPage.class);
+        
+        ElementFinder elementFinder = page.getElementFinder();
+        Element username = elementFinder.find(By.id("nameTextBox"));
+        Element button = elementFinder.find(By.id("helloWorldButton"));
+        Element message = elementFinder.find(By.id("messageSpan"));
+
+        page.createFieldSet();
+
+        username.type("Tester");
+        button.click();
+        assertEquals("Hello Tester!", message.getText());
+
+        // recreate the fields
+        page.createFieldSet();
+        username.type("Developer");
+        button.click();
+        assertEquals("Hello Developer!", message.getText());
+    }
+
+    @Test
+    public void shouldRebindElementsIfStale_whenLocatedByParentFindSingle()
+    {
+        DynamicPage page = product.visit(DynamicPage.class);
+        ElementFinder elementFinder = page.getElementFinder();
+
+        Element div = elementFinder.find(By.id("placeHolderDiv"));
+        Element username = div.find(By.tagName("fieldset")).find(By.id("nameTextBox"));
+        Element button = div.find(By.tagName("fieldset")).find(By.id("helloWorldButton"));
+        Element message = div.find(By.tagName("fieldset")).find(By.id("messageSpan"));
+
+        page.createFieldSet();
+        username.type("Tester");
+        button.click();
+        assertEquals("Hello Tester!", message.getText());
+
+        //recreate the fields
+        page.createFieldSet();
+        username.type("Developer");
+        button.click();
+        assertEquals("Hello Developer!", message.getText());
+    }
+
+    @Test
+    public void shouldRebindElementsIfStale_whenLocatingByParentFindAll()
+    {
+        DynamicPage page = product.visit(DynamicPage.class);
+        ElementFinder elementFinder = page.getElementFinder();
+
+        page.createFieldSet();
+
+        Element fieldset = elementFinder.find(By.tagName("fieldset"));
+        Element username = fieldset.findAll(By.tagName("input")).get(0);
+        Element button = fieldset.findAll(By.tagName("input")).get(1);
+        Element message = fieldset.find(By.id("messageSpan"));
+
+        username.type("Tester");
+        button.click();
+        assertEquals("Hello Tester!", message.getText());
+
+        //recreate the fields
+        page.createFieldSet();
+        username.type("Developer");
+        button.click();
+        assertEquals("Hello Developer!", message.getText());
     }
 }

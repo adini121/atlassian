@@ -24,14 +24,14 @@ public class WebDriverMultiSelectElement extends WebDriverElement implements Mul
         super(locator, defaultTimeout);
     }
 
-    public WebDriverMultiSelectElement(By locator, SearchContext searchContext)
+    public WebDriverMultiSelectElement(By locator, WebDriverLocatable parent)
     {
-        super(locator, searchContext);
+        super(locator, parent);
     }
 
-    public WebDriverMultiSelectElement(WebElement webElement)
+    public WebDriverMultiSelectElement(WebDriverLocatable locatable, TimeoutType timeoutType)
     {
-        super(webElement);
+        super(locatable, timeoutType);
     }
 
     private Option buildOption(WebElement option)

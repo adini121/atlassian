@@ -24,14 +24,14 @@ public class WebDriverSelectElement extends WebDriverElement implements SelectEl
         super(locator, defaultTimeout);
     }
 
-    public WebDriverSelectElement(WebElement webElement)
+    public WebDriverSelectElement(WebDriverLocatable locatable, TimeoutType timeoutType)
     {
-        super(webElement);
+        super(locatable, timeoutType);
     }
 
-    public WebDriverSelectElement(By locator, SearchContext searchContext)
+    public WebDriverSelectElement(By locator, WebDriverLocatable parent)
     {    
-        super(locator, searchContext);
+        super(locator, parent);
     }
 
     private Option buildOption(WebElement option)
