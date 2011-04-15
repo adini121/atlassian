@@ -1,7 +1,7 @@
 package com.atlassian.pageobjects.elements;
 
 import com.atlassian.pageobjects.PageBinder;
-import com.atlassian.pageobjects.elements.WebDriverElementMappings;
+import com.atlassian.pageobjects.elements.timeout.TimeoutType;
 import org.openqa.selenium.By;
 
 import javax.inject.Inject;
@@ -15,7 +15,9 @@ public class ElementFinder
     PageBinder pageBinder;
 
     /**
-     * Creates a WebDriverElement using the specified locator
+     * Creates  {@link com.atlassian.pageobjects.elements.Element} implementation
+     * using the specified <tt>locator</tt> and default timeout.
+     *
      * @param by Locator mechanism to use
      * @return Element that waits until its present in the DOM before executing actions.
      */
@@ -26,7 +28,23 @@ public class ElementFinder
     }
 
     /**
-     * Creates specified WebDriverElement using the specified locator
+     * Creates {@link com.atlassian.pageobjects.elements.Element} implementation
+     * using the specified <tt>locator</tt> and given <tt>timeoutType</tt>.
+     *
+     * @param by Locator mechanism to use
+     * @param timeoutType timeout for the element's timed operations
+     * @return Element that waits until its present in the DOM before executing actions.
+     */
+
+    public Element find(final By by, TimeoutType timeoutType)
+    {
+        return pageBinder.bind(WebDriverElement.class, by, timeoutType);
+    }
+
+    /**
+     * Creates {@link com.atlassian.pageobjects.elements.Element} extension of type <tt>T</tt> using the specified
+     * <tt>locator</tt> and default timeout.
+     *
      * @param by Locator mechanism to use
      * @param elementClass The class of the element to create
      * @return An instance of specified WebDriverElement
@@ -34,5 +52,19 @@ public class ElementFinder
     public <T extends Element> T find(final By by, Class<T> elementClass)
     {
         return pageBinder.bind(WebDriverElementMappings.findMapping(elementClass), by);
+    }
+
+    /**
+     * Creates {@link com.atlassian.pageobjects.elements.Element} extension of type <tt>T</tt> using the specified
+     * <tt>locator</tt> and given <tt>timeoutType</tt>
+     *
+     * @param by Locator mechanism to use
+     * @param elementClass The class of the element to create
+     * @param timeoutType timeout for the element's timed operations
+     * @return An instance of specified WebDriverElement
+     */
+    public <T extends Element> T find(final By by, Class<T> elementClass, TimeoutType timeoutType)
+    {
+        return pageBinder.bind(WebDriverElementMappings.findMapping(elementClass), by, timeoutType);
     }
 }
