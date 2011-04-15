@@ -43,7 +43,7 @@ public class InjectUtils
     private static Collection<Field> findAllFields(Object instance)
     {
         Map<String,Field> fields = new HashMap<String,Field>();
-        Class cls = instance.getClass();
+        Class<?> cls = instance.getClass();
         while (cls != Object.class)
         {
             for (Field field : cls.getDeclaredFields())

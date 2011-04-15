@@ -219,7 +219,8 @@ public class WebDriverElement implements PageElement
     }
 
 
-    public PageElement withTimeout(TimeoutType timeoutType) {
+    public PageElement withTimeout(TimeoutType timeoutType)
+    {
         if (this.defaultTimeout == timeoutType)
         {
             return this;

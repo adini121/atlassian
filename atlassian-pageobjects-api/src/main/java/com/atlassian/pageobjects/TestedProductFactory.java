@@ -1,11 +1,9 @@
 package com.atlassian.pageobjects;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 /**
  * Constructs a {@link TestedProduct}.  The {@link TestedProduct} instance is created by calling the constructor
@@ -16,8 +14,6 @@ import java.net.InetAddress;
  */
 public class TestedProductFactory
 {
-    private static final Logger LOG = LoggerFactory.getLogger(TestedProductFactory.class);
-
     /**
      * A factory for {@link Tester} instances
      * @param <T> The tester type
@@ -136,28 +132,30 @@ public class TestedProductFactory
         }
         catch (NoSuchMethodException e)
         {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            throw new RuntimeException(e);
         }
         catch (InvocationTargetException e)
         {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            throw new RuntimeException(e);
         }
         catch (InstantiationException e)
         {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            throw new RuntimeException(e);
         }
         catch (IllegalAccessException e)
         {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            throw new RuntimeException(e);
         }
-        throw new RuntimeException();
     }
 
     private static String getLocalHostName()
     {
-        try {
+        try
+        {
             return InetAddress.getLocalHost().getHostName();
-        } catch (Exception e) {
+        }
+        catch (UnknownHostException e)
+        {
             throw new RuntimeException(e);
         }
     }

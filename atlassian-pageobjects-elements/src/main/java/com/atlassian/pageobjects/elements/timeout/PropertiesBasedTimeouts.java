@@ -1,19 +1,17 @@
 package com.atlassian.pageobjects.elements.timeout;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Map;
+import java.util.Properties;
+
 import com.google.common.collect.Maps;
+
 import org.apache.commons.io.IOUtils;
 import org.hamcrest.StringDescription;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.util.Map;
-import java.util.Properties;
 
 import static com.atlassian.pageobjects.elements.util.StringConcat.asString;
 import static com.google.common.base.Preconditions.checkArgument;

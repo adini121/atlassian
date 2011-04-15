@@ -1,12 +1,14 @@
 package com.atlassian.pageobjects.elements.query;
 
+import java.util.List;
+
 import com.google.common.base.Supplier;
+
 import org.apache.commons.lang.ArrayUtils;
 import org.hamcrest.Matcher;
 import org.hamcrest.StringDescription;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
 
 import static com.atlassian.pageobjects.elements.util.StringConcat.asString;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -18,7 +20,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public final class Conditions
 {
-    private static final org.slf4j.Logger log = LoggerFactory.getLogger(Conditions.class);
+    private static final Logger log = LoggerFactory.getLogger(Conditions.class);
 
     private static final int DEFAULT_TIMEOUT = 100;
 

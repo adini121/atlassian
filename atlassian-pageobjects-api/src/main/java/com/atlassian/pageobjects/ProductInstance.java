@@ -6,12 +6,12 @@ package com.atlassian.pageobjects;
 public interface ProductInstance
 {
     /**
-     * @return The base url of the instance.  Cannot be null.
+     * @return The base URL of the instance.  Cannot be null.
      */
     String getBaseUrl();
 
     /**
-     * @return The http port
+     * @return The HTTP port
      */
     int getHttpPort();
 

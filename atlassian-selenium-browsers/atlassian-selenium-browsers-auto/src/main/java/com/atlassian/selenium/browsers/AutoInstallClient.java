@@ -5,8 +5,6 @@ import com.atlassian.selenium.SeleniumClient;
 import com.atlassian.selenium.SeleniumConfiguration;
 import com.atlassian.selenium.SeleniumStarter;
 
-import java.io.File;
-
 /**
  * Client that supports automatically installing the appropriate browser for the environment
  *

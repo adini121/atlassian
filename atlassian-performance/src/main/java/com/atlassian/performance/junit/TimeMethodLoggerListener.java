@@ -1,12 +1,11 @@
 package com.atlassian.performance.junit;
 
-import com.atlassian.performance.PerformanceReporter;
+import org.slf4j.Marker;
+import org.slf4j.MarkerFactory;
+
 import junit.framework.AssertionFailedError;
 import junit.framework.Test;
 import junit.framework.TestListener;
-
-import org.slf4j.MarkerFactory;
-import org.slf4j.Marker;
 
 public class TimeMethodLoggerListener implements TestListener {
 

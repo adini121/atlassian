@@ -1,10 +1,8 @@
 package com.atlassian.pageobjects.elements.timeout;
 
-import com.google.common.collect.ImmutableMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.Map;
+
+import com.google.common.collect.ImmutableMap;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -21,8 +19,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class MapBasedTimeouts implements Timeouts
 {
-    private static final Logger log = LoggerFactory.getLogger(MapBasedTimeouts.class);
-
     private final Map<TimeoutType,Long> timeouts;
     private final long defaultValue;
 

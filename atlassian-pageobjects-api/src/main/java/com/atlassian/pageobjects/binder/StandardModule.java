@@ -6,9 +6,6 @@ import com.atlassian.pageobjects.Tester;
 import com.google.inject.Binder;
 import com.google.inject.Module;
 
-/**
- *
- */
 public class StandardModule implements Module
 {
     private final TestedProduct testedProduct;

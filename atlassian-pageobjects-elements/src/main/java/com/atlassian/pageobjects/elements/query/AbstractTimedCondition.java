@@ -38,5 +38,4 @@ public abstract class AbstractTimedCondition extends AbstractTimedQuery<Boolean>
     {
         return currentEval;
     }
-
 }

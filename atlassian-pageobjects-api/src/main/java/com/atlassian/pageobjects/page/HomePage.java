@@ -9,7 +9,7 @@ import com.atlassian.pageobjects.component.Header;
 public interface HomePage<H extends Header> extends Page
 {
     /**
-     * @return The header
+     * @return the header
      */
     H getHeader();
 }

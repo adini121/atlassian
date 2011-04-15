@@ -9,8 +9,8 @@ import java.util.Map;
  *
  * @since v4.4
  */
-public class WebDriverElementMappings {
-
+public class WebDriverElementMappings
+{
     private static final Map<Class<? extends PageElement>, Class<? extends PageElement>> MAPPINGS = ImmutableMap.<Class<? extends PageElement>, Class<? extends PageElement>>builder()
             .put(SelectElement.class, WebDriverSelectElement.class)
             .put(MultiSelectElement.class, WebDriverMultiSelectElement.class)

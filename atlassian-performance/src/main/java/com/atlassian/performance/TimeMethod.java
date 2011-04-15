@@ -9,5 +9,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface TimeMethod
 {
-    public String value();
+    String value();
 }

@@ -26,5 +26,4 @@ public interface LoginPage extends Page
      * @return The next page, fully loaded and initialized.
      */
     <M extends Page> M loginAsSysAdmin(Class<M> nextPage);
-
 }

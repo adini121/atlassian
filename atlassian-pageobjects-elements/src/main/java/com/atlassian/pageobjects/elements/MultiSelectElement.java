@@ -28,7 +28,7 @@ public interface MultiSelectElement extends PageElement
      * @param option option to add
      * @return this multi-select instance
      */
-    public MultiSelectElement select(Option option);
+    MultiSelectElement select(Option option);
 
     /**
      * Remove given option from the current selection
@@ -36,20 +36,19 @@ public interface MultiSelectElement extends PageElement
      * @param option option to remove
      * @return this multi-select instance
      */
-    public MultiSelectElement unselect(Option option);
+    MultiSelectElement unselect(Option option);
 
     /**
      * Add all options to the current selection.
      *
      * @return this multi-select instance
      */
-    public MultiSelectElement selectAll();
+    MultiSelectElement selectAll();
 
     /**
      * Remove all options from the current selection
      *
      * @return this multi-select instance
      */
-    public MultiSelectElement unselectAll();
-
+    MultiSelectElement unselectAll();
 }

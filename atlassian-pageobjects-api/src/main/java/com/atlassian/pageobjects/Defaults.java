@@ -6,24 +6,24 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * The default values for a {@link com.atlassian.pageobjects.TestedProduct}
+ * The default values for a {@link com.atlassian.pageobjects.TestedProduct}.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface Defaults {
 
     /**
-     * @return The default instance id
+     * @return the default instance id
      */
     String instanceId();
 
     /**
-     * @return The default context path
+     * @return the default context path
      */
     String contextPath();
 
     /**
-     * @return The default http port
+     * @return the default HTTP port
      */
     int httpPort();
 }

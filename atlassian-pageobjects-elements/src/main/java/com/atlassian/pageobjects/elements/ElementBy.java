@@ -8,7 +8,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Injects an Element into the field.
+ * Injects an Element into the field. Only one of the selector types should be specified.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)

@@ -3,6 +3,8 @@ package com.atlassian.pageobjects.util;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.Validate;
+
 
 /**
  * Helper class for building a query string
@@ -15,7 +17,7 @@ public class QueryStringBuilder
 
     public QueryStringBuilder(String... params)
     {
-        //Validate.isTrue(params.length % 2 == 0, "Must be an even number of parameters");
+        Validate.isTrue(params.length % 2 == 0, "Must be an even number of parameters");
 
         for (int i = 0; i < params.length; i += 2)
         {

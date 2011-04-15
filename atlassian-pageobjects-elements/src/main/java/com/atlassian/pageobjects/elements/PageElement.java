@@ -6,7 +6,7 @@ import org.openqa.selenium.By;
 import java.util.List;
 
 /**
- * Represents an HTML element that is expected on a DOM of a page
+ * Represents an HTML element that is expected on a DOM of a page.
  */
 public interface PageElement
 {

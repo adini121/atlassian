@@ -28,8 +28,6 @@ public class AuiTabs implements TabbedComponent
     private final By rootLocator;
 
     private PageElement rootElement;
-    private PageElement tabTrigger;
-    private PageElement tabView;
 
     public AuiTabs(By locator)
     {

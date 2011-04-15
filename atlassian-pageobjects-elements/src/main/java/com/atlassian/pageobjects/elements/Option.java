@@ -7,7 +7,6 @@ package com.atlassian.pageobjects.elements;
  */
 public interface Option
 {
-
     /**
      * Option ID.
      *

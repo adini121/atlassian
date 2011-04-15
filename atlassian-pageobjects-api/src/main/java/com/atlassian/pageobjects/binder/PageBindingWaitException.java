@@ -5,7 +5,6 @@ package com.atlassian.pageobjects.binder;
  */
 public class PageBindingWaitException extends PageBindingException
 {
-
     public PageBindingWaitException(Object pageObject, Throwable cause)
     {
         super(pageObject, cause);

@@ -1,14 +1,12 @@
 package com.atlassian.performance;
 
+import java.lang.reflect.Method;
+
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MarkerFactory;
-import org.slf4j.Marker;
-
-import java.lang.reflect.Method;
-import java.util.Iterator;
 
 public class TimeMethodInterceptor implements MethodInterceptor
 {

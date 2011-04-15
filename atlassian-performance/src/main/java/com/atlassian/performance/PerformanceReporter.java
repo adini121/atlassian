@@ -13,11 +13,6 @@ public class PerformanceReporter
     private static final String SEPARATOR = ", ";
     private static final String ENDLINE = "\n";
 
-    public PerformanceReporter()
-    {
-
-    }
-
     public void addRecorder(TimeRecorder recorder)
     {
         recorders.add(recorder);

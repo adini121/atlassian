@@ -6,8 +6,7 @@ package com.atlassian.pageobjects.component;
 public interface Header
 {
     /**
-     * @return True if a user is logged in, false otherwise.
+     * @return true if a user is logged in, false otherwise.
      */
-    public boolean isLoggedIn();
-
+    boolean isLoggedIn();
 }

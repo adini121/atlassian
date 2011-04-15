@@ -28,5 +28,4 @@ public interface SelectElement extends PageElement
      * @return this select instance
      */
     public SelectElement select(Option option);
-    
 }

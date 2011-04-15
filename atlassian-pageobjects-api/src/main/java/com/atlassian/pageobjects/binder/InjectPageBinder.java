@@ -58,8 +58,8 @@ public final class InjectPageBinder implements PageBinder
     private final ProductInstance productInstance;
     private static final Logger log = LoggerFactory.getLogger(InjectPageBinder.class);
 
-    private final Map<Class, Class> overrides =
-            new HashMap<Class, Class>();
+    private final Map<Class<?>, Class<?>> overrides =
+            new HashMap<Class<?>, Class<?>>();
     private final Injector injector;
     private final List<Binding<PostInjectionProcessor>> postInjectionProcessors;
 
@@ -380,7 +380,7 @@ public final class InjectPageBinder implements PageBinder
         private void advanceTo(Class<? extends Phase> phaseClass)
         {
             boolean found = false;
-            for (Phase phase : phases)
+            for (Phase<T> phase : phases)
             {
                 if (phase.getClass() == phaseClass)
                 {
@@ -437,7 +437,5 @@ public final class InjectPageBinder implements PageBinder
             advanceTo(InitializePhase.class);
             return pageObject;
         }
-
     }
-
 }

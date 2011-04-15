@@ -1,17 +1,16 @@
 package com.atlassian.selenium.browsers;
 
-import com.atlassian.browsers.InstallConfigurator;
-import com.atlassian.browsers.BrowserAutoInstaller;
-import com.atlassian.browsers.BrowserConfig;
-import com.atlassian.selenium.AbstractSeleniumConfiguration;
-import com.atlassian.selenium.browsers.firefox.DisplayAwareFirefoxChromeLauncher;
-import org.openqa.selenium.server.browserlaunchers.BrowserLauncherFactory;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import static com.atlassian.browsers.ProcessRunner.runProcess;
+import com.atlassian.browsers.BrowserAutoInstaller;
+import com.atlassian.browsers.BrowserConfig;
+import com.atlassian.browsers.InstallConfigurator;
+import com.atlassian.selenium.AbstractSeleniumConfiguration;
+import com.atlassian.selenium.browsers.firefox.DisplayAwareFirefoxChromeLauncher;
+
+import org.openqa.selenium.server.browserlaunchers.BrowserLauncherFactory;
 
 /**
  * Configures Selenium by detecting if installation of a browserStartString is required, and if so, installs it for this session.
@@ -158,7 +157,4 @@ class AutoInstallConfiguration extends AbstractSeleniumConfiguration
             }
         }
     }
-
-
-
 }
