@@ -4,9 +4,11 @@ import com.atlassian.pageobjects.elements.PageElement;
 import com.atlassian.pageobjects.elements.TimedElement;
 import com.atlassian.pageobjects.elements.query.Poller;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.ElementsPage;
+import com.atlassian.pageobjects.elements.timeout.TimeoutType;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
+import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.Matchers.equalToIgnoringCase;
 
 public class TestTimedElement extends AbstractFileBasedServerTest
@@ -159,5 +161,15 @@ public class TestTimedElement extends AbstractFileBasedServerTest
         {
             Poller.waitUntilTrue(li.timed().isPresent());
         }
+    }
+
+    @Test
+    public void testElementWithTimeout()
+    {
+        product.visit(ElementsPage.class);
+        PageElement element = product.find(By.id("test1_addElementsButton"));
+        assertEquals(element.timed().isPresent().defaultTimeout(), product.timeouts().timeoutFor(TimeoutType.DEFAULT));
+        element = element.withTimeout(TimeoutType.AJAX_ACTION);
+        assertEquals(element.timed().isPresent().defaultTimeout(), product.timeouts().timeoutFor(TimeoutType.AJAX_ACTION));
     }
 }

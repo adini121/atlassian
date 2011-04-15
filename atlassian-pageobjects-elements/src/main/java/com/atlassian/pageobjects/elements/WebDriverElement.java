@@ -5,11 +5,14 @@ import com.atlassian.pageobjects.elements.timeout.TimeoutType;
 import com.atlassian.pageobjects.elements.timeout.Timeouts;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.utils.Check;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.RenderedWebElement;
+import org.openqa.selenium.WebElement;
 
-import java.util.*;
-import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -213,5 +216,14 @@ public class WebDriverElement implements PageElement
     public PageElement find(final By locator)
     {
         return pageBinder.bind(WebDriverElement.class, locator, locatable);
+    }
+
+
+    public PageElement withTimeout(TimeoutType timeoutType) {
+        if (this.defaultTimeout == timeoutType)
+        {
+            return this;
+        }
+        return pageBinder.bind(WebDriverElement.class, locatable, checkNotNull(timeoutType));
     }
 }

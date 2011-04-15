@@ -28,4 +28,9 @@ public class TimeoutsModule implements Module
     {
         binder.bind(Timeouts.class).toInstance(timeouts);
     }
+
+    public Timeouts timeouts()
+    {
+        return timeouts;
+    }
 }

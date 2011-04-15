@@ -1,5 +1,6 @@
 package com.atlassian.pageobjects.elements;
 
+import com.atlassian.pageobjects.elements.timeout.TimeoutType;
 import org.openqa.selenium.By;
 
 import java.util.List;
@@ -145,4 +146,12 @@ public interface PageElement
      * @return MouseEvents object that can dispatch javascript events to this element.
      */
     WebDriverMouseEvents mouseEvents();
+
+    /**
+     * Returns an instance equivalent to this element, with a changed <tt>timeoutType</tt>.
+     *
+     * @param timeoutType new timeout
+     * @return new element with given <tt>timeoutType</tt>
+     */
+    PageElement withTimeout(TimeoutType timeoutType);
 }
