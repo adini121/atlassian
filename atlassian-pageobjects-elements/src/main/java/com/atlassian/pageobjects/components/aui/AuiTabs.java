@@ -4,7 +4,7 @@ import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.binder.Init;
 import com.atlassian.pageobjects.binder.InvalidPageStateException;
 import com.atlassian.pageobjects.components.TabbedComponent;
-import com.atlassian.pageobjects.elements.Element;
+import com.atlassian.pageobjects.elements.PageElement;
 import com.atlassian.pageobjects.elements.ElementFinder;
 import com.atlassian.pageobjects.elements.query.Poller;
 import org.openqa.selenium.By;
@@ -27,9 +27,9 @@ public class AuiTabs implements TabbedComponent
 
     private final By rootLocator;
 
-    private Element rootElement;
-    private Element tabTrigger;
-    private Element tabView;
+    private PageElement rootElement;
+    private PageElement tabTrigger;
+    private PageElement tabView;
 
     public AuiTabs(By locator)
     {
@@ -42,13 +42,13 @@ public class AuiTabs implements TabbedComponent
         this.rootElement = elementFinder.find(rootLocator);
     }
 
-    public Element selectedTab()
+    public PageElement selectedTab()
     {
-        List<Element> items = rootElement.find(By.className("tabs-menu")).findAll(By.tagName("li"));
+        List<PageElement> items = rootElement.find(By.className("tabs-menu")).findAll(By.tagName("li"));
 
         for(int i = 0; i < items.size(); i++)
         {
-            Element tab = items.get(i);
+            PageElement tab = items.get(i);
             if(tab.hasClass("active-tab"))
             {
                 return tab;
@@ -58,12 +58,12 @@ public class AuiTabs implements TabbedComponent
         throw new InvalidPageStateException("A tab must be active.", this);
     }
 
-    public Element selectedView()
+    public PageElement selectedView()
     {
-         List<Element> panes = rootElement.findAll(By.className("tabs-pane"));
+         List<PageElement> panes = rootElement.findAll(By.className("tabs-pane"));
         for(int i = 0; i < panes.size(); i++)
         {
-            Element pane = panes.get(i);
+            PageElement pane = panes.get(i);
             if(pane.hasClass("active-pane"))
             {
                 return pane;
@@ -73,25 +73,25 @@ public class AuiTabs implements TabbedComponent
         throw new InvalidPageStateException("A pane must be active", this);
     }
 
-    public List<Element> tabs()
+    public List<PageElement> tabs()
     {
         return rootElement.find(By.className("tabs-menu")).findAll(By.tagName("li"));
     }
 
-    public Element openTab(String tabText)
+    public PageElement openTab(String tabText)
     {
-        List<Element> tabs = rootElement.find(By.className("tabs-menu")).findAll(By.tagName("a"));
+        List<PageElement> tabs = rootElement.find(By.className("tabs-menu")).findAll(By.tagName("a"));
 
         for(int i = 0; i < tabs.size(); i++)
         {
             if(tabs.get(i).getText().equals(tabText))
             {
-                Element listItem = tabs.get(i);
+                PageElement listItem = tabs.get(i);
                 listItem.click();
 
                 // find the pane and wait until it has class "active-pane"
                 String tabViewClassName = listItem.getAttribute("href").substring(1);
-                Element pane = rootElement.find(By.id(tabViewClassName));
+                PageElement pane = rootElement.find(By.id(tabViewClassName));
                 Poller.waitUntilTrue(pane.timed().hasClass("active-pane"));
 
                 return pane;
@@ -101,7 +101,7 @@ public class AuiTabs implements TabbedComponent
         throw new InvalidPageStateException("Tab not found", this);
     }
 
-    public Element openTab(Element tab)
+    public PageElement openTab(PageElement tab)
     {
         String tabIdentifier = tab.getText();
         return openTab(tabIdentifier);

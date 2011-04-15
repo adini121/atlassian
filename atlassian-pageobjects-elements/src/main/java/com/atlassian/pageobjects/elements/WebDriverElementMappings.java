@@ -1,6 +1,5 @@
 package com.atlassian.pageobjects.elements;
 
-import com.atlassian.pageobjects.elements.*;
 import com.google.common.collect.ImmutableMap;
 
 import java.util.Map;
@@ -12,14 +11,14 @@ import java.util.Map;
  */
 public class WebDriverElementMappings {
 
-    private static final Map<Class<? extends Element>, Class<? extends Element>> MAPPINGS = ImmutableMap.<Class<? extends Element>, Class<? extends Element>>builder()
+    private static final Map<Class<? extends PageElement>, Class<? extends PageElement>> MAPPINGS = ImmutableMap.<Class<? extends PageElement>, Class<? extends PageElement>>builder()
             .put(SelectElement.class, WebDriverSelectElement.class)
             .put(MultiSelectElement.class, WebDriverMultiSelectElement.class)
             .build();
 
 
     @SuppressWarnings({"unchecked"})
-    public static <T extends Element> Class<T> findMapping(Class<T> input)
+    public static <T extends PageElement> Class<T> findMapping(Class<T> input)
     {
         if (!input.isInterface())
         {

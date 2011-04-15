@@ -15,20 +15,20 @@ public class ElementFinder
     PageBinder pageBinder;
 
     /**
-     * Creates  {@link com.atlassian.pageobjects.elements.Element} implementation
+     * Creates  {@link PageElement} implementation
      * using the specified <tt>locator</tt> and default timeout.
      *
      * @param by Locator mechanism to use
      * @return Element that waits until its present in the DOM before executing actions.
      */
 
-    public Element find(final By by)
+    public PageElement find(final By by)
     {
         return pageBinder.bind(WebDriverElement.class, by);
     }
 
     /**
-     * Creates {@link com.atlassian.pageobjects.elements.Element} implementation
+     * Creates {@link PageElement} implementation
      * using the specified <tt>locator</tt> and given <tt>timeoutType</tt>.
      *
      * @param by Locator mechanism to use
@@ -36,26 +36,26 @@ public class ElementFinder
      * @return Element that waits until its present in the DOM before executing actions.
      */
 
-    public Element find(final By by, TimeoutType timeoutType)
+    public PageElement find(final By by, TimeoutType timeoutType)
     {
         return pageBinder.bind(WebDriverElement.class, by, timeoutType);
     }
 
     /**
-     * Creates {@link com.atlassian.pageobjects.elements.Element} extension of type <tt>T</tt> using the specified
+     * Creates {@link PageElement} extension of type <tt>T</tt> using the specified
      * <tt>locator</tt> and default timeout.
      *
      * @param by Locator mechanism to use
      * @param elementClass The class of the element to create
      * @return An instance of specified WebDriverElement
      */
-    public <T extends Element> T find(final By by, Class<T> elementClass)
+    public <T extends PageElement> T find(final By by, Class<T> elementClass)
     {
         return pageBinder.bind(WebDriverElementMappings.findMapping(elementClass), by);
     }
 
     /**
-     * Creates {@link com.atlassian.pageobjects.elements.Element} extension of type <tt>T</tt> using the specified
+     * Creates {@link PageElement} extension of type <tt>T</tt> using the specified
      * <tt>locator</tt> and given <tt>timeoutType</tt>
      *
      * @param by Locator mechanism to use
@@ -63,7 +63,7 @@ public class ElementFinder
      * @param timeoutType timeout for the element's timed operations
      * @return An instance of specified WebDriverElement
      */
-    public <T extends Element> T find(final By by, Class<T> elementClass, TimeoutType timeoutType)
+    public <T extends PageElement> T find(final By by, Class<T> elementClass, TimeoutType timeoutType)
     {
         return pageBinder.bind(WebDriverElementMappings.findMapping(elementClass), by, timeoutType);
     }

@@ -3,7 +3,7 @@ package com.atlassian.pageobjects.components.aui;
 import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.binder.Init;
 import com.atlassian.pageobjects.components.ActivatedComponent;
-import com.atlassian.pageobjects.elements.Element;
+import com.atlassian.pageobjects.elements.PageElement;
 import com.atlassian.pageobjects.elements.ElementFinder;
 import com.atlassian.pageobjects.elements.query.Poller;
 import org.openqa.selenium.By;
@@ -26,9 +26,9 @@ public class AuiDropDownMenu implements ActivatedComponent<AuiDropDownMenu>
     protected ElementFinder elementFinder;
     
     private final By locator;
-    private Element rootElement;
-    private Element triggerElement;
-    private Element viewElement;
+    private PageElement rootElement;
+    private PageElement triggerElement;
+    private PageElement viewElement;
 
     public AuiDropDownMenu(By locator)
     {
@@ -43,12 +43,12 @@ public class AuiDropDownMenu implements ActivatedComponent<AuiDropDownMenu>
         viewElement = rootElement.find(By.className("aui-dropdown"));
     }
 
-    public Element getTrigger()
+    public PageElement getTrigger()
     {
         return triggerElement;
     }
 
-    public Element getView()
+    public PageElement getView()
     {
         return viewElement;
     }
@@ -81,7 +81,7 @@ public class AuiDropDownMenu implements ActivatedComponent<AuiDropDownMenu>
     public List<String> getItems()
     {
         List<String> items = new ArrayList<String>();
-        for(Element e: viewElement.findAll(By.tagName("li")))
+        for(PageElement e: viewElement.findAll(By.tagName("li")))
         {
             items.add(e.getText());
         }

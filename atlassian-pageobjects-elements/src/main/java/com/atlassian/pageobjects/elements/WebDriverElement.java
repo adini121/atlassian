@@ -14,11 +14,11 @@ import javax.inject.Inject;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Implementation of {@link Element} that waits for element to be
+ * Implementation of {@link PageElement} that waits for element to be
  * present before executing each actions.
  * 
  */
-public class WebDriverElement implements Element
+public class WebDriverElement implements PageElement
 {
     @Inject
     protected AtlassianWebDriver driver;
@@ -155,31 +155,31 @@ public class WebDriverElement implements Element
         return waitForWebElement().getValue();
     }
 
-    public Element click()
+    public PageElement click()
     {
         waitForWebElement().click();
         return this;
     }
 
-    public Element type(final CharSequence... keysToSend)
+    public PageElement type(final CharSequence... keysToSend)
     {
         waitForWebElement().sendKeys(keysToSend);
         return this;
     }
 
-    public Element select()
+    public PageElement select()
     {
         waitForWebElement().setSelected();
         return this;
     }
 
-    public Element toggle()
+    public PageElement toggle()
     {
         waitForWebElement().toggle();
         return this;
     }
 
-    public Element clear()
+    public PageElement clear()
     {
         waitForWebElement().clear();
         return this;
@@ -196,9 +196,9 @@ public class WebDriverElement implements Element
         return new WebDriverMouseEvents(driver, waitForWebElement());
     }
 
-    public List<Element> findAll(final By locator)
+    public List<PageElement> findAll(final By locator)
     {
-        List<Element> elements = new LinkedList<Element>();
+        List<PageElement> elements = new LinkedList<PageElement>();
         List<WebElement> webElements = waitForWebElement().findElements(locator);
 
         for(int i = 0; i < webElements.size(); i++)
@@ -210,7 +210,7 @@ public class WebDriverElement implements Element
         return elements;
     }
 
-    public Element find(final By locator)
+    public PageElement find(final By locator)
     {
         return pageBinder.bind(WebDriverElement.class, locator, locatable);
     }

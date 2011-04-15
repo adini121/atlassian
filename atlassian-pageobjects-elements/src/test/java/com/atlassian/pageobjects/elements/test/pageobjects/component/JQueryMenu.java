@@ -3,7 +3,7 @@ package com.atlassian.pageobjects.elements.test.pageobjects.component;
 import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.binder.Init;
 import com.atlassian.pageobjects.components.ActivatedComponent;
-import com.atlassian.pageobjects.elements.Element;
+import com.atlassian.pageobjects.elements.PageElement;
 import com.atlassian.pageobjects.elements.ElementBy;
 import com.atlassian.pageobjects.elements.query.Poller;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.ElementsPage;
@@ -24,13 +24,13 @@ public class JQueryMenu implements ActivatedComponent<JQueryMenu>
     protected PageBinder pageBinder;
 
     @ElementBy(id="elements_link")
-    private Element elementsLink;
+    private PageElement elementsLink;
 
     @ElementBy(id="menu")
-    private Element rootElement;
+    private PageElement rootElement;
 
-    private Element triggerElement;
-    private Element viewElement;
+    private PageElement triggerElement;
+    private PageElement viewElement;
 
     @Init
     public void intialize()
@@ -47,12 +47,12 @@ public class JQueryMenu implements ActivatedComponent<JQueryMenu>
     }
 
 
-    public Element getTrigger()
+    public PageElement getTrigger()
     {
         return triggerElement;
     }
 
-    public Element getView()
+    public PageElement getView()
     {
         return viewElement;
     }

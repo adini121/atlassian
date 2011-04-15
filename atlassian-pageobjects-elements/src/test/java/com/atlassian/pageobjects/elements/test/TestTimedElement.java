@@ -1,6 +1,6 @@
 package com.atlassian.pageobjects.elements.test;
 
-import com.atlassian.pageobjects.elements.Element;
+import com.atlassian.pageobjects.elements.PageElement;
 import com.atlassian.pageobjects.elements.TimedElement;
 import com.atlassian.pageobjects.elements.query.Poller;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.ElementsPage;
@@ -154,8 +154,8 @@ public class TestTimedElement extends AbstractFileBasedServerTest
     public void testTimedElementWithFindAll()
     {
         product.visit(ElementsPage.class);
-        Element leafList = product.find(By.id("test4_leafList"));
-        for (Element li : leafList.findAll(By.tagName("li")))
+        PageElement leafList = product.find(By.id("test4_leafList"));
+        for (PageElement li : leafList.findAll(By.tagName("li")))
         {
             Poller.waitUntilTrue(li.timed().isPresent());
         }

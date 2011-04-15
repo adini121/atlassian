@@ -1,6 +1,6 @@
 package com.atlassian.pageobjects.elements.test.pageobjects.component;
 
-import com.atlassian.pageobjects.elements.Element;
+import com.atlassian.pageobjects.elements.PageElement;
 import com.atlassian.pageobjects.components.ActivatedComponent;
 import org.openqa.selenium.By;
 
@@ -22,12 +22,12 @@ public class UserTab implements ActivatedComponent<UserTab>
         return getView().find(By.tagName("h4")).getText();
     }
 
-    public Element getTrigger()
+    public PageElement getTrigger()
     {
         return tabs.selectedTab();
     }
 
-    public Element getView()
+    public PageElement getView()
     {
         return tabs.selectedView();
     }

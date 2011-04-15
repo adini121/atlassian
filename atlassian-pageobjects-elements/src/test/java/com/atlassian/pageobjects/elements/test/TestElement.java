@@ -1,6 +1,6 @@
 package com.atlassian.pageobjects.elements.test;
 
-import com.atlassian.pageobjects.elements.Element;
+import com.atlassian.pageobjects.elements.PageElement;
 import com.atlassian.pageobjects.elements.ElementFinder;
 import com.atlassian.pageobjects.elements.Options;
 import com.atlassian.pageobjects.elements.SelectElement;
@@ -62,7 +62,7 @@ public class TestElement extends AbstractFileBasedServerTest
     {
         product.visit(ElementsPage.class);
 
-       Element testInput = product.find(By.id("test2_input"));
+       PageElement testInput = product.find(By.id("test2_input"));
 
        // Positive - verify input that is visible
        assertTrue(testInput.isVisible());
@@ -101,13 +101,13 @@ public class TestElement extends AbstractFileBasedServerTest
         product.visit(ElementsPage.class);
 
         // find a delayed elements within another
-        Element childList = product.find(By.id("test4_parentList")).find(By.tagName("ul"));
+        PageElement childList = product.find(By.id("test4_parentList")).find(By.tagName("ul"));
         assertEquals("test4_childList", childList.getAttribute("id"));
 
-        Element leafList = childList.find(By.tagName("ul"));
+        PageElement leafList = childList.find(By.tagName("ul"));
         assertEquals("test4_leafList", leafList.getAttribute("id"));
 
-        Element listItem = leafList.find(By.tagName("li"));
+        PageElement listItem = leafList.find(By.tagName("li"));
         assertEquals("Item 1", listItem.getText());
 
         //wait for presence on an element within another
@@ -148,8 +148,8 @@ public class TestElement extends AbstractFileBasedServerTest
     public void shouldFindElementByJquery()
     {
         product.visit(ElementsPage.class);
-        final Element awesomeDiv = product.find(By.id("awesome-div"));
-        final Element awesomeSpan = awesomeDiv.find(ByJquery.$("span:contains(Awesome)"));
+        final PageElement awesomeDiv = product.find(By.id("awesome-div"));
+        final PageElement awesomeSpan = awesomeDiv.find(ByJquery.$("span:contains(Awesome)"));
         assertNotNull(awesomeSpan);
         assertEquals("awesome-span", awesomeSpan.getAttribute("id"));
 
@@ -174,9 +174,9 @@ public class TestElement extends AbstractFileBasedServerTest
         DynamicPage page = product.visit(DynamicPage.class);
         
         ElementFinder elementFinder = page.getElementFinder();
-        Element username = elementFinder.find(By.id("nameTextBox"));
-        Element button = elementFinder.find(By.id("helloWorldButton"));
-        Element message = elementFinder.find(By.id("messageSpan"));
+        PageElement username = elementFinder.find(By.id("nameTextBox"));
+        PageElement button = elementFinder.find(By.id("helloWorldButton"));
+        PageElement message = elementFinder.find(By.id("messageSpan"));
 
         page.createFieldSet();
 
@@ -197,10 +197,10 @@ public class TestElement extends AbstractFileBasedServerTest
         DynamicPage page = product.visit(DynamicPage.class);
         ElementFinder elementFinder = page.getElementFinder();
 
-        Element div = elementFinder.find(By.id("placeHolderDiv"));
-        Element username = div.find(By.tagName("fieldset")).find(By.id("nameTextBox"));
-        Element button = div.find(By.tagName("fieldset")).find(By.id("helloWorldButton"));
-        Element message = div.find(By.tagName("fieldset")).find(By.id("messageSpan"));
+        PageElement div = elementFinder.find(By.id("placeHolderDiv"));
+        PageElement username = div.find(By.tagName("fieldset")).find(By.id("nameTextBox"));
+        PageElement button = div.find(By.tagName("fieldset")).find(By.id("helloWorldButton"));
+        PageElement message = div.find(By.tagName("fieldset")).find(By.id("messageSpan"));
 
         page.createFieldSet();
         username.type("Tester");
@@ -222,10 +222,10 @@ public class TestElement extends AbstractFileBasedServerTest
 
         page.createFieldSet();
 
-        Element fieldset = elementFinder.find(By.tagName("fieldset"));
-        Element username = fieldset.findAll(By.tagName("input")).get(0);
-        Element button = fieldset.findAll(By.tagName("input")).get(1);
-        Element message = fieldset.find(By.id("messageSpan"));
+        PageElement fieldset = elementFinder.find(By.tagName("fieldset"));
+        PageElement username = fieldset.findAll(By.tagName("input")).get(0);
+        PageElement button = fieldset.findAll(By.tagName("input")).get(1);
+        PageElement message = fieldset.find(By.id("messageSpan"));
 
         username.type("Tester");
         button.click();

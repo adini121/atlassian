@@ -9,10 +9,8 @@ import com.atlassian.pageobjects.TestedProductFactory;
 import com.atlassian.pageobjects.binder.InjectPageBinder;
 import com.atlassian.pageobjects.binder.StandardModule;
 import com.atlassian.pageobjects.elements.ElementModule;
-import com.atlassian.pageobjects.elements.Element;
+import com.atlassian.pageobjects.elements.PageElement;
 import com.atlassian.pageobjects.elements.WebDriverElement;
-import com.atlassian.pageobjects.elements.timeout.DefaultTimeouts;
-import com.atlassian.pageobjects.elements.timeout.Timeouts;
 import com.atlassian.pageobjects.elements.timeout.TimeoutsModule;
 import com.atlassian.webdriver.AtlassianWebDriverModule;
 import com.atlassian.webdriver.pageobjects.DefaultWebDriverTester;
@@ -37,7 +35,7 @@ public class SampleTestedProduct  implements TestedProduct<WebDriverTester>
                 new AtlassianWebDriverModule(this), new ElementModule(), new TimeoutsModule());
     }
 
-    public Element find(final By by)
+    public PageElement find(final By by)
     {
         return getPageBinder().bind(WebDriverElement.class, by);
     }

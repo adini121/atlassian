@@ -4,7 +4,7 @@ import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.binder.Init;
 import com.atlassian.pageobjects.components.ActivatedComponent;
 import com.atlassian.pageobjects.components.aui.AuiInlineDialog;
-import com.atlassian.pageobjects.elements.Element;
+import com.atlassian.pageobjects.elements.PageElement;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import org.openqa.selenium.By;
 
@@ -36,12 +36,12 @@ public class InlineDialog implements ActivatedComponent<InlineDialog>
     }
 
 
-    public Element getTrigger()
+    public PageElement getTrigger()
     {
         return dialog.getTrigger();
     }
 
-    public Element getView()
+    public PageElement getView()
     {
         return dialog.getView();
     }

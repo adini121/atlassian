@@ -2,7 +2,7 @@ package com.atlassian.webdriver.jira.page;
 
 import com.atlassian.pageobjects.Page;
 import com.atlassian.pageobjects.PageBinder;
-import com.atlassian.pageobjects.elements.Element;
+import com.atlassian.pageobjects.elements.PageElement;
 import com.atlassian.pageobjects.elements.ElementBy;
 import com.atlassian.pageobjects.page.WebSudoPage;
 
@@ -17,10 +17,10 @@ public class JiraWebSudoPage implements WebSudoPage
     private PageBinder pageBinder;
 
     @ElementBy(id="login-form-authenticatePassword")
-    private Element passwordTextbox;
+    private PageElement passwordTextbox;
 
     @ElementBy(id="authenticateButton")
-    private Element confirmButton;
+    private PageElement confirmButton;
 
     public String getUrl()
     {

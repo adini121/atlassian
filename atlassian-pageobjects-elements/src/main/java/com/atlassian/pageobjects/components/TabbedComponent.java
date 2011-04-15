@@ -1,7 +1,7 @@
 package com.atlassian.pageobjects.components;
 
 
-import com.atlassian.pageobjects.elements.Element;
+import com.atlassian.pageobjects.elements.PageElement;
 
 import java.util.List;
 
@@ -13,20 +13,20 @@ public interface TabbedComponent
     /**
      * Returns element that represents the selected tab.
      */
-    Element selectedTab();
+    PageElement selectedTab();
 
     /**
      * Returns element that represents the selected tab's view.
      */
-    Element selectedView();
+    PageElement selectedView();
 
     /**
      * Returns all elements that represent the tabs.
      */
-    List<Element> tabs();
+    List<PageElement> tabs();
 
     /**
      * Open's the given tab's view.
      */
-    Element openTab(Element tab);
+    PageElement openTab(PageElement tab);
 }

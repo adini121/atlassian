@@ -1,7 +1,7 @@
 package com.atlassian.pageobjects.elements.test.pageobjects.page;
 
 import com.atlassian.pageobjects.Page;
-import com.atlassian.pageobjects.elements.Element;
+import com.atlassian.pageobjects.elements.PageElement;
 import com.atlassian.pageobjects.elements.ElementBy;
 import com.atlassian.pageobjects.elements.ElementFinder;
 
@@ -15,16 +15,16 @@ import static com.atlassian.pageobjects.elements.query.Poller.waitUntilTrue;
 public class DynamicPage implements Page
 {
     @ElementBy(id = "nameTextBox")
-    Element nameTextBox;
+    PageElement nameTextBox;
 
     @ElementBy(id = "helloWorldButton")
-    Element helloWorldButton;
+    PageElement helloWorldButton;
 
     @ElementBy(id = "messageSpan")
-    Element messageSpan;
+    PageElement messageSpan;
 
     @ElementBy(id = "createFieldSetButton")
-    Element createFieldSetButton;
+    PageElement createFieldSetButton;
 
     @Inject
     ElementFinder elementFinder;

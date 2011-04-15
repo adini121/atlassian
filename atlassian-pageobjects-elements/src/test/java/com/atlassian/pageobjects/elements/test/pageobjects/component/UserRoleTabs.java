@@ -4,7 +4,7 @@ import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.binder.Init;
 import com.atlassian.pageobjects.components.TabbedComponent;
 import com.atlassian.pageobjects.components.aui.AuiTabs;
-import com.atlassian.pageobjects.elements.Element;
+import com.atlassian.pageobjects.elements.PageElement;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import org.openqa.selenium.By;
 
@@ -53,27 +53,27 @@ public class UserRoleTabs implements TabbedComponent
         return pageBinder.bind(UserTab.class, this).open();
     }
 
-    public Element selectedTab()
+    public PageElement selectedTab()
     {
         return auiTabs.selectedTab();
     }
 
-    public Element selectedView()
+    public PageElement selectedView()
     {
         return auiTabs.selectedView();
     }
 
-    public List<Element> tabs()
+    public List<PageElement> tabs()
     {
         return auiTabs.tabs();
     }
 
-    public Element openTab(Element tab)
+    public PageElement openTab(PageElement tab)
     {
         return auiTabs.openTab(tab);
     }
 
-    public Element openTab(String titleText)
+    public PageElement openTab(String titleText)
     {
         return auiTabs.openTab(titleText);
     }

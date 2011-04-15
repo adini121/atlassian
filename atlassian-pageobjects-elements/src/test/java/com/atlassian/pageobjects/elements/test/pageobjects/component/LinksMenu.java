@@ -4,7 +4,7 @@ import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.binder.Init;
 import com.atlassian.pageobjects.components.ActivatedComponent;
 import com.atlassian.pageobjects.components.aui.AuiDropDownMenu;
-import com.atlassian.pageobjects.elements.Element;
+import com.atlassian.pageobjects.elements.PageElement;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.JQueryPage;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import org.openqa.selenium.By;
@@ -32,12 +32,12 @@ public class LinksMenu implements ActivatedComponent<LinksMenu>
         auiMenu = pageBinder.bind(AuiDropDownMenu.class, By.id("dropDown-standard"));
     }
 
-    public Element getTrigger()
+    public PageElement getTrigger()
     {
         return auiMenu.getTrigger();
     }
 
-    public Element getView()
+    public PageElement getView()
     {
         return auiMenu.getView();
     }

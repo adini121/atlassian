@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Represents an HTML element that is expected on a DOM of a page
  */
-public interface Element
+public interface PageElement
 {
     /**
      * Whether this element is currently on the DOM of the page
@@ -86,7 +86,7 @@ public interface Element
      *
      * @return The eleemnt that got clicked.
      */
-    Element click();
+    PageElement click();
 
     /**
      * Simulate typing into this element. This will append the keystrokes to the end of the text entry element.
@@ -94,35 +94,35 @@ public interface Element
      * @param keys keys to type
      * @return The Element that got typed in.
      */
-    Element type(CharSequence... keys);
+    PageElement type(CharSequence... keys);
 
     /**
      * Select an element. This method will work against radio buttons, "option" elements within a "select" and checkboxes
      *
      * @return The Element that got selected
      */
-    Element select();
+    PageElement select();
 
     /**
      * If the element is a checkbox this will toggle the elements state from selected to not selected, or from not selected to selected.
      * 
      * @return The Element that got toggled
      */
-    Element toggle();
+    PageElement toggle();
 
     /**
      * Clear the value of the text entry element.
      *
      * @return The Element that got cleared.
      */
-    Element clear();
+    PageElement clear();
 
     /**
      * Returns a list of element's that match the given locator within this element
      * @param locator The locator mecharnism
      * @return A list of elements that are located within this element.
      */
-    List<Element> findAll(By locator);
+    List<PageElement> findAll(By locator);
 
     /**
      * Returns an element that will match the given locator within this element.
@@ -130,7 +130,7 @@ public interface Element
      * @param locator The locator mechanism
      * @return An element that will be located within this element.
      */
-    Element find(By locator);
+    PageElement find(By locator);
 
     /**
      * Creates a timed element based on this element's locator.

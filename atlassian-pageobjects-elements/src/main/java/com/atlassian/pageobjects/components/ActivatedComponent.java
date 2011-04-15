@@ -1,6 +1,6 @@
 package com.atlassian.pageobjects.components;
 
-import com.atlassian.pageobjects.elements.Element;
+import com.atlassian.pageobjects.elements.PageElement;
 
 /**
  * Represents a components that needs to be activated to interact with.
@@ -12,14 +12,14 @@ public interface ActivatedComponent<T>
      *
      * @return Element
      */
-    Element getTrigger();
+    PageElement getTrigger();
 
     /**
      * The view Element, hidden or not present until activated.
      *
      * @return Element
      */
-    Element getView();
+    PageElement getView();
 
     /**
      * Opens the view and waits until UI is ready for interaction.
