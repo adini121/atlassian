@@ -7,7 +7,7 @@ import com.atlassian.pageobjects.elements.ElementFinder;
 
 import javax.inject.Inject;
 
-import static com.atlassian.pageobjects.elements.query.TimedAssertions.assertTrueByDefaultTimeout;
+import static com.atlassian.pageobjects.elements.query.Poller.waitUntilTrue;
 
 /**
  * Represents the dynamicpage.html page
@@ -37,7 +37,7 @@ public class DynamicPage implements Page
     public DynamicPage createFieldSet()
     {
         createFieldSetButton.click();
-        assertTrueByDefaultTimeout(nameTextBox.timed().isVisible());
+        waitUntilTrue(nameTextBox.timed().isVisible());
         return this;
     }
 
@@ -45,7 +45,7 @@ public class DynamicPage implements Page
     {
         nameTextBox.clear().type(name);
         helloWorldButton.click();
-        assertTrueByDefaultTimeout(messageSpan.timed().isVisible());
+        waitUntilTrue(messageSpan.timed().isVisible());
         return this;
     }
 
