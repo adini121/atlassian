@@ -13,7 +13,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Mock implementation of {@link com.atlassian.pageobjects.elements.query.TimedCondition}.
  *
- * @since v4.3
  */
 public class MockCondition extends AbstractTimedCondition implements TimedCondition
 {

@@ -7,7 +7,6 @@ import java.util.Set;
 /**
 * Represent key events that occur in browsers upon typing. 
 *
-* @since v4.3
 */
 public enum KeyEventType
 {

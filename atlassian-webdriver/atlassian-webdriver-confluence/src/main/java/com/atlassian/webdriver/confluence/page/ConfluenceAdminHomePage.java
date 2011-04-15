@@ -8,7 +8,6 @@ import org.openqa.selenium.support.FindBy;
 /**
  * TODO: Document this class / interface here
  *
- * @since v4.2
  */
 public class ConfluenceAdminHomePage extends ConfluenceAbstractPage implements AdminHomePage<ConfluenceHeader>
 {

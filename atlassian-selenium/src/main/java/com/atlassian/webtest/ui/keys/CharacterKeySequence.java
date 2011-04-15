@@ -13,7 +13,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * Key sequence consisting out of alphanumeric characters only, capable of being represented as a pure string.
  *
- * @since v4.3
  */
 public final class CharacterKeySequence extends AbstractKeySequence
 {

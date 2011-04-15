@@ -5,7 +5,6 @@ import com.atlassian.pageobjects.elements.query.util.Clock;
 /**
  * {@link Clock} implementations for testing timed queries and conditions.
  *
- * @since v4.3
  */
 public final class QueryClocks
 {

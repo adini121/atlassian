@@ -5,7 +5,6 @@ import java.util.List;
 /**
  * TODO: Document this class / interface here
  *
- * @since v4.2
  */
 public class KeyEventSequence
 {

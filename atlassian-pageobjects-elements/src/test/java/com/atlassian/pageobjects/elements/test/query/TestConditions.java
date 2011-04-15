@@ -13,7 +13,6 @@ import static org.junit.Assert.assertTrue;
 /**
  * Test case for {@link com.atlassian.pageobjects.elements.query.Conditions}.
  *
- * @since v4.2
  */
 public class TestConditions
 {

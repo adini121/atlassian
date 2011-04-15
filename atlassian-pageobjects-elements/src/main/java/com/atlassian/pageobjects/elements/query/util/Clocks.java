@@ -3,7 +3,6 @@ package com.atlassian.pageobjects.elements.query.util;
 /**
  * Utilities for clocks.
  *
- * @since v4.3
  */
 public final class Clocks
 {

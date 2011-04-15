@@ -9,7 +9,6 @@ import javax.inject.Inject;
 /**
  * TODO: Document this class / interface here
  *
- * @since v4.2
  */
 public class DashboardMenu
 {

@@ -7,7 +7,6 @@ import java.util.Map;
 /**
  * Maps element interfaces to web driver implementations.
  *
- * @since v4.4
  */
 public class WebDriverElementMappings
 {

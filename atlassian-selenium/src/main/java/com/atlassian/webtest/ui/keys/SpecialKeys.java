@@ -18,7 +18,6 @@ import java.util.Set;
  *
  * @see Key
  * @see KeySequence
- * @since v4.3
  */
 public enum SpecialKeys implements SpecialKey, KeySequence
 {

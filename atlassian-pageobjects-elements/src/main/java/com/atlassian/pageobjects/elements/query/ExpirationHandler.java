@@ -3,7 +3,6 @@ package com.atlassian.pageobjects.elements.query;
 /**
  * Strategies for handling expired timeouts of the {@link TimedQuery}.
  *
- * @since v4.3
  */
 public interface ExpirationHandler
 {

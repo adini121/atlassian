@@ -15,7 +15,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * the Basic Multilingual Plane (BMP) and <b>NOT</b> the <i>supplementary characters<i> as explained
  * in the {@link Character} class documentation.
  *
- * @since v4.3
  */
 public class DefaultCharacterKey implements CharacterKey
 {

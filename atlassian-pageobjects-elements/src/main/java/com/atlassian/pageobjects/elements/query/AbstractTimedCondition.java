@@ -13,7 +13,6 @@ import static com.atlassian.pageobjects.elements.query.util.Clocks.getClock;
  * Abstract timed condition based on {@link com.atlassian.pageobjects.elements.query.AbstractTimedQuery}. Override
  * {@link #currentValue()} to complete implementation. 
  *
- * @since v4.3
  */
 @NotThreadSafe
 public abstract class AbstractTimedCondition extends AbstractTimedQuery<Boolean> implements TimedCondition, ClockAware

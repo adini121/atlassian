@@ -10,7 +10,6 @@ import java.util.Set;
  * also be meant to type in with some modifier keys pressed down, which is represented by
  * the {@link #withPressed()} method.
  *
- * @since v4.3
  */
 public interface KeySequence
 {

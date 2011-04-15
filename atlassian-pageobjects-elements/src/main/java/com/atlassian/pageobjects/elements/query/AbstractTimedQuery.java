@@ -28,7 +28,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  * @see ExpirationHandler
  *
- * @since v4.3
  */
 @NotThreadSafe
 public abstract class AbstractTimedQuery<T> extends AbstractPollingQuery implements TimedQuery<T>, ClockAware

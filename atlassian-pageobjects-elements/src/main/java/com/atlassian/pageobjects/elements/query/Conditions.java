@@ -16,7 +16,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * Utilities to create miscellaneous {@link TimedCondition}s.
  *
- * @since v4.2
  */
 public final class Conditions
 {

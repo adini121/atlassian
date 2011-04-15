@@ -17,7 +17,6 @@ import static org.hamcrest.Matchers.is;
  * @see PollingQuery
  * @see TimedQuery
  * @see TimedCondition
- * @since v4.3
  */
 public final class Poller
 {

@@ -10,7 +10,6 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 /**
  * TODO: Document this class / interface here
  *
- * @since v4.2
  */
 abstract class ElementLocationCondition implements ExpectedCondition<Boolean>
 {

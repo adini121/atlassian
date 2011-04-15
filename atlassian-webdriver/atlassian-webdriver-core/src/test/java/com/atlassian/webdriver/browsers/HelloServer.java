@@ -15,7 +15,6 @@ import java.net.ServerSocket;
 /**
  * TODO: Document this class / interface here
  *
- * @since v4.2
  */
 class HelloServer
 {

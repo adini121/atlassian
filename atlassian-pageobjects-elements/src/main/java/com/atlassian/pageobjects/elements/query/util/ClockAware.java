@@ -3,7 +3,6 @@ package com.atlassian.pageobjects.elements.query.util;
 /**
  * Marks classes that perform time computations and are using {@link Clock}s.
  *
- * @since v4.3
  */
 public interface ClockAware
 {

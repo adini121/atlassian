@@ -10,7 +10,6 @@ package com.atlassian.webtest.ui.keys;
  * the Basic Multilingual Plane (BMP) and <b>NOT</b> the <i>supplementary characters<i> as explained
  * in the {@link Character} class documentation.
  *
- * @since v4.3
  */
 public interface CharacterKey extends Key
 {

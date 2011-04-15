@@ -10,7 +10,6 @@ import java.util.List;
 /**
  * Default implementation of {@link KeySequence}.
  *
- * @since v4.3
  */
 public class DefaultKeySequence extends AbstractKeySequence
 {

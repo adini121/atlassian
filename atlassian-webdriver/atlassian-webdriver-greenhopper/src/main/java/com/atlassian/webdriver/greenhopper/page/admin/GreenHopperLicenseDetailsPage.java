@@ -19,7 +19,6 @@ import java.util.regex.Pattern;
 /**
  * TODO: Document this class / interface here
  *
- * @since v4.2
  */
 public class GreenHopperLicenseDetailsPage extends JiraAdminAbstractPage
 {

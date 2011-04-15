@@ -12,7 +12,6 @@ package com.atlassian.webtest.ui.keys;
  *
  * @see Key
  * @see SpecialKeys
- * @since v4.3
  */
 public interface SpecialKey extends Key
 {

@@ -6,7 +6,6 @@ import static com.atlassian.pageobjects.elements.util.StringConcat.asString;
 /**
  * A {@link TimedQuery} that always immediately returns a pre-defined static value.
  *
- * @since v4.3
  */
 public final class StaticQuery<T> extends AbstractTimedQuery<T> implements TimedQuery<T>
 {

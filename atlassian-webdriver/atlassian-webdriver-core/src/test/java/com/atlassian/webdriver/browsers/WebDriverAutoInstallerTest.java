@@ -6,7 +6,6 @@ import org.junit.BeforeClass;
 /**
  * TODO: Document this class / interface here
  *
- * @since v4.2
  */
 public abstract class WebDriverAutoInstallerTest
 {

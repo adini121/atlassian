@@ -18,7 +18,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * For easy and efficient instantiation of {@link KeySequence}s.
  *
- * @since v4.3
  */
 public final class KeySequenceBuilder implements KeyEventAware
 {

@@ -9,7 +9,6 @@ package com.atlassian.webtest.ui.keys;
  * implementations: character keys and special keys. Creating custom implementations is discouraged, as it will
  * most likely not be handled across different implementations. 
  *
- * @since v4.3
  *
  * @see CharacterKey
  * @see SpecialKey

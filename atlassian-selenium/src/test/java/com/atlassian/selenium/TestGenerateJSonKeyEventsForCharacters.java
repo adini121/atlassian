@@ -23,7 +23,6 @@ import java.util.TreeMap;
 /**
  * This test will generate to stdout the json for the character to keyevent mapping.
  *
- * @since v4.2
  */
 public class TestGenerateJSonKeyEventsForCharacters extends TestCase
 {
