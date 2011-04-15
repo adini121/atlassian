@@ -4,14 +4,13 @@ import com.atlassian.pageobjects.Page;
 import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.binder.WaitUntil;
 import com.atlassian.pageobjects.elements.ElementFinder;
+import com.atlassian.pageobjects.elements.query.Poller;
 import com.atlassian.pageobjects.elements.test.pageobjects.component.InlineDialog;
 import com.atlassian.pageobjects.elements.test.pageobjects.component.LinksMenu;
 import com.atlassian.pageobjects.elements.test.pageobjects.component.UserRoleTabs;
 import com.atlassian.webdriver.utils.by.ByJquery;
 
 import javax.inject.Inject;
-
-import static com.atlassian.pageobjects.elements.query.TimedAssertions.assertTrueByDefaultTimeout;
 
 /**
  * Represents the page returned by the AUIServlet plugin that is deployed to RefApp
@@ -27,7 +26,7 @@ public class AuiPage implements Page
     @WaitUntil
     public void doWait()
     {
-        assertTrueByDefaultTimeout(elementFinder.find(ByJquery.$("h2:contains(AuiDropDown)")).timed().isPresent());
+        Poller.waitUntilTrue(elementFinder.find(ByJquery.$("h2:contains(AuiDropDown)")).timed().isPresent());
     }
     
     public String getUrl()

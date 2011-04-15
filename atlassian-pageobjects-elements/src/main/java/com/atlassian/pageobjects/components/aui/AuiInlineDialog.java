@@ -2,14 +2,13 @@ package com.atlassian.pageobjects.components.aui;
 
 import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.binder.Init;
+import com.atlassian.pageobjects.components.ActivatedComponent;
 import com.atlassian.pageobjects.elements.Element;
 import com.atlassian.pageobjects.elements.ElementFinder;
-import com.atlassian.pageobjects.components.ActivatedComponent;
+import com.atlassian.pageobjects.elements.query.Poller;
 import org.openqa.selenium.By;
 
 import javax.inject.Inject;
-
-import static com.atlassian.pageobjects.elements.query.TimedAssertions.assertTrueByDefaultTimeout;
 
 /**
  * Represents an inline dialog created via AUI.
@@ -55,7 +54,7 @@ public class AuiInlineDialog implements ActivatedComponent<AuiInlineDialog>
     public AuiInlineDialog open()
     {
         triggerElement.mouseEvents().click();
-        assertTrueByDefaultTimeout(viewElement.timed().isVisible());
+        Poller.waitUntilTrue(viewElement.timed().isVisible());
         return this;
     }
 

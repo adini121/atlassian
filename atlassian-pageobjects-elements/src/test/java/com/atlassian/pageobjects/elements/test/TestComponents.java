@@ -1,5 +1,6 @@
 package com.atlassian.pageobjects.elements.test;
 
+import com.atlassian.pageobjects.elements.query.Poller;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.AuiPage;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.ElementsPage;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.JQueryPage;
@@ -7,7 +8,6 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static com.atlassian.pageobjects.elements.query.TimedAssertions.assertFalseByDefaultTimeout;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
@@ -66,7 +66,7 @@ public class TestComponents extends AbstractFileBasedServerTest
 
         // click somewhere else and verify dialog is not visible.
         auipage.roleTabs().openUserTab();
-        assertFalseByDefaultTimeout(auipage.inlineDialog().getView().timed().isVisible());
+        Poller.waitUntilFalse(auipage.inlineDialog().getView().timed().isVisible());
 
     }
 

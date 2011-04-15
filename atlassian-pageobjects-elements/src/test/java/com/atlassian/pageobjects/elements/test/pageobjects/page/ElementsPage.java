@@ -4,13 +4,12 @@ import com.atlassian.pageobjects.Page;
 import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.binder.WaitUntil;
 import com.atlassian.pageobjects.elements.Element;
-import com.atlassian.pageobjects.elements.ElementFinder;
 import com.atlassian.pageobjects.elements.ElementBy;
+import com.atlassian.pageobjects.elements.ElementFinder;
+import com.atlassian.pageobjects.elements.query.Poller;
 import com.atlassian.webdriver.utils.by.ByJquery;
 
 import javax.inject.Inject;
-
-import static com.atlassian.pageobjects.elements.query.TimedAssertions.assertTrueByDefaultTimeout;
 
 /**
  * Represents the elements.html
@@ -37,7 +36,7 @@ public class ElementsPage implements Page
     @WaitUntil
     public void doWait()
     {
-        assertTrueByDefaultTimeout(elementFinder.find(ByJquery.$("h1:contains(Html Elements Page)")).timed().isPresent());
+        Poller.waitUntilTrue(elementFinder.find(ByJquery.$("h1:contains(Html Elements Page)")).timed().isPresent());
     }
 
     public Element test1_addElementsButton()

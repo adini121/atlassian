@@ -4,6 +4,7 @@ import com.atlassian.pageobjects.elements.Element;
 import com.atlassian.pageobjects.elements.ElementFinder;
 import com.atlassian.pageobjects.elements.Options;
 import com.atlassian.pageobjects.elements.SelectElement;
+import com.atlassian.pageobjects.elements.query.Poller;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.DynamicPage;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.ElementsPage;
 import com.atlassian.webdriver.utils.by.ByJquery;
@@ -11,9 +12,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
-import static com.atlassian.pageobjects.elements.query.TimedAssertions.assertTrueByDefaultTimeout;
-import static junit.framework.Assert.*;
+import static com.atlassian.pageobjects.elements.query.Poller.waitUntilTrue;
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertTrue;
 
 public class TestElement extends AbstractFileBasedServerTest
 {
@@ -34,7 +37,7 @@ public class TestElement extends AbstractFileBasedServerTest
        elementsPage.test1_addElementsButton().click();
 
        // verify delayed element that was injected via @ElementBy waits
-       assertTrueByDefaultTimeout(elementsPage.test1_delayedSpan().timed().isPresent());
+       Poller.waitUntilTrue(elementsPage.test1_delayedSpan().timed().isPresent());
    }
 
 
@@ -109,7 +112,7 @@ public class TestElement extends AbstractFileBasedServerTest
 
         //wait for presence on an element within another
         product.find(By.id("test4_addElementsButton")).click();
-        assertTrueByDefaultTimeout(leafList.find(By.linkText("Item 4")).timed().isPresent());
+        waitUntilTrue(leafList.find(By.linkText("Item 4")).timed().isPresent());
 
         //wait for text on an element within another
         driver.get(rootUrl + "/html/elements.html");

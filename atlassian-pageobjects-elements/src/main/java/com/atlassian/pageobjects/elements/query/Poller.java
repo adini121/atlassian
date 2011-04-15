@@ -12,151 +12,158 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
 /**
- * Common assertions for timeout-based queries inheriting from
- * {@link PollingQuery}.
+ * Utility class to poll and wait for a particular states of timeout-based queries inheriting from {@link PollingQuery}.
  *
  * @see PollingQuery
  * @see TimedQuery
  * @see TimedCondition
  * @since v4.3
  */
-public final class TimedAssertions
+public final class Poller
 {
-    private TimedAssertions() {
+    private Poller() {
         throw new AssertionError("Don't instantiate me");
     }
 
     /**
-     * Assert that <tt>condition</tt> is <code>true</code> by default timeout
+     * Wait until given <tt>condition</tt> is <code>true</code> by default timeout
      *
-     * @param condition condition to check
+     * @param condition condition to exercise
      */
-    public static void assertTrueByDefaultTimeout(TimedQuery<Boolean> condition)
+    public static void waitUntilTrue(TimedQuery<Boolean> condition)
     {
-        assertThatByDefaultTimeout(condition, is(true));
+        waitUntil(condition, is(true));
     }
 
     /**
-     * Assert that <tt>condition</tt> is <code>true</code> by default timeout, with custom error message.
-     *
-     * @param message error message
-     * @param condition condition to check
-     */
-    public static void assertTrueByDefaultTimeout(String message, TimedQuery<Boolean> condition)
-    {
-        assertThatByDefaultTimeout(condition, is(true));
-    }
-
-    /**
-     * Assert that <tt>condition</tt> is <code>false</code> by default timeout
-     *
-     * @param condition condition to check
-     */
-    public static void assertFalseByDefaultTimeout(TimedQuery<Boolean> condition)
-    {
-        assertThatByDefaultTimeout(condition, is(false));
-    }
-
-    /**
-     * Assert that <tt>condition</tt> is <code>false</code> by default timeout, with custom error message.
+     * Wait until given <tt>condition</tt> is <code>true</code> by default timeout, with custom error message.
      *
      * @param message error message
-     * @param condition condition to check
+     * @param condition condition to exercise
      */
-    public static void assertFalseByDefaultTimeout(String message, TimedQuery<Boolean> condition)
+    public static void waitUntilTrue(String message, TimedQuery<Boolean> condition)
     {
-        assertThatByDefaultTimeout(condition, is(false));
+        waitUntil(condition, is(true));
     }
 
     /**
-     * Assert that <tt>query</tt> evaluates to actual value that is equal to <tt>expectedValue</tt> by default timeout.
+     * Wait until given <tt>condition</tt> is <code>false</code> by default timeout
+     *
+     * @param condition condition to exercise
+     */
+    public static void waitUntilFalse(TimedQuery<Boolean> condition)
+    {
+        waitUntil(condition, is(false));
+    }
+
+    /**
+     * Wait until given <tt>condition</tt> is <code>false</code> by default timeout, with custom error message.
+     *
+     * @param message error message
+     * @param condition condition to exercise
+     */
+    public static void waitUntilFalse(String message, TimedQuery<Boolean> condition)
+    {
+        waitUntil(condition, is(false));
+    }
+
+    /**
+     * Wait until given <tt>query</tt> evaluates to actual value that is equal to <tt>expectedValue</tt>
+     * by default timeout.
      *
      * @param expectedValue expected value
-     * @param query query to check
+     * @param query query to evaluate
      */
-    public static <T> void assertEqualsByDefaultTimeout(T expectedValue, TimedQuery<T> query)
+    public static <T> void waitUntilEquals(T expectedValue, TimedQuery<T> query)
     {
-        assertThatByDefaultTimeout(query, equalTo(expectedValue));
+        waitUntil(query, equalTo(expectedValue));
     }
 
     /**
-     * Assert that <tt>query</tt> evaluates to actual value that is equal to <tt>expectedValue</tt> by default timeout,
+     * Wait until given <tt>query</tt> evaluates to actual value that is equal to <tt>expectedValue</tt> by default timeout,
      * with custom error message.
      *
      * @param message error message
      * @param expectedValue expected value
-     * @param query query to check
+     * @param query query to evaluate
      */
-    public static <T> void assertEqualsByDefaultTimeout(String message, T expectedValue, TimedQuery<T> query)
+    public static <T> void waitUntilEquals(String message, T expectedValue, TimedQuery<T> query)
     {
-        assertThatByDefaultTimeout(query, equalTo(expectedValue));
+        waitUntil(query, equalTo(expectedValue));
     }
 
     /**
      * <p>
-     * Assert that result of given <tt>query</tt> fulfils certain condition specified by given the <tt>matcher</tt>, by
+     * Wait until given <tt>query</tt> fulfils certain condition specified by the <tt>matcher</tt>, by
      * default timeout of the <tt>query</tt>.
      *
      * <p>
-     * Use any matcher available from the libraries (e.g. Hamcrest, JUnit etc.), or a custom one.
+     * Use any matcher from the available libraries (e.g. Hamcrest, JUnit etc.), or a custom one.
      *
-     * @param query timed query to verify
+     * @param query timed query to evaluate
      * @param matcher a matcher representing the assertion condition
      * @see Matcher
+     * @see org.hamcrest.Matchers
      */
-    public static <T> void assertThatByDefaultTimeout(TimedQuery<T> query, Matcher<T> matcher)
+    public static <T> void waitUntil(TimedQuery<T> query, Matcher<T> matcher)
     {
-        assertThat(null, query, matcher, byDefaultTimeout());
+        waitUntil(null, query, matcher, byDefaultTimeout());
     }
 
     /**
      * <p>
-     * Assert that result of given <tt>query</tt> fulfils certain condition specified by given the <tt>matcher</tt>, by
+     * Wait until given <tt>query</tt> fulfils certain condition specified by the <tt>matcher</tt>, by
      * default timeout of the <tt>query</tt>.
      *
      * <p>
-     * Use any matcher available from the libraries (e.g. Hamcrest, JUnit etc.), or a custom one.
+     * Use any matcher from the available libraries (e.g. Hamcrest, JUnit etc.), or a custom one.
      *
-     * @param message message displayed for dailed assertions
-     * @param query timed query to verify
+     * @param message message displayed in case of failure
+     * @param query timed query to evaluate
      * @param matcher a matcher representing the assertion condition
      * @see Matcher
+     * @see org.hamcrest.Matchers
      */
-    public static <T> void assertThatByDefaultTimeout(String message, TimedQuery<T> query, Matcher<T> matcher)
+    public static <T> void waitUntil(String message, TimedQuery<T> query, Matcher<T> matcher)
     {
-        assertThat(message, query, matcher, byDefaultTimeout());
+        waitUntil(message, query, matcher, byDefaultTimeout());
     }
 
     /**
      * <p>
-     * Assert that result of given <tt>query</tt> fulfils certain condition specified by given the <tt>matcher</tt>, by
+     * Wait until given <tt>query</tt> fulfils certain condition specified by given the <tt>matcher</tt>, by
      * given <tt>timeout</tt>.
      *
      * <p>
-     * Use any matcher available from the libraries (e.g. Hamcrest, JUnit etc.), or a custom one.
+     * Use any matcher from the available libraries (e.g. Hamcrest, JUnit etc.), or a custom one.
      *
-     * @param query timed query to verify
+     * <p>
+     * To specify desired timeout, use one of four provided timeouts: {@link #now()}, {@link #byDefaultTimeout()},
+     * #{@link #by(long)}, {@link #by(long, java.util.concurrent.TimeUnit)}.
+     *
+     * @param query timed query to evaluate
      * @param matcher a matcher representing the assertion condition
-     * @param timeout timeout of the assertion
+     * @param timeout time limit for this wait
      * @see Matcher
+     * @see org.hamcrest.Matchers
      * @see #now()
      * @see #by(long)
      * @see #by(long, java.util.concurrent.TimeUnit)
      * @see #byDefaultTimeout()
      */
-    public static <T> void assertThat(TimedQuery<T> query, Matcher<T> matcher, AssertionTimeout timeout)
+    public static <T> void waitUntil(TimedQuery<T> query, Matcher<T> matcher, WaitTimeout timeout)
     {
-        assertThat(null, query, matcher, timeout);
+        waitUntil(null, query, matcher, timeout);
     }
 
 
     /**
      * <p>
-     * Assert that result of given <tt>query</tt> fulfils certain condition specified by given the <tt>matcher</tt>, by
+     * Wait until given <tt>query</tt> fulfils certain condition specified by given the <tt>matcher</tt>, by
      * given <tt>timeout</tt>.
      *
      * <p>
-     * For matching condition, use any matcher available from the libraries (e.g. Hamcrest, JUnit etc.), or a custom one.
+     * Use any matcher from the libraries available (e.g. Hamcrest, JUnit etc.), or a custom one.
      *
      * <p>
      * To specify desired timeout, use one of four provided timeouts: {@link #now()}, {@link #byDefaultTimeout()},
@@ -167,12 +174,13 @@ public final class TimedAssertions
      * @param matcher a matcher representing the assertion condition
      * @param timeout timeout of the assertion
      * @see Matcher
+     * @see org.hamcrest.Matchers
      * @see #now()
      * @see #by(long)
      * @see #by(long, java.util.concurrent.TimeUnit)
      * @see #byDefaultTimeout()
      */
-    public static <T> void assertThat(String message, TimedQuery<T> query, Matcher<T> matcher, AssertionTimeout timeout)
+    public static <T> void waitUntil(String message, TimedQuery<T> query, Matcher<T> matcher, WaitTimeout timeout)
     {
         checkNotNull(timeout);
         final Conditions.MatchingCondition<T> assertion = new Conditions.MatchingCondition<T>(query, matcher);
@@ -182,7 +190,8 @@ public final class TimedAssertions
         }
     }
 
-    private static <T> String buildMessage(String message, Conditions.MatchingCondition<T> assertion, Matcher<T> matcher, AssertionTimeout timeout)
+    private static <T> String buildMessage(String message, Conditions.MatchingCondition<T> assertion,
+                                           Matcher<T> matcher, WaitTimeout timeout)
     {
         final Description answer = new StringDescription();
         if (StringUtils.isNotEmpty(message))
@@ -197,10 +206,10 @@ public final class TimedAssertions
 
 
 
-    public static abstract class AssertionTimeout
+    public static abstract class WaitTimeout
     {
-        // we don't want this to be extended by anybody
-        private AssertionTimeout() {}
+        // we don't want this to be instantiated, or extended by anybody
+        private WaitTimeout() {}
 
         abstract boolean evaluate(TimedCondition condition);
 
@@ -213,9 +222,9 @@ public final class TimedAssertions
      *
      * @return new immediate assertion timeout
      */
-    public static AssertionTimeout now()
+    public static WaitTimeout now()
     {
-        return new AssertionTimeout()
+        return new WaitTimeout()
         {
             @Override
             boolean evaluate(final TimedCondition condition)
@@ -236,9 +245,9 @@ public final class TimedAssertions
      *
      * @return new default assertion timeout
      */
-    public static AssertionTimeout byDefaultTimeout()
+    public static WaitTimeout byDefaultTimeout()
     {
-        return new AssertionTimeout()
+        return new WaitTimeout()
         {
             @Override
             boolean evaluate(final TimedCondition condition)
@@ -260,9 +269,9 @@ public final class TimedAssertions
      * @param timeoutInMillis number of milliseconds to wait for the assertion condition
      * @return new custom timeout assertion
      */
-    public static AssertionTimeout by(final long timeoutInMillis)
+    public static WaitTimeout by(final long timeoutInMillis)
     {
-        return new AssertionTimeout()
+        return new WaitTimeout()
         {
             @Override
             boolean evaluate(final TimedCondition condition)
@@ -285,9 +294,9 @@ public final class TimedAssertions
      * @param unit unit of the timeout
      * @return new custom timeout assertion
      */
-    public static AssertionTimeout by(final long timeout, final TimeUnit unit)
+    public static WaitTimeout by(final long timeout, final TimeUnit unit)
     {
-        return new AssertionTimeout()
+        return new WaitTimeout()
         {
             @Override
             boolean evaluate(final TimedCondition condition)

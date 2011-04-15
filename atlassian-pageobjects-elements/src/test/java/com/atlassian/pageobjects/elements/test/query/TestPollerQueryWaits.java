@@ -3,53 +3,52 @@ package com.atlassian.pageobjects.elements.test.query;
 import com.atlassian.pageobjects.elements.mock.MockTimedQuery;
 import com.atlassian.pageobjects.elements.mock.clock.StrictMockClock;
 import com.atlassian.pageobjects.elements.query.ExpirationHandler;
+import com.atlassian.pageobjects.elements.query.Poller;
 import com.atlassian.pageobjects.elements.query.StaticQuery;
-import com.atlassian.pageobjects.elements.query.TimedAssertions;
 import com.atlassian.pageobjects.elements.query.TimedQuery;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.atlassian.pageobjects.elements.query.TimedAssertions.assertThat;
-import static com.atlassian.pageobjects.elements.query.TimedAssertions.by;
-import static com.atlassian.pageobjects.elements.query.TimedAssertions.byDefaultTimeout;
-import static com.atlassian.pageobjects.elements.query.TimedAssertions.now;
+import static com.atlassian.pageobjects.elements.query.Poller.by;
+import static com.atlassian.pageobjects.elements.query.Poller.byDefaultTimeout;
+import static com.atlassian.pageobjects.elements.query.Poller.now;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Test case for {@link TimedAssertions} with various timed queries.
+ * Test case for {@link com.atlassian.pageobjects.elements.query.Poller} with various timed queries.
  *
  */
-public class TestQueryAssertions
+public class TestPollerQueryWaits
 {
     private static final int DEFAULT_INTERVAL = 100;
 
     @Test
     public void queryEqualsAssertionShouldPassForPassingQuery()
     {
-        assertThat(queryFor("test"), equalTo("test"), now());
-        assertThat(queryFor("test"), equalTo("test"), byDefaultTimeout());
-        assertThat(queryFor("test"), equalTo("test"), by(500));
+        Poller.waitUntil(queryFor("test"), equalTo("test"), now());
+        Poller.waitUntil(queryFor("test"), equalTo("test"), byDefaultTimeout());
+        Poller.waitUntil(queryFor("test"), equalTo("test"), by(500));
     }
 
     @Test
     public void queryNotNullAssertionShouldPassForNotNullQuery()
     {
-        assertThat(queryFor("test"), notNullValue(String.class), now());
-        assertThat(queryFor("test"), notNullValue(String.class), byDefaultTimeout());
-        assertThat(queryFor("test"), notNullValue(String.class), by(500));
+        Poller.waitUntil(queryFor("test"), notNullValue(String.class), now());
+        Poller.waitUntil(queryFor("test"), notNullValue(String.class), byDefaultTimeout());
+        Poller.waitUntil(queryFor("test"), notNullValue(String.class), by(500));
     }
 
     @Test
     public void queryIsNullAssertionShouldPassForNullQuery()
     {
-        assertThat(nullQuery(), nullValue(String.class), now());
-        assertThat(nullQuery(), nullValue(String.class), byDefaultTimeout());
-        assertThat(nullQuery(), nullValue(String.class), by(500));
+        Poller.waitUntil(nullQuery(), nullValue(String.class), now());
+        Poller.waitUntil(nullQuery(), nullValue(String.class), byDefaultTimeout());
+        Poller.waitUntil(nullQuery(), nullValue(String.class), by(500));
     }
 
 
@@ -58,7 +57,7 @@ public class TestQueryAssertions
     {
         try
         {
-            assertThat(queryFor("something"), equalTo("somethingelse"), now());
+            Poller.waitUntil(queryFor("something"), equalTo("somethingelse"), now());
             throw new IllegalStateException("Should fail");
         }
         catch(AssertionError e)
@@ -75,7 +74,7 @@ public class TestQueryAssertions
     {
         try
         {
-            assertThat(forMultipleReturns("something", "somethingdifferent", "somethingmore").returnAll(),
+            Poller.waitUntil(forMultipleReturns("something", "somethingdifferent", "somethingmore").returnAll(),
                     equalTo("somethingelse"), byDefaultTimeout());
             throw new IllegalStateException("Should fail");
         }
@@ -93,7 +92,7 @@ public class TestQueryAssertions
     {
         try
         {
-            assertThat(forMultipleReturns("something", "somethingdifferent", "somethingmore",
+            Poller.waitUntil(forMultipleReturns("something", "somethingdifferent", "somethingmore",
                     "andnowforsomethingcompletelydifferent").returnAll(), equalTo("somethingelse"), by(100));
             throw new IllegalStateException("Should fail");
         }
@@ -111,7 +110,7 @@ public class TestQueryAssertions
     {
         try
         {
-            assertThat(nullQuery(), notNullValue(String.class), now());
+            Poller.waitUntil(nullQuery(), notNullValue(String.class), now());
             throw new IllegalStateException("Should fail");
         }
         catch(AssertionError e)
@@ -128,7 +127,7 @@ public class TestQueryAssertions
     {
         try
         {
-            assertThat(forMultipleReturns("one", "two", "three", "four", "five").returnNull(), notNullValue(String.class),
+            Poller.waitUntil(forMultipleReturns("one", "two", "three", "four", "five").returnNull(), notNullValue(String.class),
                     byDefaultTimeout());
             throw new IllegalStateException("Should fail");
         }
@@ -146,7 +145,7 @@ public class TestQueryAssertions
     {
         try
         {
-            assertThat(forMultipleReturns("five", "six", "seven", "eight").returnLast(), notNullValue(String.class), by(200));
+            Poller.waitUntil(forMultipleReturns("five", "six", "seven", "eight").returnLast(), notNullValue(String.class), by(200));
             throw new IllegalStateException("Should fail");
         }
         catch(AssertionError e)
@@ -164,7 +163,7 @@ public class TestQueryAssertions
     {
         try
         {
-            assertThat(forMultipleReturns("one", "two", "three", "four").returnAll(), nullValue(String.class), now());
+            Poller.waitUntil(forMultipleReturns("one", "two", "three", "four").returnAll(), nullValue(String.class), now());
             throw new IllegalStateException("Should fail");
         }
         catch(AssertionError e)
@@ -182,7 +181,7 @@ public class TestQueryAssertions
     {
         try
         {
-            assertThat(forMultipleReturns("one", "two", "three", "four", "five").returnAll(), nullValue(String.class),
+            Poller.waitUntil(forMultipleReturns("one", "two", "three", "four", "five").returnAll(), nullValue(String.class),
                     byDefaultTimeout());
             throw new IllegalStateException("Should fail");
         }
@@ -201,7 +200,7 @@ public class TestQueryAssertions
     {
         try
         {
-            assertThat(forMultipleReturns("five", "six", "seven", "eight").returnAll(), nullValue(String.class), by(200));
+            Poller.waitUntil(forMultipleReturns("five", "six", "seven", "eight").returnAll(), nullValue(String.class), by(200));
             throw new IllegalStateException("Should fail");
         }
         catch(AssertionError e)

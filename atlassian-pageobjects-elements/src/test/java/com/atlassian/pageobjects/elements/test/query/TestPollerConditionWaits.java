@@ -2,28 +2,28 @@ package com.atlassian.pageobjects.elements.test.query;
 
 import com.atlassian.pageobjects.elements.mock.MockCondition;
 import com.atlassian.pageobjects.elements.mock.clock.QueryClocks;
+import com.atlassian.pageobjects.elements.query.Poller;
 import com.atlassian.pageobjects.elements.query.TimedCondition;
 import org.junit.Test;
 
-import static com.atlassian.pageobjects.elements.query.TimedAssertions.assertThat;
-import static com.atlassian.pageobjects.elements.query.TimedAssertions.by;
-import static com.atlassian.pageobjects.elements.query.TimedAssertions.byDefaultTimeout;
-import static com.atlassian.pageobjects.elements.query.TimedAssertions.now;
+import static com.atlassian.pageobjects.elements.query.Poller.by;
+import static com.atlassian.pageobjects.elements.query.Poller.byDefaultTimeout;
+import static com.atlassian.pageobjects.elements.query.Poller.now;
 import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.Matchers.is;
 
 /**
- * Test case for {@link com.atlassian.pageobjects.elements.query.TimedAssertions} using mock timed conditions.
+ * Test case for {@link com.atlassian.pageobjects.elements.query.Poller} using mock timed conditions.
  *
  */
-public class TestConditionAssertions
+public class TestPollerConditionWaits
 {
     @Test
     public void shouldPassForPassingCondition()
     {
-        assertThat(passingCondition(), is(true), byDefaultTimeout());
-        assertThat(passingCondition(), is(true), by(1000));
-        assertThat(passingCondition(), is(true), now());
+        Poller.waitUntil(passingCondition(), is(true), byDefaultTimeout());
+        Poller.waitUntil(passingCondition(), is(true), by(1000));
+        Poller.waitUntil(passingCondition(), is(true), now());
     }
 
     @Test
@@ -31,7 +31,7 @@ public class TestConditionAssertions
     {
         MockCondition tested = new MockCondition(false, false, false, true)
                 .withClock(QueryClocks.forInterval(MockCondition.DEFAULT_INTERVAL));
-        assertThat(tested, is(true), by(1000));
+        Poller.waitUntil(tested, is(true), by(1000));
         assertEquals(4, tested.callCount());
     }
 
@@ -40,7 +40,7 @@ public class TestConditionAssertions
     {
         MockCondition tested = new MockCondition(true, true, true, false)
                 .withClock(QueryClocks.forInterval(MockCondition.DEFAULT_INTERVAL));
-        assertThat(tested, is(false), by(1000));
+        Poller.waitUntil(tested, is(false), by(1000));
         assertEquals(4, tested.callCount());
     }
 
@@ -50,7 +50,7 @@ public class TestConditionAssertions
     {
         try
         {
-            assertThat(failingCondition(), is(true), byDefaultTimeout());
+            Poller.waitUntil(failingCondition(), is(true), byDefaultTimeout());
             throw new IllegalStateException("Should fail");
         }
         catch(AssertionError e)
@@ -66,7 +66,7 @@ public class TestConditionAssertions
     {
         try
         {
-            assertThat(passingCondition(), is(false), byDefaultTimeout());
+            Poller.waitUntil(passingCondition(), is(false), byDefaultTimeout());
             throw new IllegalStateException("Should fail");
         }
         catch(AssertionError e)

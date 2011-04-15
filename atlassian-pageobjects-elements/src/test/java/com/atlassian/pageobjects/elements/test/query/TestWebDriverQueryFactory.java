@@ -1,5 +1,6 @@
 package com.atlassian.pageobjects.elements.test.query;
 
+import com.atlassian.pageobjects.elements.query.Poller;
 import com.atlassian.pageobjects.elements.query.TimedQuery;
 import com.atlassian.pageobjects.elements.query.webdriver.WebDriverQueryFactory;
 import com.atlassian.pageobjects.elements.timeout.MapBasedTimeouts;
@@ -13,10 +14,9 @@ import org.openqa.selenium.RenderedWebElement;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import static com.atlassian.pageobjects.elements.query.TimedAssertions.assertThat;
-import static com.atlassian.pageobjects.elements.query.TimedAssertions.by;
-import static com.atlassian.pageobjects.elements.query.TimedAssertions.byDefaultTimeout;
-import static com.atlassian.pageobjects.elements.query.TimedAssertions.now;
+import static com.atlassian.pageobjects.elements.query.Poller.by;
+import static com.atlassian.pageobjects.elements.query.Poller.byDefaultTimeout;
+import static com.atlassian.pageobjects.elements.query.Poller.now;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
@@ -58,7 +58,7 @@ public class TestWebDriverQueryFactory
         TimedQuery<Boolean> result = tested.isPresent(By.id("test"));
         assertEquals(100L, result.interval());
         assertEquals(500L, result.defaultTimeout());
-        assertThat(result, is(true), now());
+        Poller.waitUntil(result, is(true), now());
     }
 
     @Test
@@ -71,7 +71,7 @@ public class TestWebDriverQueryFactory
         TimedQuery<Boolean> result = tested.isPresent(By.id("test"));
         assertEquals(100L, result.interval());
         assertEquals(500L, result.defaultTimeout());
-        assertThat(result, is(false), by(1000));
+        Poller.waitUntil(result, is(false), by(1000));
     }
 
     @Test
@@ -86,7 +86,7 @@ public class TestWebDriverQueryFactory
         TimedQuery<Boolean> result = tested.isVisible(By.id("test"));
         assertEquals(100L, result.interval());
         assertEquals(500L, result.defaultTimeout());
-        assertThat(result, is(true), now());
+        Poller.waitUntil(result, is(true), now());
     }
 
     @Test
@@ -101,8 +101,8 @@ public class TestWebDriverQueryFactory
         TimedQuery<Boolean> result = tested.isVisible(By.id("test"));
         assertEquals(100L, result.interval());
         assertEquals(500L, result.defaultTimeout());
-        assertThat(result, is(false), now());
-        assertThat(result, is(true), by(1000));
+        Poller.waitUntil(result, is(false), now());
+        Poller.waitUntil(result, is(true), by(1000));
     }
 
     @Test
@@ -117,7 +117,7 @@ public class TestWebDriverQueryFactory
         TimedQuery<Boolean> result = tested.isVisible(By.id("test"));
         assertEquals(100L, result.interval());
         assertEquals(500L, result.defaultTimeout());
-        assertThat(result, is(false), by(1000));
+        Poller.waitUntil(result, is(false), by(1000));
     }
 
     @Test
@@ -129,10 +129,10 @@ public class TestWebDriverQueryFactory
         when(mockDriver.findElement(any(By.class))).thenReturn(mockElement);
         WebDriverQueryFactory tested = new WebDriverQueryFactory(mockDriver, timeouts);
 
-        assertThat(tested.hasClass(By.id("test"), "oneclass"), is(true), now());
-        assertThat(tested.hasClass(By.id("test"), "secondclass"), is(true), now());
-        assertThat(tested.hasClass(By.id("test"), "someotherclasssss"), is(true), now());
-        assertThat(tested.hasClass(By.id("test"), "blahblah"), is(false), byDefaultTimeout());
+        Poller.waitUntil(tested.hasClass(By.id("test"), "oneclass"), is(true), now());
+        Poller.waitUntil(tested.hasClass(By.id("test"), "secondclass"), is(true), now());
+        Poller.waitUntil(tested.hasClass(By.id("test"), "someotherclasssss"), is(true), now());
+        Poller.waitUntil(tested.hasClass(By.id("test"), "blahblah"), is(false), byDefaultTimeout());
     }
 
     @Test
@@ -144,9 +144,9 @@ public class TestWebDriverQueryFactory
         when(mockDriver.findElement(any(By.class))).thenReturn(mockElement);
         WebDriverQueryFactory tested = new WebDriverQueryFactory(mockDriver, timeouts);
 
-        assertThat(tested.hasClass(By.id("test"), "Oneclass"), is(true), now());
-        assertThat(tested.hasClass(By.id("test"), "SECondclAss"), is(true), now());
-        assertThat(tested.hasClass(By.id("test"), "someotherclaSSSSS"), is(true), now());
+        Poller.waitUntil(tested.hasClass(By.id("test"), "Oneclass"), is(true), now());
+        Poller.waitUntil(tested.hasClass(By.id("test"), "SECondclAss"), is(true), now());
+        Poller.waitUntil(tested.hasClass(By.id("test"), "someotherclaSSSSS"), is(true), now());
     }
 
     private WebElement newMockElement()
