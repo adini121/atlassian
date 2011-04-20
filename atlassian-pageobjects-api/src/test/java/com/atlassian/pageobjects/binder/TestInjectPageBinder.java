@@ -27,6 +27,7 @@ import static org.mockito.Mockito.mock;
 /**
  *
  */
+@SuppressWarnings("unchecked") 
 public class TestInjectPageBinder
 {
     private MyTestedProduct product;
@@ -41,7 +42,7 @@ public class TestInjectPageBinder
     {
         return createBinder(null, null);
     }
-    private InjectPageBinder createBinder(final Class key, final Class impl)
+    private InjectPageBinder createBinder(final Class<?> key, final Class impl)
     {
         return new InjectPageBinder(mock(ProductInstance.class), mock(Tester.class), new StandardModule(product),
                 new Module()

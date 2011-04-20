@@ -12,8 +12,8 @@ import static org.junit.Assert.assertTrue;
 
 /**
  * Test case for {@link com.atlassian.pageobjects.elements.query.Conditions}.
- *
  */
+@SuppressWarnings("unchecked")
 public class TestConditions
 {
     @Test
