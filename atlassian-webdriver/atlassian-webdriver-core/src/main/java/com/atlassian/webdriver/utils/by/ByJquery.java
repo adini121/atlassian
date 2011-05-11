@@ -440,6 +440,10 @@ public abstract class ByJquery extends By
 
     private static boolean isLoaded(WebDriver driver)
     {
+        if (driver == null)
+        {
+            throw new NullPointerException("driver is null, have you called ByJquery.init()?");
+        }
         String js = "return window.WD != undefined && window.WD.byJquery != undefined";
         Boolean jQueryLocatorDefined = JavaScriptUtils.execute(js, driver);
         return jQueryLocatorDefined;
