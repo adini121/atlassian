@@ -1,11 +1,13 @@
 package com.atlassian.webdriver.utils;
 
+import org.apache.commons.io.IOUtils;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 
 /**
@@ -48,22 +50,34 @@ public class JavaScriptUtils
         try
         {
             String lineSep = System.getProperty("line.separator");
-            BufferedReader br = new BufferedReader(new InputStreamReader(ClassLoader.getSystemClassLoader().getResourceAsStream(jsScriptName)));
-            String nextLine = "";
-            StringBuffer sb = new StringBuffer();
-            while ((nextLine = br.readLine()) != null)
-            {
-                sb.append(nextLine);
-                //
-                // note:
-                //   BufferedReader strips the EOL character
-                //   so we add a new one!
-                //
-                sb.append(lineSep);
-            }
-            String jsSource = sb.toString();
+            BufferedReader br = null;
+            try {
+                InputStream is = ClassLoader.getSystemClassLoader().getResourceAsStream(jsScriptName);
+                if (is == null) {
+                    is = Thread.currentThread().getContextClassLoader().getResourceAsStream(jsScriptName);
+                }
+                if (is == null) {
+                    throw new RuntimeException("javascript resource " + jsScriptName + " not found by system or context classloaders.");
+                }
+                br = new BufferedReader(new InputStreamReader(is));
+                String nextLine = "";
+                StringBuffer sb = new StringBuffer();
+                while ((nextLine = br.readLine()) != null)
+                {
+                    sb.append(nextLine);
+                    //
+                    // note:
+                    //   BufferedReader strips the EOL character
+                    //   so we add a new one!
+                    //
+                    sb.append(lineSep);
+                }
+                String jsSource = sb.toString();
 
-            JavaScriptUtils.execute(jsSource, driver);
+                JavaScriptUtils.execute(jsSource, driver);
+            } finally {
+                IOUtils.closeQuietly(br);
+            }
 
         }
         catch (IOException e)
