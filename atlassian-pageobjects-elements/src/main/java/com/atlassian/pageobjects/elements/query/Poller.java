@@ -42,7 +42,7 @@ public final class Poller
      */
     public static void waitUntilTrue(String message, TimedQuery<Boolean> condition)
     {
-        waitUntil(condition, is(true));
+        waitUntil(message, condition, is(true));
     }
 
     /**
@@ -63,7 +63,7 @@ public final class Poller
      */
     public static void waitUntilFalse(String message, TimedQuery<Boolean> condition)
     {
-        waitUntil(condition, is(false));
+        waitUntil(message, condition, is(false));
     }
 
     /**
@@ -72,10 +72,11 @@ public final class Poller
      *
      * @param expectedValue expected value
      * @param query query to evaluate
+     * @return last value from the query, satisfying the expected value
      */
-    public static <T> void waitUntilEquals(T expectedValue, TimedQuery<T> query)
+    public static <T> T waitUntilEquals(T expectedValue, TimedQuery<T> query)
     {
-        waitUntil(query, equalTo(expectedValue));
+        return waitUntil(query, equalTo(expectedValue));
     }
 
     /**
@@ -85,10 +86,11 @@ public final class Poller
      * @param message error message
      * @param expectedValue expected value
      * @param query query to evaluate
+     * @return last value from the query, satisfying the expected value
      */
-    public static <T> void waitUntilEquals(String message, T expectedValue, TimedQuery<T> query)
+    public static <T> T waitUntilEquals(String message, T expectedValue, TimedQuery<T> query)
     {
-        waitUntil(query, equalTo(expectedValue));
+        return waitUntil(message, query, equalTo(expectedValue));
     }
 
     /**
@@ -103,10 +105,11 @@ public final class Poller
      * @param matcher a matcher representing the assertion condition
      * @see Matcher
      * @see org.hamcrest.Matchers
+     * @return last value from the query, satisfying the matcher
      */
-    public static <T> void waitUntil(TimedQuery<T> query, Matcher<T> matcher)
+    public static <T> T waitUntil(TimedQuery<T> query, Matcher<T> matcher)
     {
-        waitUntil(null, query, matcher, byDefaultTimeout());
+        return waitUntil(null, query, matcher, byDefaultTimeout());
     }
 
     /**
@@ -122,10 +125,11 @@ public final class Poller
      * @param matcher a matcher representing the assertion condition
      * @see Matcher
      * @see org.hamcrest.Matchers
+     * @return last value from the query, satisfying the matcher
      */
-    public static <T> void waitUntil(String message, TimedQuery<T> query, Matcher<T> matcher)
+    public static <T> T waitUntil(String message, TimedQuery<T> query, Matcher<T> matcher)
     {
-        waitUntil(message, query, matcher, byDefaultTimeout());
+        return waitUntil(message, query, matcher, byDefaultTimeout());
     }
 
     /**
@@ -149,10 +153,11 @@ public final class Poller
      * @see #by(long)
      * @see #by(long, java.util.concurrent.TimeUnit)
      * @see #byDefaultTimeout()
+     * @return last value from the query, satisfying the matcher
      */
-    public static <T> void waitUntil(TimedQuery<T> query, Matcher<T> matcher, WaitTimeout timeout)
+    public static <T> T waitUntil(TimedQuery<T> query, Matcher<T> matcher, WaitTimeout timeout)
     {
-        waitUntil(null, query, matcher, timeout);
+        return waitUntil(null, query, matcher, timeout);
     }
 
 
@@ -178,8 +183,9 @@ public final class Poller
      * @see #by(long)
      * @see #by(long, java.util.concurrent.TimeUnit)
      * @see #byDefaultTimeout()
+     * @return last value from the query, satisfying the matcher
      */
-    public static <T> void waitUntil(String message, TimedQuery<T> query, Matcher<T> matcher, WaitTimeout timeout)
+    public static <T> T waitUntil(String message, TimedQuery<T> query, Matcher<T> matcher, WaitTimeout timeout)
     {
         checkNotNull(timeout);
         final Conditions.MatchingCondition<T> assertion = new Conditions.MatchingCondition<T>(query, matcher);
@@ -187,6 +193,7 @@ public final class Poller
         {
             throw new AssertionError(buildMessage(message, assertion, matcher, timeout));
         }
+        return assertion.lastValue;
     }
 
     private static <T> String buildMessage(String message, Conditions.MatchingCondition<T> assertion,
