@@ -126,7 +126,12 @@ public interface PageElement
     List<PageElement> findAll(By locator);
 
     /**
+     * <p/>
      * Returns an element that will match the given locator within this element.
+     *
+     * <p/>
+     * This method will <i>always</i> return an element instance. Use {@link #isPresent()}
+     * to check whether a corresponding element on the page actually exists.
      *
      * @param locator The locator mechanism
      * @return An element that will be located within this element.
