@@ -6,9 +6,6 @@ import com.atlassian.pageobjects.elements.query.TimedCondition;
 import com.atlassian.pageobjects.elements.query.TimedQuery;
 import com.atlassian.pageobjects.elements.query.webdriver.WebDriverQueryFactory;
 import com.atlassian.pageobjects.elements.timeout.TimeoutType;
-import com.atlassian.pageobjects.elements.timeout.Timeouts;
-import org.openqa.selenium.By;
-import org.openqa.selenium.SearchContext;
 
 import javax.inject.Inject;
 
@@ -22,92 +19,82 @@ public class WebDriverTimedElement implements TimedElement
     @Inject
     PageBinder pageBinder;
 
-    @Inject
-    Timeouts timeouts;
-    
     private WebDriverQueryFactory queryFactory;
-    private final By locator;
-    private final SearchContext searchContext;
+    private final WebDriverLocatable locatable;
     private final TimeoutType defaultTimeout;
 
     /**
-     * Create a WebDriverTimedElement with the given timeout
+     * Create a WebDriverTimedElement with the given timeout.
+     *
+     * @param locatable locatable for the target element
      * @param defaultTimeout default timeout of this element
-     * @param locator The locator mechanism to use.
-     * @param searchContext The search context to use.
      */
-    public WebDriverTimedElement(final By locator, final SearchContext searchContext, final TimeoutType defaultTimeout)
+    public WebDriverTimedElement(WebDriverLocatable locatable, TimeoutType defaultTimeout)
     {
-        if(locator == null)
-        {
-            throw new IllegalStateException("TimedElement requires the element to be uniquely locatable on the page.");
-        }
-
-        this.locator = locator;
-        this.searchContext = checkNotNull(searchContext);
+        this.locatable = checkNotNull(locatable);
         this.defaultTimeout = checkNotNull(defaultTimeout);
     }
 
     @Init
     public void initialize()
     {
-        queryFactory = pageBinder.bind(WebDriverQueryFactory.class, searchContext, timeouts);
+        queryFactory = pageBinder.bind(WebDriverQueryFactory.class, locatable);
     }
     
     public TimedCondition isPresent()
     {
-        return queryFactory.isPresent(locator, defaultTimeout);
+        return queryFactory.isPresent(defaultTimeout);
     }
 
     public TimedCondition isVisible()
     {
-        return queryFactory.isVisible(locator, defaultTimeout);
+        return queryFactory.isVisible(defaultTimeout);
     }
 
     public TimedCondition isEnabled()
     {
-        return queryFactory.isEnabled(locator, defaultTimeout);
+        return queryFactory.isEnabled(defaultTimeout);
     }
 
     public TimedCondition isSelected()
     {
-        return queryFactory.isSelected(locator, defaultTimeout);
+        return queryFactory.isSelected(defaultTimeout);
     }
 
     public TimedCondition hasClass(final String className)
     {
-        return queryFactory.hasClass(locator, className, defaultTimeout);
+        return queryFactory.hasClass(className, defaultTimeout);
     }
 
     public TimedQuery<String> getAttribute(final String name)
     {
-        return queryFactory.getAttribute(locator, name, defaultTimeout);
+        return queryFactory.getAttribute(name, defaultTimeout);
     }
 
     public TimedCondition hasAttribute(final String name, final String value)
     {
-        return queryFactory.hasAttribute(locator, name, value, defaultTimeout);
+        return queryFactory.hasAttribute(name, value, defaultTimeout);
     }
 
     public TimedQuery<String> getText()
     {
-        return queryFactory.getText(locator, defaultTimeout);
+        return queryFactory.getText(defaultTimeout);
     }
 
     public TimedCondition hasText(String text)
     {
-        return queryFactory.hasText(locator, text, defaultTimeout);
+        return queryFactory.hasText(text, defaultTimeout);
     }
 
     public TimedQuery<String> getTagName()
     {
         /* Even though the tagname can't change, the reason why we go through the same query mechanism is to
         get the polling for finding the element */
-        return queryFactory.getTagName(locator, defaultTimeout);
+        return queryFactory.getTagName(defaultTimeout);
     }
 
     public TimedQuery<String> getValue()
     {
-        return queryFactory.getValue(locator, defaultTimeout);
+        return queryFactory.getValue(defaultTimeout);
     }
 }
