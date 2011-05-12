@@ -1,6 +1,7 @@
 package com.atlassian.pageobjects.elements.test;
 
 import com.atlassian.pageobjects.elements.CheckboxElement;
+import com.atlassian.pageobjects.elements.GlobalElementFinder;
 import com.atlassian.pageobjects.elements.PageElementFinder;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.ElementsPage;
 import org.junit.Test;
@@ -14,7 +15,7 @@ public class TestCheckboxElement extends AbstractFileBasedServerTest
     @Test
     public void testCheck()
     {
-        PageElementFinder elementFinder = product.getPageBinder().bind(PageElementFinder.class);
+        PageElementFinder elementFinder = product.getPageBinder().bind(GlobalElementFinder.class);
         product.visit(ElementsPage.class);
 
         CheckboxElement element1 = elementFinder.find(By.id("test8_checkbox1"), CheckboxElement.class);
@@ -33,7 +34,7 @@ public class TestCheckboxElement extends AbstractFileBasedServerTest
     @Test
     public void testUncheck()
     {
-        PageElementFinder elementFinder = product.getPageBinder().bind(PageElementFinder.class);
+        PageElementFinder elementFinder = product.getPageBinder().bind(GlobalElementFinder.class);
         product.visit(ElementsPage.class);
 
         CheckboxElement element1 = elementFinder.find(By.id("test8_checkbox1"), CheckboxElement.class);
