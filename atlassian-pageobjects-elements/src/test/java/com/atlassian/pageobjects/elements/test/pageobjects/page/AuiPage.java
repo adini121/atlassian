@@ -3,7 +3,7 @@ package com.atlassian.pageobjects.elements.test.pageobjects.page;
 import com.atlassian.pageobjects.Page;
 import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.binder.WaitUntil;
-import com.atlassian.pageobjects.elements.ElementFinder;
+import com.atlassian.pageobjects.elements.PageElementFinder;
 import com.atlassian.pageobjects.elements.query.Poller;
 import com.atlassian.pageobjects.elements.test.pageobjects.component.InlineDialog;
 import com.atlassian.pageobjects.elements.test.pageobjects.component.LinksMenu;
@@ -21,7 +21,7 @@ public class AuiPage implements Page
     protected PageBinder pageBinder;
 
     @Inject
-    protected ElementFinder elementFinder;
+    protected PageElementFinder elementFinder;
 
     @WaitUntil
     public void doWait()

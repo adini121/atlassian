@@ -11,5 +11,6 @@ public class ElementModule implements Module
     public void configure(Binder binder)
     {
         binder.bind(ElementByPostInjectionProcessor.class);
+        binder.bind(PageElementFinder.class).to(GlobalElementFinder.class);
     }
 }

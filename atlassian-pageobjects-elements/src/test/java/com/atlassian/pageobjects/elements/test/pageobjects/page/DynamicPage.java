@@ -2,8 +2,8 @@ package com.atlassian.pageobjects.elements.test.pageobjects.page;
 
 import com.atlassian.pageobjects.Page;
 import com.atlassian.pageobjects.elements.ElementBy;
-import com.atlassian.pageobjects.elements.ElementFinder;
 import com.atlassian.pageobjects.elements.PageElement;
+import com.atlassian.pageobjects.elements.PageElementFinder;
 
 import javax.inject.Inject;
 
@@ -30,7 +30,7 @@ public class DynamicPage implements Page
     PageElement createFieldSetButtonSlowly;
 
     @Inject
-    ElementFinder elementFinder;
+    PageElementFinder elementFinder;
 
     public String getUrl()
     {
@@ -63,7 +63,7 @@ public class DynamicPage implements Page
         return messageSpan.getText();
     }
 
-    public ElementFinder getElementFinder()
+    public PageElementFinder getElementFinder()
     {
         return elementFinder;
     }

@@ -1,7 +1,12 @@
 package com.atlassian.pageobjects.elements.test.pageobjects.page;
 
 import com.atlassian.pageobjects.Page;
-import com.atlassian.pageobjects.elements.*;
+import com.atlassian.pageobjects.elements.ElementBy;
+import com.atlassian.pageobjects.elements.MultiSelectElement;
+import com.atlassian.pageobjects.elements.PageElementFinder;
+import com.atlassian.pageobjects.elements.SelectElement;
+import com.atlassian.pageobjects.elements.WebDriverMultiSelectElement;
+import com.atlassian.pageobjects.elements.WebDriverSelectElement;
 import org.openqa.selenium.By;
 
 import javax.inject.Inject;
@@ -12,7 +17,7 @@ import javax.inject.Inject;
 public class SelectElementPage implements Page
 {
     @Inject
-    ElementFinder elementFinder;
+    PageElementFinder elementFinder;
 
     @ElementBy(id="test1_Select")
     SelectElement select1;

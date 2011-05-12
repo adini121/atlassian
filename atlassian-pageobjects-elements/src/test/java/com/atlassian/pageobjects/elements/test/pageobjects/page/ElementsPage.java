@@ -3,9 +3,9 @@ package com.atlassian.pageobjects.elements.test.pageobjects.page;
 import com.atlassian.pageobjects.Page;
 import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.binder.WaitUntil;
-import com.atlassian.pageobjects.elements.PageElement;
 import com.atlassian.pageobjects.elements.ElementBy;
-import com.atlassian.pageobjects.elements.ElementFinder;
+import com.atlassian.pageobjects.elements.PageElement;
+import com.atlassian.pageobjects.elements.PageElementFinder;
 import com.atlassian.pageobjects.elements.query.Poller;
 import com.atlassian.webdriver.utils.by.ByJquery;
 
@@ -20,7 +20,7 @@ public class ElementsPage implements Page
     protected PageBinder pageBinder;
 
     @Inject
-    protected ElementFinder elementFinder;
+    protected PageElementFinder elementFinder;
 
     @ElementBy(id="test1_addElementsButton")
     private PageElement test1_addElementsButton;

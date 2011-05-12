@@ -1,8 +1,9 @@
 package com.atlassian.pageobjects.elements.test;
 
-import com.atlassian.pageobjects.elements.ElementFinder;
+import com.atlassian.pageobjects.elements.GlobalElementFinder;
 import com.atlassian.pageobjects.elements.Options;
 import com.atlassian.pageobjects.elements.PageElement;
+import com.atlassian.pageobjects.elements.PageElementFinder;
 import com.atlassian.pageobjects.elements.SelectElement;
 import com.atlassian.pageobjects.elements.query.Poller;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.DynamicPage;
@@ -22,12 +23,12 @@ import static junit.framework.Assert.assertTrue;
 
 public class TestElement extends AbstractFileBasedServerTest
 {
-    private ElementFinder elementFinder;
+    private PageElementFinder elementFinder;
 
     @Before
     public void initFinder()
     {
-        elementFinder = product.getPageBinder().bind(ElementFinder.class);
+        elementFinder = product.getPageBinder().bind(GlobalElementFinder.class);
     }
 
     @Test
@@ -175,7 +176,7 @@ public class TestElement extends AbstractFileBasedServerTest
     {
         DynamicPage page = product.visit(DynamicPage.class);
         
-        ElementFinder elementFinder = page.getElementFinder();
+        PageElementFinder elementFinder = page.getElementFinder();
         PageElement username = elementFinder.find(By.id("nameTextBox"));
         PageElement button = elementFinder.find(By.id("helloWorldButton"));
         PageElement message = elementFinder.find(By.id("messageSpan"));
@@ -197,7 +198,7 @@ public class TestElement extends AbstractFileBasedServerTest
     public void shouldRebindElementsIfStale_whenLocatedByParentFindSingle()
     {
         DynamicPage page = product.visit(DynamicPage.class);
-        ElementFinder elementFinder = page.getElementFinder();
+        PageElementFinder elementFinder = page.getElementFinder();
 
         PageElement div = elementFinder.find(By.id("placeHolderDiv"));
         PageElement username = div.find(By.tagName("fieldset")).find(By.id("nameTextBox"));
@@ -220,7 +221,7 @@ public class TestElement extends AbstractFileBasedServerTest
     public void shouldRebindElementsIfStale_whenLocatingByParentFindAll()
     {
         DynamicPage page = product.visit(DynamicPage.class);
-        ElementFinder elementFinder = page.getElementFinder();
+        PageElementFinder elementFinder = page.getElementFinder();
 
         page.createFieldSet();
 
@@ -244,7 +245,7 @@ public class TestElement extends AbstractFileBasedServerTest
     public void shouldRebindElementsIfStale_whenLocatingByParentFindAllGivenParentAlwaysExists()
     {
         DynamicPage page = product.visit(DynamicPage.class);
-        ElementFinder elementFinder = page.getElementFinder();
+        PageElementFinder elementFinder = page.getElementFinder();
 
         page.createFieldSet();
 

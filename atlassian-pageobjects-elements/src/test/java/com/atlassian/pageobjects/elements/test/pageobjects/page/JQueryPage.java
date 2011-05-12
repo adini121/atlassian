@@ -3,7 +3,7 @@ package com.atlassian.pageobjects.elements.test.pageobjects.page;
 import com.atlassian.pageobjects.Page;
 import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.binder.WaitUntil;
-import com.atlassian.pageobjects.elements.ElementFinder;
+import com.atlassian.pageobjects.elements.PageElementFinder;
 import com.atlassian.pageobjects.elements.query.Poller;
 import com.atlassian.pageobjects.elements.test.pageobjects.component.JQueryMenu;
 import com.atlassian.webdriver.utils.by.ByJquery;
@@ -19,7 +19,7 @@ public class JQueryPage implements Page
     protected PageBinder pageBinder;
 
     @Inject
-    protected ElementFinder elementFinder;
+    protected PageElementFinder elementFinder;
 
     public String getUrl()
     {

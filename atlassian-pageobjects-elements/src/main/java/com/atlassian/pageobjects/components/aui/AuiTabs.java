@@ -5,7 +5,7 @@ import com.atlassian.pageobjects.binder.Init;
 import com.atlassian.pageobjects.binder.InvalidPageStateException;
 import com.atlassian.pageobjects.components.TabbedComponent;
 import com.atlassian.pageobjects.elements.PageElement;
-import com.atlassian.pageobjects.elements.ElementFinder;
+import com.atlassian.pageobjects.elements.PageElementFinder;
 import com.atlassian.pageobjects.elements.query.Poller;
 import org.openqa.selenium.By;
 
@@ -23,7 +23,7 @@ public class AuiTabs implements TabbedComponent
     protected PageBinder pageBinder;
 
     @Inject
-    protected ElementFinder elementFinder;
+    protected PageElementFinder elementFinder;
 
     private final By rootLocator;
 

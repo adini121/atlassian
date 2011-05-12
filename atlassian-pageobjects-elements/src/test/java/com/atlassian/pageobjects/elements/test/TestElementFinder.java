@@ -1,7 +1,12 @@
 package com.atlassian.pageobjects.elements.test;
 
 
-import com.atlassian.pageobjects.elements.*;
+import com.atlassian.pageobjects.elements.GlobalElementFinder;
+import com.atlassian.pageobjects.elements.MultiSelectElement;
+import com.atlassian.pageobjects.elements.Options;
+import com.atlassian.pageobjects.elements.PageElement;
+import com.atlassian.pageobjects.elements.PageElementFinder;
+import com.atlassian.pageobjects.elements.SelectElement;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.ElementsPage;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.SelectElementPage;
 import org.junit.Test;
@@ -16,7 +21,7 @@ public class TestElementFinder extends AbstractFileBasedServerTest
     @Test
     public void testFindAll()
     {
-        ElementFinder elementFinder = product.getPageBinder().bind(ElementFinder.class);
+        PageElementFinder elementFinder = product.getPageBinder().bind(GlobalElementFinder.class);
         product.visit(ElementsPage.class);
 
         List<PageElement> items = elementFinder.findAll(By.className("test4_item"));
@@ -29,7 +34,7 @@ public class TestElementFinder extends AbstractFileBasedServerTest
     @Test
     public void testFindAll_WithCustomClass()
     {
-        ElementFinder elementFinder = product.getPageBinder().bind(ElementFinder.class);
+        PageElementFinder elementFinder = product.getPageBinder().bind(GlobalElementFinder.class);
         product.visit(SelectElementPage.class);
 
         List<SelectElement> singleSelects = elementFinder.findAll(By.tagName("select"), SelectElement.class);

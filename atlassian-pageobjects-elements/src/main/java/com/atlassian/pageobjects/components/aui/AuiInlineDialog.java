@@ -4,7 +4,7 @@ import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.binder.Init;
 import com.atlassian.pageobjects.components.ActivatedComponent;
 import com.atlassian.pageobjects.elements.PageElement;
-import com.atlassian.pageobjects.elements.ElementFinder;
+import com.atlassian.pageobjects.elements.PageElementFinder;
 import com.atlassian.pageobjects.elements.query.Poller;
 import org.openqa.selenium.By;
 
@@ -21,7 +21,7 @@ public class AuiInlineDialog implements ActivatedComponent<AuiInlineDialog>
     protected PageBinder pageBinder;
 
     @Inject
-    protected ElementFinder elementFinder;
+    protected PageElementFinder elementFinder;
 
     private final By triggerLocator;
     private final String identifier;
