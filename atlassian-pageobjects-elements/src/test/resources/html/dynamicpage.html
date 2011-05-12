@@ -4,32 +4,44 @@
     <title>Dynamic Page</title>
     <script type="text/javascript" src="../js/jquery-1.4.2.min.js"></script>
     <script type="text/javascript">
-         $(document).ready(function(){
-             $('#createFieldSetButton').click(function(){
-                 var form = $(document.createElement('fieldset'));
-                 form.append('<legend>Hello World Example</legend>');
-                 form.append('<label for="nameTextBox">Name:</label><input type="text" id="nameTextBox" /><br/>');
-                 form.append('<input type="button" id="helloWorldButton" value="Click Me" />');
+        function createForm() {
+            var form = $(document.createElement('fieldset'));
+            form.append('<legend>Hello World Example</legend>');
+            form.append('<label for="nameTextBox">Name:</label><input type="text" id="nameTextBox" /><br/>');
+            form.append('<input type="button" id="helloWorldButton" value="Click Me" />');
 
-                 $('#placeHolderDiv').html(form);
+            $('#placeHolderDiv').html(form);
 
-                 $('#helloWorldButton').click(function(){
-                    var fieldSet = $(this).parent();
-                    var message = "Hello " + fieldSet.find('#nameTextBox').attr('value') + "!";
-                    fieldSet.prepend('<span id="messageSpan">'+ message +'</span>');
-                });
-             });
+            $('#helloWorldButton').click(function(){
+                var fieldSet = $(this).parent();
+                var message = "Hello " + fieldSet.find('#nameTextBox').attr('value') + "!";
+                fieldSet.prepend('<span id="messageSpan">'+ message +'</span>');
+            });
+        }
 
+        $(document).ready(function(){
+            $('#createFieldSetButton').click(function(){
+                createForm();
+            });
 
+        });
 
-         });
+        // create the form with timeout
+        $(document).ready(function(){
+            $('#createFieldSetSlowlyButton').click(function() {
+                $('#placeHolderDiv').find("fieldset").remove();
+                window.setTimeout(createForm, 3000);
+            });
+
+        });
 
     </script>
 </head>
 <body>
-    <h2>Create controls via script</h2>
-    <input type="button" id="createFieldSetButton" value="Create Form" />
-    <div id="placeHolderDiv"></div>
+<h2>Create controls via script</h2>
+<input type="button" id="createFieldSetButton" value="Create Form" />
+<input type="button" id="createFieldSetSlowlyButton" value="Create Form Slowly" />
+<div id="placeHolderDiv"></div>
 
 </body>
 </html>

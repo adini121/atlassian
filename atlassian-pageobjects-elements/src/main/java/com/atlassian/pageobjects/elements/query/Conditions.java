@@ -1,14 +1,13 @@
 package com.atlassian.pageobjects.elements.query;
 
-import java.util.List;
-
 import com.google.common.base.Supplier;
-
 import org.apache.commons.lang.ArrayUtils;
 import org.hamcrest.Matcher;
 import org.hamcrest.StringDescription;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 import static com.atlassian.pageobjects.elements.util.StringConcat.asString;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -194,6 +193,35 @@ public final class Conditions
     public static <T> TimedCondition forMatcher(TimedQuery<T> query, Matcher<T> matcher)
     {
         return new MatchingCondition<T>(query, matcher);
+    }
+
+
+    /**
+     * Returns a timed condition, whose current evaluation is based on a value provided by given <tt>supplier</tt>.
+     *
+     * @param supplier supplier of the current condition value
+     * @return new query based on supplier
+     */
+    public static TimedCondition forSupplier(final Supplier<Boolean> supplier)
+    {
+        return forSupplier(DEFAULT_TIMEOUT, supplier);
+    }
+
+    /**
+     * Returns a timed condition, whose current evaluation is based on a value provided by given <tt>supplier</tt>.
+     *
+     * @param defaultTimeout default timeout of the condition
+     * @param supplier supplier of the current condition value
+     * @return new query based on supplier
+     */
+    public static TimedCondition forSupplier(long defaultTimeout, final Supplier<Boolean> supplier)
+    {
+        return new AbstractTimedCondition(defaultTimeout, PollingQuery.DEFAULT_INTERVAL) {
+            @Override
+            protected Boolean currentValue() {
+                return supplier.get();
+            }
+        };
     }
 
 

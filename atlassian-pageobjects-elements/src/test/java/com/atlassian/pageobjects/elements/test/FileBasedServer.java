@@ -6,6 +6,7 @@ import org.mortbay.jetty.Handler;
 import org.mortbay.jetty.Request;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.handler.AbstractHandler;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,6 +23,17 @@ public class FileBasedServer
 {
     private int port = 0;
     private Server server = null;
+
+    /**
+     * Main method to run the server standalone.
+     *
+     * @param args program arguments
+     * @throws Exception any exception
+     */
+    public static void main(String... args) throws Exception
+    {
+        new FileBasedServer().startServer();
+    }
 
     private final Map<String,String> urlMappings;
 

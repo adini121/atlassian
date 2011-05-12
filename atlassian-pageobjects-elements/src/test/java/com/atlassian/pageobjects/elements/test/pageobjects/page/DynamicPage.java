@@ -1,9 +1,9 @@
 package com.atlassian.pageobjects.elements.test.pageobjects.page;
 
 import com.atlassian.pageobjects.Page;
-import com.atlassian.pageobjects.elements.PageElement;
 import com.atlassian.pageobjects.elements.ElementBy;
 import com.atlassian.pageobjects.elements.ElementFinder;
+import com.atlassian.pageobjects.elements.PageElement;
 
 import javax.inject.Inject;
 
@@ -26,6 +26,9 @@ public class DynamicPage implements Page
     @ElementBy(id = "createFieldSetButton")
     PageElement createFieldSetButton;
 
+    @ElementBy(id = "createFieldSetSlowlyButton")
+    PageElement createFieldSetButtonSlowly;
+
     @Inject
     ElementFinder elementFinder;
 
@@ -38,6 +41,12 @@ public class DynamicPage implements Page
     {
         createFieldSetButton.click();
         waitUntilTrue(nameTextBox.timed().isVisible());
+        return this;
+    }
+
+    public DynamicPage createFieldSetSlowly()
+    {
+        createFieldSetButtonSlowly.click();
         return this;
     }
 

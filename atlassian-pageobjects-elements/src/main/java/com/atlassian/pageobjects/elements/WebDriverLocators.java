@@ -1,12 +1,22 @@
 package com.atlassian.pageobjects.elements;
 
+import com.atlassian.pageobjects.elements.query.Conditions;
+import com.atlassian.pageobjects.elements.query.TimedCondition;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.utils.element.ElementLocated;
+import com.google.common.base.Supplier;
 import org.hamcrest.StringDescription;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.SearchContext;
+import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.TimeoutException;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import static com.atlassian.pageobjects.elements.query.Poller.waitUntilTrue;
 
 /**
  * Creates WebDriveLocatables for different search strategies
@@ -144,10 +154,9 @@ public class WebDriverLocators
             return driver.elementExistsAt(this.locator, parent.waitUntilLocated(driver, timeoutForParentInSeconds));
         }
 
-
     }
 
-     private static class WebDriverListLocator implements  WebDriverLocatable
+    private static class WebDriverListLocator implements  WebDriverLocatable
     {
         private WebElement webElement = null;
 
@@ -173,29 +182,49 @@ public class WebDriverLocators
             return parent;
         }
 
-        public SearchContext waitUntilLocated(AtlassianWebDriver driver, int timeoutInSeconds)
+        public SearchContext waitUntilLocated(final AtlassianWebDriver driver, int timeoutInSeconds)
         {
             if(WebDriverLocators.isStale(webElement))
             {
-                SearchContext searchContext = parent.waitUntilLocated(driver, timeoutInSeconds);
 
-                List<WebElement> webElements = searchContext.findElements(this.locator);
-
-                if(locatorIndex <= webElements.size() - 1)
+                try
                 {
-                    webElement = webElements.get(locatorIndex);
+                    // if this does not fail, it means that our webElement is not stale any more (see the condition)
+                    // yes, it's not very readable, sorry...
+                    waitUntilTrue(elementInListCondition(driver, TimeUnit.SECONDS.toMillis(timeoutInSeconds)));
                 }
-                else
+                catch (AssertionError notLocated)
                 {
-                    throw new org.openqa.selenium.NoSuchElementException(new StringDescription()
-                        .appendText("Unable to locate element in collection.")
-                        .appendText("\nLocator: ").appendValue(locator)
-                        .appendText("\nLocator Index: ").appendValue(locatorIndex)
-                        .toString());
+                    throw new NoSuchElementException(new StringDescription()
+                            .appendText("Unable to locate element in collection.")
+                            .appendText("\nLocator: ").appendValue(locator)
+                            .appendText("\nLocator Index: ").appendValue(locatorIndex)
+                            .toString());
                 }
             }
-
             return webElement;
+        }
+
+        private TimedCondition elementInListCondition(final AtlassianWebDriver driver, long timeout) {
+            return Conditions.forSupplier(timeout, new Supplier<Boolean>() {
+                public Boolean get() {
+                    // we want the parent to be located and then the child list to be long enough to contain our index!
+                    if (parent.isPresent(driver, 0)) {
+                        List<WebElement> webElements = parent.waitUntilLocated(driver, 0).findElements(locator);
+                        if (locatorIndex < webElements.size())
+                        {
+                            // oooouch side effect! whatever....
+                            webElement = webElements.get(locatorIndex);
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                    return false;
+                }
+            });
         }
 
         public boolean isPresent(AtlassianWebDriver driver, int timeoutForParentInSeconds)

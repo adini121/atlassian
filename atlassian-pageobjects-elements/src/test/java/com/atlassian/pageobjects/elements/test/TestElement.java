@@ -1,17 +1,19 @@
 package com.atlassian.pageobjects.elements.test;
 
-import com.atlassian.pageobjects.elements.PageElement;
 import com.atlassian.pageobjects.elements.ElementFinder;
 import com.atlassian.pageobjects.elements.Options;
+import com.atlassian.pageobjects.elements.PageElement;
 import com.atlassian.pageobjects.elements.SelectElement;
 import com.atlassian.pageobjects.elements.query.Poller;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.DynamicPage;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.ElementsPage;
+import com.atlassian.pageobjects.elements.timeout.TimeoutType;
 import com.atlassian.webdriver.utils.by.ByJquery;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
+import static com.atlassian.pageobjects.elements.query.Poller.waitUntilEquals;
 import static com.atlassian.pageobjects.elements.query.Poller.waitUntilTrue;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
@@ -236,5 +238,30 @@ public class TestElement extends AbstractFileBasedServerTest
         username.type("Developer");
         button.click();
         assertEquals("Hello Developer!", message.getText());
+    }
+
+    @Test
+    public void shouldRebindElementsIfStale_whenLocatingByParentFindAllGivenParentAlwaysExists()
+    {
+        DynamicPage page = product.visit(DynamicPage.class);
+        ElementFinder elementFinder = page.getElementFinder();
+
+        page.createFieldSet();
+
+        PageElement mainDiv = elementFinder.find(By.id("placeHolderDiv"));
+        // needs timeout more than 3 seconds
+        PageElement username = mainDiv.findAll(By.tagName("input")).get(0).withTimeout(TimeoutType.AJAX_ACTION);
+        PageElement button = mainDiv.findAll(By.tagName("input")).get(1).withTimeout(TimeoutType.AJAX_ACTION);
+        PageElement message = mainDiv.find(By.id("messageSpan")).withTimeout(TimeoutType.AJAX_ACTION);
+
+        username.type("Tester");
+        button.click();
+        assertEquals("Hello Tester!", message.getText());
+
+        //recreate the fields
+        page.createFieldSetSlowly();
+        username.type("Developer");
+        button.click();
+        waitUntilEquals("Hello Developer!", message.timed().getText());
     }
 }

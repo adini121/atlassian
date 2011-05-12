@@ -50,7 +50,8 @@ public class ElementFinder
 
     /**
      * Creates  a {@link PageElement} for each element that matches the given <tt>locator</tt>
-     * using default timeout
+     * using default timeout.
+     *
      * @param by Locator mechanism to use
      * @return List of PageElements that match the given locator
      */
@@ -61,7 +62,8 @@ public class ElementFinder
 
     /**
      * Creates  a {@link PageElement} for each element that matches the given <tt>locator</tt>
-     * using <tt>timeoutType</tt>
+     * using <tt>timeoutType</tt>.
+     *
      * @param by Locator mechanism to use
      * @param timeoutType timeout for the element's timed operations
      * @return List of PageElements that match the given locator
