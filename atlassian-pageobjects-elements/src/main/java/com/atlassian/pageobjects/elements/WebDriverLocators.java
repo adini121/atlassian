@@ -1,10 +1,11 @@
 package com.atlassian.pageobjects.elements;
 
-import com.atlassian.pageobjects.elements.query.Conditions;
-import com.atlassian.pageobjects.elements.query.TimedCondition;
+import com.atlassian.pageobjects.elements.query.AbstractTimedQuery;
+import com.atlassian.pageobjects.elements.query.ExpirationHandler;
+import com.atlassian.pageobjects.elements.query.PollingQuery;
+import com.atlassian.pageobjects.elements.query.TimedQuery;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.utils.element.ElementLocated;
-import com.google.common.base.Supplier;
 import org.hamcrest.StringDescription;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -16,7 +17,8 @@ import org.openqa.selenium.support.ui.TimeoutException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static com.atlassian.pageobjects.elements.query.Poller.waitUntilTrue;
+import static com.atlassian.pageobjects.elements.query.Poller.waitUntil;
+import static org.hamcrest.Matchers.notNullValue;
 
 /**
  * Creates WebDriveLocatables for different search strategies
@@ -186,12 +188,10 @@ public class WebDriverLocators
         {
             if(WebDriverLocators.isStale(webElement))
             {
-
                 try
                 {
-                    // if this does not fail, it means that our webElement is not stale any more (see the condition)
-                    // yes, it's not very readable, sorry...
-                    waitUntilTrue(elementInListCondition(driver, TimeUnit.SECONDS.toMillis(timeoutInSeconds)));
+                    webElement = waitUntil(queryForElement(driver, TimeUnit.SECONDS.toMillis(timeoutInSeconds)),
+                            notNullValue(WebElement.class));
                 }
                 catch (AssertionError notLocated)
                 {
@@ -205,26 +205,24 @@ public class WebDriverLocators
             return webElement;
         }
 
-        private TimedCondition elementInListCondition(final AtlassianWebDriver driver, long timeout) {
-            return Conditions.forSupplier(timeout, new Supplier<Boolean>() {
-                public Boolean get() {
+        private TimedQuery<WebElement> queryForElement(final AtlassianWebDriver driver, long timeout) {
+            return new AbstractTimedQuery<WebElement>(timeout, PollingQuery.DEFAULT_INTERVAL, ExpirationHandler.RETURN_NULL)
+            {
+                @Override
+                protected boolean shouldReturn(WebElement currentEval) {
+                    return true;
+                }
+
+                @Override
+                protected WebElement currentValue() {
                     // we want the parent to be located and then the child list to be long enough to contain our index!
                     if (parent.isPresent(driver, 0)) {
                         List<WebElement> webElements = parent.waitUntilLocated(driver, 0).findElements(locator);
-                        if (locatorIndex < webElements.size())
-                        {
-                            // oooouch side effect! whatever....
-                            webElement = webElements.get(locatorIndex);
-                            return true;
-                        }
-                        else
-                        {
-                            return false;
-                        }
+                        return locatorIndex < webElements.size() ? webElements.get(locatorIndex) : null;
                     }
-                    return false;
+                    return null;
                 }
-            });
+            };
         }
 
         public boolean isPresent(AtlassianWebDriver driver, int timeoutForParentInSeconds)
