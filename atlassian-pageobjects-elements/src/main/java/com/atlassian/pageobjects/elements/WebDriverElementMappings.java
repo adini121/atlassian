@@ -14,6 +14,7 @@ public class WebDriverElementMappings
             .put(PageElement.class, WebDriverElement.class)
             .put(SelectElement.class, WebDriverSelectElement.class)
             .put(MultiSelectElement.class, WebDriverMultiSelectElement.class)
+            .put(CheckboxElement.class, WebDriverCheckboxElement.class)
             .build();
 
 
