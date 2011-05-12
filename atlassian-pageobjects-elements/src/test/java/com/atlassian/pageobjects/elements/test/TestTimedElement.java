@@ -152,7 +152,7 @@ public class TestTimedElement extends AbstractFileBasedServerTest
         Poller.waitUntilFalse(product.find(By.id("test1_delayedSpan")).timed().hasAttribute("nonexistant", "foo"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testTimedElementWithFindAll()
     {
         product.visit(ElementsPage.class);

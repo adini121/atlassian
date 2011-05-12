@@ -1,17 +1,19 @@
 package com.atlassian.pageobjects.elements.test.query;
 
+import com.atlassian.pageobjects.elements.WebDriverLocatable;
+import com.atlassian.pageobjects.elements.WebDriverLocators;
 import com.atlassian.pageobjects.elements.query.Poller;
 import com.atlassian.pageobjects.elements.query.TimedQuery;
 import com.atlassian.pageobjects.elements.query.webdriver.WebDriverQueryFactory;
 import com.atlassian.pageobjects.elements.timeout.MapBasedTimeouts;
 import com.atlassian.pageobjects.elements.timeout.TimeoutType;
 import com.atlassian.pageobjects.elements.timeout.Timeouts;
+import com.atlassian.webdriver.AtlassianWebDriver;
 import com.google.common.collect.ImmutableMap;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.RenderedWebElement;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import static com.atlassian.pageobjects.elements.query.Poller.by;
@@ -39,10 +41,11 @@ public class TestWebDriverQueryFactory
     @Test
     public void shouldSetUpQueryWithCustomDefaultTimeout()
     {
-        WebDriver mockElementPresentDriver = mock(WebDriver.class);
-        WebDriverQueryFactory tested = new WebDriverQueryFactory(mockElementPresentDriver, timeouts);
+        WebDriverLocatable locatable = singleTestLocatable();
+        AtlassianWebDriver mockElementPresentDriver = mock(AtlassianWebDriver.class);
+        WebDriverQueryFactory tested = new WebDriverQueryFactory(locatable, timeouts, mockElementPresentDriver);
 
-        TimedQuery<Boolean> result = tested.isPresent(By.id("test"), TimeoutType.COMPONENT_LOAD);
+        TimedQuery<Boolean> result = tested.isPresent(TimeoutType.COMPONENT_LOAD);
         assertEquals(100L, result.interval());
         assertEquals(200L, result.defaultTimeout());
     }
@@ -51,11 +54,11 @@ public class TestWebDriverQueryFactory
     public void shouldReturnValidIsPresentQuery()
     {
         WebElement mockElement = newMockElement();
-        WebDriver mockElementPresentDriver = mock(WebDriver.class);
-        when(mockElementPresentDriver.findElement(any(By.class))).thenReturn(mockElement);
-        WebDriverQueryFactory tested = new WebDriverQueryFactory(mockElementPresentDriver, timeouts);
+        AtlassianWebDriver mockDriver = mock(AtlassianWebDriver.class);
+        when(mockDriver.findElement(any(By.class))).thenReturn(mockElement);
+        WebDriverQueryFactory tested = new WebDriverQueryFactory(singleTestLocatable(), timeouts, mockDriver);
 
-        TimedQuery<Boolean> result = tested.isPresent(By.id("test"));
+        TimedQuery<Boolean> result = tested.isPresent();
         assertEquals(100L, result.interval());
         assertEquals(500L, result.defaultTimeout());
         Poller.waitUntil(result, is(true), now());
@@ -64,11 +67,11 @@ public class TestWebDriverQueryFactory
     @Test
     public void shouldReturnFalseIsPresentQuery()
     {
-        WebDriver mockElementPresentDriver = mock(WebDriver.class);
-        when(mockElementPresentDriver.findElement(any(By.class))).thenThrow(new NoSuchElementException("Cause you've got issues"));
-        WebDriverQueryFactory tested = new WebDriverQueryFactory(mockElementPresentDriver, timeouts);
+        AtlassianWebDriver mockDriver = mock(AtlassianWebDriver.class);
+        when(mockDriver.findElement(any(By.class))).thenThrow(new NoSuchElementException("Cause you've got issues"));
+        WebDriverQueryFactory tested = new WebDriverQueryFactory(singleTestLocatable(), timeouts, mockDriver);
 
-        TimedQuery<Boolean> result = tested.isPresent(By.id("test"));
+        TimedQuery<Boolean> result = tested.isPresent();
         assertEquals(100L, result.interval());
         assertEquals(500L, result.defaultTimeout());
         Poller.waitUntil(result, is(false), by(1000));
@@ -79,11 +82,11 @@ public class TestWebDriverQueryFactory
     {
         RenderedWebElement mockElement = mock(RenderedWebElement.class);
         when(mockElement.isDisplayed()).thenReturn(true);
-        WebDriver mockElementPresentDriver = mock(WebDriver.class);
-        when(mockElementPresentDriver.findElement(any(By.class))).thenReturn(mockElement);
-        WebDriverQueryFactory tested = new WebDriverQueryFactory(mockElementPresentDriver, timeouts);
+        AtlassianWebDriver mockDriver = mock(AtlassianWebDriver.class);
+        when(mockDriver.findElement(any(By.class))).thenReturn(mockElement);
+        WebDriverQueryFactory tested = new WebDriverQueryFactory(singleTestLocatable(), timeouts, mockDriver);
 
-        TimedQuery<Boolean> result = tested.isVisible(By.id("test"));
+        TimedQuery<Boolean> result = tested.isVisible();
         assertEquals(100L, result.interval());
         assertEquals(500L, result.defaultTimeout());
         Poller.waitUntil(result, is(true), now());
@@ -94,11 +97,11 @@ public class TestWebDriverQueryFactory
     {
         RenderedWebElement mockElement = mock(RenderedWebElement.class);
         when(mockElement.isDisplayed()).thenReturn(false, false, false, false, true);
-        WebDriver mockDriver = mock(WebDriver.class);
+        AtlassianWebDriver mockDriver = mock(AtlassianWebDriver.class);
         when(mockDriver.findElement(any(By.class))).thenReturn(mockElement);
-        WebDriverQueryFactory tested = new WebDriverQueryFactory(mockDriver, timeouts);
+        WebDriverQueryFactory tested = new WebDriverQueryFactory(singleTestLocatable(), timeouts, mockDriver);
 
-        TimedQuery<Boolean> result = tested.isVisible(By.id("test"));
+        TimedQuery<Boolean> result = tested.isVisible();
         assertEquals(100L, result.interval());
         assertEquals(500L, result.defaultTimeout());
         Poller.waitUntil(result, is(false), now());
@@ -110,11 +113,11 @@ public class TestWebDriverQueryFactory
     {
         RenderedWebElement mockElement = mock(RenderedWebElement.class);
         when(mockElement.isDisplayed()).thenReturn(false);
-        WebDriver mockDriver = mock(WebDriver.class);
+        AtlassianWebDriver mockDriver = mock(AtlassianWebDriver.class);
         when(mockDriver.findElement(any(By.class))).thenReturn(mockElement);
-        WebDriverQueryFactory tested = new WebDriverQueryFactory(mockDriver, timeouts);
+        WebDriverQueryFactory tested = new WebDriverQueryFactory(singleTestLocatable(), timeouts, mockDriver);
 
-        TimedQuery<Boolean> result = tested.isVisible(By.id("test"));
+        TimedQuery<Boolean> result = tested.isVisible();
         assertEquals(100L, result.interval());
         assertEquals(500L, result.defaultTimeout());
         Poller.waitUntil(result, is(false), by(1000));
@@ -125,14 +128,14 @@ public class TestWebDriverQueryFactory
     {
         RenderedWebElement mockElement = mock(RenderedWebElement.class);
         when(mockElement.getAttribute("class")).thenReturn("oneclass secondclass someotherclasssss");
-        WebDriver mockDriver = mock(WebDriver.class);
+        AtlassianWebDriver mockDriver = mock(AtlassianWebDriver.class);
         when(mockDriver.findElement(any(By.class))).thenReturn(mockElement);
-        WebDriverQueryFactory tested = new WebDriverQueryFactory(mockDriver, timeouts);
+        WebDriverQueryFactory tested = new WebDriverQueryFactory(singleTestLocatable(), timeouts, mockDriver);
 
-        Poller.waitUntil(tested.hasClass(By.id("test"), "oneclass"), is(true), now());
-        Poller.waitUntil(tested.hasClass(By.id("test"), "secondclass"), is(true), now());
-        Poller.waitUntil(tested.hasClass(By.id("test"), "someotherclasssss"), is(true), now());
-        Poller.waitUntil(tested.hasClass(By.id("test"), "blahblah"), is(false), byDefaultTimeout());
+        Poller.waitUntil(tested.hasClass("oneclass"), is(true), now());
+        Poller.waitUntil(tested.hasClass("secondclass"), is(true), now());
+        Poller.waitUntil(tested.hasClass("someotherclasssss"), is(true), now());
+        Poller.waitUntil(tested.hasClass("blahblah"), is(false), byDefaultTimeout());
     }
 
     @Test
@@ -140,13 +143,18 @@ public class TestWebDriverQueryFactory
     {
         RenderedWebElement mockElement = mock(RenderedWebElement.class);
         when(mockElement.getAttribute("class")).thenReturn("oneclass secOndclAss soMeotherclasSsss");
-        WebDriver mockDriver = mock(WebDriver.class);
+        AtlassianWebDriver mockDriver = mock(AtlassianWebDriver.class);
         when(mockDriver.findElement(any(By.class))).thenReturn(mockElement);
-        WebDriverQueryFactory tested = new WebDriverQueryFactory(mockDriver, timeouts);
+        WebDriverQueryFactory tested = new WebDriverQueryFactory(singleTestLocatable(), timeouts, mockDriver);
 
-        Poller.waitUntil(tested.hasClass(By.id("test"), "Oneclass"), is(true), now());
-        Poller.waitUntil(tested.hasClass(By.id("test"), "SECondclAss"), is(true), now());
-        Poller.waitUntil(tested.hasClass(By.id("test"), "someotherclaSSSSS"), is(true), now());
+        Poller.waitUntil(tested.hasClass("Oneclass"), is(true), now());
+        Poller.waitUntil(tested.hasClass("SECondclAss"), is(true), now());
+        Poller.waitUntil(tested.hasClass("someotherclaSSSSS"), is(true), now());
+    }
+
+    private WebDriverLocatable singleTestLocatable()
+    {
+        return WebDriverLocators.single(By.id("test"));
     }
 
     private WebElement newMockElement()

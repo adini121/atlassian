@@ -35,12 +35,24 @@ public class WebDriverLocators
     }
 
     /**
-     * Creates a WebDriverLocatable for a single element
-     * @param locator The locator strategy within the parent
-     * @param parent The locatable for the parent
+     * Creates a WebDriverLocatable for a single element in global context.
+     *
+     * @param locator The locator strategy within the parent. It will be applied in the global search context
      * @return WebDriverLocatable
      */
-    public static WebDriverLocatable single(By locator, WebDriverLocatable parent)
+    public static WebDriverLocatable single(By locator)
+    {
+        return new WebDriverSingleLocator(locator, root());
+    }
+
+    /**
+     * Creates a WebDriverLocatable for a single element nested within another locatable.
+     *
+     * @param locator The locator strategy within the parent
+     * @param parent The parent locatable
+     * @return WebDriverLocatable for a single nested element
+     */
+    public static WebDriverLocatable nested(By locator, WebDriverLocatable parent)
     {
         return new WebDriverSingleLocator(locator, parent);
     }
@@ -127,6 +139,10 @@ public class WebDriverLocators
         {
             if(!webElementLocated || WebDriverLocators.isStale(webElement))
             {
+                // TODO we might want to rewrite this so that there is one check including existence of parent and
+                // TODO existence of the locator within parent - this will be more correct from the timeout point of view
+                // see the list locatable implementation
+
                 SearchContext searchContext = parent.waitUntilLocated(driver, timeoutInSeconds);
 
                 if(!driver.elementExistsAt(locator, searchContext) && timeoutInSeconds > 0)

@@ -75,7 +75,7 @@ public class WebDriverElement implements PageElement
      */
     public WebDriverElement(By locator, WebDriverLocatable parent, TimeoutType timeoutType)
     {
-        this.locatable = WebDriverLocators.single(locator, parent);
+        this.locatable = WebDriverLocators.nested(locator, parent);
         this.defaultTimeout = checkNotNull(timeoutType);
     }
 
@@ -190,8 +190,7 @@ public class WebDriverElement implements PageElement
 
     public TimedElement timed()
     {
-       return pageBinder.bind(WebDriverTimedElement.class, locatable.getLocator(),
-               locatable.getParent().waitUntilLocated(driver, timeoutInSeconds()), defaultTimeout);
+       return pageBinder.bind(WebDriverTimedElement.class, locatable, defaultTimeout);
     }
 
     public WebDriverMouseEvents mouseEvents()
