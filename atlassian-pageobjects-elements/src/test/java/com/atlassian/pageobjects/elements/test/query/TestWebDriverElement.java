@@ -11,6 +11,7 @@ import com.atlassian.webdriver.AtlassianWebDriver;
 import com.google.inject.Binder;
 import com.google.inject.Module;
 import org.junit.Before;
+import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.openqa.selenium.By;
@@ -51,6 +52,7 @@ public class TestWebDriverElement
         });
     }
 
+    @Test
     public void shouldFindSinglePageElement()
     {
         final WebDriverElement tested = pageBinder.bind(WebDriverElement.class, By.id("test-id"));
