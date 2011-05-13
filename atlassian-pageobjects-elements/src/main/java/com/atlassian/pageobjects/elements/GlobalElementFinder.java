@@ -3,11 +3,11 @@ package com.atlassian.pageobjects.elements;
 import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.elements.timeout.TimeoutType;
 import com.atlassian.webdriver.AtlassianWebDriver;
+import com.google.common.collect.Lists;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import javax.inject.Inject;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -32,16 +32,6 @@ public class GlobalElementFinder implements PageElementFinder {
         return pageBinder.bind(WebDriverElement.class, by, timeoutType);
     }
 
-    public List<PageElement> findAll(final By by)
-    {
-        return findAll(by, TimeoutType.DEFAULT);
-    }
-
-    public List<PageElement> findAll(final By by, TimeoutType timeoutType)
-    {
-        return findAll(by, PageElement.class, timeoutType);
-    }
-
     public <T extends PageElement> T find(final By by, Class<T> elementClass)
     {
         return pageBinder.bind(WebDriverElementMappings.findMapping(elementClass), by);
@@ -52,6 +42,16 @@ public class GlobalElementFinder implements PageElementFinder {
         return pageBinder.bind(WebDriverElementMappings.findMapping(elementClass), by, timeoutType);
     }
 
+    public List<PageElement> findAll(final By by)
+    {
+        return findAll(by, TimeoutType.DEFAULT);
+    }
+
+    public List<PageElement> findAll(final By by, TimeoutType timeoutType)
+    {
+        return findAll(by, PageElement.class, timeoutType);
+    }
+
     public <T extends PageElement> List<T> findAll(final By by, Class<T> elementClass)
     {
         return findAll(by, elementClass, TimeoutType.DEFAULT);
@@ -59,7 +59,7 @@ public class GlobalElementFinder implements PageElementFinder {
 
     public <T extends PageElement> List<T> findAll(final By by, Class<T> elementClass, TimeoutType timeoutType)
     {
-        List<T> elements = new LinkedList<T>();
+        List<T> elements = Lists.newLinkedList();
         List<WebElement> webElements = driver.findElements(by);
 
         for(int i = 0; i < webElements.size(); i++)

@@ -58,7 +58,8 @@ public class WebDriverLocators
     }
 
     /**
-     * Creates a WebDriverLocatable for an element included in a list initialized with given element
+     * Creates a WebDriverLocatable for an element included in a list initialized with given element.
+     *
      * @param element WebElement
      * @param locator The locator strategy within the parent that will produce a list of matches
      * @param locatorIndex The index within the list of matches to find this element

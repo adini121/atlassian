@@ -158,7 +158,7 @@
     </script>
 
     <h2>6. Test for timed() within context</h2>
-    <span class="test6_class">Test6_Span</span>
+    <span class="test6_class">SelectElement singleSelect = Test6_Span</span>
     <div id="test6_Div">
         <span class="test6_class" id="test6_Inner_Span">Test6_Inner_Span</span>
         <input type="button" id="test6_hideSpanButton" value="Hide Inner Span With Delay" /><br />
@@ -195,7 +195,24 @@
     <br />
     <input type="checkbox" id="test8_checkbox2" value="Test8_Checkbox2" checked=checked />
     <label for="test8_checkbox2">Test8_Checkbox2</label>
-    
-    <h2>9. Next test</h2>
+
+    <h2>8. Test for PageElement.find() with custom types</h2>
+    <div id="select-parent-div">
+        <select id="nested-select" class="nested-select-marker">
+          <option value="volvo">Volvo</option>
+          <option value="saab">Saab</option>
+          <option value="mercedes">Mercedes</option>
+          <option value="audi">Audi</option>
+        </select>
+
+        <select id="nested-select2" >
+          <option value="volvo">JIRA</option>
+          <option value="saab">Confluence</option>
+          <option value="mercedes">Bamboo</option>
+          <option value="audi">Fisheye</option>
+          <option value="audi">Crucible</option>
+        </select>
+    </div>
+
 </body>
 </html>

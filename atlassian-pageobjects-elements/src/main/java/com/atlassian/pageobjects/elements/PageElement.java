@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Represents an HTML element that is expected on a DOM of a page.
  */
-public interface PageElement
+public interface PageElement extends PageElementFinder
 {
     /**
      * Whether this element is currently on the DOM of the page

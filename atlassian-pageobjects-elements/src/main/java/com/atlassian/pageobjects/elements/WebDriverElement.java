@@ -5,12 +5,12 @@ import com.atlassian.pageobjects.elements.timeout.TimeoutType;
 import com.atlassian.pageobjects.elements.timeout.Timeouts;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.utils.Check;
+import com.google.common.collect.Lists;
 import org.openqa.selenium.By;
 import org.openqa.selenium.RenderedWebElement;
 import org.openqa.selenium.WebElement;
 
 import javax.inject.Inject;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -198,23 +198,52 @@ public class WebDriverElement implements PageElement
         return new WebDriverMouseEvents(driver, waitForWebElement());
     }
 
+    public PageElement find(By locator)
+    {
+        return pageBinder.bind(WebDriverElement.class, locator, locatable);
+    }
+
+    public PageElement find(By locator, TimeoutType timeoutType)
+    {
+        return pageBinder.bind(WebDriverElement.class, locator, locatable, timeoutType);
+    }
+
+    public <T extends PageElement> T find(By locator, Class<T> elementClass)
+    {
+        return pageBinder.bind(WebDriverElementMappings.findMapping(elementClass), locator, locatable);
+    }
+
+    public <T extends PageElement> T find(By locator, Class<T> elementClass, TimeoutType timeoutType)
+    {
+        return pageBinder.bind(WebDriverElementMappings.findMapping(elementClass), locator, locatable, timeoutType);
+    }
+
     public List<PageElement> findAll(final By locator)
     {
-        List<PageElement> elements = new LinkedList<PageElement>();
+        return findAll(locator, defaultTimeout);
+    }
+
+    public List<PageElement> findAll(By locator, TimeoutType timeoutType)
+    {
+        return findAll(locator, PageElement.class, timeoutType);
+    }
+
+    public <T extends PageElement> List<T> findAll(By locator, Class<T> elementClass)
+    {
+        return findAll(locator, elementClass, defaultTimeout);
+    }
+
+    public <T extends PageElement> List<T> findAll(By locator, Class<T> elementClass, TimeoutType timeoutType)
+    {
+        List<T> elements = Lists.newLinkedList();
         List<WebElement> webElements = waitForWebElement().findElements(locator);
 
         for(int i = 0; i < webElements.size(); i++)
         {
-            elements.add(pageBinder.bind(WebDriverElement.class,
-                    WebDriverLocators.list(webElements.get(i), locator, i, locatable), defaultTimeout));
+            elements.add(pageBinder.bind(WebDriverElementMappings.findMapping(elementClass),
+                    WebDriverLocators.list(webElements.get(i), locator, i, locatable), timeoutType));
         }
-        
         return elements;
-    }
-
-    public PageElement find(final By locator)
-    {
-        return pageBinder.bind(WebDriverElement.class, locator, locatable);
     }
 
 
