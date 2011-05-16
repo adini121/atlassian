@@ -15,6 +15,7 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 
 import static com.atlassian.pageobjects.elements.query.Poller.waitUntilEquals;
+import static com.atlassian.pageobjects.elements.query.Poller.waitUntilFalse;
 import static com.atlassian.pageobjects.elements.query.Poller.waitUntilTrue;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
@@ -170,6 +171,23 @@ public class TestElement extends AbstractFileBasedServerTest
         assertEquals("Hello Developer!", page.createFieldSet().helloWorld("Developer").getMessage());
 
     }
+
+    @Test
+    public void shouldRebindElementIfStale_whenOriginalElementBecomesStaleAfterSomeTime()
+    {
+        // This strategy can be used by pabeobjects that reload the same page after an action
+        
+        DynamicPage page = product.visit(DynamicPage.class);
+        page.createFieldSet();
+
+        PageElementFinder elementFinder = page.getElementFinder();
+        PageElement button = elementFinder.find(By.id("helloWorldButton"), TimeoutType.AJAX_ACTION);
+
+        product.getTester().getDriver().executeScript("$('#helloWorldButton').addClass('posting')");
+        page.removeAndCreateFieldSetSlowly();
+        waitUntilFalse(button.timed().hasClass("posting"));
+    }
+
 
     @Test
     public void shouldRebindElementIfStale_whenLocatedByElementFinder()

@@ -5,6 +5,7 @@ import com.atlassian.webdriver.AtlassianWebDriver;
 import com.google.common.base.Function;
 import com.google.common.base.Supplier;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 
 import static com.atlassian.pageobjects.elements.util.StringConcat.asString;
@@ -89,6 +90,11 @@ public class WebDriverLocatableBasedTimedQuery<T> extends GenericWebDriverTimedQ
             try
             {
                 return valueProvider.apply((WebElement) locatable.waitUntilLocated(webDriver, 0));
+            }
+            catch(StaleElementReferenceException e)
+            {
+                // element was stale after we got it from the locatable, need to try on next poll.
+                return invalidValue;
             }
             catch (NoSuchElementException e)
             {

@@ -4,6 +4,12 @@
     <title>Dynamic Page</title>
     <script type="text/javascript" src="../js/jquery-1.4.2.min.js"></script>
     <script type="text/javascript">
+        function removeAndCreateForm()
+        {
+            $('#placeHolderDiv').find("fieldset").remove();
+            createForm();
+        }
+
         function createForm() {
             var form = $(document.createElement('fieldset'));
             form.append('<legend>Hello World Example</legend>');
@@ -24,16 +30,16 @@
                 createForm();
             });
 
-        });
-
-        // create the form with timeout
-        $(document).ready(function(){
             $('#createFieldSetSlowlyButton').click(function() {
                 $('#placeHolderDiv').find("fieldset").remove();
                 window.setTimeout(createForm, 3000);
             });
 
+            $('#removeAndcreateFieldSetSlowlyButton').click(function(){
+               window.setTimeout(removeAndCreateForm, 3000);
+            });
         });
+
 
     </script>
 </head>
@@ -41,6 +47,7 @@
 <h2>Create controls via script</h2>
 <input type="button" id="createFieldSetButton" value="Create Form" />
 <input type="button" id="createFieldSetSlowlyButton" value="Create Form Slowly" />
+<input type="button" id="removeAndcreateFieldSetSlowlyButton" value="Remove and Create Form Slowly" />
 <div id="placeHolderDiv"></div>
 
 </body>

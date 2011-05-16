@@ -29,6 +29,9 @@ public class DynamicPage implements Page
     @ElementBy(id = "createFieldSetSlowlyButton")
     PageElement createFieldSetButtonSlowly;
 
+    @ElementBy(id = "removeAndcreateFieldSetSlowlyButton")
+    PageElement removeAndcreateFieldSetButtonSlowly;
+
     @Inject
     PageElementFinder elementFinder;
 
@@ -47,6 +50,12 @@ public class DynamicPage implements Page
     public DynamicPage createFieldSetSlowly()
     {
         createFieldSetButtonSlowly.click();
+        return this;
+    }
+
+    public DynamicPage removeAndCreateFieldSetSlowly()
+    {
+        removeAndcreateFieldSetButtonSlowly.click();
         return this;
     }
 
