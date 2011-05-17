@@ -59,14 +59,14 @@ public class DefaultAtlassianWebDriver implements AtlassianWebDriver
         driver.quit();
     }
 
-    public void waitUntil(final Function func)
+    public void waitUntil(final Function<WebDriver, Boolean> isTrue)
     {
-        new WebDriverWait(getDriver(), WAIT_TIME).until(func);
+        new WebDriverWait(getDriver(), WAIT_TIME).until(isTrue);
     }
 
-    public void waitUntil(final Function func, int timeoutInSeconds)
+    public void waitUntil(final Function<WebDriver, Boolean> isTrue, int timeoutInSeconds)
     {
-        new WebDriverWait(getDriver(), timeoutInSeconds).until(func);
+        new WebDriverWait(getDriver(), timeoutInSeconds).until(isTrue);
     }
 
     public void dumpSourceTo(File dumpFile) {
@@ -172,22 +172,9 @@ public class DefaultAtlassianWebDriver implements AtlassianWebDriver
         return Check.elementIsVisible(locator, context);
     }
 
-    public void sleep(final long timeout)
-    {
-        try
-        {
-            Thread.sleep(timeout);
-        }
-        catch (InterruptedException e)
-        {
-            // Do nothing.
-        }
-    }
-
     /**
      * WebDriver implementation below
      */
-
     public void get(final String url)
     {
         driver.get(url);

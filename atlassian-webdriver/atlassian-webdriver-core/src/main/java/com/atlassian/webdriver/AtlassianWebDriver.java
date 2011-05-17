@@ -18,9 +18,9 @@ public interface AtlassianWebDriver extends WebDriver, JavascriptExecutor
 
     void quit();
 
-    void waitUntil(Function func);
+    void waitUntil(Function<WebDriver, Boolean> isTrue);
 
-    void waitUntil(Function func, int timeoutInSeconds);
+    void waitUntil(Function<WebDriver, Boolean> isTrue, int timeoutInSeconds);
 
     void dumpSourceTo(File dumpFile);
 
@@ -49,6 +49,4 @@ public interface AtlassianWebDriver extends WebDriver, JavascriptExecutor
     boolean elementIsVisible(By locator);
 
     boolean elementIsVisibleAt(By locator, SearchContext context);
-
-    void sleep(long timeout);
 }
