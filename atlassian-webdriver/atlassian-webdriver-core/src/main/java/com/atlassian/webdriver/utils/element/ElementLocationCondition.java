@@ -8,7 +8,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 
 /**
- * TODO: Document this class / interface here
+ * Condition to wait for an element's presence.
  *
  */
 abstract class ElementLocationCondition implements ExpectedCondition<Boolean>

@@ -2,11 +2,9 @@ package com.atlassian.webdriver.utils.element;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 /**
- * TODO: Document this class / interface here
+ * Continues to execute until a particular element is visible.
  *
  */
 public class ElementIsVisible extends ElementVisibilityCondition

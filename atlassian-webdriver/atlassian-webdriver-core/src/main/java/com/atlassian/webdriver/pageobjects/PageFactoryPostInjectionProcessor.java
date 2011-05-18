@@ -8,8 +8,6 @@ import javax.inject.Inject;
 
 /**
  * Processor that will use {@Link PageFactory} to initialize the object
- *
- * @since 2.0
  */
 public class PageFactoryPostInjectionProcessor implements PostInjectionProcessor
 {

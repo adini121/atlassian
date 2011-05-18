@@ -2,12 +2,9 @@ package com.atlassian.webdriver.utils.element;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 /**
- * Implements an ExpectedCondition that looks for the visiblity of another element. The apply
- * command will continue to execute until the element is visible.
+ * Continues to execute until a particular element is located.
  */
 public class ElementLocated extends ElementLocationCondition
 {

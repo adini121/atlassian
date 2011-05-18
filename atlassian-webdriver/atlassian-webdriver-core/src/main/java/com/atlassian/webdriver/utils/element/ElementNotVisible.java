@@ -1,11 +1,10 @@
 package com.atlassian.webdriver.utils.element;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.SearchContext;
 
 /**
- * TODO: Document this class / interface here
+ * Continues to execute until a particular element is no longer visible.
  *
  */
 public class ElementNotVisible extends ElementVisibilityCondition
@@ -15,7 +14,7 @@ public class ElementNotVisible extends ElementVisibilityCondition
         super(by, Visibility.NOTVISIBLE);
     }
 
-    public ElementNotVisible(By by, WebElement el)
+    public ElementNotVisible(By by, SearchContext el)
     {
         super(by, el, Visibility.NOTVISIBLE);
     }

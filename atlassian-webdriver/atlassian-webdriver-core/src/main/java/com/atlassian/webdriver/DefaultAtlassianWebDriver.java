@@ -102,12 +102,7 @@ public class DefaultAtlassianWebDriver implements AtlassianWebDriver
         }
     }
 
-    /**
-     * Wait utilities
-     * TODO: extract out into a wait utility
-     */
-
-    public void waitUntilElementIsVisibleAt(By elementLocator, WebElement at)
+    public void waitUntilElementIsVisibleAt(By elementLocator, SearchContext at)
     {
         waitUntil(new ElementIsVisible(elementLocator, at));
     }
@@ -117,7 +112,7 @@ public class DefaultAtlassianWebDriver implements AtlassianWebDriver
         waitUntilElementIsVisibleAt(elementLocator, null);
     }
 
-    public void waitUntilElementIsNotVisibleAt(By elementLocator, WebElement at)
+    public void waitUntilElementIsNotVisibleAt(By elementLocator, SearchContext at)
     {
         waitUntil(new ElementNotVisible(elementLocator, at));
     }
@@ -127,7 +122,7 @@ public class DefaultAtlassianWebDriver implements AtlassianWebDriver
         waitUntilElementIsNotVisibleAt(elementLocator, null);
     }
 
-    public void waitUntilElementIsLocatedAt(By elementLocator, WebElement at)
+    public void waitUntilElementIsLocatedAt(By elementLocator, SearchContext at)
     {
         waitUntil(new ElementLocated(elementLocator, at));
     }
@@ -137,7 +132,7 @@ public class DefaultAtlassianWebDriver implements AtlassianWebDriver
         waitUntilElementIsLocatedAt(elementLocator, null);
     }
 
-    public void waitUntilElementIsNotLocatedAt(By elementLocator, WebElement at)
+    public void waitUntilElementIsNotLocatedAt(By elementLocator, SearchContext at)
     {
         waitUntil(new ElementNotLocated(elementLocator, at));
     }
@@ -146,11 +141,6 @@ public class DefaultAtlassianWebDriver implements AtlassianWebDriver
     {
         waitUntilElementIsNotLocatedAt(elementLocator, null);
     }
-
-    /**
-     * Check Methods
-     * TODO: remove.
-     */
 
     public boolean elementExists(By locator)
     {
@@ -200,7 +190,6 @@ public class DefaultAtlassianWebDriver implements AtlassianWebDriver
         return driver.findElement(by);
     }
 
-    
     public String getPageSource()
     {
         return driver.getPageSource();

@@ -1,7 +1,7 @@
 package com.atlassian.pageobjects;
 
 /**
- * The object used for implementing page objects
+ * Abstracts the technology that can drive the browser.
  */
 public interface Tester
 {
