@@ -146,11 +146,11 @@ public interface PageElement extends PageElementFinder
     TimedElement timed();
 
     /**
-     * Gets a MouseEvents object for this element
+     * Gets a <tt>PageElementJavascriptExecutor</tt> for this element
      * 
-     * @return MouseEvents object that can dispatch javascript events to this element.
+     * @return Object that can execute javascript on this element.
      */
-    WebDriverMouseEvents mouseEvents();
+    PageElementJavascriptExecutor javascript();
 
     /**
      * Returns an instance equivalent to this element, with a changed <tt>timeoutType</tt>.

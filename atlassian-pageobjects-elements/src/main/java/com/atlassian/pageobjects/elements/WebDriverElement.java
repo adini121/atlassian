@@ -193,9 +193,9 @@ public class WebDriverElement implements PageElement
        return pageBinder.bind(WebDriverTimedElement.class, locatable, defaultTimeout);
     }
 
-    public WebDriverMouseEvents mouseEvents()
+    public PageElementJavascriptExecutor javascript()
     {
-        return new WebDriverMouseEvents(driver, waitForWebElement());
+        return new PageElementJavascriptExecutor(driver, waitForWebElement());
     }
 
     public PageElement find(By locator)

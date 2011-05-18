@@ -5,19 +5,19 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 /**
- * Allows dispatching individual mouse events to an element
+ * Executes javascript on an element
  */
-public class WebDriverMouseEvents
+public class PageElementJavascriptExecutor
 {
     private final WebDriver driver;
     private final WebElement element;
 
     /**
-     * Creates a WebDriverMouseEvents object for the given element
+     * Creates a PageElementJavascriptExecutor object for the given element
      * @param driver The WebDriver instance
      * @param element The WebElement to dispatch events to.
      */
-    public WebDriverMouseEvents(WebDriver driver, WebElement element)
+    public PageElementJavascriptExecutor(WebDriver driver, WebElement element)
     {
         this.driver = driver;
         this.element = element;
