@@ -5,15 +5,16 @@ import com.atlassian.webdriver.jira.JiraTestedProduct;
 import com.atlassian.webdriver.jira.component.header.JiraHeader;
 import com.atlassian.webdriver.jira.page.DashboardPage;
 import com.atlassian.webdriver.jira.page.LogoutPage;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static junit.framework.Assert.assertFalse;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
- * 
+ *
  */
 public class TestJiraHeader
 {
@@ -33,6 +34,15 @@ public class TestJiraHeader
     {
         JiraHeader header = JIRA.gotoHomePage().getHeader();
         assertFalse(header.isAdmin());
+        assertFalse(header.isLoggedIn());
+    }
+
+    @Test
+    public void testHeaderLogout()
+    {
+        JiraHeader header = JIRA.gotoLoginPage().loginAsSysAdmin(DashboardPage.class).getHeader();
+        header = header.logout(DashboardPage.class).getHeader();
+
         assertFalse(header.isLoggedIn());
     }
 

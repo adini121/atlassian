@@ -1,16 +1,19 @@
 package com.atlassian.webdriver.confluence.component.header;
 
+import javax.inject.Inject;
+
+import com.atlassian.pageobjects.Page;
 import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.component.Header;
+import com.atlassian.pageobjects.page.HomePage;
 import com.atlassian.webdriver.AtlassianWebDriver;
+import com.atlassian.webdriver.confluence.component.UserDiscoverable;
 import com.atlassian.webdriver.confluence.component.menu.BrowseMenu;
 import com.atlassian.webdriver.confluence.component.menu.ConfluenceUserMenu;
-import com.atlassian.webdriver.confluence.component.UserDiscoverable;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-
-import javax.inject.Inject;
 
 /**
  * TODO: Document this class / interface here
@@ -25,10 +28,10 @@ public class ConfluenceHeader implements Header, UserDiscoverable
 
     @Inject
     PageBinder pageBinder;
-    
+
     @FindBy(id = "header")
     WebElement headerElement;
-    
+
     private final static By USER_MENU_LOCATOR = By.id("user-menu-link");
     private final static By ADMIN_MENU_LOCATOR = By.id("administration-link");
 
@@ -36,6 +39,14 @@ public class ConfluenceHeader implements Header, UserDiscoverable
     public boolean isLoggedIn()
     {
         return driver.elementExistsAt(USER_MENU_LOCATOR, headerElement);
+    }
+
+    public <M extends Page> M logout(Class<M> nextPage)
+    {
+        if (isLoggedIn()) {
+            getUserMenu().open().logout();
+        }
+        return HomePage.class.isAssignableFrom(nextPage) ? pageBinder.bind(nextPage) : pageBinder.navigateToAndBind(nextPage);
     }
 
     public boolean isAdmin()

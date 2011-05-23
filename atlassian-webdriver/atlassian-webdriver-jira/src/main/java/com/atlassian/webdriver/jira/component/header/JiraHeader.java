@@ -1,18 +1,21 @@
 package com.atlassian.webdriver.jira.component.header;
 
+import javax.inject.Inject;
+
+import com.atlassian.pageobjects.Page;
 import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.binder.Init;
 import com.atlassian.pageobjects.component.Header;
 import com.atlassian.webdriver.AtlassianWebDriver;
+import com.atlassian.webdriver.jira.component.UserDiscoverable;
 import com.atlassian.webdriver.jira.component.menu.AdminMenu;
 import com.atlassian.webdriver.jira.component.menu.DashboardMenu;
 import com.atlassian.webdriver.jira.component.menu.JiraUserMenu;
-import com.atlassian.webdriver.jira.component.UserDiscoverable;
+import com.atlassian.webdriver.jira.page.LogoutPage;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-
-import javax.inject.Inject;
 
 /**
  * TODO: Document this class / interface here
@@ -26,10 +29,10 @@ public class JiraHeader implements UserDiscoverable, Header
 
     @Inject
     AtlassianWebDriver driver;
-    
+
     @FindBy(id="header")
     private WebElement headerElement;
-    
+
     private String userName;
 
     @Init
@@ -63,4 +66,11 @@ public class JiraHeader implements UserDiscoverable, Header
         return isLoggedIn() && driver.elementExistsAt(By.id("admin_link"), headerElement);
     }
 
+    public <M extends Page> M logout(Class<M> nextPage)
+    {
+        if (isLoggedIn()) {
+            pageBinder.navigateToAndBind(LogoutPage.class).confirmLogout();
+        }
+        return LogoutPage.class.isAssignableFrom(nextPage) ? pageBinder.bind(nextPage) : pageBinder.navigateToAndBind(nextPage);
+    }
 }
