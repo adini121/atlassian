@@ -1,16 +1,20 @@
 package com.atlassian.pageobjects.elements.query.webdriver;
 
 import com.atlassian.pageobjects.elements.WebDriverLocatable;
+import com.atlassian.pageobjects.elements.query.AbstractTimedQuery;
+import com.atlassian.pageobjects.elements.query.ExpirationHandler;
+import com.atlassian.pageobjects.elements.query.PollingQuery;
 import com.atlassian.pageobjects.elements.query.TimedCondition;
 import com.atlassian.pageobjects.elements.query.TimedQuery;
 import com.atlassian.pageobjects.elements.timeout.TimeoutType;
 import com.atlassian.pageobjects.elements.timeout.Timeouts;
 import com.atlassian.webdriver.AtlassianWebDriver;
-import org.openqa.selenium.By;
+import com.google.common.base.Supplier;
 
 import javax.annotation.concurrent.NotThreadSafe;
 import javax.inject.Inject;
 
+import static com.atlassian.pageobjects.elements.timeout.TimeoutType.DEFAULT;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
@@ -61,7 +65,7 @@ public class WebDriverQueryFactory
 
     public TimedCondition isPresent()
     {
-        return isPresent(TimeoutType.DEFAULT);
+        return isPresent(DEFAULT);
     }
 
     public TimedCondition isVisible(TimeoutType timeoutType)
@@ -72,7 +76,7 @@ public class WebDriverQueryFactory
 
     public TimedCondition isVisible()
     {
-        return isVisible(TimeoutType.DEFAULT);
+        return isVisible(DEFAULT);
     }
 
     public TimedCondition isEnabled(TimeoutType timeoutType)
@@ -83,7 +87,7 @@ public class WebDriverQueryFactory
 
     public TimedCondition isEnabled()
     {
-        return isEnabled(TimeoutType.DEFAULT);
+        return isEnabled(DEFAULT);
     }
 
     public TimedCondition isSelected(TimeoutType timeoutType)
@@ -94,7 +98,7 @@ public class WebDriverQueryFactory
 
     public TimedCondition isSelected()
     {
-        return isSelected(TimeoutType.DEFAULT);
+        return isSelected(DEFAULT);
     }
 
     public TimedQuery<String> getText(TimeoutType timeoutType)
@@ -105,7 +109,7 @@ public class WebDriverQueryFactory
 
     public TimedQuery<String> getText()
     {
-        return getText(TimeoutType.DEFAULT);
+        return getText(DEFAULT);
     }
 
     public TimedQuery<String> getValue(TimeoutType timeoutType)
@@ -116,7 +120,7 @@ public class WebDriverQueryFactory
 
     public TimedQuery<String> getValue()
     {
-        return getValue(TimeoutType.DEFAULT);
+        return getValue(DEFAULT);
     }
 
     public TimedCondition hasAttribute(String attributeName, String expectedValue, TimeoutType timeoutType)
@@ -128,7 +132,7 @@ public class WebDriverQueryFactory
 
     public TimedCondition hasAttribute(String attributeName, String expectedValue)
     {
-        return hasAttribute(attributeName, expectedValue, TimeoutType.DEFAULT);
+        return hasAttribute(attributeName, expectedValue, DEFAULT);
     }
 
     public TimedQuery<String> getAttribute(String attributeName, TimeoutType timeoutType)
@@ -140,7 +144,7 @@ public class WebDriverQueryFactory
 
     public TimedQuery<String> getAttribute(String attributeName)
     {
-        return getAttribute(attributeName, TimeoutType.DEFAULT);
+        return getAttribute(attributeName, DEFAULT);
     }
 
 
@@ -152,7 +156,7 @@ public class WebDriverQueryFactory
 
     public TimedCondition hasClass(String className)
     {
-        return hasClass(className, TimeoutType.DEFAULT);
+        return hasClass(className, DEFAULT);
     }
 
     public TimedQuery<String> getTagName(TimeoutType timeoutType)
@@ -163,7 +167,7 @@ public class WebDriverQueryFactory
 
     public TimedQuery<String> getTagName()
     {
-        return getTagName(TimeoutType.DEFAULT);
+        return getTagName(DEFAULT);
     }
 
     public TimedCondition hasText(String text, TimeoutType timeoutType)
@@ -172,8 +176,33 @@ public class WebDriverQueryFactory
                 timeouts.timeoutFor(timeoutType), interval());
     }
 
-    public TimedCondition hasText(By locator, String text)
+    public TimedCondition hasText(String text)
     {
-        return hasText(text, TimeoutType.DEFAULT);
+        return hasText(text, DEFAULT);
+    }
+
+    public <T> TimedQuery<T> forSupplier(final Supplier<T> supplier, TimeoutType timeoutType)
+    {
+        return new AbstractTimedQuery<T>(timeouts.timeoutFor(timeoutType), PollingQuery.DEFAULT_INTERVAL,
+                ExpirationHandler.RETURN_CURRENT)
+        {
+
+            @Override
+            protected boolean shouldReturn(T currentEval)
+            {
+                return true;
+            }
+
+            @Override
+            protected T currentValue()
+            {
+                return supplier.get();
+            }
+        };
+    }
+
+    public <T> TimedQuery<T> forSupplier(final Supplier<T> supplier)
+    {
+        return forSupplier(supplier, DEFAULT);
     }
 }
