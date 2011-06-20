@@ -58,10 +58,6 @@ public class ScreenResolution implements Comparable<ScreenResolution>
             client.refresh();
             client.waitForPageToLoad();
             client.waitForAjaxWithJquery();
-            // TODO: This is a hack to give things on the page time to render (e.g. gadgets)
-            try {
-                Thread.sleep(3000);
-            } catch (Exception e) {}
         }
     }
 }

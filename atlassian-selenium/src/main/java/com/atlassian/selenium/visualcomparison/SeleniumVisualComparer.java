@@ -1,5 +1,6 @@
 package com.atlassian.selenium.visualcomparison;
 
+import com.atlassian.selenium.Condition;
 import com.atlassian.selenium.SeleniumClient;
 import com.atlassian.selenium.visualcomparison.utils.ScreenResolution;
 import com.atlassian.selenium.visualcomparison.utils.Screenshot;
@@ -26,6 +27,7 @@ public class SeleniumVisualComparer
     private String imageSubDirName = "report_images";
     private String tempPath = System.getProperty("java.io.tmpdir");
     private Map<String, String> uiStringReplacements = null;
+    private Condition waitBeforeScreenshotCondition = null;
 
     public SeleniumVisualComparer(SeleniumClient client)
     {
@@ -114,6 +116,13 @@ public class SeleniumVisualComparer
         for (ScreenResolution res : resolutions)
         {
             res.resize(client, refreshAfterResize);
+            if(waitBeforeScreenshotCondition != null)
+            {
+                if(!waitBeforeScreenshotCondition.executeTest(client))
+                {
+                    Assert.fail(waitBeforeScreenshotCondition.errorMessage());
+                }
+            }
             if (uiStringReplacements != null)
             {
                 // Remove strings from the UI that we are expecting will change
@@ -179,4 +188,13 @@ public class SeleniumVisualComparer
         return oldScreenshot.getDiff(newScreenshot);
     }
 
+    public Condition getWaitBeforeScreenshotCondition()
+    {
+        return waitBeforeScreenshotCondition;
+    }
+
+    public void setWaitBeforeScreenshotCondition(final Condition waitBeforeScreenshotCondition)
+    {
+        this.waitBeforeScreenshotCondition = waitBeforeScreenshotCondition;
+    }
 }
