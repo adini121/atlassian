@@ -57,7 +57,6 @@ public class ScreenResolution implements Comparable<ScreenResolution>
         {
             client.refresh();
             client.waitForPageToLoad();
-            client.waitForAjaxWithJquery();
         }
     }
 }
