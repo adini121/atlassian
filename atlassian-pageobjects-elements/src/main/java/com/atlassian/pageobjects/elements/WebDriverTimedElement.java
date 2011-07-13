@@ -97,4 +97,9 @@ public class WebDriverTimedElement implements TimedElement
     {
         return queryFactory.getValue(defaultTimeout);
     }
+
+    public TimedCondition hasValue(String value)
+    {
+        return queryFactory.hasValue(value, defaultTimeout);
+    }
 }

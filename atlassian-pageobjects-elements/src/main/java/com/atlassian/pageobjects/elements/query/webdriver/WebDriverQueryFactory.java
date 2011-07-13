@@ -181,6 +181,17 @@ public class WebDriverQueryFactory
         return hasText(text, DEFAULT);
     }
 
+    public TimedCondition hasValue(String value, TimeoutType timeoutType)
+    {
+        return new WebDriverLocatableBasedTimedCondition(locatable, webDriver, WebDriverQueryFunctions.hasValue(value),
+                timeouts.timeoutFor(timeoutType), interval());
+    }
+
+    public TimedCondition hasValue(String value)
+    {
+        return hasValue(value, DEFAULT);
+    }
+
     public <T> TimedQuery<T> forSupplier(final Supplier<T> supplier, TimeoutType timeoutType)
     {
         return new AbstractTimedQuery<T>(timeouts.timeoutFor(timeoutType), PollingQuery.DEFAULT_INTERVAL,

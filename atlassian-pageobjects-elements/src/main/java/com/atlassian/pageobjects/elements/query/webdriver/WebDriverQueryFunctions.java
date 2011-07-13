@@ -4,7 +4,10 @@ import com.atlassian.webdriver.utils.Check;
 import com.google.common.base.Function;
 import com.google.common.base.Supplier;
 import org.apache.commons.lang.StringUtils;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.RenderedWebElement;
+import org.openqa.selenium.SearchContext;
+import org.openqa.selenium.WebElement;
 
 import javax.annotation.Nullable;
 
@@ -134,7 +137,7 @@ public final class WebDriverQueryFunctions
         checkNotNull(expectedValue);
         return new Function<WebElement, Boolean>()
         {
-            public Boolean apply(@Nullable final WebElement from)
+            public Boolean apply(final WebElement from)
             {
                 return expectedValue.equals(from.getAttribute(attributeName));
             }
@@ -146,7 +149,7 @@ public final class WebDriverQueryFunctions
         checkNotNull(className);
         return new Function<WebElement, Boolean>()
         {
-            public Boolean apply(@Nullable final WebElement from)
+            public Boolean apply(final WebElement from)
             {
                 final String classNameLowerCase = className.toLowerCase();
                 String classValue = from.getAttribute(CLASS_ATTR_NAME);
@@ -176,9 +179,21 @@ public final class WebDriverQueryFunctions
         checkNotNull(text);
         return new Function<WebElement, Boolean>()
         {
-            public Boolean apply(@Nullable final WebElement from)
+            public Boolean apply(final WebElement from)
             {
                 return text.equals(from.getText());
+            }
+        };
+    }
+
+    public static Function<WebElement, Boolean> hasValue(final String value)
+    {
+        checkNotNull(value);
+        return new Function<WebElement, Boolean>()
+        {
+            public Boolean apply(final WebElement from)
+            {
+                return value.equals(from.getValue());
             }
         };
     }

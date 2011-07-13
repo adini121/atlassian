@@ -5,7 +5,7 @@ import com.atlassian.pageobjects.elements.query.TimedQuery;
 
 /**
  * Represents an HTML element that is expected in the DOM of a page, all queries return TimedQueries.
- * 
+ *
  */
 public interface TimedElement
 {
@@ -40,7 +40,7 @@ public interface TimedElement
      * timeout expires.
      */
     TimedCondition isSelected();
- 
+
     /**
      * Query representing whether this element has the given classname set.
      * @param className The name of the class to check
@@ -76,11 +76,12 @@ public interface TimedElement
      */
     TimedQuery<String> getText();
 
-     /**
-     * Query representing whether this element's innerText is equals to the provided string
+    /**
+     * Query representing whether this element's innerText is equal to the provided string.
+     *
      * @param text The expected innerText string
-     * @return TimedQuery that returns true if this element has given innerText set, false if element does not have the
-      * given attribute set or timeout expires
+     * @return timed condition that returns <code>true</code> if this element has given innerText equal to expected,
+     * <code>false</code> otherwise
      */
     TimedCondition hasText(String text);
 
@@ -98,4 +99,13 @@ public interface TimedElement
      * attribute or timeout expires.
      */
     TimedQuery<String> getValue();
+
+    /**
+     * Query representing whether this element's value attribute is equal to the provided string.
+      *
+     * @param value The expected value attribute
+     * @return timed condition that returns <code>true</code> if this element has given value attribute equalt to
+     * expected, <code>false</code> otherwise
+     */
+    TimedCondition hasValue(String value);
 }

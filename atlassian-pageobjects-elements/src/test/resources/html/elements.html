@@ -214,5 +214,33 @@
         </select>
     </div>
 
+    <h2>9. Test for value</h2>
+    <input type="text" id="test9_input" value="test9_value" />
+    <input type="button" id="test9_toggleValue" value="Toggle Value"/>
+
+     <script type="text/javascript ">
+         $(document).ready(function(){
+            $('#test9_toggleValue').click(function(){
+                setTimeout(test9_toggleInput, delayInMilliseconds);
+            });
+         });
+
+        function test9_toggleInput(){
+            var element = $('#test9_input');
+
+            if(element.val() === "test9_value"){
+                element.val("test9_newvalue");
+            }
+            else{
+                element.val("test9_value");
+            }
+        }
+
+        function test2_appendElements()
+        {
+            $('#test2_delayedDiv').append("<span id='test2_delayedSpan' class='testClass'>Delayed Span</span>");
+        }
+    </script>
+
 </body>
 </html>

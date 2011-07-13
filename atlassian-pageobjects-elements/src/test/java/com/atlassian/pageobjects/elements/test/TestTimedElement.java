@@ -172,4 +172,40 @@ public class TestTimedElement extends AbstractFileBasedServerTest
         element = element.withTimeout(TimeoutType.AJAX_ACTION);
         assertEquals(element.timed().isPresent().defaultTimeout(), product.timeouts().timeoutFor(TimeoutType.AJAX_ACTION));
     }
+
+    @Test
+    public void testGetValue()
+    {
+        product.visit(ElementsPage.class);
+
+        final PageElement testedInput = product.find(By.id("test9_input"));
+        final PageElement toggleValueButton = product.find(By.id("test9_toggleValue"));
+
+        Poller.waitUntilEquals("test9_value", testedInput.timed().getValue());
+
+        toggleValueButton.click();
+        Poller.waitUntilEquals("test9_newvalue", testedInput.timed().getValue());
+
+        // ... and switch again!
+        toggleValueButton.click();
+        Poller.waitUntilEquals("test9_value", testedInput.timed().getValue());
+    }
+
+    @Test
+    public void testHasValue()
+    {
+        product.visit(ElementsPage.class);
+
+        final PageElement testedInput = product.find(By.id("test9_input"));
+        final PageElement toggleValueButton = product.find(By.id("test9_toggleValue"));
+
+        Poller.waitUntilTrue(testedInput.timed().hasValue("test9_value"));
+
+        toggleValueButton.click();
+        Poller.waitUntilTrue(testedInput.timed().hasValue("test9_newvalue"));
+
+        // ... and switch again!
+        toggleValueButton.click();
+        Poller.waitUntilTrue(testedInput.timed().hasValue("test9_value"));
+    }
 }

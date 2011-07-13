@@ -121,7 +121,7 @@ public final class Conditions
 
 
     /**
-     * Condition that always returns <code>false<code>. Its interval will be equal to the default timeout.
+     * Condition that always returns <code>false<code>. Its interval will be equal to the provided <tt>defaultTimeout</tt>.
      *
      * @param defaultTimeout default timeout
      * @return false condition
@@ -148,7 +148,33 @@ public final class Conditions
         return falseCondition(DEFAULT_TIMEOUT);
     }
 
-    // TODO true condition
+     /**
+     * Condition that always returns <code>true<code>. Its interval will be equal to the provided <tt>defaultTimeout</tt>.
+     *
+     * @param defaultTimeout default timeout
+     * @return true condition
+     */
+    public static TimedCondition trueCondition(long defaultTimeout)
+    {
+        return new AbstractTimedCondition(defaultTimeout, defaultTimeout)
+        {
+            @Override
+            public Boolean currentValue()
+            {
+                return true;
+            }
+        };
+    }
+
+    /**
+     * Condition that always returns <code>true<code>, with default timeout of 100ms.
+     *
+     * @return true condition
+     */
+    public static TimedCondition trueCondition()
+    {
+        return falseCondition(DEFAULT_TIMEOUT);
+    }
 
     /**
      * <p>
@@ -174,11 +200,11 @@ public final class Conditions
 
 
     /**
-     * <p>
-     * Return condition that will be <code>true</code>, if given <tt>matcher</tt> will match the  <tt>query</tt>. Any
+     * <p/>
+     * Return condition that will be <code>true</code>, if given <tt>matcher</tt> will match the <tt>query</tt>. Any
      * Hamcrest matcher implementation may be used.
      *
-     * <p>
+     * <p/>
      * Example:<br>
      *
      * <code>
