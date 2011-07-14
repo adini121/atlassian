@@ -2,22 +2,25 @@ package com.atlassian.pageobjects.elements;
 
 import com.atlassian.pageobjects.elements.query.AbstractTimedQuery;
 import com.atlassian.pageobjects.elements.query.ExpirationHandler;
+import com.atlassian.pageobjects.elements.query.Poller;
 import com.atlassian.pageobjects.elements.query.PollingQuery;
 import com.atlassian.pageobjects.elements.query.TimedQuery;
+import com.atlassian.pageobjects.elements.timeout.DefaultTimeouts;
 import com.atlassian.webdriver.AtlassianWebDriver;
-import com.atlassian.webdriver.utils.element.ElementLocated;
 import org.hamcrest.StringDescription;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.TimeoutException;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static com.atlassian.pageobjects.elements.query.Poller.by;
+import static com.atlassian.pageobjects.elements.query.Poller.now;
 import static com.atlassian.pageobjects.elements.query.Poller.waitUntil;
+import static com.google.common.base.Preconditions.checkArgument;
 import static org.hamcrest.Matchers.notNullValue;
 
 /**
@@ -89,6 +92,12 @@ public class WebDriverLocators
         }
     }
 
+    private static Poller.WaitTimeout withinTimeout(int timeoutInSeconds)
+    {
+        checkArgument(timeoutInSeconds >= 0, "timeoutInSeconds must be >= 0");
+        return timeoutInSeconds > 0 ? by(timeoutInSeconds, TimeUnit.SECONDS) : now();
+    }
+
     private static class WebDriverRootLocator implements WebDriverLocatable
     {
         public By getLocator()
@@ -140,32 +149,54 @@ public class WebDriverLocators
         {
             if(!webElementLocated || WebDriverLocators.isStale(webElement))
             {
-                // TODO we might want to rewrite this so that there is one check including existence of parent and
-                // TODO existence of the locator within parent - this will be more correct from the timeout point of view
-                // see the list locatable implementation
-
-                SearchContext searchContext = parent.waitUntilLocated(driver, timeoutInSeconds);
-
-                if(!driver.elementExistsAt(locator, searchContext) && timeoutInSeconds > 0)
+                try
                 {
-                    try
-                    {
-                        driver.waitUntil(new ElementLocated(locator, searchContext), timeoutInSeconds);
-                    }
-                    catch(TimeoutException e)
-                    {
-                        throw new org.openqa.selenium.NoSuchElementException(new StringDescription()
-                                .appendText("Unable to locate element after timeout.")
-                                .appendText("\nLocator: ").appendValue(locator)
-                                .appendText("\nTimeout: ").appendValue(timeoutInSeconds).appendText(" seconds.")
-                                .toString(), e);
-                    }
+                    webElement = waitUntil(queryForSingleElement(driver), notNullValue(WebElement.class),
+                            withinTimeout(timeoutInSeconds));
                 }
-                webElement = searchContext.findElement(locator);
+                catch(AssertionError notFound)
+                {
+                    throw new NoSuchElementException(new StringDescription()
+                            .appendText("Unable to locate element after timeout.")
+                            .appendText("\nLocator: ").appendValue(locator)
+                            .appendText("\nTimeout: ").appendValue(timeoutInSeconds).appendText(" seconds.")
+                            .toString());
+                }
                 webElementLocated = true;
             }
-
             return webElement;
+        }
+
+        private TimedQuery<WebElement> queryForSingleElement(final AtlassianWebDriver driver)
+        {
+            return new AbstractTimedQuery<WebElement>(DefaultTimeouts.DEFAULT, PollingQuery.DEFAULT_INTERVAL, ExpirationHandler.RETURN_NULL)
+            {
+                @Override
+                protected boolean shouldReturn(WebElement currentEval) {
+                    return true;
+                }
+
+                @Override
+                protected WebElement currentValue() {
+                    // we want the parent to be located and find the element within it
+                    if (parent.isPresent(driver, 0)) {
+                        try
+                        {
+                            return parent.waitUntilLocated(driver, 0).findElement(locator);
+                        }
+                        catch (NoSuchElementException e)
+                        {
+                            // element not found within parent
+                            return null;
+                        }
+                    }
+                    else
+                    {
+                        // parent not found
+                        return null;
+                    }
+                }
+            };
         }
 
         public boolean isPresent(AtlassianWebDriver driver, int timeoutForParentInSeconds)
@@ -207,8 +238,8 @@ public class WebDriverLocators
             {
                 try
                 {
-                    webElement = waitUntil(queryForElement(driver, TimeUnit.SECONDS.toMillis(timeoutInSeconds)),
-                            notNullValue(WebElement.class));
+                    webElement = waitUntil(queryForElementInList(driver), notNullValue(WebElement.class),
+                            withinTimeout(timeoutInSeconds));
                 }
                 catch (AssertionError notLocated)
                 {
@@ -222,8 +253,9 @@ public class WebDriverLocators
             return webElement;
         }
 
-        private TimedQuery<WebElement> queryForElement(final AtlassianWebDriver driver, long timeout) {
-            return new AbstractTimedQuery<WebElement>(timeout, PollingQuery.DEFAULT_INTERVAL, ExpirationHandler.RETURN_NULL)
+        private TimedQuery<WebElement> queryForElementInList(final AtlassianWebDriver driver)
+        {
+            return new AbstractTimedQuery<WebElement>(DefaultTimeouts.DEFAULT, PollingQuery.DEFAULT_INTERVAL, ExpirationHandler.RETURN_NULL)
             {
                 @Override
                 protected boolean shouldReturn(WebElement currentEval) {

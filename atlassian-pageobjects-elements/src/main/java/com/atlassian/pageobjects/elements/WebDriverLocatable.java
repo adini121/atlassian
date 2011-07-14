@@ -35,7 +35,7 @@ public interface WebDriverLocatable
      * Wait until this SearchContext represented by this locatable is located.
      *
      * @param driver AtlassianWebDriver
-     * @param timeoutInSeconds Timeout to wait until located.
+     * @param timeoutInSeconds Timeout to wait until located, may be 0.
      * @return SearchContext
      * @throws NoSuchElementException if context could not be located before timeout expired
      */

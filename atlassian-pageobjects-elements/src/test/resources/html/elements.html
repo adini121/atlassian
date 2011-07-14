@@ -219,22 +219,70 @@
     <input type="button" id="test9_toggleValue" value="Toggle Value"/>
 
      <script type="text/javascript ">
-         $(document).ready(function(){
-            $('#test9_toggleValue').click(function(){
+         $(document).ready(function() {
+            $('#test9_toggleValue').click(function() {
                 setTimeout(test9_toggleInput, delayInMilliseconds);
             });
          });
 
-        function test9_toggleInput(){
+        function test9_toggleInput() {
             var element = $('#test9_input');
 
-            if(element.val() === "test9_value"){
+            if(element.val() === "test9_value") {
                 element.val("test9_newvalue");
             }
-            else{
+            else {
                 element.val("test9_value");
             }
         }
+    </script>
+
+
+    <h2>10. Test for find with reload</h2>
+    <ul id="test10_parentList">
+        <li>
+            Parent List
+            <ul id="test10_childList">
+                <li>
+                    Child List
+                    <ul id="test10_leafList">
+                        <li class="test10_item">Item 1</li>
+                        <li class="test10_item">Item 2</li>
+                        <li class="test10_item">Item 3</li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <input type="button" id="test10_reloadChildListButton" value="Reload whole child list" /><br />
+    <input type="button" id="test10_reloadChildElementsButton" value="Reload child elements" /><br />
+
+    <script type="text/javascript ">
+         $(document).ready(function() {
+            $('#test10_reloadChildListButton').click(test10_reloadList);
+            $('#test10_reloadChildElementsButton').click(test10_reloadElements);
+         });
+
+        function test10_reloadList() {
+            $('#test10_leafList').remove();
+            setTimeout(function() {
+                $('#test10_childList').append("<ul id='test10_leafList' />");
+                test10_reappendElements()
+            }, delayInMilliseconds);
+        }
+
+        function test10_reloadElements() {
+            $('.test10_item').remove();
+            setTimeout(test10_reappendElements, delayInMilliseconds);
+        }
+
+        function test10_reappendElements() {
+            $('#test10_leafList')
+                    .append("<li class='test10_item'>Item 1</li>")
+                    .append("<li class='test10_item'>Item 2</li>")
+                    .append("<li class='test10_item'>Item 3</li>");
+        }
+
     </script>
 
 </body>

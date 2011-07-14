@@ -88,7 +88,7 @@ public class TestPageElementAsElementFinder extends AbstractFileBasedServerTest
     {
         product.visit(ElementsPage.class);
 
-         PageElement parent = elementFinder.find(By.id("test4_childList"));
+        PageElement parent = elementFinder.find(By.id("test4_childList"));
         List<PageElement> items = parent.findAll(By.className("test4_item"));
         assertEquals(3, items.size());
         assertEquals("Item 1", items.get(0).getText());
