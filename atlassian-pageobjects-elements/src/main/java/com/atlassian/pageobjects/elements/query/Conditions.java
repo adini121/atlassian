@@ -181,12 +181,14 @@ public final class Conditions
      * Returns a condition that combines <tt>original</tt> and <tt>dependant</tt> in a manner that dependant condition
      * will only ever be retrieved if the <tt>original</tt> condition is <code>true</code>. This is useful
      * when dependant condition may only be retrieved given the original condition is <code>true</code>.
+     * </p>
      *
      * <p>
      * The supplier for dependant condition is allowed to return <code>null</code> or throw exception if the
      * original condition returns false. But it <i>may not</i> do so given the original condition is <code>true</code>,
      * as this will lead to <code>NullPointerException</code> or the raised exception be propagated by
      * this condition respectively.
+     * </p>
      *
      * @param original original condition
      * @param dependant supplier for dependant condition that will only be evaluated given the original condition
@@ -200,16 +202,17 @@ public final class Conditions
 
 
     /**
-     * <p/>
+     * <p>
      * Return condition that will be <code>true</code>, if given <tt>matcher</tt> will match the <tt>query</tt>. Any
      * Hamcrest matcher implementation may be used.
-     *
-     * <p/>
+     * </p>
+     * <p>
      * Example:<br>
      *
      * <code>
      *     TimedCondition textEquals = Conditions.forMatcher(element.getText(), isEqualTo("blah"));
      * </code>
+     * </p>
      *
      * @param query timed query to match
      * @param matcher matcher for the query

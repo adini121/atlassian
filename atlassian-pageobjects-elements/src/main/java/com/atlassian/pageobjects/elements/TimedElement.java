@@ -104,7 +104,7 @@ public interface TimedElement
      * Query representing whether this element's value attribute is equal to the provided string.
       *
      * @param value The expected value attribute
-     * @return timed condition that returns <code>true</code> if this element has given value attribute equalt to
+     * @return timed condition that returns <code>true</code> if this element has given value attribute equal to
      * expected, <code>false</code> otherwise
      */
     TimedCondition hasValue(String value);

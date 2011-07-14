@@ -9,8 +9,6 @@ import org.openqa.selenium.RenderedWebElement;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.Nullable;
-
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -41,7 +39,7 @@ public final class WebDriverQueryFunctions
     {
         return new Function<WebElement, Boolean>()
         {
-            public Boolean apply(@Nullable final WebElement from)
+            public Boolean apply(WebElement from)
             {
                 // if we're here, the element was found
                 return true;
@@ -53,7 +51,7 @@ public final class WebDriverQueryFunctions
     {
         return new Function<WebElement, Boolean>()
         {
-            public Boolean apply(@Nullable final WebElement from)
+            public Boolean apply(WebElement from)
             {
                 if (from instanceof RenderedWebElement)
                 {
@@ -68,7 +66,7 @@ public final class WebDriverQueryFunctions
     {
         return new Function<WebElement, Boolean>()
         {
-            public Boolean apply(@Nullable final WebElement from)
+            public Boolean apply(WebElement from)
             {
                 return from.isEnabled();
             }
@@ -79,7 +77,7 @@ public final class WebDriverQueryFunctions
     {
        return new Function<WebElement, Boolean>()
         {
-            public Boolean apply(@Nullable final WebElement from)
+            public Boolean apply(WebElement from)
             {
                 return from.isSelected();
             }
@@ -90,7 +88,7 @@ public final class WebDriverQueryFunctions
     {
         return new Function<WebElement, String>()
         {
-            public String apply(@Nullable final WebElement from)
+            public String apply(WebElement from)
             {
                 return from.getTagName();
             }
@@ -101,7 +99,7 @@ public final class WebDriverQueryFunctions
     {
         return new Function<WebElement, String>()
         {
-            public String apply(@Nullable final WebElement from)
+            public String apply(WebElement from)
             {
                 return from.getText();
             }
@@ -112,7 +110,7 @@ public final class WebDriverQueryFunctions
     {
         return new Function<WebElement, String>()
         {
-            public String apply(@Nullable final WebElement from)
+            public String apply(WebElement from)
             {
                 return from.getValue();
             }
@@ -124,7 +122,7 @@ public final class WebDriverQueryFunctions
         checkNotNull(attributeName);
         return new Function<WebElement, String>()
         {
-            public String apply(@Nullable final WebElement from)
+            public String apply(WebElement from)
             {
                 return from.getAttribute(attributeName);
             }
@@ -137,7 +135,7 @@ public final class WebDriverQueryFunctions
         checkNotNull(expectedValue);
         return new Function<WebElement, Boolean>()
         {
-            public Boolean apply(final WebElement from)
+            public Boolean apply(WebElement from)
             {
                 return expectedValue.equals(from.getAttribute(attributeName));
             }
@@ -149,7 +147,7 @@ public final class WebDriverQueryFunctions
         checkNotNull(className);
         return new Function<WebElement, Boolean>()
         {
-            public Boolean apply(final WebElement from)
+            public Boolean apply(WebElement from)
             {
                 final String classNameLowerCase = className.toLowerCase();
                 String classValue = from.getAttribute(CLASS_ATTR_NAME);
@@ -179,7 +177,7 @@ public final class WebDriverQueryFunctions
         checkNotNull(text);
         return new Function<WebElement, Boolean>()
         {
-            public Boolean apply(final WebElement from)
+            public Boolean apply(WebElement from)
             {
                 return text.equals(from.getText());
             }
@@ -191,7 +189,7 @@ public final class WebDriverQueryFunctions
         checkNotNull(value);
         return new Function<WebElement, Boolean>()
         {
-            public Boolean apply(final WebElement from)
+            public Boolean apply(WebElement from)
             {
                 return value.equals(from.getValue());
             }
