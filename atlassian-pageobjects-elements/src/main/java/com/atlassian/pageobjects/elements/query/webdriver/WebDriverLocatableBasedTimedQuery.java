@@ -12,12 +12,12 @@ import static com.atlassian.pageobjects.elements.util.StringConcat.asString;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * <p>
+ * <p/>
  * {@link com.atlassian.pageobjects.elements.WebDriverLocatable} based timed query that retrieves
  * {@link org.openqa.selenium.WebElement} using provided {@link com.atlassian.pageobjects.elements.WebDriverLocatable}
  * and applies provided function from that element to the target value.
  *
- * <p>
+ * <p/>
  * If given element is not found, the 'invalid value' semantics of the timed query are applied. 
  *
  */
@@ -58,10 +58,15 @@ public class WebDriverLocatableBasedTimedQuery<T> extends GenericWebDriverTimedQ
         return (LocatableBasedSupplier<T>) valueSupplier;
     }
 
+    Function<WebElement,T> valueProvider()
+    {
+        return webElementSupplier().valueProvider;
+    }
+
     @Override
     public String toString()
     {
-        return asString(super.toString(), "[locatable=", locatable, "]");
+        return asString(super.toString(), "[locatable=", locatable, ",valueProvider=", valueProvider(), "]");
     }
 
     private static class LocatableBasedSupplier<S> implements Supplier<S>

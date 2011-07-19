@@ -20,6 +20,7 @@ import java.util.concurrent.TimeUnit;
 import static com.atlassian.pageobjects.elements.query.Poller.by;
 import static com.atlassian.pageobjects.elements.query.Poller.now;
 import static com.atlassian.pageobjects.elements.query.Poller.waitUntil;
+import static com.atlassian.pageobjects.elements.util.StringConcat.asString;
 import static com.google.common.base.Preconditions.checkArgument;
 import static org.hamcrest.Matchers.notNullValue;
 
@@ -204,6 +205,12 @@ public class WebDriverLocators
             return driver.elementExistsAt(this.locator, parent.waitUntilLocated(driver, timeoutForParentInSeconds));
         }
 
+        @Override
+        public String toString()
+        {
+            return asString("WebDriverSingleLocator[locator=", locator, "]");
+        }
+
     }
 
     private static class WebDriverListLocator implements  WebDriverLocatable
@@ -280,6 +287,12 @@ public class WebDriverLocators
 
             List<WebElement> webElements = searchContext.findElements(this.locator);
             return locatorIndex <= webElements.size() - 1;
+        }
+
+        @Override
+        public String toString()
+        {
+            return asString("WebDriverListLocator[locator=", locator, ",index=", locatorIndex, "]");
         }
     }
 }
