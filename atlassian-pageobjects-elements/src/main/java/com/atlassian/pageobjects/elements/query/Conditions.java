@@ -11,6 +11,7 @@ import java.util.List;
 
 import static com.atlassian.pageobjects.elements.util.StringConcat.asString;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static org.hamcrest.Matchers.equalTo;
 
 /**
  * Utilities to create miscellaneous {@link TimedCondition}s.
@@ -30,7 +31,7 @@ public final class Conditions
 
     /**
      * Return new timed condition that is a negation of <tt>condition</tt>.
-     * 
+     *
      * @param condition condition to be negated
      * @return negated {@link TimedCondition} instance.
      */
@@ -92,7 +93,7 @@ public final class Conditions
      * @param conditions conditions to sum
      * @return logical sum of <tt>conditions</tt>
      * @throws IllegalArgumentException if <tt>conditions</tt> array is <code>null</code> or empty
-     * 
+     *
      * @see TimedCondition#interval()
      */
     public static CombinableCondition or(TimedQuery<Boolean>... conditions)
@@ -117,63 +118,6 @@ public final class Conditions
     public static CombinableCondition or(List<TimedQuery<Boolean>> conditions)
     {
         return or(conditions.toArray(new TimedCondition[conditions.size()]));
-    }
-
-
-    /**
-     * Condition that always returns <code>false<code>. Its interval will be equal to the provided <tt>defaultTimeout</tt>.
-     *
-     * @param defaultTimeout default timeout
-     * @return false condition
-     */
-    public static TimedCondition falseCondition(long defaultTimeout)
-    {
-        return new AbstractTimedCondition(defaultTimeout, defaultTimeout)
-        {
-            @Override
-            public Boolean currentValue()
-            {
-                return false;
-            }
-        };
-    }
-
-    /**
-     * Condition that always returns <code>false<code>, with default timeout of 100ms.
-     *
-     * @return false condition
-     */
-    public static TimedCondition falseCondition()
-    {
-        return falseCondition(DEFAULT_TIMEOUT);
-    }
-
-     /**
-     * Condition that always returns <code>true<code>. Its interval will be equal to the provided <tt>defaultTimeout</tt>.
-     *
-     * @param defaultTimeout default timeout
-     * @return true condition
-     */
-    public static TimedCondition trueCondition(long defaultTimeout)
-    {
-        return new AbstractTimedCondition(defaultTimeout, defaultTimeout)
-        {
-            @Override
-            public Boolean currentValue()
-            {
-                return true;
-            }
-        };
-    }
-
-    /**
-     * Condition that always returns <code>true<code>, with default timeout of 100ms.
-     *
-     * @return true condition
-     */
-    public static TimedCondition trueCondition()
-    {
-        return falseCondition(DEFAULT_TIMEOUT);
     }
 
     /**
@@ -222,6 +166,20 @@ public final class Conditions
     public static <T> TimedCondition forMatcher(TimedQuery<T> query, Matcher<T> matcher)
     {
         return new MatchingCondition<T>(query, matcher);
+    }
+
+    /**
+     * Returns timed condition verifying that given query will evaluate to value equal to <tt>value</tt>. The timeouts
+     * are inherited from the provided <tt>query</tt>
+     *
+     * @param value value that <tt>query</tt> should be equalt to
+     * @param query the timed query
+     * @param <T> type of the value
+     * @return timed condition for query equality to value
+     */
+    public static <T> TimedCondition isEqual(T value, TimedQuery<T> query)
+    {
+        return forMatcher(query, equalTo(value));
     }
 
 
