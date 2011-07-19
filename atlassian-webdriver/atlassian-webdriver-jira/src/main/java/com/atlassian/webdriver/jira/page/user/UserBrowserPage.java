@@ -177,7 +177,11 @@ public class UserBrowserPage extends JiraAdminAbstractPage
 
     private void setUserFilterToShowAllUsers()
     {
-        usersPerPageDropdown.findElement(By.cssSelector("option[value=\"" + MAX + "\"]")).setSelected();
+        WebElement userOption = usersPerPageDropdown.findElement(By.cssSelector("option[value=\"" + MAX + "\"]"));
+        if (!userOption.isSelected())
+        {
+            userOption.click();
+        }
         filterSubmit.click();
     }
 

@@ -9,7 +9,7 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.RenderedWebElement;
+import org.openqa.selenium.WebElement;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -53,7 +53,7 @@ public class TestJavaScriptUtils
     @Test
     public void testCssHoverRespondsToMouseover()
     {
-        RenderedWebElement hoveringDiv = (RenderedWebElement) driver.findElement(By.id("hovering-element"));
+        WebElement hoveringDiv = driver.findElement(By.id("hovering-element"));
         assertTrue(hoveringDiv.isDisplayed());
         assertFalse(driver.elementIsVisible(By.id("child-element-one")));
         assertFalse(driver.elementIsVisible(By.id("child-element-two")));
@@ -68,7 +68,7 @@ public class TestJavaScriptUtils
     @Test
     public void testJQueryHoverRespondsToMouseover()
     {
-        RenderedWebElement hoveringDiv = (RenderedWebElement) driver.findElement(By.id("hovering-jquery-element"));
+        WebElement hoveringDiv = driver.findElement(By.id("hovering-jquery-element"));
         assertTrue(hoveringDiv.isDisplayed());
         driver.waitUntilElementIsNotVisible(By.id("child-jquery-element-one"));
         assertFalse(driver.elementIsVisible(By.id("child-jquery-element-one")));

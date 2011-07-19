@@ -387,6 +387,11 @@ public class MockSeleniumClient implements SeleniumClient
         return null;
     }
 
+    public Number getCssCount(String css)
+    {
+        return null;
+    }
+
     public void assignId(final String s, final String s1)
     {
     }

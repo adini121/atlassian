@@ -98,14 +98,14 @@ public class AddUserPage extends JiraAdminAbstractPage
         {
             if (!sendPasswordEmail)
             {
-                sendEmailCheckbox.toggle();
+                sendEmailCheckbox.click();
             }
         }
         else
         {
             if (sendPasswordEmail)
             {
-                sendEmailCheckbox.toggle();
+                sendEmailCheckbox.click();
             }
         }
 

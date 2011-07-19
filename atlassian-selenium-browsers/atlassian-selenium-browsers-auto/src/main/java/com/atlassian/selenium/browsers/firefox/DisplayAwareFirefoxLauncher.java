@@ -16,31 +16,25 @@
  */
 package com.atlassian.selenium.browsers.firefox;
 
+import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.browserlaunchers.BrowserLauncher;
+import org.openqa.selenium.browserlaunchers.locators.*;
 import org.openqa.selenium.server.ApplicationRegistry;
-import org.openqa.selenium.server.BrowserConfigurationOptions;
 import org.openqa.selenium.server.RemoteControlConfiguration;
-import org.openqa.selenium.server.browserlaunchers.BrowserInstallation;
-import org.openqa.selenium.server.browserlaunchers.BrowserLauncher;
-import org.openqa.selenium.server.browserlaunchers.FirefoxChromeLauncher;
 import org.openqa.selenium.server.browserlaunchers.FirefoxCustomProfileLauncher;
 import org.openqa.selenium.server.browserlaunchers.InvalidBrowserExecutableException;
 import org.openqa.selenium.server.browserlaunchers.ProxyInjectionFirefoxCustomProfileLauncher;
-import org.openqa.selenium.server.browserlaunchers.locators.BrowserLocator;
-import org.openqa.selenium.server.browserlaunchers.locators.Firefox2Locator;
-import org.openqa.selenium.server.browserlaunchers.locators.Firefox2or3Locator;
-import org.openqa.selenium.server.browserlaunchers.locators.Firefox3Locator;
 
-public class DisplayAwareFirefoxLauncher implements BrowserLauncher
-{
+public class DisplayAwareFirefoxLauncher implements BrowserLauncher {
 
   final BrowserLauncher realLauncher;
 
-  public DisplayAwareFirefoxLauncher(BrowserConfigurationOptions browserOptions, RemoteControlConfiguration configuration, String sessionId, String browserLaunchLocation)
+  public DisplayAwareFirefoxLauncher(Capabilities browserOptions, RemoteControlConfiguration configuration, String sessionId, String browserLaunchLocation)
       throws InvalidBrowserExecutableException
   {
     String browserName = "firefox";
-    BrowserLocator locator = new Firefox2or3Locator();
-    String version = browserOptions.get("version");
+    BrowserLocator locator = new CombinedFirefoxLocator();
+    String version = (String) browserOptions.getCapability("version");
     if ("2".equals(version)) {
       browserName = "firefox2";
       locator = new Firefox2Locator();
@@ -49,7 +43,7 @@ public class DisplayAwareFirefoxLauncher implements BrowserLauncher
       browserName = "firefox3";
       locator = new Firefox3Locator();
     }
-    String mode = browserOptions.get("mode");
+    String mode = (String) browserOptions.getCapability("mode");
     if (mode == null) {
       mode = "chrome";
     }

@@ -54,9 +54,21 @@ public class SimpleServer
             public void handle(String target, HttpServletRequest request, HttpServletResponse response, int dispatch)
                 throws IOException, ServletException
             {
-                response.setContentType("text/html");
-
                 String uri = request.getRequestURI();
+
+                if(uri.endsWith("css"))
+                {
+                    response.setContentType("text/css");
+                }
+                else  if(uri.endsWith("js"))
+                {
+                    response.setContentType("text/javascript");
+                }
+                else
+                {
+                    response.setContentType("text/html");
+                }
+
                 if (urlMappings.containsKey(uri))
                 {
                     String filename = urlMappings.get(uri);

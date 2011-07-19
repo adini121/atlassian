@@ -17,54 +17,52 @@
 package com.atlassian.selenium.browsers.firefox;
 
 
+import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.Platform;
+import org.openqa.selenium.browserlaunchers.AsyncExecute;
+import org.openqa.selenium.browserlaunchers.LauncherUtils;
+import org.openqa.selenium.browserlaunchers.Proxies;
+import org.openqa.selenium.browserlaunchers.locators.BrowserInstallation;
+import org.openqa.selenium.browserlaunchers.locators.CombinedFirefoxLocator;
+import org.openqa.selenium.os.CommandLine;
+import org.openqa.selenium.server.ApplicationRegistry;
+import org.openqa.selenium.server.RemoteControlConfiguration;
+import org.openqa.selenium.server.browserlaunchers.AbstractBrowserLauncher;
+import org.openqa.selenium.server.browserlaunchers.BrowserOptions;
+import org.openqa.selenium.server.browserlaunchers.InvalidBrowserExecutableException;
+import org.openqa.selenium.server.browserlaunchers.ResourceExtractor;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import org.apache.commons.logging.Log;
-import org.apache.log4j.Logger;
-import org.openqa.jetty.log.LogFactory;
-import org.openqa.selenium.Platform;
-import org.openqa.selenium.internal.CommandLine;
-import org.openqa.selenium.server.ApplicationRegistry;
-import org.openqa.selenium.server.BrowserConfigurationOptions;
-import org.openqa.selenium.server.RemoteControlConfiguration;
-import org.openqa.selenium.server.browserlaunchers.AbstractBrowserLauncher;
-import org.openqa.selenium.server.browserlaunchers.AsyncExecute;
-import org.openqa.selenium.server.browserlaunchers.BrowserInstallation;
-import org.openqa.selenium.server.browserlaunchers.InvalidBrowserExecutableException;
-import org.openqa.selenium.server.browserlaunchers.ResourceExtractor;
-import org.openqa.selenium.server.browserlaunchers.locators.Firefox2or3Locator;
-
-public class DisplayAwareFirefoxChromeLauncher extends AbstractBrowserLauncher
-{
-  private static final Logger LOGGER = Logger.getLogger(DisplayAwareFirefoxChromeLauncher.class);
+public class DisplayAwareFirefoxChromeLauncher extends AbstractBrowserLauncher {
+  private static final Logger log = Logger.getLogger(DisplayAwareFirefoxChromeLauncher.class.getName());
 
   private File customProfileDir = null;
-  private String[] cmdarray;
   private boolean closed = false;
   private BrowserInstallation browserInstallation;
   private Process process = null;
 
-//  private AsyncExecute shell = new AsyncExecute();
-
   private boolean changeMaxConnections = false;
 
-  public DisplayAwareFirefoxChromeLauncher(BrowserConfigurationOptions browserOptions, RemoteControlConfiguration configuration, String sessionId, String browserString)
+  public DisplayAwareFirefoxChromeLauncher(Capabilities browserOptions, RemoteControlConfiguration configuration, String sessionId, String browserString)
       throws InvalidBrowserExecutableException
   {
     this(browserOptions, configuration,
         sessionId, ApplicationRegistry.instance()
             .browserInstallationCache().locateBrowserInstallation(
-            "chrome", browserString, new Firefox2or3Locator()));
+            "chrome", browserString, new CombinedFirefoxLocator()));
     if (browserInstallation == null) {
       throw new InvalidBrowserExecutableException(
           "The specified path to the browser executable is invalid.");
     }
   }
 
-  public DisplayAwareFirefoxChromeLauncher(BrowserConfigurationOptions browserOptions, RemoteControlConfiguration configuration, String sessionId, BrowserInstallation browserInstallation) {
+  public DisplayAwareFirefoxChromeLauncher(Capabilities browserOptions, RemoteControlConfiguration configuration, String sessionId, BrowserInstallation browserInstallation) {
     super(sessionId, configuration, browserOptions);
 
     if (browserInstallation == null) {
@@ -89,14 +87,13 @@ public class DisplayAwareFirefoxChromeLauncher extends AbstractBrowserLauncher
       profilePath = makeCustomProfile(homePage);
       populateCustomProfileDirectory(profilePath);
 
-      LOGGER.info("Launching Firefox...");
+      log.info("Launching Firefox...");
       CommandLine command = prepareCommand(
           browserInstallation.launcherFilePath(),
           "-profile",
           profilePath
       );
       command.setEnvironmentVariable("NO_EM_RESTART", "1");
-
       process = command.executeAsync();
     } catch (IOException e) {
       throw new RuntimeException(e);
@@ -116,9 +113,14 @@ public class DisplayAwareFirefoxChromeLauncher extends AbstractBrowserLauncher
         "-silent"
     );
     command.setDynamicLibraryPath(browserInstallation.libraryPath());
-    LOGGER.info("Preparing Firefox profile...");
+    log.info("Preparing Firefox profile...");
     command.execute();
-    waitForFullProfileToBeCreated(20 * 1000);
+    try {
+      waitForFullProfileToBeCreated(20 * 1000);
+    } catch (RuntimeException e) {
+      command.destroy();
+      throw e;
+    }
   }
 
   protected CommandLine prepareCommand(String... commands) {
@@ -133,8 +135,8 @@ public class DisplayAwareFirefoxChromeLauncher extends AbstractBrowserLauncher
         command.setDynamicLibraryPath(browserInstallation.libraryPath());
     }
 
-    if (System.getProperty("DISPLAY") != null){
-      command.setEnvironmentVariable("DISPLAY", System.getProperty("DISPLAY"));
+    if (System.getProperty("DISPLAY") != null) {
+        command.setEnvironmentVariable("DISPLAY", System.getProperty("DISPLAY"));
     }
 
     return command;
@@ -149,9 +151,10 @@ public class DisplayAwareFirefoxChromeLauncher extends AbstractBrowserLauncher
   }
 
   protected File initProfileTemplate() {
-    File firefoxProfileTemplate = null;
+    File firefoxProfileTemplate;
 
-    String relativeProfile = browserConfigurationOptions.getProfile();
+    String relativeProfile = BrowserOptions
+        .getProfile(browserConfigurationOptions);
     if (relativeProfile == null) {
       relativeProfile = "";
     }
@@ -166,7 +169,7 @@ public class DisplayAwareFirefoxChromeLauncher extends AbstractBrowserLauncher
             + "' does not exist");
       }
     } else {
-      firefoxProfileTemplate = browserConfigurationOptions.getFile("firefoxProfileTemplate");
+      firefoxProfileTemplate = BrowserOptions.getFile(browserConfigurationOptions, "firefoxProfileTemplate");
     }
 
     if (firefoxProfileTemplate != null) {
@@ -178,7 +181,7 @@ public class DisplayAwareFirefoxChromeLauncher extends AbstractBrowserLauncher
 
   protected void extractProfileFromJar() throws IOException {
     ResourceExtractor.extractResourcePath(getClass(), "/customProfileDirCUSTFFCHROME",
-            customProfileDir);
+        customProfileDir);
   }
 
   protected void copySingleFileWithOverwrite(File sourceFile, File destFile) {
@@ -201,12 +204,12 @@ public class DisplayAwareFirefoxChromeLauncher extends AbstractBrowserLauncher
   }
 
   protected void generatePacAndPrefJs(String homePage) throws IOException {
-    browserConfigurationOptions.setProxyRequired(false);
+    browserConfigurationOptions = Proxies.setProxyRequired(browserConfigurationOptions, false);
     if (browserConfigurationOptions.is("captureNetworkTraffic") ||
         browserConfigurationOptions.is("addCustomRequestHeaders") ||
         browserConfigurationOptions.is("trustAllSSLCertificates")) {
-      browserConfigurationOptions.setProxyEverything(true);
-      browserConfigurationOptions.setProxyRequired(true);
+      browserConfigurationOptions = Proxies.setProxyEverything(browserConfigurationOptions, true);
+      browserConfigurationOptions = Proxies.setProxyRequired(browserConfigurationOptions, true);
     }
 
     LauncherUtils.generatePacAndPrefJs(customProfileDir, getPort(), homePage,
@@ -264,10 +267,10 @@ public class DisplayAwareFirefoxChromeLauncher extends AbstractBrowserLauncher
         removeCustomProfileDir();
       } catch (RuntimeException e) {
         if (fileLockException != null) {
-          LOGGER.error("Couldn't delete custom Firefox profile directory", e);
-          LOGGER.error("Perhaps caused by this exception:");
+          log.log(Level.SEVERE, "Couldn't delete custom Firefox profile directory", e);
+          log.severe("Perhaps caused by this exception:");
           if (fileLockException != null) {
-            LOGGER.error("Perhaps caused by this exception:", fileLockException);
+            log.log(Level.SEVERE, "Perhaps caused by this exception:", fileLockException);
           }
           throw new RuntimeException("Couldn't delete custom Firefox " +
                                      "profile directory, presumably because task kill failed; " +
@@ -290,10 +293,10 @@ public class DisplayAwareFirefoxChromeLauncher extends AbstractBrowserLauncher
    * Wrapper to allow for stubbed-out testing *
    */
   protected void killFirefoxProcess() throws FileLockRemainedException {
-    LOGGER.info("Killing Firefox...");
+    log.info("Killing Firefox...");
     int exitValue = AsyncExecute.killProcess(process);
     if (exitValue == 0) {
-      LOGGER.warn("Firefox seems to have ended on its own (did we kill the real browser???)");
+      log.warning("Firefox seems to have ended on its own (did we kill the real browser???)");
     }
     waitForFileLockToGoAway(0, 500);
   }
@@ -409,16 +412,15 @@ public class DisplayAwareFirefoxChromeLauncher extends AbstractBrowserLauncher
           suiteUrl.replaceFirst("^TestPrompt\\.html\\?", "chrome://src/content/TestPrompt.html?");
     }
     launch(LauncherUtils.getDefaultHTMLSuiteUrl(browserURL, suiteUrl,
-        (!browserConfigurationOptions.isSingleWindow()), getPort()));
+        (!BrowserOptions.isSingleWindow(browserConfigurationOptions)), getPort()));
   }
 
   @Override
   // need to specify an absolute driverUrl
   public void launchRemoteSession(String browserURL) {
     launch(LauncherUtils.getDefaultRemoteSessionUrl(browserURL, sessionId,
-        (!browserConfigurationOptions.isSingleWindow()), getPort(),
+        (!BrowserOptions.isSingleWindow(browserConfigurationOptions)), getPort(),
         browserConfigurationOptions.is("browserSideLog")));
   }
 
 }
-

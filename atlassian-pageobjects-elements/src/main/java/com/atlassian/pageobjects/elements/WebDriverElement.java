@@ -7,7 +7,6 @@ import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.utils.Check;
 import com.google.common.collect.Lists;
 import org.openqa.selenium.By;
-import org.openqa.selenium.RenderedWebElement;
 import org.openqa.selenium.WebElement;
 
 import javax.inject.Inject;
@@ -115,7 +114,7 @@ public class WebDriverElement implements PageElement
     public boolean isVisible()
     {
         WebElement element = waitForWebElement();
-        return ((RenderedWebElement) element).isDisplayed();
+        return element.isDisplayed();
     }
 
     public boolean isEnabled()
@@ -155,7 +154,7 @@ public class WebDriverElement implements PageElement
 
     public String getValue()
     {
-        return waitForWebElement().getValue();
+        return waitForWebElement().getAttribute("value");
     }
 
     public PageElement click()
@@ -172,13 +171,17 @@ public class WebDriverElement implements PageElement
 
     public PageElement select()
     {
-        waitForWebElement().setSelected();
+        WebElement el = waitForWebElement();
+        if (!el.isSelected()) {
+            el.click();
+        }
         return this;
     }
 
     public PageElement toggle()
     {
-        waitForWebElement().toggle();
+        WebElement el = waitForWebElement();
+        el.click();
         return this;
     }
 

@@ -78,7 +78,9 @@ public class WebDriverMultiSelectElement extends WebDriverElement implements Mul
         {
             if(option.equals(buildOption(currentOption)))
             {
-                currentOption.setSelected();
+                if(!currentOption.isSelected()) {
+                    currentOption.click();
+                }
                 break;
             }
         }
@@ -94,7 +96,7 @@ public class WebDriverMultiSelectElement extends WebDriverElement implements Mul
             {
                 if(currentOption.isSelected())
                 {
-                    currentOption.toggle();
+                    currentOption.click();
                 }
                 break;
             }
@@ -109,7 +111,7 @@ public class WebDriverMultiSelectElement extends WebDriverElement implements Mul
         {
             if(!option.isSelected())
             {
-                option.setSelected();
+                option.click();
             }
         }
 

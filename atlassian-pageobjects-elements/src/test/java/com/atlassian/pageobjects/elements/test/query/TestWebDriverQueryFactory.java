@@ -13,7 +13,6 @@ import com.google.common.collect.ImmutableMap;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.RenderedWebElement;
 import org.openqa.selenium.WebElement;
 
 import static com.atlassian.pageobjects.elements.query.Poller.by;
@@ -80,7 +79,7 @@ public class TestWebDriverQueryFactory
     @Test
     public void shouldReturnIsVisibleQueryThatIsTrueNow()
     {
-        RenderedWebElement mockElement = mock(RenderedWebElement.class);
+        WebElement mockElement = mock(WebElement.class);
         when(mockElement.isDisplayed()).thenReturn(true);
         AtlassianWebDriver mockDriver = mock(AtlassianWebDriver.class);
         when(mockDriver.findElement(any(By.class))).thenReturn(mockElement);
@@ -95,7 +94,7 @@ public class TestWebDriverQueryFactory
     @Test
     public void shouldReturnIsVisibleQueryThatIsTrueInAWhile()
     {
-        RenderedWebElement mockElement = mock(RenderedWebElement.class);
+        WebElement mockElement = mock(WebElement.class);
         when(mockElement.isDisplayed()).thenReturn(false, false, false, false, true);
         AtlassianWebDriver mockDriver = mock(AtlassianWebDriver.class);
         when(mockDriver.findElement(any(By.class))).thenReturn(mockElement);
@@ -111,7 +110,7 @@ public class TestWebDriverQueryFactory
     @Test
     public void shouldReturnIsVisibleQueryThatIsFalse()
     {
-        RenderedWebElement mockElement = mock(RenderedWebElement.class);
+        WebElement mockElement = mock(WebElement.class);
         when(mockElement.isDisplayed()).thenReturn(false);
         AtlassianWebDriver mockDriver = mock(AtlassianWebDriver.class);
         when(mockDriver.findElement(any(By.class))).thenReturn(mockElement);
@@ -126,7 +125,7 @@ public class TestWebDriverQueryFactory
     @Test
     public void hasClassQueryShouldReturnTrueForSimpleMatch()
     {
-        RenderedWebElement mockElement = mock(RenderedWebElement.class);
+        WebElement mockElement = mock(WebElement.class);
         when(mockElement.getAttribute("class")).thenReturn("oneclass secondclass someotherclasssss");
         AtlassianWebDriver mockDriver = mock(AtlassianWebDriver.class);
         when(mockDriver.findElement(any(By.class))).thenReturn(mockElement);
@@ -141,7 +140,7 @@ public class TestWebDriverQueryFactory
     @Test
     public void hasClassQueryShouldBeCaseInsensitive()
     {
-        RenderedWebElement mockElement = mock(RenderedWebElement.class);
+        WebElement mockElement = mock(WebElement.class);
         when(mockElement.getAttribute("class")).thenReturn("oneclass secOndclAss soMeotherclasSsss");
         AtlassianWebDriver mockDriver = mock(AtlassianWebDriver.class);
         when(mockDriver.findElement(any(By.class))).thenReturn(mockElement);

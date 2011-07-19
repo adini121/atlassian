@@ -2,9 +2,7 @@ package com.atlassian.webdriver.jira.component.dashboard;
 
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.jira.JiraTestedProduct;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -44,9 +42,14 @@ public class GadgetView implements WebElement
         view.submit();
     }
 
+    /**
+     * getValue has been removed from WebElement
+     * @deprecated Use {@link WebElement#getAttribute(String)}
+     */
+    @Deprecated
     public String getValue()
     {
-        return view.getValue();
+        return view.getAttribute("value");
     }
 
     public void sendKeys(final CharSequence... charSequences)
@@ -69,9 +72,15 @@ public class GadgetView implements WebElement
         return view.getAttribute(s);
     }
 
+    /**
+     * This has been removed from WebElement.
+     * @deprecated Use {@link WebElement#click()}
+     */
+    @Deprecated
     public boolean toggle()
     {
-        return view.toggle();
+        view.click();
+        return view.isSelected();
     }
 
     public boolean isSelected()
@@ -79,9 +88,16 @@ public class GadgetView implements WebElement
         return view.isSelected();
     }
 
+    /**
+     * setSelected has been removed from WebElement
+     * @deprecated Use {@link WebElement#click()}
+     */
+    @Deprecated
     public void setSelected()
     {
-        view.setSelected();
+        if (!view.isSelected()) {
+            view.click();
+        }
     }
 
     public boolean isEnabled()
@@ -102,5 +118,25 @@ public class GadgetView implements WebElement
     public WebElement findElement(final By by)
     {
         return view.findElement(by);
+    }
+
+    public boolean isDisplayed()
+    {
+        return view.isDisplayed();
+    }
+
+    public Point getLocation()
+    {
+        return view.getLocation();
+    }
+
+    public Dimension getSize()
+    {
+        return view.getSize();
+    }
+
+    public String getCssValue(String propertyName)
+    {
+        return view.getCssValue(propertyName);
     }
 }

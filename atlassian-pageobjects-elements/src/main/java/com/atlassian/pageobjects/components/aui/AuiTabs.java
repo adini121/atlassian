@@ -88,7 +88,8 @@ public class AuiTabs implements TabbedComponent
                 listItem.click();
 
                 // find the pane and wait until it has class "active-pane"
-                String tabViewClassName = listItem.getAttribute("href").substring(1);
+                String tabViewHref = listItem.getAttribute("href");
+                String tabViewClassName = tabViewHref.substring(tabViewHref.indexOf('#') + 1);
                 PageElement pane = rootElement.find(By.id(tabViewClassName));
                 Poller.waitUntilTrue(pane.timed().hasClass("active-pane"));
 

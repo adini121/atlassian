@@ -3,7 +3,6 @@
  * <ul>
  * <li>org.openqa.selenium.server.browserlaunchers.FirefoxChromeLauncher</li>
  * <li>org.openqa.selenium.server.browserlaunchers.FirefoxLauncher</li>
- * <li>org.openqa.selenium.server.browserlaunchers.LauncherUtils</li>
  * </ul>
  * <p>
  * The purpose of the fork is to add the DISPLAY environment variable when starting Firefox, but otherwise, the files

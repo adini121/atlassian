@@ -5,7 +5,6 @@ import com.google.common.base.Function;
 import com.google.common.base.Supplier;
 import org.apache.commons.lang.StringUtils;
 import org.openqa.selenium.By;
-import org.openqa.selenium.RenderedWebElement;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 
@@ -53,11 +52,7 @@ public final class WebDriverQueryFunctions
         {
             public Boolean apply(WebElement from)
             {
-                if (from instanceof RenderedWebElement)
-                {
-                    return ((RenderedWebElement)from).isDisplayed();
-                }
-                else return false;
+                return from.isDisplayed();
             }
         };
     }
@@ -112,7 +107,7 @@ public final class WebDriverQueryFunctions
         {
             public String apply(WebElement from)
             {
-                return from.getValue();
+                return from.getAttribute("value");
             }
         };
     }
@@ -142,6 +137,7 @@ public final class WebDriverQueryFunctions
         };
     }
 
+    //TODO(dariuzs): refactor this to use the hasClass method on {@link com.atlassian.webdriver.utils.Check}
     public static Function<WebElement, Boolean> hasClass(final String className)
     {
         checkNotNull(className);
@@ -191,7 +187,7 @@ public final class WebDriverQueryFunctions
         {
             public Boolean apply(WebElement from)
             {
-                return value.equals(from.getValue());
+                return value.equals(from.getAttribute("value"));
             }
         };
     }

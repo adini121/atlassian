@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.net.ServerSocket;
 
 /**
- * TODO: Document this class / interface here
  *
  */
 class HelloServer

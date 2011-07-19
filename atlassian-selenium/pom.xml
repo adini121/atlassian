@@ -15,6 +15,13 @@
     </description>
     <name>${project.artifactId}</name>
 
+    <repositories>
+        <repository>
+            <id>selenium-repository</id>
+            <url>http://selenium.googlecode.com/svn/repository/</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>log4j</groupId>
@@ -39,7 +46,7 @@
         </dependency>
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium</artifactId>
+            <artifactId>selenium-java</artifactId>
             <version>${selenium.version}</version>
             <exclusions>
                 <exclusion>
@@ -105,7 +112,7 @@
         </dependency>
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-remote-client</artifactId>
+            <artifactId>selenium-remote-driver</artifactId>
             <version>${selenium.version}</version>
         </dependency>
         <dependency>

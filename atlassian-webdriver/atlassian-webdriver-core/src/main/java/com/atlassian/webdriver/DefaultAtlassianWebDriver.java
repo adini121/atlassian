@@ -17,6 +17,7 @@ import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -237,6 +238,6 @@ public class DefaultAtlassianWebDriver implements AtlassianWebDriver
 
     public boolean isJavascriptEnabled()
     {
-        return ((JavascriptExecutor)driver).isJavascriptEnabled();
+        return ((RemoteWebDriver)driver).getCapabilities().isJavascriptEnabled();
     }
 }

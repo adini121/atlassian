@@ -69,7 +69,9 @@ public class WebDriverSelectElement extends WebDriverElement implements SelectEl
         {
             if(option.equals(buildOption(currentOption)))
             {
-                currentOption.setSelected();
+                if (!currentOption.isSelected()) {
+                    currentOption.click();
+                }
                 break;
             }
         }

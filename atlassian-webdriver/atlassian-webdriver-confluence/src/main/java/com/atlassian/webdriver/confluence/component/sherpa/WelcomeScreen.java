@@ -42,11 +42,13 @@ public class WelcomeScreen
     {
         if (show)
         {
-            showAtStartupTickbox.setSelected();
+            if (!showAtStartupTickbox.isSelected()) {
+                showAtStartupTickbox.click();
+            }
         }
         else if (showAtStartupTickbox.isSelected())
         {
-            showAtStartupTickbox.toggle();
+            showAtStartupTickbox.click();
         }
     }
 

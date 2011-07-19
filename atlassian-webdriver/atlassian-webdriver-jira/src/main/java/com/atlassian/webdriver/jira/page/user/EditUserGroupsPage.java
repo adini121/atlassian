@@ -121,7 +121,11 @@ public class  EditUserGroupsPage extends JiraAdminAbstractPage
 
             if (Check.elementExists(ByJquery.$(groupSelector), select))
             {
-                select.findElement(ByJquery.$(groupSelector)).setSelected();
+                WebElement option = select.findElement(ByJquery.$(groupSelector));
+                if (!option.isSelected())
+                {
+                    option.click();
+                }
             }
         }
 

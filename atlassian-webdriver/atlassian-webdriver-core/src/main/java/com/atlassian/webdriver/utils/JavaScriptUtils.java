@@ -18,9 +18,13 @@ public class JavaScriptUtils
 
     private JavaScriptUtils() {}
 
+    /**
+     * @deprecated Use {@link WebElementUtil#getInnerHtml(WebElement, WebDriver)}
+     */
+    @Deprecated
     public static String innerHtml(WebElement element, WebDriver driver)
     {
-        return execute("return arguments[0].innerHTML", driver, element);
+        return WebElementUtil.getInnerHtml(element, driver);
     }
 
     /**

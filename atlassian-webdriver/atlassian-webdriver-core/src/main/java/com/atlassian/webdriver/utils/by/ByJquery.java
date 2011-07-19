@@ -118,24 +118,8 @@ public abstract class ByJquery extends By
                 case PARENTS:
                 case CHILDREN:
                 case PREV:
-                    // HTMLUNIT BUG (http://code.google.com/p/selenium/issues/detail?id=1280):
-                    // if pass in elements in the args object then html unit fails to run the selector properly.
-                    // So intead have to iterate over the elements and run the selector one at a time.
-                    List<WebElement> newElements = new ArrayList<WebElement>();
-                    for (WebElement element : elements)
-                    {
-                        args = new Object[]{"WD.byJquery.$(context)." + selector.type.name().toLowerCase() + "(" + selectorStr + ")", element };
-                        List<WebElement> temp = JavaScriptUtils.execute("return window.WD.byJquery.execute(arguments[0],arguments[1])", driver, args);
-                        newElements.addAll(temp);
-                    }
-
-                    elements = new ArrayList<WebElement>();
-                    elements.addAll(newElements);
-
-                    /*
                     args = new Object[]{"WD.byJquery.$(context)." + selector.type.name().toLowerCase() + "(" + selectorStr + ")", elements };
                     elements = JavaScriptUtils.execute("return WD.byJquery.execute(arguments[0],arguments[1])", driver, args);
-                    */
                     break;
 
                 default:

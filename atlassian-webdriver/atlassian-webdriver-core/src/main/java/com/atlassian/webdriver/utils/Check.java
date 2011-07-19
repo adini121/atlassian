@@ -2,7 +2,6 @@ package com.atlassian.webdriver.utils;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.RenderedWebElement;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 
@@ -38,7 +37,7 @@ public class Check
         try
         {
             WebElement lookFor = context.findElement(by);
-            return ((RenderedWebElement) lookFor).isDisplayed();
+            return lookFor.isDisplayed();
         }
         catch (NoSuchElementException e)
         {
@@ -52,7 +51,7 @@ public class Check
         {
             for (WebElement lookFor : context.findElements(by))
             {
-                if (!((RenderedWebElement) lookFor).isDisplayed())
+                if (!lookFor.isDisplayed())
                 {
                     return false;
                 }
@@ -62,7 +61,7 @@ public class Check
         {
             return false;
         }
-        return false;
+        return true;
     }
 
     /**

@@ -6,15 +6,12 @@ import com.atlassian.webdriver.utils.Browser;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeExtension;
-import org.openqa.selenium.chrome.ChromeProfile;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -91,8 +88,6 @@ public class WebDriverFactory
             default:
                 System.err.println("Unknown browser: " + BROWSER + ", defaulting to firefox.");
                 driver = new FirefoxDriver();
-
-
         }
 
         return new DefaultAtlassianWebDriver(driver);
