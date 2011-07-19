@@ -37,7 +37,7 @@ public class JavaScriptUtils
     public static void dispatchMouseEvent(String event, WebElement el, WebDriver driver)
     {
 
-        // TODO: move this to a real js file and import the file if needed.
+        // TODO(jwilson): move this to a real js file and import the file if needed.
         String js = "if ( document.createEvent ) {"
                 + "var eventObj = document.createEvent('MouseEvents');"
                 + "eventObj.initEvent('" + event + "', false, true);"
