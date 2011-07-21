@@ -136,7 +136,6 @@ public final class WebDriverQueryFunctions
         };
     }
 
-    //TODO(dariuzs): refactor this to use the hasClass method on {@link com.atlassian.webdriver.utils.Check}
     public static Function<WebElement, Boolean> hasClass(final String className)
     {
         checkNotNull(className);
