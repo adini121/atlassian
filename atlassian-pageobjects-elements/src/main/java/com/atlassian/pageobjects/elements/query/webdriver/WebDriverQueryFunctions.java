@@ -3,7 +3,6 @@ package com.atlassian.pageobjects.elements.query.webdriver;
 import com.atlassian.webdriver.utils.Check;
 import com.google.common.base.Function;
 import com.google.common.base.Supplier;
-import org.apache.commons.lang.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
@@ -145,25 +144,7 @@ public final class WebDriverQueryFunctions
         {
             public Boolean apply(WebElement from)
             {
-                final String classNameLowerCase = className.toLowerCase();
-                String classValue = from.getAttribute(CLASS_ATTR_NAME);
-                if (StringUtils.isEmpty(classValue))
-                {
-                    return false;
-                }
-                classValue = classValue.toLowerCase();
-                if (!classValue.contains(classNameLowerCase))
-                {
-                    return false;
-                }
-                for (String singleClass : classValue.split("\\s"))
-                {
-                    if (classNameLowerCase.equals(singleClass))
-                    {
-                        return true;
-                    }
-                }
-                return false;
+                return Check.hasClass(className, from);
             }
         };
     }

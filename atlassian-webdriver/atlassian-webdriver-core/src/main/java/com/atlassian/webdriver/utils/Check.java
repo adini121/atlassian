@@ -1,5 +1,6 @@
 package com.atlassian.webdriver.utils;
 
+import org.apache.commons.lang.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.SearchContext;
@@ -65,29 +66,32 @@ public class Check
     }
 
     /**
-     * Checks to see if a specified element contains a specific class of not.
+     * Checks to see if a specified element contains a specific class of not. The check is case-insensitive.
+     *
+     * @param className CSS class name to check for
+     * @param element element to check
+     * @return <code>true</code>, if <tt>element</tt> has CSS class with given <tt>className</tt>
      */
-    public static boolean hasClass(String className, WebElement el)
+    public static boolean hasClass(String className, WebElement element)
     {
-
-        String classAttr = el.getAttribute("class");
-
-        if (classAttr == null)
+        final String classNameLowerCase = className.toLowerCase();
+        String classValue = element.getAttribute("class");
+        if (StringUtils.isEmpty(classValue))
         {
             return false;
         }
-
-        String[] classes = classAttr.split("\\s+");
-
-        for (String clazz : classes)
+        classValue = classValue.toLowerCase();
+        if (!classValue.contains(classNameLowerCase))
         {
-            if (clazz.equals(className))
+            return false;
+        }
+        for (String singleClass : classValue.split("\\s+"))
+        {
+            if (classNameLowerCase.equals(singleClass))
             {
                 return true;
             }
-
         }
-
         return false;
     }
 
