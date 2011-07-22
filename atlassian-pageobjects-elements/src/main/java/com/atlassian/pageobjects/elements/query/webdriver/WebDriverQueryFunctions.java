@@ -155,7 +155,8 @@ public final class WebDriverQueryFunctions
         {
             public Boolean apply(WebElement from)
             {
-                return text.equals(from.getText());
+                // in case of text contains is the most common case
+                return from.getText().contains(text);
             }
         };
     }

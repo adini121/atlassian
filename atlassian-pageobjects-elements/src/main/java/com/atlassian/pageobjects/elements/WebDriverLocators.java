@@ -158,7 +158,7 @@ public class WebDriverLocators
                 catch(AssertionError notFound)
                 {
                     throw new NoSuchElementException(new StringDescription()
-                            .appendText("Unable to locate element after timeout.")
+                            .appendText("Unable to locate element by timeout.")
                             .appendText("\nLocator: ").appendValue(locator)
                             .appendText("\nTimeout: ").appendValue(timeoutInSeconds).appendText(" seconds.")
                             .toString());
