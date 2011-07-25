@@ -6,6 +6,8 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 
+import java.util.List;
+
 
 /**
  * Utilities for doing simple checks on a page.
@@ -48,21 +50,22 @@ public class Check
 
     public static boolean elementsAreVisible(By by, SearchContext context)
     {
-        try
+        List<WebElement> elements = context.findElements(by);
+
+        if (elements.size() > 0)
         {
-            for (WebElement lookFor : context.findElements(by))
+            for (WebElement lookFor : elements)
             {
                 if (!lookFor.isDisplayed())
                 {
                     return false;
                 }
             }
+
+            return true;
         }
-        catch (NoSuchElementException e)
-        {
-            return false;
-        }
-        return true;
+
+        return false;
     }
 
     /**

@@ -21,7 +21,7 @@ import static org.mockito.Mockito.when;
 /**
  * Test case for {@link com.atlassian.pageobjects.elements.WebDriverElement}.
  *
- * @since v4.4
+ * @since v2.0.0
  */
 public class TestWebDriverElement
 {
