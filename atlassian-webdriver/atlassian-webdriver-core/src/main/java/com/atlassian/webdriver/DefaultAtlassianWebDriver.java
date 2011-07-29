@@ -12,7 +12,10 @@ import org.apache.commons.io.IOUtils;
 import org.apache.xmlbeans.impl.common.IOUtil;
 import org.openqa.selenium.By;
 import org.openqa.selenium.HasCapabilities;
+import org.openqa.selenium.HasInputDevices;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keyboard;
+import org.openqa.selenium.Mouse;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.TakesScreenshot;
@@ -239,5 +242,15 @@ public class DefaultAtlassianWebDriver implements AtlassianWebDriver
     public boolean isJavascriptEnabled()
     {
         return ((HasCapabilities)driver).getCapabilities().isJavascriptEnabled();
+    }
+
+    public Keyboard getKeyboard()
+    {
+        return ((HasInputDevices)driver).getKeyboard();
+    }
+
+    public Mouse getMouse()
+    {
+        return ((HasInputDevices)driver).getMouse();
     }
 }

@@ -1,26 +1,26 @@
 package com.atlassian.webdriver.utils;
 
+import java.util.Locale;
 
 public enum Browser
 {
-    FIREFOX("firefox"),
-    OPERA("opera"),
-    SAFARI("safari"),
-    UNKNOWN("unkown"),
-    IE("ie"),
-    CHROME("chrome"),
-    HTMLUNIT("htmlunit");
+    ALL,
+    FIREFOX,
+    OPERA,
+    SAFARI,
+    UNKNOWN,
+    IE,
+    CHROME,
+    HTMLUNIT,
+    IPHONE,
+    ANDROID;
 
-    private final String name;
-
-    Browser(String name)
-    {
-        this.name = name;
-    }
-
+    /**
+     * @return a lowercase version of the name
+     */
     public String getName()
     {
-        return name;
+        return name().toLowerCase(Locale.ENGLISH);
     }
 
     public static Browser typeOf(String browserStartString)

@@ -80,7 +80,7 @@ public class FileBasedServer
                 }
                 else  if(uri.endsWith("js"))
                 {
-                    response.setContentType("text/javascript");    
+                    response.setContentType("application/javascript");
                 }
                 else
                 {

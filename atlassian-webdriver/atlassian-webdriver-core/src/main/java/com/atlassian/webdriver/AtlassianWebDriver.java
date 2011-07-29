@@ -2,6 +2,7 @@ package com.atlassian.webdriver;
 
 import com.google.common.base.Function;
 import org.openqa.selenium.By;
+import org.openqa.selenium.HasInputDevices;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
@@ -11,7 +12,7 @@ import java.io.File;
 /**
  * Represents the web browser, adds common helper methods on top of <tt>WebDriver</tt>
  */
-public interface AtlassianWebDriver extends WebDriver, JavascriptExecutor
+public interface AtlassianWebDriver extends WebDriver, JavascriptExecutor, HasInputDevices
 {
     /**
      * Gets the underlying <tt>WebDriver</tt>.

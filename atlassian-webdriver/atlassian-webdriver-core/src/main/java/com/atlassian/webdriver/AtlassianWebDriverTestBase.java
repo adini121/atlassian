@@ -15,9 +15,7 @@ import java.io.File;
 
 
 /**
- * TODO: Document this class / interface here
- *
- * @since v1.0
+ * @since v2.0
  */
 public abstract class AtlassianWebDriverTestBase
 {

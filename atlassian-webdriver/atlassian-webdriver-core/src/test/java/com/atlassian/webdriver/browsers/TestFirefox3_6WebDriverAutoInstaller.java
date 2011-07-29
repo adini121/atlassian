@@ -1,35 +1,31 @@
 package com.atlassian.webdriver.browsers;
 
-import com.atlassian.browsers.BrowserConfig;
-import com.atlassian.webdriver.AtlassianWebDriver;
-import com.atlassian.webdriver.WebDriverFactory;
+import com.atlassian.webdriver.it.AbstractFileBasedServerTest;
+import com.atlassian.webdriver.it.TestBrowser;
+import com.atlassian.webdriver.it.pageobjects.page.UserAgentPage;
+import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.By;
 
 import static junit.framework.Assert.assertTrue;
-import static org.junit.Assert.assertEquals;
 
 /**
  * 
  */
-public class TestFirefox3_6WebDriverAutoInstaller extends WebDriverAutoInstallerTest
+@TestBrowser ("firefox-3.6")
+public class TestFirefox3_6WebDriverAutoInstaller extends AbstractFileBasedServerTest
 {
+    UserAgentPage userAgentPage;
+
+    @Before
+    public void init()
+    {
+        userAgentPage = product.getPageBinder().navigateToAndBind(UserAgentPage.class);
+    }
 
     @Test
     public void testFirefox_3_6() throws Exception
     {
-        System.setProperty("webdriver.browser", "firefox-3.6");
-
-        BrowserConfig browserConfig = AutoInstallConfiguration.setupBrowser();
-        AtlassianWebDriver driver = WebDriverFactory.getDriver(browserConfig);
-
-        driver.get(TEST_URL);
-        driver.waitUntilElementIsLocated(By.tagName("h1"));
-        assertEquals(driver.findElement(By.tagName("h1")).getText(), "Hello");
-        System.out.println("page:"+driver.getPageSource());
-        assertTrue(driver.findElement(By.tagName("div")).getText().contains("Firefox/3.6"));
-        driver.quit();
-
+        assertTrue(userAgentPage.getUserAgent().contains("Firefox/3.6"));
     }
 
 }

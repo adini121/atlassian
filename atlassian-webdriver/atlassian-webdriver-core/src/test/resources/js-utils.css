@@ -1,3 +1,0 @@
-#hovering-element {background-color:yellow; color:green;}
-#hovering-element .child-element { display:none; }
-#hovering-element:hover .child-element { display:block; }

@@ -2,8 +2,8 @@
 <html>
 <head>
     <title>HTML Elements</title>
-    <script type="text/javascript" src="../js/jquery-1.4.2.min.js"></script>
-    <script type="text/javascript">
+    <script src="../js/jquery-1.4.2.min.js"></script>
+    <script>
         var delayInMilliseconds = 2000;
     </script>
 </head>
@@ -16,7 +16,7 @@
     <input type="button" id="test1_addElementsButton" value="Add Elements With Delay" /><br />
     <div id="test1_delayedDiv"></div>
 
-    <script type="text/javascript ">
+    <script>
          $(document).ready(function(){
             $('#test1_addElementsButton').click(function(){
                 setTimeout('test1_appendElements()', delayInMilliseconds);
@@ -37,7 +37,7 @@
     <input type="button" id="test2_addElementsButton" value="Add Elements With Delay" /><br />
     <div id="test2_delayedDiv"></div>
 
-     <script type="text/javascript ">
+     <script>
          $(document).ready(function(){
             $('#test2_toggleInputVisibility').click(function(){
                 test2_toggleInput();
@@ -73,7 +73,7 @@
     <input type="button" id="test3_addElementsButton" value="Add Elements With Delay" /><br />
     <div id="test3_delayedDiv"></div>
 
-    <script type="text/javascript ">
+    <script >
          $(document).ready(function(){
             $('#test3_addElementsButton').click(function(){
                 setTimeout('test3_appendElements()', delayInMilliseconds);
@@ -113,7 +113,7 @@
     </ul>
     <input type="button" id="test4_addElementsButton" value="Add Elements With Delay" /><br />
 
-    <script type="text/javascript ">
+    <script >
          $(document).ready(function(){
             $('#test4_addElementsButton').click(function(){
                 setTimeout('test4_appendElements()', delayInMilliseconds);
@@ -134,7 +134,7 @@
     <input type="button" id="test5_addElementsButton" value="Add Elements With Delay" /><br />
     <div id="test5_delayedDiv"></div>
 
-    <script type="text/javascript ">
+    <script >
          $(document).ready(function(){
             $('#test5_addElementsButton').click(function(){
                 setTimeout('test5_appendElements()', delayInMilliseconds);
@@ -164,7 +164,7 @@
         <input type="button" id="test6_hideSpanButton" value="Hide Inner Span With Delay" /><br />
     </div>
 
-    <script type="text/javascript ">
+    <script >
         $(document).ready(function(){
            $('#test6_hideSpanButton').click(function(){
                setTimeout('test6_hideElements()', delayInMilliseconds);
@@ -218,7 +218,7 @@
     <input type="text" id="test9_input" value="test9_value" />
     <input type="button" id="test9_toggleValue" value="Toggle Value"/>
 
-     <script type="text/javascript ">
+     <script >
          $(document).ready(function() {
             $('#test9_toggleValue').click(function() {
                 setTimeout(test9_toggleInput, delayInMilliseconds);
@@ -257,7 +257,7 @@
     <input type="button" id="test10_reloadChildListButton" value="Reload whole child list" /><br />
     <input type="button" id="test10_reloadChildElementsButton" value="Reload child elements" /><br />
 
-    <script type="text/javascript ">
+    <script>
          $(document).ready(function() {
             $('#test10_reloadChildListButton').click(test10_reloadList);
             $('#test10_reloadChildElementsButton').click(test10_reloadElements);

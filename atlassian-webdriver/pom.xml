@@ -21,7 +21,7 @@
     </modules>
 
      <properties>
-        <xvfb.enable>true</xvfb.enable>
+        <xvfb.enable>false</xvfb.enable>
         <xvfb.display>:20</xvfb.display>
     </properties>
 

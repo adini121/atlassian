@@ -1,11 +1,15 @@
+<!DOCTYPE html>
 <html>
     <head>
         <title>JavaScriptUtils test page</title>
-        <link type="text/css" rel="stylesheet" href="/js-utils.css">
-        <script type="text/javascript" src="/jquery.js"></script>
+        <link type="text/css" rel="stylesheet" href="/css/js-utils.css">
+        <script src="/js/jquery/jquery-1.4.2.js"></script>
     </head>
     <body>
-
+        <div id="mouseout-jquery-element">
+            MOUSEOUT ELEMENT
+            <span id="mouseout-container">no mouseout</span>
+        </div>
         <h1>JavaScriptUtils test page</h1>
 
         <div id="hovering-element">
@@ -26,7 +30,9 @@
             </ul>
         </div>
 
-        <script type="text/javascript">
+
+
+        <script>
             jQuery("#hovering-jquery-element").find(".child-element").hide();
             jQuery("#hovering-jquery-element").mouseover(function() {
                 jQuery("#hovering-jquery-element").find(".child-element").show();
@@ -34,6 +40,15 @@
             jQuery("#hovering-jquery-element").mouseout(function() {
                 jQuery("#hovering-jquery-element").find(".child-element").hide();
             });
+
+            // Updates the element when the mouseout event fires.
+            jQuery("#mouseout-jquery-element").mouseover(function() {
+                jQuery("#mouseout-container").text("mouseover");
+            });
+            jQuery("#mouseout-jquery-element").mouseout(function() {
+                jQuery("#mouseout-container").text("mouseout");
+            });
+
         </script>
 
     </body>

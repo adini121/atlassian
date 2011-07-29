@@ -118,8 +118,8 @@ public abstract class ByJquery extends By
                 case PARENTS:
                 case CHILDREN:
                 case PREV:
-                    args = new Object[]{"WD.byJquery.$(context)." + selector.type.name().toLowerCase() + "(" + selectorStr + ")", elements };
-                    elements = JavaScriptUtils.execute("return WD.byJquery.execute(arguments[0],arguments[1])", driver, args);
+                    args = new Object[]{"ATLWD.byJquery.$(context)." + selector.type.name().toLowerCase() + "(" + selectorStr + ")", elements };
+                    elements = JavaScriptUtils.execute("return ATLWD.byJquery.execute(arguments[0],arguments[1])", driver, args);
                     break;
 
                 default:
@@ -226,13 +226,13 @@ public abstract class ByJquery extends By
 
         if (context instanceof WebElement)
         {
-            Object[] args = { "WD.byJquery.$(context).find(" + fixedSelector + ")", (WebElement) context };
-            return JavaScriptUtils.execute("return WD.byJquery.execute(arguments[0],arguments[1])", driver, args);
+            Object[] args = { "ATLWD.byJquery.$(context).find(" + fixedSelector + ")", (WebElement) context };
+            return JavaScriptUtils.execute("return ATLWD.byJquery.execute(arguments[0],arguments[1])", driver, args);
         }
         else
         {
-            Object[] args = { "WD.byJquery.$(document).find(" + fixedSelector  + ")"};
-            return JavaScriptUtils.execute("return WD.byJquery.execute(arguments[0])", driver, args);
+            Object[] args = { "ATLWD.byJquery.$(document).find(" + fixedSelector  + ")"};
+            return JavaScriptUtils.execute("return ATLWD.byJquery.execute(arguments[0])", driver, args);
         }
     }
 
@@ -244,14 +244,14 @@ public abstract class ByJquery extends By
         List<WebElement> newElements = new ArrayList<WebElement>();
         for (WebElement element : els)
         {
-            Object[] args = { "WD.byJquery.$(context).find('" + selector + "')", element };
-            List<WebElement> temp = JavaScriptUtils.execute("return WD.byJquery.execute(arguments[0],arguments[1])", driver, args);
+            Object[] args = { "ATLWD.byJquery.$(context).find('" + selector + "')", element };
+            List<WebElement> temp = JavaScriptUtils.execute("return ATLWD.byJquery.execute(arguments[0],arguments[1])", driver, args);
             newElements.addAll(temp);
         }
 
         return newElements;
-        //Object[] args = { "WD.byJquery.$(context).find('" + selector + "')", els };
-        //return JavaScriptUtils.execute("return WD.byJquery.execute(arguments[0],arguments[1])", driver, args);
+        //Object[] args = { "ATLWD.byJquery.$(context).find('" + selector + "')", els };
+        //return JavaScriptUtils.execute("return ATLWD.byJquery.execute(arguments[0],arguments[1])", driver, args);
     }
 
     public static ByJquery $(final WebElement element)
@@ -415,9 +415,9 @@ public abstract class ByJquery extends By
     {
         if (!isLoaded(driver))
         {
-            JavaScriptUtils.loadScript("jqueryLocator.js", driver);
-            JavaScriptUtils.loadScript("jquery-1.4.2.min.js", driver);
-            JavaScriptUtils.execute("WD.loadJquery()", driver);
+            JavaScriptUtils.loadScript("js/byjquery/byJquery.js", driver);
+            JavaScriptUtils.loadScript("js/jquery/jquery-1.4.2.min.js", driver);
+            JavaScriptUtils.execute("ATLWD.loadJquery()", driver);
         }
 
     }
@@ -428,7 +428,7 @@ public abstract class ByJquery extends By
         {
             throw new NullPointerException("driver is null, have you called ByJquery.init()?");
         }
-        String js = "return window.WD != undefined && window.WD.byJquery != undefined";
+        String js = "return window.ATLWD != undefined && window.ATLWD.byJquery != undefined";
         Boolean jQueryLocatorDefined = JavaScriptUtils.execute(js, driver);
         return jQueryLocatorDefined;
     }

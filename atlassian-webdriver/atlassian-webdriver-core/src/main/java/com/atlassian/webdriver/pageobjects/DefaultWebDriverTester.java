@@ -17,7 +17,12 @@ public class DefaultWebDriverTester implements WebDriverTester
 
     public DefaultWebDriverTester()
     {
-        webDriver = WebDriverBrowserAutoInstall.INSTANCE.getDriver();
+        this(WebDriverBrowserAutoInstall.INSTANCE.getDriver());
+    }
+
+    public DefaultWebDriverTester(AtlassianWebDriver driver)
+    {
+        webDriver = driver;
         injectables = Arrays.<Object>asList(webDriver);
     }
 
