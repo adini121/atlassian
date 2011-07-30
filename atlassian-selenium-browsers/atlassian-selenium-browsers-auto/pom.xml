@@ -11,6 +11,11 @@
     <artifactId>atlassian-selenium-browsers-auto</artifactId>
     <name>${project.artifactId}</name>
 
+    <properties>
+        <xvfb.enable>false</xvfb.enable>
+        <xvfb.display>:20</xvfb.display>
+    </properties>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -18,39 +23,10 @@
                 <artifactId>atlassian-browsers-auto</artifactId>
                 <version>${atlassian-browsers-version}</version>
             </dependency>
-            <dependency>
-                <groupId>com.atlassian.browsers</groupId>
-                <artifactId>atlassian-browsers-linux</artifactId>
-                <version>${atlassian-browsers-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.atlassian.browsers</groupId>
-                <artifactId>atlassian-browsers-osx</artifactId>
-                <version>${atlassian-browsers-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.atlassian.browsers</groupId>
-                <artifactId>atlassian-browsers-windows</artifactId>
-                <version>${atlassian-browsers-version}</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 
     <profiles>
-        <profile>
-            <id>windows</id>
-            <activation>
-                <os>
-                    <family>windows</family>
-                </os>
-            </activation>
-            <dependencies>
-                <dependency>
-                    <groupId>com.atlassian.browsers</groupId>
-                    <artifactId>atlassian-browsers-windows</artifactId>
-                </dependency>
-            </dependencies>
-        </profile>
         <profile>
             <id>linux</id>
             <activation>
@@ -62,26 +38,6 @@
                 <xvfb.enable>true</xvfb.enable>
                 <xvfb.display>:20</xvfb.display>
             </properties>
-            <dependencies>
-                <dependency>
-                    <groupId>com.atlassian.browsers</groupId>
-                    <artifactId>atlassian-browsers-linux</artifactId>
-                </dependency>
-            </dependencies>
-        </profile>
-        <profile>
-            <id>osx</id>
-            <activation>
-                <os>
-                    <family>mac</family>
-                </os>
-            </activation>
-            <dependencies>
-                <dependency>
-                    <groupId>com.atlassian.browsers</groupId>
-                    <artifactId>atlassian-browsers-osx</artifactId>
-                </dependency>
-            </dependencies>
         </profile>
     </profiles>
     <build>

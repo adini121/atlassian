@@ -10,9 +10,7 @@
 
     <artifactId>atlassian-selenium-browsers</artifactId>
     <name>${project.artifactId}</name>
-    <description>
-        A set of autoinstallable browsers
-    </description>
+    <description>A set of autoinstallable browsers</description>
     <packaging>pom</packaging>
     
     <modules>

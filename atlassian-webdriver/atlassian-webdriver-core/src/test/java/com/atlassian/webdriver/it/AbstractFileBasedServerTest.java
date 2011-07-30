@@ -1,19 +1,21 @@
 package com.atlassian.webdriver.it;
 
-import com.atlassian.pageobjects.TestedProductFactory;
-import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.it.pageobjects.SimpleTestedProduct;
+import com.atlassian.webdriver.testing.rule.IgnoreBrowserRule;
+import com.atlassian.webdriver.testing.rule.TestBrowserRule;
+import com.atlassian.webdriver.testing.rule.TestedProductRule;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.runner.RunWith;
+import org.junit.Rule;
 
-@RunWith(WebDriverBrowserRunner.class)
 public abstract class AbstractFileBasedServerTest 
 {
     public static FileBasedServer server;
     public static String rootUrl;
-    public static AtlassianWebDriver driver;
-    public static SimpleTestedProduct product;
+
+    @Rule public IgnoreBrowserRule ignoreRule = new IgnoreBrowserRule();
+    @Rule public TestedProductRule product = new TestedProductRule(SimpleTestedProduct.class);
+    @Rule public TestBrowserRule testBrowserRule = new TestBrowserRule();
 
     @BeforeClass
     public static void startServer() throws Exception
@@ -27,9 +29,6 @@ public abstract class AbstractFileBasedServerTest
         System.setProperty("baseurl.testapp", rootUrl);
         System.setProperty("http.testapp.port", String.valueOf(port));
         System.setProperty("context.testapp.path", "/");
-
-        product = TestedProductFactory.create(SimpleTestedProduct.class);
-        driver = product.getTester().getDriver();
     }
 
     @AfterClass

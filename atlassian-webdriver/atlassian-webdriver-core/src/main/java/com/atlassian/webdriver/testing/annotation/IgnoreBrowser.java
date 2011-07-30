@@ -1,4 +1,4 @@
-package com.atlassian.webdriver.it.tests;
+package com.atlassian.webdriver.testing.annotation;
 
 import com.atlassian.webdriver.utils.Browser;
 

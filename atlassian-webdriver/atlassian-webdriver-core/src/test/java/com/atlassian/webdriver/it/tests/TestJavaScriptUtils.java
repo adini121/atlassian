@@ -1,7 +1,9 @@
 package com.atlassian.webdriver.it.tests;
 
+import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.it.AbstractFileBasedServerTest;
 import com.atlassian.webdriver.it.pageobjects.page.JavaScriptUtilsPage;
+import com.atlassian.webdriver.testing.annotation.IgnoreBrowser;
 import com.atlassian.webdriver.utils.Browser;
 import com.atlassian.webdriver.utils.MouseEvents;
 import org.junit.Before;
@@ -20,18 +22,20 @@ public class TestJavaScriptUtils extends AbstractFileBasedServerTest
 {
 
     JavaScriptUtilsPage javascriptUtilsPage;
+    AtlassianWebDriver driver;
 
     @Before
     public void init()
     {
         javascriptUtilsPage = product.getPageBinder().navigateToAndBind(JavaScriptUtilsPage.class);
+        driver = product.getTester().getDriver();
     }
 
     /**
      * This test is testing that css psuedo class :hover will display an element
      */
     @Test
-    @IgnoreBrowser (value = {Browser.FIREFOX, Browser.HTMLUNIT}, reason = "CSS hovering on elements does not work.")
+    @IgnoreBrowser(value = {Browser.FIREFOX, Browser.HTMLUNIT}, reason = "CSS hovering on elements does not work.")
     public void testCssHoverRespondsToMouseover()
     {
         WebElement hoveringDiv = driver.findElement(By.id("hovering-element"));

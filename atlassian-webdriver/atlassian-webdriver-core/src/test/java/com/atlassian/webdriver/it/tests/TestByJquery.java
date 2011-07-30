@@ -6,6 +6,7 @@ import com.atlassian.webdriver.utils.by.ByJquery;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
@@ -19,11 +20,13 @@ public class TestByJquery extends AbstractFileBasedServerTest
 {
 
     ByJqueryPage byJqueryPage;
+    WebDriver driver;
 
     @Before
     public void init()
     {
         byJqueryPage = product.getPageBinder().navigateToAndBind(ByJqueryPage.class);
+        driver = product.getTester().getDriver();
     }
     
     @Test

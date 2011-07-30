@@ -1,7 +1,6 @@
 package com.atlassian.webdriver.it;
 
-import com.atlassian.webdriver.WebDriverFactory;
-import com.atlassian.webdriver.it.tests.IgnoreBrowser;
+import com.atlassian.webdriver.testing.annotation.IgnoreBrowser;
 import com.atlassian.webdriver.utils.Browser;
 import com.atlassian.webdriver.utils.WebDriverUtil;
 import org.junit.Ignore;
@@ -14,43 +13,15 @@ import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 
 /**
- * Simple test runner that check whether the Test class has the TestBrowser
- * annotation so that the webdriver browser system property is set before
- * the browser is launched.
+ * A test runner that checks to see if the executing test method
+ * has the {@link IgnoreBrowser} annotation and if the current running driver
+ * is in the list of browsers to ignore then the test will be skipped.
  */
 public class WebDriverBrowserRunner extends BlockJUnit4ClassRunner
 {
-    private final Class testClass;
-    private String originalBrowserValue = WebDriverFactory.getBrowserProperty();
-
     public WebDriverBrowserRunner(Class testClass) throws InitializationError
     {
         super(testClass);
-        this.testClass = testClass;
-    }
-
-    @Override
-    public Description getDescription()
-    {
-        return super.getDescription();
-    }
-
-    @Override
-    public void run(final RunNotifier notifier)
-    {
-        TestBrowser browserAnnotation = (TestBrowser) testClass.getAnnotation(TestBrowser.class);
-
-        if (browserAnnotation != null)
-        {
-            String browserValue = browserAnnotation.value();
-            System.setProperty("webdriver.browser", browserValue);
-        }
-        else
-        {
-            System.setProperty("webdriver.browser", originalBrowserValue);
-        }
-
-        super.run(notifier);
     }
 
     // Copied from {@link BlockJUnit4ClassRunner} and extra functionality added
