@@ -68,7 +68,7 @@ public class LifecycleAwareWebDriverGrid
                 {
                     drivers.remove(browserProperty);
 
-                    if (currentDriver.equals(driver))
+                    if (driver.equals(currentDriver))
                     {
                         currentDriver = null;
                     }
