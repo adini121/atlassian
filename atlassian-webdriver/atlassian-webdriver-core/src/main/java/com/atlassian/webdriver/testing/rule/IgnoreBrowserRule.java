@@ -6,6 +6,8 @@ import com.atlassian.webdriver.utils.WebDriverUtil;
 import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A rule that allows annotating test methods with the {@link IgnoreBrowser}
@@ -14,6 +16,8 @@ import org.junit.runners.model.Statement;
  */
 public class IgnoreBrowserRule implements MethodRule
 {
+    private static final Logger log = LoggerFactory.getLogger(IgnoreBrowserRule.class);
+
     public Statement apply(final Statement base, final FrameworkMethod method, Object target)
     {
         return new Statement()
@@ -29,7 +33,7 @@ public class IgnoreBrowserRule implements MethodRule
                     {
                         if (browser == latestBrowser || browser == Browser.ALL)
                         {
-                            System.out.println(method.getName() + " ignored, reason: " + ignoreBrowser.reason());
+                            log.info(method.getName() + " ignored, reason: " + ignoreBrowser.reason());
                             return;
                         }
                     }

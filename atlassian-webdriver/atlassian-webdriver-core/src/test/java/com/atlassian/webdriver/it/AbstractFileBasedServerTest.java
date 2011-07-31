@@ -1,9 +1,7 @@
 package com.atlassian.webdriver.it;
 
 import com.atlassian.webdriver.it.pageobjects.SimpleTestedProduct;
-import com.atlassian.webdriver.testing.rule.IgnoreBrowserRule;
-import com.atlassian.webdriver.testing.rule.TestBrowserRule;
-import com.atlassian.webdriver.testing.rule.TestedProductRule;
+import com.atlassian.webdriver.testing.rule.*;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -16,6 +14,8 @@ public abstract class AbstractFileBasedServerTest
     @Rule public IgnoreBrowserRule ignoreRule = new IgnoreBrowserRule();
     @Rule public TestedProductRule product = new TestedProductRule(SimpleTestedProduct.class);
     @Rule public TestBrowserRule testBrowserRule = new TestBrowserRule();
+    @Rule public WebDriverScreenshotRule webDriverScreenshotRule = new WebDriverScreenshotRule();
+    @Rule public SessionCleanupRule sessionCleanupRule = new SessionCleanupRule();
 
     @BeforeClass
     public static void startServer() throws Exception

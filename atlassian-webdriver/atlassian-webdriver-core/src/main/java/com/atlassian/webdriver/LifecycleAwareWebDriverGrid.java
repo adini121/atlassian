@@ -2,6 +2,7 @@ package com.atlassian.webdriver;
 
 import com.atlassian.browsers.BrowserConfig;
 import com.atlassian.webdriver.browsers.AutoInstallConfiguration;
+import com.google.common.base.Preconditions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 
@@ -20,6 +21,7 @@ import java.util.Map;
 public class LifecycleAwareWebDriverGrid
 {
     private static Map<String,AtlassianWebDriver> drivers = new HashMap<String,AtlassianWebDriver>();
+    private static AtlassianWebDriver currentDriver;
 
     private LifecycleAwareWebDriverGrid() {}
 
@@ -37,14 +39,23 @@ public class LifecycleAwareWebDriverGrid
 
         if (drivers.containsKey(browserProperty))
         {
-            return drivers.get(browserProperty);
+            AtlassianWebDriver driver = drivers.get(browserProperty);
+            currentDriver = driver;
+            return driver;
         }
 
         AtlassianWebDriver driver = WebDriverFactory.getDriver(browserConfig);
         drivers.put(browserProperty, driver);
-        
+        currentDriver = driver;
+
         addShutdownHook(browserProperty, driver);
         return driver;
+    }
+
+    public static AtlassianWebDriver getCurrentDriver()
+    {
+        Preconditions.checkState(currentDriver != null, "The current driver has not been initialised");
+        return currentDriver;
     }
 
     private static void addShutdownHook(final String browserProperty, final WebDriver driver) {
@@ -56,6 +67,12 @@ public class LifecycleAwareWebDriverGrid
                 try
                 {
                     drivers.remove(browserProperty);
+
+                    if (currentDriver.equals(driver))
+                    {
+                        currentDriver = null;
+                    }
+
                     driver.quit();
                 } catch (WebDriverException e)
                 {

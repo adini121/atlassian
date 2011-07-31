@@ -1,6 +1,7 @@
 package com.atlassian.webdriver;
 
 import com.atlassian.webdriver.browsers.AutoInstallConfiguration;
+import com.atlassian.webdriver.testing.rule.WebDriverScreenshotRule;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -16,7 +17,10 @@ import java.io.File;
 
 /**
  * @since v2.0
+ * @deprecated This class is no longer necessary as most of this is provided
+ * by the rules in: {@link com.atlassian.webdriver.testing.rule}
  */
+@Deprecated
 public abstract class AtlassianWebDriverTestBase
 {
     private final Logger log = LoggerFactory.getLogger(AtlassianWebDriverTestBase.class);
@@ -24,54 +28,7 @@ public abstract class AtlassianWebDriverTestBase
     protected static AtlassianWebDriver driver;
 
     @Rule
-    public MethodRule rule = new TestWatchman() {
-
-        private String destinationFolder;
-
-        @Override
-        public void starting(final FrameworkMethod method)
-        {
-            log.info("----- Starting " + method.getName());
-
-            destinationFolder = "target/webdriverTests/" + method.getMethod().getDeclaringClass().getName();
-
-            File dir = new File(destinationFolder);
-            // Clean up the directory for the next run
-            if (dir.exists()) {
-                dir.delete();
-            }
-
-            dir.mkdirs();
-        }
-
-        @Override
-        public void succeeded(final FrameworkMethod method)
-        {
-            log.info("----- Succeeded " + method.getName());
-        }
-
-        @Override
-        public void failed(final Throwable e, final FrameworkMethod method)
-        {
-            String baseFileName =  destinationFolder + "/" + method.getName();
-            File dumpFile = new File(baseFileName + ".html");
-            log.error(e.getMessage(), e);
-            log.info("----- Test Failed. " + e.getMessage());
-            log.info("----- At page: "+ driver.getCurrentUrl());
-            log.info("----- Dumping page source to: " + dumpFile.getAbsolutePath());
-
-            // Take a screen shot and dump it.
-            driver.dumpSourceTo(dumpFile);
-            driver.takeScreenshotTo(new File(baseFileName + ".png"));
-            
-        }
-
-        @Override
-        public void finished(final FrameworkMethod method)
-        {
-            log.info("----- Finished " + method.getName());
-        }
-    };
+    public WebDriverScreenshotRule rule = new WebDriverScreenshotRule();
 
     @After
     public void tearDown() {

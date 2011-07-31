@@ -104,6 +104,10 @@ public class DefaultAtlassianWebDriver implements AtlassianWebDriver
                 log.warn("Could not capture screenshot to: " + destFile, e);
             }
         }
+        else
+        {
+            log.info("Driver is not capable of taking screenshots.");
+        }
     }
 
     public void waitUntilElementIsVisibleAt(By elementLocator, SearchContext at)
