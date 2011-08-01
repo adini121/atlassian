@@ -33,10 +33,7 @@ public class LifecycleAwareWebDriverGrid
      */
     public static AtlassianWebDriver getDriver()
     {
-        BrowserConfig browserConfig = AutoInstallConfiguration.setupBrowser();
-
         String browserProperty = WebDriverFactory.getBrowserProperty();
-
         if (drivers.containsKey(browserProperty))
         {
             AtlassianWebDriver driver = drivers.get(browserProperty);
@@ -44,6 +41,7 @@ public class LifecycleAwareWebDriverGrid
             return driver;
         }
 
+        BrowserConfig browserConfig = AutoInstallConfiguration.setupBrowser();
         AtlassianWebDriver driver = WebDriverFactory.getDriver(browserConfig);
         drivers.put(browserProperty, driver);
         currentDriver = driver;
