@@ -20,7 +20,7 @@ public class TestArgumentConversionBug extends AbstractFileBasedServerTest
     @Before
     public void init()
     {
-        argConversionBugPage = product.getPageBinder().navigateToAndBind(ArgumentConversionBugPage.class);
+        argConversionBugPage = product.visit(ArgumentConversionBugPage.class);
         driver = product.getTester().getDriver();
     }
 

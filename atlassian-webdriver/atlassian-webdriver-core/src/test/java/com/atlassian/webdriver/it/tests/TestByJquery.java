@@ -25,7 +25,7 @@ public class TestByJquery extends AbstractFileBasedServerTest
     @Before
     public void init()
     {
-        byJqueryPage = product.getPageBinder().navigateToAndBind(ByJqueryPage.class);
+        byJqueryPage = product.visit(ByJqueryPage.class);
         driver = product.getTester().getDriver();
     }
     

@@ -9,9 +9,6 @@ import org.junit.Rule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-
-
 /**
  * @since v2.0
  * @deprecated This class is no longer necessary as most of this is provided

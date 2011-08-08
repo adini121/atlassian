@@ -13,6 +13,9 @@ public class SessionCleanupRule extends ExternalResource
     protected void after()
     {
         AtlassianWebDriver driver = LifecycleAwareWebDriverGrid.getCurrentDriver();
-        driver.manage().deleteAllCookies();
+        if (driver != null)
+        {
+            driver.manage().deleteAllCookies();
+        }
     }
 }

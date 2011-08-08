@@ -51,4 +51,9 @@ public class TestedProductRule<T extends TestedProduct<WebDriverTester>> impleme
         return product.getTester();
     }
 
+    public T getTestedProduct()
+    {
+        return product;
+    }
+
 }

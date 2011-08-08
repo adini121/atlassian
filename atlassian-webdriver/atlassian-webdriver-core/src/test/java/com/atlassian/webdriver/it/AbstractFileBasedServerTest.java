@@ -12,7 +12,8 @@ public abstract class AbstractFileBasedServerTest
     public static String rootUrl;
 
     @Rule public IgnoreBrowserRule ignoreRule = new IgnoreBrowserRule();
-    @Rule public TestedProductRule product = new TestedProductRule(SimpleTestedProduct.class);
+    @Rule public TestedProductRule<SimpleTestedProduct> product =
+        new TestedProductRule<SimpleTestedProduct>(SimpleTestedProduct.class);
     @Rule public TestBrowserRule testBrowserRule = new TestBrowserRule();
     @Rule public WebDriverScreenshotRule webDriverScreenshotRule = new WebDriverScreenshotRule();
     @Rule public SessionCleanupRule sessionCleanupRule = new SessionCleanupRule();

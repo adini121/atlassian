@@ -24,8 +24,7 @@ public class SimpleTestedProduct implements TestedProduct<WebDriverTester>
 
     public SimpleTestedProduct(TestedProductFactory.TesterFactory<WebDriverTester> testerFactory, ProductInstance productInstance)
     {
-        checkNotNull(productInstance);
-        this.productInstance = productInstance;
+        this.productInstance = checkNotNull(productInstance);
 
         this.webDriverTester =  new DefaultWebDriverTester();
         this.pageBinder = new InjectPageBinder(productInstance, webDriverTester, new StandardModule(this),

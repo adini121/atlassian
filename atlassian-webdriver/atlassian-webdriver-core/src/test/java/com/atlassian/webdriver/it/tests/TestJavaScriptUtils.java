@@ -27,7 +27,7 @@ public class TestJavaScriptUtils extends AbstractFileBasedServerTest
     @Before
     public void init()
     {
-        javascriptUtilsPage = product.getPageBinder().navigateToAndBind(JavaScriptUtilsPage.class);
+        javascriptUtilsPage = product.visit(JavaScriptUtilsPage.class);
         driver = product.getTester().getDriver();
     }
 

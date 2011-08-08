@@ -34,7 +34,7 @@ public class LifecycleAwareWebDriverGrid
     public static AtlassianWebDriver getDriver()
     {
         String browserProperty = WebDriverFactory.getBrowserProperty();
-        if (drivers.containsKey(browserProperty))
+        if (browserIsConfigured(browserProperty))
         {
             AtlassianWebDriver driver = drivers.get(browserProperty);
             currentDriver = driver;
@@ -54,6 +54,11 @@ public class LifecycleAwareWebDriverGrid
     {
         Preconditions.checkState(currentDriver != null, "The current driver has not been initialised");
         return currentDriver;
+    }
+
+    private static boolean browserIsConfigured(String browserProperty)
+    {
+        return drivers.containsKey(browserProperty);
     }
 
     private static void addShutdownHook(final String browserProperty, final WebDriver driver) {
