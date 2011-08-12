@@ -95,4 +95,18 @@ public class TestByJquery extends AbstractFileBasedServerTest
     {
         driver.findElement(ByJquery.$("#id2 .nonExistant"));
     }
+
+    @Test
+    public void testClosestSelectorLocatesParent()
+    {
+        WebElement el = driver.findElement(ByJquery.$("li.item-a").closest("ul"));
+        assertEquals("level-2", el.getAttribute("class"));
+    }
+
+    @Test
+    public void testClosestSelectorLocatesSelf()
+    {
+        WebElement el = driver.findElement(ByJquery.$("li.item-a").closest("li"));
+        assertEquals("item-a", el.getAttribute("class"));
+    }
 }

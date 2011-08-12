@@ -42,7 +42,8 @@ public abstract class ByJquery extends By
         PARENTS,
         SIBLINGS,
         CHILDREN,
-        PREV;
+        PREV,
+        CLOSEST;
     }
 
     private class Selector {
@@ -118,6 +119,7 @@ public abstract class ByJquery extends By
                 case PARENTS:
                 case CHILDREN:
                 case PREV:
+                case CLOSEST:
                     args = new Object[]{"ATLWD.byJquery.$(context)." + selector.type.name().toLowerCase() + "(" + selectorStr + ")", elements };
                     elements = JavaScriptUtils.execute("return ATLWD.byJquery.execute(arguments[0],arguments[1])", driver, args);
                     break;
@@ -392,6 +394,12 @@ public abstract class ByJquery extends By
     {
         addSelector(new Selector(selector, SelectorType.PREV));
 
+        return this;
+    }
+
+    public ByJquery closest(String selector)
+    {
+        addSelector(new Selector(selector, SelectorType.CLOSEST));
         return this;
     }
 
