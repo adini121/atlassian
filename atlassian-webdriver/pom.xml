@@ -17,7 +17,6 @@
         <module>atlassian-webdriver-jira</module>
         <module>atlassian-webdriver-confluence</module>
         <module>atlassian-webdriver-greenhopper</module>
-        <module>atlassian-webdriver-refapp</module>
     </modules>
 
      <properties>
