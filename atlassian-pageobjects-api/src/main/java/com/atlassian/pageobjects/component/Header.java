@@ -4,6 +4,7 @@ import com.atlassian.pageobjects.Page;
 
 /**
  * Header component to be implemented via an override by the products
+ * @since 2.0
  */
 public interface Header
 {

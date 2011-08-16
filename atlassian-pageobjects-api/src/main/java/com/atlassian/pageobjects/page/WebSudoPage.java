@@ -7,7 +7,7 @@ import com.atlassian.pageobjects.Page;
  */
 public interface WebSudoPage extends Page
 {
-      /**
+    /**
      * Confirm the sys admin password and navigate to given page
      * @param targetPage Page to navigate to after password confirm
      * @param <T> Page
