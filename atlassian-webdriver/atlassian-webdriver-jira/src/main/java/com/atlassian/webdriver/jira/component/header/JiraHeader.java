@@ -6,6 +6,7 @@ import com.atlassian.pageobjects.Page;
 import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.binder.Init;
 import com.atlassian.pageobjects.component.Header;
+import com.atlassian.pageobjects.component.WebSudoBanner;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.jira.component.UserDiscoverable;
 import com.atlassian.webdriver.jira.component.menu.AdminMenu;
@@ -13,6 +14,7 @@ import com.atlassian.webdriver.jira.component.menu.DashboardMenu;
 import com.atlassian.webdriver.jira.component.menu.JiraUserMenu;
 import com.atlassian.webdriver.jira.page.LogoutPage;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -72,5 +74,10 @@ public class JiraHeader implements UserDiscoverable, Header
             pageBinder.navigateToAndBind(LogoutPage.class).confirmLogout();
         }
         return LogoutPage.class.isAssignableFrom(nextPage) ? pageBinder.bind(nextPage) : pageBinder.navigateToAndBind(nextPage);
+    }
+
+    public WebSudoBanner getWebSudoBanner()
+    {
+        throw new NotImplementedException();
     }
 }

@@ -21,4 +21,9 @@ public interface Header
      * @return The next page, fully loaded and initialized.
      */
     <M extends Page> M logout(Class<M> nextPage);
+
+    /**
+     * @return The WebSudoBanner page object
+     */
+    WebSudoBanner getWebSudoBanner();
 }

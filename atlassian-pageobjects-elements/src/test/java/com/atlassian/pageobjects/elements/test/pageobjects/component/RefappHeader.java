@@ -5,10 +5,12 @@ import javax.inject.Inject;
 import com.atlassian.pageobjects.Page;
 import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.component.Header;
+import com.atlassian.pageobjects.component.WebSudoBanner;
 import com.atlassian.pageobjects.page.HomePage;
 import com.atlassian.webdriver.AtlassianWebDriver;
 
 import org.openqa.selenium.By;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * Represents the header of the RefApp
@@ -39,5 +41,10 @@ public class RefappHeader implements Header
             driver.findElement(LOGIN).click();
         }
         return HomePage.class.isAssignableFrom(nextPage) ? pageBinder.bind(nextPage) : pageBinder.navigateToAndBind(nextPage);
+    }
+
+    public WebSudoBanner getWebSudoBanner()
+    {
+        throw new NotImplementedException();
     }
 }

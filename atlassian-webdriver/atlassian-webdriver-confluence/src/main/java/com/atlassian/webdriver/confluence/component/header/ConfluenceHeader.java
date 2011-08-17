@@ -5,20 +5,20 @@ import javax.inject.Inject;
 import com.atlassian.pageobjects.Page;
 import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.component.Header;
+import com.atlassian.pageobjects.component.WebSudoBanner;
 import com.atlassian.pageobjects.page.HomePage;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.confluence.component.UserDiscoverable;
 import com.atlassian.webdriver.confluence.component.menu.BrowseMenu;
 import com.atlassian.webdriver.confluence.component.menu.ConfluenceUserMenu;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 /**
- * TODO: Document this class / interface here
- *
- * @since v1.0
+ * @since v2.0
  */
 public class ConfluenceHeader implements Header, UserDiscoverable
 {
@@ -47,6 +47,11 @@ public class ConfluenceHeader implements Header, UserDiscoverable
             getUserMenu().open().logout();
         }
         return HomePage.class.isAssignableFrom(nextPage) ? pageBinder.bind(nextPage) : pageBinder.navigateToAndBind(nextPage);
+    }
+
+    public WebSudoBanner getWebSudoBanner()
+    {
+        return pageBinder.bind(WebSudoBanner.class);
     }
 
     public boolean isAdmin()

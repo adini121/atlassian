@@ -12,13 +12,13 @@ public interface WebSudoBanner
      * Checks the websudo banner is showing
      * @return boolean indicating whether the websudo banner is showing
      */
-    boolean webSudoBannerIsShowing();
+    boolean isShowing();
 
     /**
      * Retrieves the websudo message from the banner.
      * @return The message in the websudo banner. Returns null if there is no message.
      */
-    String getWebSudoBannerMessage();
+    String getMessage();
 
     /**
      * Drops the websudo privilege if the websudo banner is displayed otherwise just navigates

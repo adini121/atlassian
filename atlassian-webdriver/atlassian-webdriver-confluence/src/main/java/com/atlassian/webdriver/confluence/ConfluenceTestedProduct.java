@@ -8,6 +8,7 @@ import com.atlassian.pageobjects.TestedProduct;
 import com.atlassian.pageobjects.TestedProductFactory;
 import com.atlassian.pageobjects.binder.InjectPageBinder;
 import com.atlassian.pageobjects.binder.StandardModule;
+import com.atlassian.pageobjects.component.WebSudoBanner;
 import com.atlassian.pageobjects.elements.ElementModule;
 import com.atlassian.pageobjects.elements.timeout.TimeoutsModule;
 import com.atlassian.pageobjects.page.AdminHomePage;
@@ -17,6 +18,7 @@ import com.atlassian.pageobjects.page.LoginPage;
 import com.atlassian.pageobjects.page.WebSudoPage;
 import com.atlassian.webdriver.AtlassianWebDriverModule;
 import com.atlassian.webdriver.confluence.component.header.ConfluenceHeader;
+import com.atlassian.webdriver.confluence.component.header.ConfluenceWebSudoBanner;
 import com.atlassian.webdriver.confluence.page.ConfluenceAdminHomePage;
 import com.atlassian.webdriver.confluence.page.ConfluenceLoginPage;
 import com.atlassian.webdriver.confluence.page.ConfluenceWebSudoPage;
@@ -62,6 +64,7 @@ public class ConfluenceTestedProduct implements TestedProduct<WebDriverTester>
         this.pageBinder.override(LoginPage.class, ConfluenceLoginPage.class);
         this.pageBinder.override(AdminHomePage.class, ConfluenceAdminHomePage.class);
         this.pageBinder.override(WebSudoPage.class, ConfluenceWebSudoPage.class);
+        this.pageBinder.override(WebSudoBanner.class, ConfluenceWebSudoBanner.class);
     }
 
     public DashboardPage gotoHomePage()
