@@ -9,8 +9,8 @@ import com.atlassian.pageobjects.component.WebSudoBanner;
 import com.atlassian.pageobjects.page.HomePage;
 import com.atlassian.webdriver.AtlassianWebDriver;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.openqa.selenium.By;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * Represents the header of the RefApp

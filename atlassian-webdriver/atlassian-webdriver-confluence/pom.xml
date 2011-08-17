@@ -27,7 +27,7 @@
                 </executions>
                 <configuration>
                     <productDataVersion>3.0</productDataVersion>
-                    <productVersion>3.3</productVersion>
+                    <productVersion>3.5</productVersion>
                     <systemPropertyVariables>
                         <xvfb.enable>${xvfb.enable}</xvfb.enable>
                     </systemPropertyVariables>
