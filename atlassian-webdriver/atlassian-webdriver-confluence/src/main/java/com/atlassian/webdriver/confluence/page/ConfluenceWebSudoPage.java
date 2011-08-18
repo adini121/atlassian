@@ -2,9 +2,9 @@ package com.atlassian.webdriver.confluence.page;
 
 import com.atlassian.pageobjects.Page;
 import com.atlassian.pageobjects.PageBinder;
-import com.atlassian.pageobjects.elements.PageElement;
-import com.atlassian.pageobjects.elements.ElementBy;
 import com.atlassian.pageobjects.page.WebSudoPage;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
 import javax.inject.Inject;
 
@@ -18,11 +18,11 @@ public class ConfluenceWebSudoPage implements WebSudoPage
     @Inject
     private PageBinder pageBinder;
 
-    @ElementBy(id="password")
-    private PageElement passwordTextbox;
+    @FindBy(id="password")
+    private WebElement passwordTextbox;
 
-    @ElementBy(id="authenticateButton")
-    private PageElement confirmButton;
+    @FindBy(id="authenticateButton")
+    private WebElement confirmButton;
 
     public String getUrl()
     {
@@ -36,7 +36,7 @@ public class ConfluenceWebSudoPage implements WebSudoPage
 
     public <T extends Page> T confirm(String password, Class<T> targetPage)
     {
-        passwordTextbox.type(password);
+        passwordTextbox.sendKeys(password);
         confirmButton.click();
         return pageBinder.navigateToAndBind(targetPage);
     }

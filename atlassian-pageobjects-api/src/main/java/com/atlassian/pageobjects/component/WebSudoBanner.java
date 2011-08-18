@@ -4,7 +4,7 @@ import com.atlassian.pageobjects.Page;
 
 /**
  * WebSudoBanner component interface so that products can add WebSudoBanner functionality to PageObjects
- * @since v2.1
+ * @since 2.1
  */
 public interface WebSudoBanner
 {

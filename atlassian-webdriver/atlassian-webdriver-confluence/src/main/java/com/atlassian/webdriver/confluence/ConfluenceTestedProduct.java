@@ -56,8 +56,8 @@ public class ConfluenceTestedProduct implements TestedProduct<WebDriverTester>
         }
         this.webDriverTester = tester;
         this.productInstance = productInstance;
-        this.pageBinder = new InjectPageBinder(productInstance, tester, new StandardModule(this), new AtlassianWebDriverModule(this),
-                new ElementModule(), new TimeoutsModule());
+        this.pageBinder = new InjectPageBinder(productInstance, tester,
+            new StandardModule(this), new AtlassianWebDriverModule(this));
 
         this.pageBinder.override(Header.class, ConfluenceHeader.class);
         this.pageBinder.override(HomePage.class, DashboardPage.class);

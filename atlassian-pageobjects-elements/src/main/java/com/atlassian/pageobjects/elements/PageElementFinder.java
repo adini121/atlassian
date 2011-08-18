@@ -14,7 +14,7 @@ import java.util.List;
  * A finder is associated with some search scope - it will find elements within this scope (e.g. globally, or within
  * a parent page element).
  *
- * @since v2.0
+ * @since 2.0
  */
 public interface PageElementFinder {
 

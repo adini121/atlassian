@@ -9,7 +9,6 @@ import com.atlassian.pageobjects.TestedProductFactory;
 import com.atlassian.pageobjects.binder.InjectPageBinder;
 import com.atlassian.pageobjects.binder.StandardModule;
 import com.atlassian.webdriver.AtlassianWebDriverModule;
-import com.atlassian.webdriver.LifecycleAwareWebDriverGrid;
 import com.atlassian.webdriver.pageobjects.DefaultWebDriverTester;
 import com.atlassian.webdriver.pageobjects.WebDriverTester;
 

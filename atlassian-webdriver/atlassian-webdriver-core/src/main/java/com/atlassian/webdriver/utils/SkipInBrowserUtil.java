@@ -3,6 +3,7 @@ package com.atlassian.webdriver.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 public class SkipInBrowserUtil
 {
     public static List<Class> filter(Browser browser, List<Class> list)
