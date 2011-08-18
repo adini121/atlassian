@@ -124,7 +124,7 @@ public class TestedProductFactory
         return annotation;
     }
 
-    private static <P extends TestedProduct<?>> P create(Class<P> testedProductClass, ProductInstance instance, TesterFactory<?> testerFactory) {
+    public static <P extends TestedProduct<?>> P create(Class<P> testedProductClass, ProductInstance instance, TesterFactory<?> testerFactory) {
         try
         {
             Constructor<P> c = testedProductClass.getConstructor(TesterFactory.class, ProductInstance.class);
