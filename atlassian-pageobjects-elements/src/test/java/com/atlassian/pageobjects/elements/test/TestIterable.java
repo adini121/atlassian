@@ -31,14 +31,14 @@ public class TestIterable extends AbstractFileBasedServerTest
     }
 
     @Test
-    public void testIteratorNoElement()
+    public void testIterableNoElement()
     {
         Iterator<PageElement> elements = elementsPage.getNoElements().iterator();
         assertFalse(elements.hasNext());
     }
 
     @Test
-    public void testIteratorOneElement()
+    public void testIterableOneElement()
     {
         Iterator<PageElement> elements = elementsPage.getOneElements().iterator();
         assertTrue(elements.hasNext());
@@ -46,7 +46,7 @@ public class TestIterable extends AbstractFileBasedServerTest
     }
 
     @Test
-    public void testIteratorTwoElements()
+    public void testIterableTwoElements()
     {
         Iterator<PageElement> elements = elementsPage.getTwoElements().iterator();
         assertTrue(elements.hasNext());
@@ -56,7 +56,7 @@ public class TestIterable extends AbstractFileBasedServerTest
     }
 
     @Test
-    public void testIteratorThreeElements()
+    public void testIterableThreeElements()
     {
         Iterator<PageElement> elements = elementsPage.getThreeElements().iterator();
         assertTrue(elements.hasNext());
@@ -94,7 +94,7 @@ public class TestIterable extends AbstractFileBasedServerTest
     }
 
     @Test
-    public void testIteratorCheckbox()
+    public void testIterableCheckbox()
     {
         Iterator<CheckboxElement> elements = elementsPage.getTwoCheckboxes().iterator();
         assertTrue(elements.hasNext());
@@ -104,7 +104,7 @@ public class TestIterable extends AbstractFileBasedServerTest
     }
 
     @Test
-    public void testIteratorSelect()
+    public void testIterableSelect()
     {
         Iterator<SelectElement> elements = elementsPage.getTwoSelects().iterator();
         assertTrue(elements.hasNext());
@@ -114,7 +114,7 @@ public class TestIterable extends AbstractFileBasedServerTest
     }
 
     @Test
-    public void testIteratorMultiSelect()
+    public void testIterableMultiSelect()
     {
         Iterator<MultiSelectElement> elements = elementsPage.getTwoMultiSelects().iterator();
         assertTrue(elements.hasNext());

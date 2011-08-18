@@ -42,7 +42,7 @@ public @interface ElementBy
      * This attribute doesn't make sense for injecting PageElements fields,
      * but it would still work. It makes sense for erased types:
      * {@code @ElementBy(name="checkbox1", pageElementClass=CheckboxElement.class) 
-     * private Iterator<CheckboxElement> checkbox1;
+     * private Iterable<CheckboxElement> checkbox1;
      * }
      * @since 2.1
      */

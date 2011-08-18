@@ -37,7 +37,7 @@ public class ElementByPostInjectionProcessor implements PostInjectionProcessor
             {
                 // Create the element to inject
                 Object value;
-                if (isIterator(field))
+                if (isIterable(field))
                 {
                     value = createIterable(field, annotation);
                 }
@@ -150,7 +150,7 @@ public class ElementByPostInjectionProcessor implements PostInjectionProcessor
     }
     
     
-    private boolean isIterator(Field field) {
+    private boolean isIterable(Field field) {
         return Iterable.class.isAssignableFrom(field.getType());
     }
     
