@@ -4,6 +4,7 @@ import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.binder.PostInjectionProcessor;
 import com.atlassian.pageobjects.util.InjectUtils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.internal.seleniumemulation.ElementFinder;
 
 import javax.inject.Inject;
 import java.lang.reflect.Field;
@@ -18,6 +19,9 @@ public class ElementByPostInjectionProcessor implements PostInjectionProcessor
 {
     @Inject
     PageBinder pageBinder;
+    
+    @Inject
+    PageElementFinder finder;
 
     public <T> T process(T pageObject)
     {
@@ -31,11 +35,22 @@ public class ElementByPostInjectionProcessor implements PostInjectionProcessor
         {
             public void visit(Field field, ElementBy annotation)
             {
-                PageElement element = createElement(field, annotation);
+                // Create the element to inject
+                Object value;
+                if (isIterator(field))
+                {
+                    value = createIterable(field, annotation);
+                }
+                else
+                {
+                    value = createPageElement(field, annotation);
+                }
+                
+                // Assign the value
                 try
                 {
                     field.setAccessible(true);
-                    field.set(instance, element);
+                    field.set(instance, value);
                 }
                 catch (IllegalAccessException e)
                 {
@@ -45,7 +60,21 @@ public class ElementByPostInjectionProcessor implements PostInjectionProcessor
         });
     }
 
-    private PageElement createElement(Field field, ElementBy elementBy)
+    private Iterable<? extends PageElement> createIterable(Field field, ElementBy elementBy)
+    {
+        By by = getSelector(elementBy);
+        Class<? extends PageElement> fieldType = getFieldType(field, elementBy);
+        return new PageElementIterableImpl(finder, fieldType, by, elementBy.timeoutType());
+    }
+
+    private PageElement createPageElement(Field field, ElementBy elementBy)
+    {
+        By by = getSelector(elementBy);
+        Class<? extends PageElement> fieldType = getFieldType(field, elementBy);
+        return pageBinder.bind(WebDriverElementMappings.findMapping(fieldType), by, elementBy.timeoutType());
+    }
+
+    private By getSelector(ElementBy elementBy)
     {
         By by;
 
@@ -85,15 +114,45 @@ public class ElementByPostInjectionProcessor implements PostInjectionProcessor
         {
             throw new IllegalArgumentException("No selector found");
         }
-        Class<? extends PageElement> fieldType = getFieldType(field);
-        return pageBinder.bind(WebDriverElementMappings.findMapping(fieldType), by, elementBy.timeoutType());
+        return by;
     }
 
+    /**
+     * Returns the type of requested PageElement: it is the type of the field
+     * overriden by the attribute 'pageElementClass' in the annotation.
+     * 
+     * @param field the field to inject
+     * @param annotation the ElementBy annotation on the field 
+     * @return the requested PageElement
+     * @throws IllegalArgumentException if the field or the annotation don't extend PageElement
+     */
     @SuppressWarnings({"unchecked"})
-    private Class<? extends PageElement> getFieldType(Field field) {
-        Class<?> realType = field.getType();
-        checkArgument(PageElement.class.isAssignableFrom(realType), "Field type " + realType.getName()
+    private Class<? extends PageElement> getFieldType(Field field, ElementBy annotation) {
+        Class<?> fieldType = field.getType();
+
+        // Check whether the annotation overrides this type
+        Class<?> annotatedType = annotation.pageElementClass();
+        // Checks whether annotatedType is more specific than PageElement
+        if (Iterable.class.isAssignableFrom(fieldType))
+        {
+            return (Class<? extends PageElement>) annotatedType;
+        }
+        else if (annotatedType != PageElement.class)
+        {
+            checkArgument(fieldType.isAssignableFrom(annotatedType), "Field type " + annotatedType.getName()
+                    + " does not implement " + fieldType.getName());
+            return (Class<? extends PageElement>) annotatedType;
+        }
+
+        checkArgument(PageElement.class.isAssignableFrom(fieldType), "Field type " + fieldType.getName()
                 + " does not implement " + PageElement.class.getName());
-        return (Class<? extends PageElement>) realType;
+        return (Class<? extends PageElement>) fieldType;
     }
+    
+    
+    private boolean isIterator(Field field) {
+        return Iterable.class.isAssignableFrom(field.getType());
+    }
+    
+    
 }

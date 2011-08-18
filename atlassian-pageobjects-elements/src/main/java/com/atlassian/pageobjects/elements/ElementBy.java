@@ -31,4 +31,20 @@ public @interface ElementBy
     String tagName() default "";
 
     TimeoutType timeoutType() default TimeoutType.DEFAULT;
+
+    /**
+     * Type of the PageElement to inject. Used with Iterator<? extends PageElement>
+     * Defaults to the class of the annotated field.
+     * <p/>
+     * This is not a selector, so you still need to specify a
+     * selector.
+     * <p/>
+     * This attribute doesn't make sense for injecting PageElements fields,
+     * but it would still work. It makes sense for erased types:
+     * {@code @ElementBy(name="checkbox1", pageElementClass=CheckboxElement.class) 
+     * private Iterator<CheckboxElement> checkbox1;
+     * }
+     * @since 2.1
+     */
+    Class<? extends PageElement> pageElementClass() default PageElement.class;
 }
