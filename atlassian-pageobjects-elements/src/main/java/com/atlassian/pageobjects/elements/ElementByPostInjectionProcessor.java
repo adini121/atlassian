@@ -131,7 +131,7 @@ public class ElementByPostInjectionProcessor implements PostInjectionProcessor
         Class<?> fieldType = field.getType();
 
         // Check whether the annotation overrides this type
-        Class<?> annotatedType = annotation.pageElementClass();
+        Class<? extends PageElement> annotatedType = annotation.pageElementClass();
         // Checks whether annotatedType is more specific than PageElement
         if (Iterable.class.isAssignableFrom(fieldType))
         {
@@ -141,7 +141,7 @@ public class ElementByPostInjectionProcessor implements PostInjectionProcessor
         {
             checkArgument(fieldType.isAssignableFrom(annotatedType), "Field type " + annotatedType.getName()
                     + " does not implement " + fieldType.getName());
-            return (Class<? extends PageElement>) annotatedType;
+            return annotatedType;
         }
 
         checkArgument(PageElement.class.isAssignableFrom(fieldType), "Field type " + fieldType.getName()
