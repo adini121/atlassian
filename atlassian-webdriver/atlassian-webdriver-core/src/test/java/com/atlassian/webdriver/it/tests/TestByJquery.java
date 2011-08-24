@@ -17,7 +17,6 @@ import static org.junit.Assert.*;
 /**
  * Test for checking ByJquery functionality in Atlassian WebDriver.
  */
-@TestBrowser("htmlunit")
 public class TestByJquery extends AbstractFileBasedServerTest
 {
 

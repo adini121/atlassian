@@ -32,7 +32,10 @@ public class FileBasedServer
      */
     public static void main(String... args) throws Exception
     {
-        new FileBasedServer().startServer();
+        FileBasedServer server = new FileBasedServer();
+        server.startServer();
+        int port = server.getPort();
+        System.out.println("Server started: " + "http://localhost:" + port);
     }
 
     private final Map<String,String> urlMappings;

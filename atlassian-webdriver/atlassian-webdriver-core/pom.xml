@@ -76,6 +76,13 @@
             <version>2.3.0</version>
         </dependency>
 
+
+        <dependency>
+          <groupId>com.atlassian.annotations</groupId>
+          <artifactId>atlassian-annotations</artifactId>
+          <version>0.4</version>
+        </dependency>
+
         <!-- Test dependencies -->
         <dependency>
             <groupId>org.mortbay.jetty</groupId>

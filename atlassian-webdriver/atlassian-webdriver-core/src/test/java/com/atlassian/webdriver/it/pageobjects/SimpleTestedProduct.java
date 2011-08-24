@@ -42,6 +42,7 @@ public class SimpleTestedProduct implements TestedProduct<WebDriverTester>
 
     public ProductInstance getProductInstance()
     {
+
         return productInstance;
     }
 
