@@ -4,7 +4,6 @@ import com.atlassian.webdriver.element.WebElementRetriever;
 import com.atlassian.webdriver.poller.webdriver.function.ConditionFunction;
 import com.atlassian.webdriver.utils.Check;
 import com.google.common.base.Preconditions;
-import com.sun.istack.internal.Nullable;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -22,7 +21,7 @@ public class HasClassFunction implements ConditionFunction
                 "className cannot be null");
     }
 
-    public Boolean apply(@Nullable final WebDriver from)
+    public Boolean apply(WebDriver from)
     {
         return Check.hasClass(className, elementRetriever.retrieveElement());
     }

@@ -15,7 +15,7 @@ public class FalseFunction implements ConditionFunction
         this.func = func;
     }
 
-    public Boolean apply(@Nullable final WebDriver driver)
+    public Boolean apply(WebDriver driver)
     {
         return !func.apply(driver);
     }

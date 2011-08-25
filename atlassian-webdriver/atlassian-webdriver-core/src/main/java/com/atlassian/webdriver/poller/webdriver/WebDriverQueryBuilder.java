@@ -4,7 +4,6 @@ import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.poller.webdriver.function.ConditionFunction;
 import com.atlassian.webdriver.poller.Query;
 import com.google.common.base.Function;
-import com.sun.istack.internal.Nullable;
 import org.openqa.selenium.WebDriver;
 
 import java.util.ArrayList;
@@ -92,7 +91,7 @@ class WebDriverQueryBuilder
             this.func2 = func2;
         }
 
-        public Boolean apply(@Nullable final WebDriver driver)
+        public Boolean apply(WebDriver driver)
         {
             return func1.apply(driver) && func2.apply(driver);
         }
@@ -109,7 +108,7 @@ class WebDriverQueryBuilder
             this.func2 = func2;
         }
 
-        public Boolean apply(@Nullable final WebDriver driver)
+        public Boolean apply(WebDriver driver)
         {
             return func1.apply(driver) || func2.apply(driver);
         }

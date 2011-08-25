@@ -2,7 +2,6 @@ package com.atlassian.webdriver.poller.webdriver.function.field;
 
 import com.atlassian.webdriver.element.WebElementFieldRetriever;
 import com.atlassian.webdriver.poller.webdriver.function.ConditionFunction;
-import com.sun.istack.internal.Nullable;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -17,7 +16,7 @@ public class IsEmptyFunction implements ConditionFunction
         this.fieldRetriever = fieldRetriever;
     }
 
-    public Boolean apply(@Nullable final WebDriver from)
+    public Boolean apply(WebDriver from)
     {
         String fieldValue = fieldRetriever.retrieveField();
         return fieldValue == null || fieldValue.isEmpty();

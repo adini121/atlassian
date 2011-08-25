@@ -5,7 +5,6 @@ import com.atlassian.webdriver.it.pageobjects.page.PollerPage;
 import com.atlassian.webdriver.poller.Poller;
 import com.atlassian.webdriver.poller.webdriver.function.ConditionFunction;
 import com.atlassian.webdriver.utils.Check;
-import com.sun.istack.internal.Nullable;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,7 +33,7 @@ public class TestPoller extends AbstractFileBasedServerTest
 
     ConditionFunction falseFunc = new ConditionFunction()
     {
-        public Boolean apply(@Nullable final WebDriver from)
+        public Boolean apply(WebDriver from)
         {
             return false;
         }
@@ -55,7 +54,7 @@ public class TestPoller extends AbstractFileBasedServerTest
                 driver.getTitle());
 
         poller.until("10ms").function(new ConditionFunction() {
-            public Boolean apply(@Nullable final WebDriver from)
+            public Boolean apply(WebDriver from)
             {
                 return from.getTitle().equals("JavaScriptUtils test page");
             }
@@ -69,7 +68,7 @@ public class TestPoller extends AbstractFileBasedServerTest
                 driver.getTitle());
         Assert.assertNotSame("Not real title", driver.getTitle());
         poller.until("10ms").function(new ConditionFunction() {
-            public Boolean apply(@Nullable final WebDriver from)
+            public Boolean apply(WebDriver from)
             {
                 return from.getTitle().equals("Not real title");
             }
@@ -296,7 +295,7 @@ public class TestPoller extends AbstractFileBasedServerTest
     public void testPollerFailure()
     {
         poller.until(1).function(new ConditionFunction() {
-            public Boolean apply(@Nullable final WebDriver from)
+            public Boolean apply(WebDriver from)
             {
                 return false;
             }

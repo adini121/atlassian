@@ -2,7 +2,6 @@ package com.atlassian.webdriver.poller.webdriver.function.element;
 
 import com.atlassian.webdriver.element.WebElementRetriever;
 import com.atlassian.webdriver.poller.webdriver.function.ConditionFunction;
-import com.sun.istack.internal.Nullable;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -17,7 +16,7 @@ public class IsEnabledFunction implements ConditionFunction
         this.elementRetriever = elementRetriever;
     }
     
-    public Boolean apply(@Nullable final WebDriver from)
+    public Boolean apply(WebDriver from)
     {
         return elementRetriever.retrieveElement().isEnabled();
     }

@@ -1,13 +1,8 @@
 package com.atlassian.webdriver.it.pageobjects.page;
 
 import com.atlassian.pageobjects.Page;
-import com.atlassian.webdriver.poller.webdriver.function.ConditionFunction;
 import com.atlassian.webdriver.poller.Poller;
-import com.sun.istack.internal.Nullable;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
 
 import javax.inject.Inject;
 
