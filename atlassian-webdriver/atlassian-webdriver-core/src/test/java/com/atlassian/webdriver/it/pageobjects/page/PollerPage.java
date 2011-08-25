@@ -22,48 +22,13 @@ public class PollerPage implements Page
     @Inject
     WebDriver driver;
 
-    @FindBy(id = "dialog-one")
-    WebElement dialogOneElement;
-
-    @FindBy(id = "dialog-one-show-button")
-    WebElement showDialogOneButton;
-
-    @FindBy(id = "dialog-one-hide-button")
-    WebElement hideDialogOneButton;
-
     public String getUrl()
     {
         return "/html/poller-test-page.html";
     }
 
-    public PollerPage showFunctionOneElement()
+    public Poller getPoller()
     {
-        WebElement el = driver.findElement(By.id("test"));
-        el.getText();
-
-        showDialogOneButton.click();
-
-        ConditionFunction func = new ConditionFunction() {
-
-            public Boolean apply(@Nullable final WebDriver from)
-            {
-                return dialogOneShowing();
-            }
-        };
-
-        poller.until().element(dialogOneElement).isVisible().execute();
-
-        return this;
-    }
-
-    public PollerPage hideFunctionOneElement()
-    {
-        hideDialogOneButton.click();
-        return this;
-    }
-
-    public boolean dialogOneShowing()
-    {
-        return dialogOneElement.isDisplayed();
+        return poller;
     }
 }

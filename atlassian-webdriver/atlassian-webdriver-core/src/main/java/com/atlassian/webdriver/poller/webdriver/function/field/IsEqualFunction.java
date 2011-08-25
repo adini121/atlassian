@@ -21,6 +21,17 @@ public class IsEqualFunction implements ConditionFunction
 
     public Boolean apply(@Nullable final WebDriver from)
     {
-        return retriever.retrieveField().equals(value);
+        String fieldValue = retriever.retrieveField();
+
+        if (fieldValue == null && value == null)
+        {
+            return true;
+        }
+        else if(fieldValue != null)
+        {
+            return fieldValue.equals(value);
+        }
+
+        return false;
     }
 }

@@ -21,6 +21,7 @@ public class EqualsIgnoresCaseFunction implements ConditionFunction
 
     public Boolean apply(@Nullable final WebDriver from)
     {
-        return fieldRetriever.retrieveField().equalsIgnoreCase(value);
+        String fieldValue = fieldRetriever.retrieveField();
+        return fieldValue != null && fieldValue.equalsIgnoreCase(value);
     }
 }

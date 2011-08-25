@@ -11,6 +11,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.inject.Inject;
 
 /**
@@ -24,6 +26,12 @@ public class WebDriverPoller implements Poller
 {
     // Default wait time is 30 seconds
     private static final String DEFAULT_INTERVAL_TIME = "30s";
+
+    // eg. 30s or 30 s
+    private final Pattern SECONDS_PATTERN = Pattern.compile("^([0-9]+)\\s*s$");
+    // eg. 30ms or 30 ms
+    private final Pattern MILLISECONDS_PATTERN = Pattern.compile("^([0-9]+)\\s*ms$");
+
 
     private AtlassianWebDriver driver;
 
@@ -62,7 +70,26 @@ public class WebDriverPoller implements Poller
      */
     public PollerQuery until(String timeoutStr)
     {
-        //TODO(jwilson): implement the timeoutStr parsing
-        return new WebDriverPollerQuery(new WebDriverQueryBuilder(driver, 30*1000));
+        int timeout;
+
+        Matcher secondsMatcher = SECONDS_PATTERN.matcher(timeoutStr);
+        Matcher milliSecondsMatcher = MILLISECONDS_PATTERN.matcher(timeoutStr);
+
+        if (secondsMatcher.matches())
+        {
+            timeout = Integer.parseInt(secondsMatcher.group(1)) * 1000;
+        }
+        else if (milliSecondsMatcher.matches())
+        {
+            timeout = Integer.parseInt(milliSecondsMatcher.group(1));
+        }
+        else
+        {
+            throw new IllegalArgumentException(
+                    String.format("The timeout string does not match expected imput: "
+                            + "eg. 15s or 10ms, but was %s", timeoutStr));
+        }
+
+        return new WebDriverPollerQuery(new WebDriverQueryBuilder(driver, timeout));
     }
 }

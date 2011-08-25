@@ -13,10 +13,22 @@ public interface StringValueQuery
     ExecutablePollerQuery contains(String value);
     ExecutablePollerQuery notContains(String value);
 
+    /**
+     * isEqual will evaluate to true if both values are null or equal.
+     */
     ExecutablePollerQuery isEqual(String value);
     ExecutablePollerQuery notEqual(String value);
 
+    /**
+     * isEmpty should evaludate to true if the value is null
+     * or is the empty String
+     */
     ExecutablePollerQuery isEmpty();
+
+    /**
+     * isNotEmpty should evaluate to true if the value is not null
+     * and is not the empty String.
+     */
     ExecutablePollerQuery isNotEmpty();
 
     ExecutablePollerQuery endsWith(String value);

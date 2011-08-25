@@ -21,7 +21,8 @@ public class ContainsFunction implements ConditionFunction
 
     public Boolean apply(@Nullable final WebDriver from)
     {
-        return retriever.retrieveField().contains(value);
+        String fieldValue = retriever.retrieveField();
+        return fieldValue != null && fieldValue.contains(value);
     }
 }
 

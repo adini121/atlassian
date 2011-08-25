@@ -19,6 +19,7 @@ public class IsEmptyFunction implements ConditionFunction
 
     public Boolean apply(@Nullable final WebDriver from)
     {
-        return fieldRetriever.retrieveField().isEmpty();
+        String fieldValue = fieldRetriever.retrieveField();
+        return fieldValue == null || fieldValue.isEmpty();
     }
 }

@@ -3,10 +3,9 @@ package com.atlassian.webdriver.poller.webdriver.function.element;
 import com.atlassian.webdriver.element.WebElementRetriever;
 import com.atlassian.webdriver.poller.webdriver.function.ConditionFunction;
 import com.sun.istack.internal.Nullable;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
-
-import java.util.NoSuchElementException;
 
 /**
  * @since 2.1.0

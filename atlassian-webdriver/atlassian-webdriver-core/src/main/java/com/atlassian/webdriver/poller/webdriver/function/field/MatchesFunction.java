@@ -22,6 +22,7 @@ public class MatchesFunction implements ConditionFunction
 
     public Boolean apply(@Nullable final WebDriver from)
     {
-        return fieldRetriever.retrieveField().matches(value);
+        String fieldValue = fieldRetriever.retrieveField();
+        return fieldValue != null && fieldValue.matches(value);
     }
 }

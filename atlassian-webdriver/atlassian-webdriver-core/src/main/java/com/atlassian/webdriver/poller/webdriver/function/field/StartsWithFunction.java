@@ -6,9 +6,7 @@ import com.sun.istack.internal.Nullable;
 import org.openqa.selenium.WebDriver;
 
 /**
- * TODO: Document this class / interface here
- *
- * @since v1.0
+ * @since 2.1.0
  */
 public class StartsWithFunction implements ConditionFunction
 {
@@ -23,6 +21,7 @@ public class StartsWithFunction implements ConditionFunction
 
     public Boolean apply(@Nullable final WebDriver from)
     {
-        return fieldRetriever.retrieveField().startsWith(value);
+        String fieldValue = fieldRetriever.retrieveField();
+        return fieldValue != null && fieldValue.startsWith(value);
     }
 }

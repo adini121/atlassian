@@ -32,13 +32,18 @@ public class FileBasedServer
      */
     public static void main(String... args) throws Exception
     {
-        FileBasedServer server = new FileBasedServer();
+        FileBasedServer server = new FileBasedServer(5555);
         server.startServer();
         int port = server.getPort();
         System.out.println("Server started: " + "http://localhost:" + port);
     }
 
     private final Map<String,String> urlMappings;
+
+    public FileBasedServer(int port)
+    {
+        this(new HashMap<String, String>(), port);
+    }
 
     public FileBasedServer()
     {
@@ -146,7 +151,7 @@ public class FileBasedServer
         }
         catch (IOException e)
         {
-            throw new RuntimeException("Error opening socket", e);
+            throw new RuntimeException("Error opening socket, port: " + port + " may already be in use", e);
         }
         finally
         {
@@ -158,7 +163,7 @@ public class FileBasedServer
                 }
                 catch (IOException e)
                 {
-                    throw new RuntimeException("Error closing socket", e);
+                    throw new RuntimeException("Error closing sockets", e);
                 }
             }
         }
