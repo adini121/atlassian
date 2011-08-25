@@ -1,6 +1,5 @@
 package com.atlassian.webdriver.poller.webdriver.function;
 
-import com.sun.istack.internal.Nullable;
 import org.openqa.selenium.WebDriver;
 
 /**
