@@ -124,11 +124,19 @@ public class TestedProductFactory
         return annotation;
     }
 
-    public static <P extends TestedProduct<?>> P create(Class<P> testedProductClass, ProductInstance instance, TesterFactory<?> testerFactory) {
+    /**
+     * Creates a tested product using the passed tester factory and product instance.
+     * @param testedProductClass The tested product class
+     * @param productInstance The product instance
+     * @param testerFactory The tester factory to use to pass to the tested product
+     * @param <P> The tested product type
+     * @return The created tested product
+     */
+    public static <P extends TestedProduct<?>> P create(Class<P> testedProductClass, ProductInstance productInstance, TesterFactory<?> testerFactory) {
         try
         {
             Constructor<P> c = testedProductClass.getConstructor(TesterFactory.class, ProductInstance.class);
-            return c.newInstance(testerFactory, instance);
+            return c.newInstance(testerFactory, productInstance);
         }
         catch (NoSuchMethodException e)
         {
