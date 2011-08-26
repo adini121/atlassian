@@ -283,4 +283,18 @@ public class TestElement extends AbstractFileBasedServerTest
         button.click();
         waitUntilEquals("Hello Developer!", message.timed().getText());
     }
+
+    @Test
+    public void testExecuteScriptOnAnElement()
+    {
+        ElementsPage page = product.visit(ElementsPage.class);
+        PageElement button = elementFinder.find(By.id(("test11_button")));
+
+        assertFalse(button.hasClass("test"));
+
+        button.javascript().execute("$(arguments[0]).addClass('test')");
+        Poller.waitUntilTrue(button.timed().hasClass("test"));
+
+        assertEquals(Boolean.TRUE, button.javascript().execute("return $(arguments[0]).hasClass('test')"));
+    }
 }

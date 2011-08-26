@@ -38,4 +38,14 @@ public class PageElementJavascriptExecutor
     {
         JavaScriptUtils.dispatchMouseEvent("click", element, driver);
     }
+
+    /**
+     * Executes custom script on this element
+     * @param script javascript to execute
+     * @return One of Boolean, Long, String, List or WebElement. Or null.
+     */
+    public Object execute(String script)
+    {
+        return JavaScriptUtils.execute(script, driver, element);
+    }
 }
