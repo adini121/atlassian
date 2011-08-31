@@ -4,6 +4,7 @@ import com.atlassian.pageobjects.binder.Init;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.utils.Check;
 import com.atlassian.webdriver.utils.MouseEvents;
+import com.atlassian.webdriver.utils.by.ByJquery;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 

@@ -17,17 +17,17 @@ public class TestDashboard extends AbstractConfluenceWebTest
     @Test
     public void testDashboard()
     {
-        DashboardPage dashboard = CONFLUENCE.gotoHomePage();
+        DashboardPage dashboard = product.getTestedProduct().gotoHomePage();
         assertTrue(dashboard.isAdmin());
         assertTrue(dashboard.isLoggedIn());
 
-        pageBinder.navigateToAndBind(LogoutPage.class);
+        product.visit(LogoutPage.class);
     }
 
     @Test
     public void testDashboardMenu()
     {
-        DashboardPage dashboard = CONFLUENCE.gotoHomePage();
+        DashboardPage dashboard = product.getTestedProduct().gotoHomePage();
         ConfluenceAdminHomePage adminPage = dashboard.getBrowseMenu().open().gotoAdminPage();
 
         LogoutPage logoutPage = adminPage.getUserMenu().open().logout();

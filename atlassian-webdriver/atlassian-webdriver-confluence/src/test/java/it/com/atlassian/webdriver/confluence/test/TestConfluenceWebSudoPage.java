@@ -16,14 +16,14 @@ public class TestConfluenceWebSudoPage extends AbstractConfluenceWebTest
     @Test
     public void testAdministratorAccessPage()
     {
-        PeopleDirectoryPage peoplePage = CONFLUENCE.visit(WebSudoPage.class).confirm(PeopleDirectoryPage.class);
+        PeopleDirectoryPage peoplePage = product.visit(WebSudoPage.class).confirm(PeopleDirectoryPage.class);
         assertTrue(peoplePage.hasUser("admin"));
     }
 
     @Test
     public void testWebSudoBanner()
     {
-        PeopleDirectoryPage peoplePage = CONFLUENCE.visit(WebSudoPage.class).confirm(PeopleDirectoryPage.class);
+        PeopleDirectoryPage peoplePage = product.visit(WebSudoPage.class).confirm(PeopleDirectoryPage.class);
         WebSudoBanner webSudoBanner = peoplePage.getHeader().getWebSudoBanner();
         assertTrue(webSudoBanner.isShowing());
 

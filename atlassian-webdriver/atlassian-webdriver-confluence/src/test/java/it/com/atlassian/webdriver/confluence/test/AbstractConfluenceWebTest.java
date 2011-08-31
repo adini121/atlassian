@@ -2,33 +2,37 @@ package it.com.atlassian.webdriver.confluence.test;
 
 import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.TestedProductFactory;
+import com.atlassian.pageobjects.page.LoginPage;
 import com.atlassian.webdriver.confluence.ConfluenceTestedProduct;
 import com.atlassian.webdriver.confluence.page.DashboardPage;
+import com.atlassian.webdriver.testing.rule.IgnoreBrowserRule;
+import com.atlassian.webdriver.testing.rule.SessionCleanupRule;
+import com.atlassian.webdriver.testing.rule.TestBrowserRule;
+import com.atlassian.webdriver.testing.rule.TestedProductRule;
+import com.atlassian.webdriver.testing.rule.WebDriverScreenshotRule;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 
 /**
  */
 public abstract class AbstractConfluenceWebTest
 {
 
-    protected static final ConfluenceTestedProduct CONFLUENCE = TestedProductFactory.create(ConfluenceTestedProduct.class);
+    @Rule
+    public IgnoreBrowserRule ignoreRule = new IgnoreBrowserRule();
+    @Rule public TestedProductRule<ConfluenceTestedProduct> product =
+        new TestedProductRule<ConfluenceTestedProduct>(ConfluenceTestedProduct.class);
+    @Rule public TestBrowserRule testBrowserRule = new TestBrowserRule();
+    @Rule public WebDriverScreenshotRule webDriverScreenshotRule = new WebDriverScreenshotRule();
+    @Rule public SessionCleanupRule sessionCleanupRule = new SessionCleanupRule();
 
     protected DashboardPage dashboard;
-
-    protected PageBinder pageBinder;
 
     @Before
     public void login()
     {
-        dashboard = CONFLUENCE.gotoLoginPage().loginAsSysAdmin(DashboardPage.class);
-        pageBinder = CONFLUENCE.getPageBinder();
-    }
-
-    @After
-    public void cleanUpCookies()
-    {
-        CONFLUENCE.getTester().getDriver().manage().deleteAllCookies();
+        dashboard = product.visit(LoginPage.class).loginAsSysAdmin(DashboardPage.class);
     }
 
 }

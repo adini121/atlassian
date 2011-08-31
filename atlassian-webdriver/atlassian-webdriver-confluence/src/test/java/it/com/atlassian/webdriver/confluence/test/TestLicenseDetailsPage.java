@@ -11,7 +11,7 @@ public class TestLicenseDetailsPage extends AbstractConfluenceWebTest
     @Test
     public void testLicenseDetailsPage()
     {
-        pageBinder.navigateToAndBind(LicenseDetailsPage.class);
+        product.visit(LicenseDetailsPage.class);
     }
 
 }
