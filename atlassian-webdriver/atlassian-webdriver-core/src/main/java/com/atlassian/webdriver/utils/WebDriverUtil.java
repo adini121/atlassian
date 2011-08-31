@@ -8,7 +8,7 @@ import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 
 /**
- * @since v2.1
+ * @since 2.1.0
  */
 public class WebDriverUtil
 {

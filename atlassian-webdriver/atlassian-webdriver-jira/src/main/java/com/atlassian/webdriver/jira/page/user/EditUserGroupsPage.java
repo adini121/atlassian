@@ -14,7 +14,7 @@ import java.util.Set;
 /**
  * Page object implementation for the edit user's group page in JIRA. 
  *
- * @since v1.0
+ * @since 2.0
  */
 public class  EditUserGroupsPage extends JiraAdminAbstractPage
 {

@@ -3,7 +3,7 @@ package com.atlassian.webdriver.it.pageobjects.page;
 import com.atlassian.pageobjects.Page;
 
 /**
- * @since v2.1
+ * @since 2.1.0
  */
 public class ByJqueryPage implements Page
 {

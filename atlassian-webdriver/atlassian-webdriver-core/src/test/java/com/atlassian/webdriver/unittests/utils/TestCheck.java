@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
 import static org.junit.Assert.*;
 
 /**
- * @since v2.1
+ * @since 2.1.0
  */
 public class TestCheck
 {

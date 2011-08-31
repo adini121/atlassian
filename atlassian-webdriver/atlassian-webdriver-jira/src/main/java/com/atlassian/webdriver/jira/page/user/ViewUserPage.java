@@ -6,9 +6,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 /**
- * TODO: Document this class / interface here
- *
- * @since v1.0
+ * @since 2.0
  */
 public class ViewUserPage extends JiraAdminAbstractPage
 {

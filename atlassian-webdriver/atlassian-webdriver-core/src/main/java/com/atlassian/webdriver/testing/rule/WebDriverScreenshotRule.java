@@ -11,7 +11,12 @@ import java.io.File;
 
 /**
  * A rule for taking screenshots when a webdriver test fails.
- * It will also dump the html source of the page.
+ * It will also dump the html source of the page to the target/webDriverTests directory.
+ *
+ * WARNING: If the destination directory for this test already exists then the directory will
+ * be cleared up before it runs so you may lose the previous dumped html file and screenshot.
+ *
+ * @since 2.1.0
  */
 public class WebDriverScreenshotRule extends TestWatchman
 {

@@ -25,7 +25,7 @@ import org.junit.runners.model.Statement;
  *     @Rule public TestBrowserRule testBrowserRule = new TestBrowserRule();
  * </code>
  *
- * @since v2.1
+ * @since 2.1.0
  */
 public class TestBrowserRule implements MethodRule
 {

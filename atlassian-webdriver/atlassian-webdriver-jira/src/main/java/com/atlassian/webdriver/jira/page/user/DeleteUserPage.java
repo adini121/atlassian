@@ -11,9 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * TODO: Document this class / interface here
- *
- * @since v1.0
+ * @since 2.0
  */
 public class DeleteUserPage extends JiraAdminAbstractPage
 {

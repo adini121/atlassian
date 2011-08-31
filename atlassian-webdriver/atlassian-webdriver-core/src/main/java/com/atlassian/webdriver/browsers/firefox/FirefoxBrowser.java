@@ -13,7 +13,7 @@ import java.io.IOException;
 
 /**
  * A helper utility for obtaining a FirefoxDriver.
- * @since v2.0
+ * @since 2.0
  */
 public final class FirefoxBrowser
 {

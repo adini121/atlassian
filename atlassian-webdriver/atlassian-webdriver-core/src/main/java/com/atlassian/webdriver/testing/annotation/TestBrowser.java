@@ -14,6 +14,8 @@ import java.lang.annotation.Target;
  *
  * eg. @TestBrowser("firefox-3.5")
  * @see {@link TestBrowserRule}
+ *
+ * @since 2.1.0
  */
 @Retention (RetentionPolicy.RUNTIME)
 @Target ({ElementType.TYPE, ElementType.PACKAGE, ElementType.METHOD})

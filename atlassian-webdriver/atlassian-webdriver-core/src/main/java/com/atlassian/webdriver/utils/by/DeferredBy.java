@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Looks for an element by using the WebDriver wait and ElementLocated condition.
  * It will wait up to 20 seconds for the element to be located.
- * @since v1.0
+ * @since 2.0
  */
 public abstract class DeferredBy extends By
 {

@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @since v2.0
+ * @since 2.0
  * @deprecated This class is no longer necessary as most of this is provided
  * by the rules in: {@link com.atlassian.webdriver.testing.rule}
  */

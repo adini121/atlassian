@@ -16,7 +16,7 @@ import java.util.Map;
  * Once the driver is running it will be re-used if the same
  * browser property is retrieved again.
  * When the runtime is shutdown it will handle cleaning up the browser.
- * @since v2.1
+ * @since 2.1.0
  */
 public class LifecycleAwareWebDriverGrid
 {

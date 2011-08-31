@@ -11,9 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * TODO: Document this class / interface here
- *
- * @since v1.0
+ * @since 2.0
  */
 public class AddUserPage extends JiraAdminAbstractPage
 {

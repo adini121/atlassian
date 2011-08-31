@@ -13,6 +13,10 @@ import org.slf4j.LoggerFactory;
  * A rule that allows annotating test methods with the {@link IgnoreBrowser}
  * annotation and will skip the test if the current running driver
  * is in the list of browsers to ignore.
+ *
+ * WARNING: This currently does not report the test as skipped in the final report.
+ *
+ * @since 2.1.0
  */
 public class IgnoreBrowserRule implements MethodRule
 {

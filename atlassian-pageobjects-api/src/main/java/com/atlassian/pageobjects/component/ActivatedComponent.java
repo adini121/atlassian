@@ -1,7 +1,7 @@
 package com.atlassian.pageobjects.component;
 
 /**
- * @since v2.1
+ * @since 2.1.0
  */
 public interface ActivatedComponent<T>
 {

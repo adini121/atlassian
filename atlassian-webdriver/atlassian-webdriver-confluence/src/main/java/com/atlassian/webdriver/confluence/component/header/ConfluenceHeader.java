@@ -18,7 +18,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 /**
- * @since v2.0
+ * @since 2.0
  */
 public class ConfluenceHeader implements Header, UserDiscoverable
 {

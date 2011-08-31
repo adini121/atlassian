@@ -25,6 +25,8 @@ import java.util.regex.Pattern;
  * ByJQuery.$("('div.className li a').parent('div')"); </code> It accepts simple searches like the
  * first example that don't need to be wrapped in brackets, but if you want to call another jQuery
  * method like <em>.parent</em> the first selector needs to be wrapped in brakcets.
+ *
+ * @since 2.0
  */
 public abstract class ByJquery extends By
 {

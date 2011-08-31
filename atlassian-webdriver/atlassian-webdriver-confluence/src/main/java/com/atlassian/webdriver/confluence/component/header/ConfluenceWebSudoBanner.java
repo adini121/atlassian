@@ -6,12 +6,13 @@ import com.atlassian.pageobjects.component.WebSudoBanner;
 import com.atlassian.pageobjects.page.HomePage;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.utils.Check;
+import com.google.common.base.Preconditions;
 import org.openqa.selenium.By;
 
 import javax.inject.Inject;
 
 /**
- * @since v2.1
+ * @since 2.1.0
  */
 public class ConfluenceWebSudoBanner implements WebSudoBanner
 {
@@ -36,6 +37,8 @@ public class ConfluenceWebSudoBanner implements WebSudoBanner
 
     public <M extends Page> M dropWebSudo(final Class<M> nextPage)
     {
+        Preconditions.checkNotNull("nextPage can not be null.", nextPage);
+
         if (isShowing())
         {
             driver.findElement(By.id("websudo-drop")).click();

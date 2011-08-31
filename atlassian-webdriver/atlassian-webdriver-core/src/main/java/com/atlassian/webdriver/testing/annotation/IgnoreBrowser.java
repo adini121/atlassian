@@ -13,6 +13,8 @@ import java.lang.annotation.Target;
  * Annotate a test method with this type if using the
  * {@link com.atlassian.webdriver.it.WebDriverBrowserRunner} the test method will be
  * skipped.
+ *
+ * @since 2.1.0
  */
 @Retention (RetentionPolicy.RUNTIME)
 @Target (ElementType.METHOD)

@@ -10,9 +10,7 @@ import org.junit.Test;
 import static junit.framework.Assert.assertEquals;
 
 /**
- * TODO: Document this class / interface here
- *
- * @since v1.0
+ * @since 2.0
  */
 public class TestAdminHomePage
 {

@@ -9,7 +9,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 /**
- * @since v2.1
+ * @since 2.1.0
  */
 public class UserAgentPage implements Page
 {
