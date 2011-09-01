@@ -22,6 +22,31 @@ public final class WebDriverQueryFunctions
         throw new AssertionError("Don't instantiate me");
     }
 
+    private static abstract class AbstractWebElementFunction<T> implements Function<WebElement,T>
+    {
+        private final String name;
+
+        public AbstractWebElementFunction(String name)
+        {
+            this.name = name;
+        }
+
+        @Override
+        public String toString()
+        {
+            return name;
+        }
+    }
+
+    private static abstract class AbstractWebElementPredicate extends AbstractWebElementFunction<Boolean>
+    {
+
+        public AbstractWebElementPredicate(String name)
+        {
+            super(name);
+        }
+    }
+
     public static Supplier<Boolean> isPresent(final SearchContext searchContext, final By locator)
     {
         return new Supplier<Boolean>()
@@ -30,24 +55,33 @@ public final class WebDriverQueryFunctions
             {
                 return Check.elementExists(locator, searchContext);
             }
+
+            @Override
+            public String toString()
+            {
+                return "isPresent";
+            }
         };
+
     }
 
     public static Function<WebElement, Boolean> isPresent()
     {
-        return new Function<WebElement, Boolean>()
+        return new AbstractWebElementPredicate("isPresent")
         {
             public Boolean apply(WebElement from)
             {
                 // if we're here, the element was found
                 return true;
             }
+
+
         };
     }
 
     public static Function<WebElement, Boolean> isVisible()
     {
-        return new Function<WebElement, Boolean>()
+        return new AbstractWebElementPredicate("isVisible")
         {
             public Boolean apply(WebElement from)
             {
@@ -58,7 +92,7 @@ public final class WebDriverQueryFunctions
 
     public static Function<WebElement, Boolean> isEnabled()
     {
-        return new Function<WebElement, Boolean>()
+        return new AbstractWebElementPredicate("isEnabled")
         {
             public Boolean apply(WebElement from)
             {
@@ -69,7 +103,7 @@ public final class WebDriverQueryFunctions
 
     public static Function<WebElement, Boolean> isSelected()
     {
-       return new Function<WebElement, Boolean>()
+        return new AbstractWebElementPredicate("isSelected")
         {
             public Boolean apply(WebElement from)
             {
@@ -127,7 +161,7 @@ public final class WebDriverQueryFunctions
     {
         checkNotNull(attributeName);
         checkNotNull(expectedValue);
-        return new Function<WebElement, Boolean>()
+        return new AbstractWebElementPredicate("hasAttribute")
         {
             public Boolean apply(WebElement from)
             {
@@ -139,7 +173,7 @@ public final class WebDriverQueryFunctions
     public static Function<WebElement, Boolean> hasClass(final String className)
     {
         checkNotNull(className);
-        return new Function<WebElement, Boolean>()
+        return new AbstractWebElementPredicate("hasClass")
         {
             public Boolean apply(WebElement from)
             {
@@ -151,7 +185,7 @@ public final class WebDriverQueryFunctions
     public static Function<WebElement, Boolean> hasText(final String text)
     {
         checkNotNull(text);
-        return new Function<WebElement, Boolean>()
+        return new AbstractWebElementPredicate("hasText")
         {
             public Boolean apply(WebElement from)
             {
@@ -164,7 +198,7 @@ public final class WebDriverQueryFunctions
     public static Function<WebElement, Boolean> hasValue(final String value)
     {
         checkNotNull(value);
-        return new Function<WebElement, Boolean>()
+        return new AbstractWebElementPredicate("hasValue")
         {
             public Boolean apply(WebElement from)
             {
