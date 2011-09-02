@@ -913,4 +913,21 @@ public class MockSeleniumClient implements SeleniumClient
     public void seleniumKeyPress(final String locator, final String key)
     {
     }
+
+    public void evaluate (String command)
+    {
+    }
+
+    public void captureEntirePageScreenshot (String filePath)
+    {
+    }
+
+    public void refreshAndWait ()
+    {
+    }
+
+    public boolean waitForJQuery (long waitTimeMillis)
+    {
+        return false;
+    }
 }

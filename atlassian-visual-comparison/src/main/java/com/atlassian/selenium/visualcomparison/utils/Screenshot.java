@@ -1,6 +1,6 @@
 package com.atlassian.selenium.visualcomparison.utils;
 
-import com.atlassian.selenium.SeleniumClient;
+import com.atlassian.selenium.visualcomparison.VisualComparableClient;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -14,10 +14,10 @@ public class Screenshot implements Comparable<Screenshot>
     private String id;
     private File file;
 
-    public Screenshot(SeleniumClient client, String id, String imageDir, ScreenResolution resolution) throws IOException
+    public Screenshot(VisualComparableClient client, String id, String imageDir, ScreenResolution resolution) throws IOException
     {
         final String filePath = imageDir + "/" + id + "." + resolution + ".png";
-        client.captureEntirePageScreenshot(filePath, "");
+        client.captureEntirePageScreenshot(filePath);
         init(filePath, id, resolution);
     }
 

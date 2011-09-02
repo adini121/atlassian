@@ -1,6 +1,6 @@
 package com.atlassian.selenium.visualcomparison.utils;
 
-import com.atlassian.selenium.SeleniumClient;
+import com.atlassian.selenium.visualcomparison.VisualComparableClient;
 
 public class ScreenResolution implements Comparable<ScreenResolution>
 {
@@ -50,13 +50,12 @@ public class ScreenResolution implements Comparable<ScreenResolution>
         return width + "x" + height;
     }
 
-    public void resize(SeleniumClient client, boolean refresh)
+    public void resize(VisualComparableClient client, boolean refresh)
     {
-        client.getEval("window.resizeTo(" + width + ", " + height + ");");
+        client.evaluate("window.resizeTo(" + width + ", " + height + ");");
         if (refresh)
         {
-            client.refresh();
-            client.waitForPageToLoad();
+            client.refreshAndWait();
         }
     }
 }

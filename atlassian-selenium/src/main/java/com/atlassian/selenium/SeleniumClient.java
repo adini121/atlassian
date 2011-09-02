@@ -2,6 +2,7 @@ package com.atlassian.selenium;
 
 import com.atlassian.webtest.ui.keys.KeyEventType;
 import com.thoughtworks.selenium.Selenium;
+import com.atlassian.selenium.visualcomparison.VisualComparableClient;
 
 import java.util.Collection;
 
@@ -10,7 +11,7 @@ import java.util.Collection;
  * Extends the {@link Selenium} client to provide a more sensible implementation
  * as well some extra utility methods such as keypress.
  */
-public interface SeleniumClient extends Selenium
+public interface SeleniumClient extends Selenium, VisualComparableClient
 {
 
     /**

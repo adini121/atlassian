@@ -600,4 +600,38 @@ public class SingleBrowserSeleniumClient extends DefaultSelenium implements Sele
         }
 
     }
+
+    public void evaluate (String command)
+    {
+        // For compatibility with VisualComparableClient
+        this.getEval(command);
+    }
+
+    public void captureEntirePageScreenshot (String filePath)
+    {
+        // For compatibility with VisualComparableClient
+        this.captureEntirePageScreenshot(filePath, "");
+    }
+
+    public void refreshAndWait ()
+    {
+        // For compatibility with VisualComparableClient
+        this.refresh();
+        this.waitForPageToLoad();
+    }
+
+    public boolean waitForJQuery (long waitTimeMillis)
+    {
+        // For compatibility with VisualComparableClient
+        this.waitForCondition("selenium.browserbot.getCurrentWindow().jQuery.active == 0;", Long.toString(400));
+        try
+        {
+            Thread.sleep(waitTimeMillis);
+        }
+        catch (InterruptedException e)
+        {
+            return false;
+        }
+        return true;
+    }
 }

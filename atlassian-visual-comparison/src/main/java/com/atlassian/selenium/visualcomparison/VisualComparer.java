@@ -1,7 +1,5 @@
 package com.atlassian.selenium.visualcomparison;
 
-import com.atlassian.selenium.Condition;
-import com.atlassian.selenium.SeleniumClient;
 import com.atlassian.selenium.visualcomparison.utils.ScreenResolution;
 import com.atlassian.selenium.visualcomparison.utils.Screenshot;
 import com.atlassian.selenium.visualcomparison.utils.ScreenshotDiff;
@@ -14,22 +12,30 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
 
-public class SeleniumVisualComparer
+public class VisualComparer
 {
     private ScreenResolution[] resolutions = new ScreenResolution[]
             {
                     new ScreenResolution(1280, 1024)
             };
-    private SeleniumClient client;
+    private VisualComparableClient client;
     private boolean refreshAfterResize = false;
     private boolean reportingEnabled = false;
     private String reportOutputPath;
     private String imageSubDirName = "report_images";
     private String tempPath = System.getProperty("java.io.tmpdir");
     private Map<String, String> uiStringReplacements = null;
-    private Condition waitBeforeScreenshotCondition = null;
+    private long waitforJQueryTimeout = 0;
 
-    public SeleniumVisualComparer(SeleniumClient client)
+    public long getWaitforJQueryTimeout() {
+        return waitforJQueryTimeout;
+    }
+
+    public void setWaitforJQueryTimeout(long waitforJQueryTimeout) {
+        this.waitforJQueryTimeout = waitforJQueryTimeout;
+    }
+
+    public VisualComparer(VisualComparableClient client)
     {
         this.client = client;
     }
@@ -116,11 +122,11 @@ public class SeleniumVisualComparer
         for (ScreenResolution res : resolutions)
         {
             res.resize(client, refreshAfterResize);
-            if(waitBeforeScreenshotCondition != null)
+            if (waitforJQueryTimeout > 0)
             {
-                if(!waitBeforeScreenshotCondition.executeTest(client))
+                if (!client.waitForJQuery (waitforJQueryTimeout))
                 {
-                    Assert.fail(waitBeforeScreenshotCondition.errorMessage());
+                    Assert.fail("Timed out while waiting for jQuery to complete");
                 }
             }
             if (uiStringReplacements != null)
@@ -158,7 +164,7 @@ public class SeleniumVisualComparer
 
     protected void replaceUIHtml(String id, String newContent)
     {
-        client.getEval("window.document.getElementById('" + id + "').innerHTML = \"" + newContent + "\"");
+        client.evaluate("window.document.getElementById('" + id + "').innerHTML = \"" + newContent + "\"");
     }
 
     public boolean compareScreenshots(ArrayList<Screenshot> oldScreenshots, ArrayList<Screenshot> newScreenshots)
@@ -186,15 +192,5 @@ public class SeleniumVisualComparer
     public ScreenshotDiff getScreenshotDiff(Screenshot oldScreenshot, Screenshot newScreenshot) throws Exception
     {
         return oldScreenshot.getDiff(newScreenshot);
-    }
-
-    public Condition getWaitBeforeScreenshotCondition()
-    {
-        return waitBeforeScreenshotCondition;
-    }
-
-    public void setWaitBeforeScreenshotCondition(final Condition waitBeforeScreenshotCondition)
-    {
-        this.waitBeforeScreenshotCondition = waitBeforeScreenshotCondition;
     }
 }

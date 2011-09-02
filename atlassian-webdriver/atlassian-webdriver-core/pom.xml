@@ -43,6 +43,11 @@
             <artifactId>atlassian-pageobjects-api</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.atlassian.selenium</groupId>
+            <artifactId>atlassian-visual-comparison</artifactId>
+            <version>${project.version}</version>
+        </dependency>
          <dependency>
             <groupId>com.atlassian.browsers</groupId>
             <artifactId>atlassian-browsers-auto</artifactId>

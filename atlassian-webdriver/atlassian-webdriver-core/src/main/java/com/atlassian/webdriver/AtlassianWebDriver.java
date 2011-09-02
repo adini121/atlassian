@@ -6,13 +6,14 @@ import org.openqa.selenium.HasInputDevices;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
+import com.atlassian.selenium.visualcomparison.VisualComparableClient;
 
 import java.io.File;
 
 /**
  * Represents the web browser, adds common helper methods on top of <tt>WebDriver</tt>
  */
-public interface AtlassianWebDriver extends WebDriver, JavascriptExecutor, HasInputDevices
+public interface AtlassianWebDriver extends WebDriver, JavascriptExecutor, HasInputDevices, VisualComparableClient
 {
     /**
      * Gets the underlying <tt>WebDriver</tt>.

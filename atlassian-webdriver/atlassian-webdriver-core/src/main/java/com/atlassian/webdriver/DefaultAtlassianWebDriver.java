@@ -8,6 +8,7 @@ import com.atlassian.webdriver.utils.element.ElementLocated;
 import com.atlassian.webdriver.utils.element.ElementNotLocated;
 import com.atlassian.webdriver.utils.element.ElementNotVisible;
 import com.google.common.base.Function;
+import com.sun.istack.internal.Nullable;
 import org.apache.commons.io.IOUtils;
 import org.apache.xmlbeans.impl.common.IOUtil;
 import org.openqa.selenium.By;
@@ -233,6 +234,11 @@ public class DefaultAtlassianWebDriver implements AtlassianWebDriver
         return driver.manage();
     }
 
+    public Object executeScript(final String script)
+    {
+        return ((JavascriptExecutor)driver).executeScript(script);
+    }
+
     public Object executeScript(final String script, final Object... args)
     {
         return ((JavascriptExecutor)driver).executeScript(script, args);
@@ -256,5 +262,44 @@ public class DefaultAtlassianWebDriver implements AtlassianWebDriver
     public Mouse getMouse()
     {
         return ((HasInputDevices)driver).getMouse();
+    }
+
+    // Functions for VisualComparableClient support
+
+    public void captureEntirePageScreenshot (String filePath)
+    {
+        takeScreenshotTo(new File (filePath));
+    }
+
+    public void evaluate (String command)
+    {
+        executeScript(command);
+    }
+
+    public void refreshAndWait ()
+    {
+        // WebDriver automatically waits, or so the docs say.
+        driver.navigate().refresh();
+    }
+
+
+    public boolean waitForJQuery (long waitTimeMillis)
+    {
+        // For compatibility with VisualComparableClient
+        this.waitUntil(new Function<WebDriver, Boolean>() {
+            public Boolean apply(@Nullable WebDriver webDriver) {
+                String jQueryActive = ((JavascriptExecutor)webDriver).executeScript("return (window.jQuery.active)").toString();
+                return (jQueryActive).equals ("0");
+            }
+        }, 400);
+        try
+        {
+            Thread.sleep(waitTimeMillis);
+        }
+        catch (InterruptedException e)
+        {
+            return false;
+        }
+        return true;
     }
 }

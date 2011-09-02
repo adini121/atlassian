@@ -38,6 +38,11 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.atlassian.selenium</groupId>
+            <artifactId>atlassian-visual-comparison</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
             <version>${selenium.version}</version>
@@ -129,11 +134,5 @@
             <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
-      <dependency>
-        <groupId>org.apache.velocity</groupId>
-        <artifactId>velocity</artifactId>
-        <version>1.6.2</version>
-        <scope>compile</scope>
-      </dependency>
     </dependencies>
 </project>
