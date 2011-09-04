@@ -1,6 +1,7 @@
 package com.atlassian.selenium.visualcomparison.utils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class BoundingBox
 {
@@ -115,6 +116,13 @@ public class BoundingBox
         return getMarginBottom(maxY) - getMarginTop() + 1;
     }
 
+    public boolean contains (int x, int y)
+    {
+        // Return true if the given co-ords are within this box.
+        return ((x >= left) && (x <= right) &&
+                (y >= top) && (y <= bottom));
+    }
+
     public boolean isNear(int x, int y)
     {
         // Return true if the given co-ords are within this box, or within the given margin of it.
@@ -191,5 +199,22 @@ public class BoundingBox
             }
         }
         while (mergePerformedThisLoop);
+    }
+
+    public static void deleteSingleLineBoxes(List<BoundingBox> boxes)
+    {
+        // Remove any changes that are only one pixel wide or high
+        for (int i = 0; i < boxes.size(); )
+        {
+            BoundingBox box = boxes.get(i);
+            if (box.getWidth() == 1 || box.getHeight() == 1)
+            {
+                boxes.remove(i);
+            }
+            else
+            {
+                i++;
+            }
+        }
     }
 }

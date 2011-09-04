@@ -4,6 +4,7 @@ import org.apache.velocity.VelocityContext;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.util.List;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -19,10 +20,11 @@ public class ScreenshotDiff
     private ScreenResolution resolution;
     private BufferedImage diffImage;
     private ArrayList<BoundingBox> boxes;
+    private List<BoundingBox> ignoreAreas;
 
     public ScreenshotDiff(Screenshot oldScreenshot, Screenshot newScreenshot,
             String id, ScreenResolution resolution,
-            BufferedImage diffImage, ArrayList<BoundingBox> boxes)
+            BufferedImage diffImage, ArrayList<BoundingBox> boxes, List<BoundingBox> ignoreAreas)
     {
         this.oldScreenshot = oldScreenshot;
         this.newScreenshot = newScreenshot;
@@ -30,6 +32,7 @@ public class ScreenshotDiff
         this.resolution = resolution;
         this.diffImage = diffImage;
         this.boxes = boxes;
+        this.ignoreAreas = ignoreAreas;
     }
 
     public static class ReportDiffInfo
@@ -105,6 +108,21 @@ public class ScreenshotDiff
 
             reportDiffs.add(new ReportDiffInfo(imageSubDir + "/" + oldImageFile, imageSubDir + "/" + newImageFile,
                     imageSubDir + "/" + diffImageFile));
+        }
+        if (ignoreAreas != null)
+        {
+            for (BoundingBox ignoreArea : ignoreAreas)
+            {
+                Graphics2D graphics = diffImage.createGraphics();
+                // Draw an orange box around each of the ignored areas on the diff.
+                graphics.setColor(Color.ORANGE);
+                BasicStroke stroke = new BasicStroke(2.0f,
+                        BasicStroke.CAP_SQUARE,
+                        BasicStroke.JOIN_MITER,
+                        10.0f, new float[] { 10.0f }, 0.0f);
+                graphics.setStroke(stroke);
+                graphics.drawRect(ignoreArea.getLeft(), ignoreArea.getTop(), ignoreArea.getWidth(), ignoreArea.getHeight());
+            }
         }
         // Write the full diff image to the output directory.
         String diffImageFile = "diff-" + id + "." + resolution + ".png";

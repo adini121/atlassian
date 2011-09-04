@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Screenshot implements Comparable<Screenshot>
 {
@@ -64,6 +65,11 @@ public class Screenshot implements Comparable<Screenshot>
 
     public ScreenshotDiff getDiff(Screenshot other) throws IOException
     {
+        return getDiff (other, null, false);
+    }
+
+    public ScreenshotDiff getDiff(Screenshot other, List<BoundingBox> ignoreAreas, boolean ignoreSingleLines) throws IOException
+    {
         final BufferedImage thisImage = getImage();
         final BufferedImage otherImage = other.getImage();
         final int thisWidth = thisImage.getWidth();
@@ -86,9 +92,9 @@ public class Screenshot implements Comparable<Screenshot>
                 {
                     int thisPixel = thisImage.getRGB(x, y);
                     int otherPixel = otherImage.getRGB(x, y);
-                    if (thisPixel == otherPixel)
+                    if (shouldIgnorePixel (x, y, ignoreAreas) || thisPixel == otherPixel)
                     {
-                        // The pixels are the same, draw it as-is in the diff.
+                        // The pixels are the same or we don't care if they're different, draw it as-is in the diff.
                         diffImage.setRGB(x, y, thisPixel);
                     }
                     else
@@ -121,12 +127,32 @@ public class Screenshot implements Comparable<Screenshot>
                 }
             }
         }
+        if (ignoreSingleLines)
+        {
+            BoundingBox.deleteSingleLineBoxes(boxes);
+        }
 
         BoundingBox.mergeOverlappingBoxes(boxes);
 
         thisImage.flush();
         otherImage.flush();
 
-        return new ScreenshotDiff(this, other, this.id, this.resolution, diffImage, boxes);
+        return new ScreenshotDiff(this, other, this.id, this.resolution, diffImage, boxes, ignoreAreas);
+    }
+
+    private boolean shouldIgnorePixel (int x, int y, List<BoundingBox> ignoreAreas)
+    {
+        if (ignoreAreas == null)
+        {
+            return false;
+        }
+        for (BoundingBox ignoreArea : ignoreAreas)
+        {
+            if (ignoreArea.contains (x,y))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

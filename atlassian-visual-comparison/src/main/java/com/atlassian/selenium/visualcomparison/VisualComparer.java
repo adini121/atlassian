@@ -1,5 +1,6 @@
 package com.atlassian.selenium.visualcomparison;
 
+import com.atlassian.selenium.visualcomparison.utils.BoundingBox;
 import com.atlassian.selenium.visualcomparison.utils.ScreenResolution;
 import com.atlassian.selenium.visualcomparison.utils.Screenshot;
 import com.atlassian.selenium.visualcomparison.utils.ScreenshotDiff;
@@ -10,6 +11,7 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 public class VisualComparer
@@ -26,6 +28,8 @@ public class VisualComparer
     private String tempPath = System.getProperty("java.io.tmpdir");
     private Map<String, String> uiStringReplacements = null;
     private long waitforJQueryTimeout = 0;
+    private List<BoundingBox> ignoreAreas = null;
+    private boolean ignoreSingleLineDiffs = false;
 
     public long getWaitforJQueryTimeout() {
         return waitforJQueryTimeout;
@@ -94,6 +98,27 @@ public class VisualComparer
     public String getTempPath()
     {
         return this.tempPath;
+    }
+
+
+    public List<BoundingBox> getIgnoreAreas()
+    {
+        return ignoreAreas;
+    }
+
+    public boolean getIgnoreSingleLineDiffs()
+    {
+        return ignoreSingleLineDiffs;
+    }
+
+    public void setIgnoreSingleLineDiffs(boolean ignoreSingleLineDiffs)
+    {
+        this.ignoreSingleLineDiffs = ignoreSingleLineDiffs;
+    }
+
+    public void setIgnoreAreas(List<BoundingBox> ignoreAreas)
+    {
+        this.ignoreAreas = ignoreAreas;
     }
 
     public void assertUIMatches(String id, String baselineImagePath)
@@ -191,6 +216,8 @@ public class VisualComparer
 
     public ScreenshotDiff getScreenshotDiff(Screenshot oldScreenshot, Screenshot newScreenshot) throws Exception
     {
-        return oldScreenshot.getDiff(newScreenshot);
+        return oldScreenshot.getDiff(newScreenshot, ignoreAreas, ignoreSingleLineDiffs);
     }
+
+
 }
