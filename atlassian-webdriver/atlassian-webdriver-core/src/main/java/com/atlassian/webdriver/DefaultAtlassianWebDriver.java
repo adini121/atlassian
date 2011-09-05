@@ -8,7 +8,6 @@ import com.atlassian.webdriver.utils.element.ElementLocated;
 import com.atlassian.webdriver.utils.element.ElementNotLocated;
 import com.atlassian.webdriver.utils.element.ElementNotVisible;
 import com.google.common.base.Function;
-import com.sun.istack.internal.Nullable;
 import org.apache.commons.io.IOUtils;
 import org.apache.xmlbeans.impl.common.IOUtil;
 import org.openqa.selenium.By;
@@ -287,7 +286,7 @@ public class DefaultAtlassianWebDriver implements AtlassianWebDriver
     {
         // For compatibility with VisualComparableClient
         this.waitUntil(new Function<WebDriver, Boolean>() {
-            public Boolean apply(@Nullable WebDriver webDriver) {
+            public Boolean apply(WebDriver webDriver) {
                 String jQueryActive = ((JavascriptExecutor)webDriver).executeScript("return (window.jQuery.active)").toString();
                 return (jQueryActive).equals ("0");
             }
