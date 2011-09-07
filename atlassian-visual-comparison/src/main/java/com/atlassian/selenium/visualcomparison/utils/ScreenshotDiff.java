@@ -34,6 +34,11 @@ public class ScreenshotDiff
         this.boxes = boxes;
         this.ignoreAreas = ignoreAreas;
     }
+    
+    public List<BoundingBox> getDiffAreas()
+    {
+    	return this.boxes;
+    }
 
     public static class ReportDiffInfo
     {
