@@ -262,43 +262,4 @@ public class DefaultAtlassianWebDriver implements AtlassianWebDriver
     {
         return ((HasInputDevices)driver).getMouse();
     }
-
-    // Functions for VisualComparableClient support
-
-    public void captureEntirePageScreenshot (String filePath)
-    {
-        takeScreenshotTo(new File (filePath));
-    }
-
-    public void evaluate (String command)
-    {
-        executeScript(command);
-    }
-
-    public void refreshAndWait ()
-    {
-        // WebDriver automatically waits, or so the docs say.
-        driver.navigate().refresh();
-    }
-
-
-    public boolean waitForJQuery (long waitTimeMillis)
-    {
-        // For compatibility with VisualComparableClient
-        this.waitUntil(new Function<WebDriver, Boolean>() {
-            public Boolean apply(WebDriver webDriver) {
-                String jQueryActive = ((JavascriptExecutor)webDriver).executeScript("return (window.jQuery.active)").toString();
-                return (jQueryActive).equals ("0");
-            }
-        }, 400);
-        try
-        {
-            Thread.sleep(waitTimeMillis);
-        }
-        catch (InterruptedException e)
-        {
-            return false;
-        }
-        return true;
-    }
 }

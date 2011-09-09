@@ -13,7 +13,7 @@ import java.io.File;
 /**
  * Represents the web browser, adds common helper methods on top of <tt>WebDriver</tt>
  */
-public interface AtlassianWebDriver extends WebDriver, JavascriptExecutor, HasInputDevices, VisualComparableClient
+public interface AtlassianWebDriver extends WebDriver, JavascriptExecutor, HasInputDevices
 {
     /**
      * Gets the underlying <tt>WebDriver</tt>.
