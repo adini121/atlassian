@@ -43,6 +43,12 @@ public class WebDriverFactory
         String browserPath = null;
 
         String BROWSER = getBrowserProperty();
+
+        if (RemoteWebDriverFactory.matches(BROWSER))
+        {
+            return RemoteWebDriverFactory.getDriver(BROWSER, browserConfig);
+        }
+
         Matcher matcher = browserPathPattern.matcher(BROWSER);
 
         if (matcher.matches())
@@ -92,7 +98,7 @@ public class WebDriverFactory
             case OPERA:
                 throw new UnsupportedOperationException("Opera is not a supported Browser Type");
             default:
-                System.err.println("Unknown browser: " + BROWSER + ", defaulting to firefox.");
+                log.error("Unknown browser: {}, defaulting to firefox.", BROWSER);
                 browserType = Browser.FIREFOX;
                 driver = new FirefoxDriver();
         }
