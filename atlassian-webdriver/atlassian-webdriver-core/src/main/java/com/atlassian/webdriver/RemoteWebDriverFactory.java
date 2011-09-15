@@ -2,6 +2,7 @@ package com.atlassian.webdriver;
 
 import com.atlassian.browsers.BrowserConfig;
 import com.atlassian.webdriver.utils.Browser;
+import com.atlassian.webdriver.utils.WebDriverUtil;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -92,6 +93,8 @@ class RemoteWebDriverFactory
                 log.error("Unknown browser: {}, defaulting to firefox.", browserType);
                 capabilities = DesiredCapabilities.firefox();
         }
+
+        WebDriverUtil.setLatestBrowser(browserType);
 
         RemoteWebDriver driver = new RemoteWebDriver(serverUrl, capabilities);
 
