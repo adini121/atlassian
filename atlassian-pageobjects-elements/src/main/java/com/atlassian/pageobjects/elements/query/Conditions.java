@@ -212,9 +212,47 @@ public final class Conditions
     }
 
 
+    /**
+     * A timed condition that always returns <code>true</code>
+     *
+     * @return timed condition that always returns true
+     */
+    public static TimedCondition alwaysTrue()
+    {
+        return new StaticCondition(true);
+    }
+
+    /**
+     * A timed condition that always returns <code>false</code>
+     *
+     * @return timed condition that always returns false
+     */
+    public static TimedCondition alwaysFalse()
+    {
+        return new StaticCondition(false);
+    }
+
     private static AbstractConditionDecorator asDecorator(TimedQuery<Boolean> condition)
     {
         return (AbstractConditionDecorator) condition;
+    }
+
+
+    private static class StaticCondition extends AbstractTimedCondition
+    {
+        private final Boolean value;
+
+        public StaticCondition(Boolean value)
+        {
+            super(DEFAULT_TIMEOUT, DEFAULT_INTERVAL);
+            this.value = checkNotNull(value);
+        }
+
+        @Override
+        protected Boolean currentValue()
+        {
+            return value;
+        }
     }
 
 

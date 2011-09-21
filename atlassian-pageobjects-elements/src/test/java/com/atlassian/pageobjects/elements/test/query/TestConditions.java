@@ -13,7 +13,6 @@ import static org.junit.Assert.assertTrue;
 /**
  * Test case for {@link com.atlassian.pageobjects.elements.query.Conditions}.
  */
-@SuppressWarnings("unchecked")
 public class TestConditions
 {
     @Test
@@ -51,5 +50,23 @@ public class TestConditions
     {
         TimedCondition or = Conditions.or(FALSE, FALSE, FALSE, FALSE);
         assertFalse(or.now());
+    }
+
+    @Test
+    public void alwaysTrueShouldAlwaysReturnTrue()
+    {
+        final TimedCondition alwaysTrue = Conditions.alwaysTrue();
+        assertTrue(alwaysTrue.now());
+        assertTrue(alwaysTrue.by(100));
+        assertTrue(alwaysTrue.now());
+    }
+
+    @Test
+    public void alwaysFalseShouldAlwaysReturnFalse()
+    {
+        final TimedCondition alwaysFalse = Conditions.alwaysFalse();
+        assertFalse(alwaysFalse.now());
+        assertFalse(alwaysFalse.by(100));
+        assertFalse(alwaysFalse.now());
     }
 }
