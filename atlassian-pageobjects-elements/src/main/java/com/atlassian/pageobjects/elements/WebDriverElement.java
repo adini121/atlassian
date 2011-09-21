@@ -74,8 +74,7 @@ public class WebDriverElement implements PageElement
      */
     public WebDriverElement(By locator, WebDriverLocatable parent, TimeoutType timeoutType)
     {
-        this.locatable = WebDriverLocators.nested(locator, parent);
-        this.defaultTimeout = checkNotNull(timeoutType);
+        this(WebDriverLocators.nested(locator, parent),timeoutType);
     }
 
     /**
@@ -86,8 +85,8 @@ public class WebDriverElement implements PageElement
      */
     public WebDriverElement(WebDriverLocatable locatable, TimeoutType timeoutType)
     {
-        this.locatable = locatable;
-        this.defaultTimeout = checkNotNull(timeoutType);
+        this.locatable = checkNotNull(locatable, "locatable");
+        this.defaultTimeout = checkNotNull(timeoutType, "timeoutType");
     }
 
     protected long timeout()

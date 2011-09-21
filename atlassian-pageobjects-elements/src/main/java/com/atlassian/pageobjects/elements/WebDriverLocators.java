@@ -22,6 +22,7 @@ import static com.atlassian.pageobjects.elements.query.Poller.now;
 import static com.atlassian.pageobjects.elements.query.Poller.waitUntil;
 import static com.atlassian.pageobjects.elements.util.StringConcat.asString;
 import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
 import static org.hamcrest.Matchers.notNullValue;
 
 /**
@@ -132,8 +133,8 @@ public class WebDriverLocators
 
         public WebDriverSingleLocator(By locator, WebDriverLocatable parent)
         {
-            this.locator = locator;
-            this.parent = parent;
+            this.locator = checkNotNull(locator, "locator");
+            this.parent = checkNotNull(parent, "parent");
         }
 
         public By getLocator()
@@ -223,10 +224,11 @@ public class WebDriverLocators
 
         public WebDriverListLocator(WebElement element, By locator, int locatorIndex, WebDriverLocatable parent)
         {
-            this.webElement = element;
+            checkArgument(locatorIndex >= 0, "locator index is negative:" + locatorIndex);
+            this.webElement = checkNotNull(element);
             this.locatorIndex = locatorIndex;
-            this.locator = locator;
-            this.parent = parent;
+            this.locator = checkNotNull(locator, "locator");
+            this.parent = checkNotNull(parent, "parent");
         }
 
         public By getLocator()
