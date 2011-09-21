@@ -32,7 +32,7 @@ public class WebDriverElement implements PageElement
     protected Timeouts timeouts;
 
     protected final WebDriverLocatable locatable;
-    private final TimeoutType defaultTimeout;
+    protected final TimeoutType defaultTimeout;
 
     /**
      * Creates a WebDriverElement within the driver's search context and default timeout
@@ -257,5 +257,11 @@ public class WebDriverElement implements PageElement
             return this;
         }
         return pageBinder.bind(WebDriverElement.class, locatable, checkNotNull(timeoutType));
+    }
+
+    @Override
+    public String toString()
+    {
+        return "WebDriverElement[locatable=" + locatable + ",defaultTimeout=" + defaultTimeout + "]";
     }
 }
