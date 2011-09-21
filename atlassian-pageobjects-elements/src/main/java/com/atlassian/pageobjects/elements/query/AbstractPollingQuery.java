@@ -20,8 +20,8 @@ public class AbstractPollingQuery implements PollingQuery
                 .appendText(" should be > 0").toString());
         checkArgument(defaultTimeout > 0, new StringDescription().appendText("defaultTimeout is ").appendValue(defaultTimeout)
                 .appendText(" should be > 0").toString());
-        checkArgument(defaultTimeout > interval, new StringDescription().appendText("defaultTimeout is ").appendValue(defaultTimeout)
-                .appendText("interval is ").appendValue(interval).appendText(" defaultTimeout should be > interval").toString());
+        checkArgument(defaultTimeout >= interval, new StringDescription().appendText("defaultTimeout is ").appendValue(defaultTimeout)
+                .appendText(" interval is ").appendValue(interval).appendText(" defaultTimeout should be >= interval").toString());
         this.interval = interval;
         this.defaultTimeout = defaultTimeout;
     }
