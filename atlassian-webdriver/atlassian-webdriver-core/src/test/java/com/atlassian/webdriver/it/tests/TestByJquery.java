@@ -2,7 +2,6 @@ package com.atlassian.webdriver.it.tests;
 
 import com.atlassian.webdriver.it.AbstractFileBasedServerTest;
 import com.atlassian.webdriver.it.pageobjects.page.ByJqueryPage;
-import com.atlassian.webdriver.testing.annotation.TestBrowser;
 import com.atlassian.webdriver.utils.by.ByJquery;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,7 +11,8 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Test for checking ByJquery functionality in Atlassian WebDriver.
