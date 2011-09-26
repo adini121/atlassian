@@ -1,13 +1,12 @@
 package com.atlassian.pageobjects.elements.query;
 
 import com.google.common.base.Supplier;
+import com.google.common.collect.Iterables;
 import org.apache.commons.lang.ArrayUtils;
 import org.hamcrest.Matcher;
 import org.hamcrest.StringDescription;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
 
 import static com.atlassian.pageobjects.elements.util.StringConcat.asString;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -77,9 +76,9 @@ public final class Conditions
      *
      * @see TimedCondition#interval()
      */
-    public static CombinableCondition and(List<TimedQuery<Boolean>> conditions)
+    public static CombinableCondition and(Iterable<TimedQuery<Boolean>> conditions)
     {
-        return and(conditions.toArray(new TimedCondition[conditions.size()]));
+        return and(Iterables.toArray(conditions, TimedQuery.class));
     }
 
     /**
@@ -115,9 +114,9 @@ public final class Conditions
      *
      * @see TimedCondition#interval()
      */
-    public static CombinableCondition or(List<TimedQuery<Boolean>> conditions)
+    public static CombinableCondition or(Iterable<TimedQuery<Boolean>> conditions)
     {
-        return or(conditions.toArray(new TimedCondition[conditions.size()]));
+        return or(Iterables.toArray(conditions, TimedQuery.class));
     }
 
     /**
