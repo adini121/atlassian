@@ -34,7 +34,7 @@ public class WebDriverFactory
 
     public static String getBrowserProperty()
     {
-        return System.getProperty("webdriver.browser", "firefox-3.5");
+        return System.getProperty("webdriver.browser", "firefox");
     }
 
     public static AtlassianWebDriver getDriver(BrowserConfig browserConfig)

@@ -29,7 +29,7 @@ import org.junit.runners.model.Statement;
  */
 public class TestBrowserRule implements MethodRule
 {
-    private String originalBrowserValue = WebDriverFactory.getBrowserProperty();
+    private static String originalBrowserValue = WebDriverFactory.getBrowserProperty();
 
     public Statement apply(final Statement base, final FrameworkMethod method, final Object target)
     {
