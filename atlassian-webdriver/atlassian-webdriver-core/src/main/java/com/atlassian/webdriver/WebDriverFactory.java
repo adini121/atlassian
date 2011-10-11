@@ -1,12 +1,12 @@
 package com.atlassian.webdriver;
 
 import com.atlassian.browsers.BrowserConfig;
+import com.atlassian.webdriver.browsers.chrome.ChromeBrowser;
 import com.atlassian.webdriver.browsers.firefox.FirefoxBrowser;
 import com.atlassian.webdriver.utils.Browser;
 import com.atlassian.webdriver.utils.WebDriverUtil;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
@@ -78,13 +78,22 @@ public class WebDriverFactory
                break;
 
             case CHROME:
-                if (browserPath != null)
+
+                if (browserPath == null && browserConfig != null)
                 {
-                    System.setProperty("webdriver.chrome.bin", browserPath);
+                    driver = ChromeBrowser.getChromeDriver(browserConfig);
                 }
 
-                driver = new ChromeDriver();
+                else if (browserPath != null)
+                {
+                    driver = ChromeBrowser.getChromeDriver(browserPath);
+                }
+                else
+                {
+                    driver = ChromeBrowser.getChromeDriver();
+                }
                 break;
+            
             case IE:
                 driver = new InternetExplorerDriver();
                 break;

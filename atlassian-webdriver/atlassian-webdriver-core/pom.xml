@@ -27,7 +27,7 @@
             <dependency>
                 <groupId>com.atlassian.browsers</groupId>
                 <artifactId>atlassian-browsers-auto</artifactId>
-                <version>${atlassian-browsers-version}</version>
+                <version>${webdriver-browsers-version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

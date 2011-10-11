@@ -1,14 +1,10 @@
 package com.atlassian.webdriver.browsers;
 
 import com.atlassian.browsers.BrowserConfiguration;
-import com.atlassian.browsers.BrowserVersion;
+import com.atlassian.browsers.BrowserType;
 
 import java.io.File;
 
-/**
- * TODO: Document this class / interface here
- *
- */
 public class WebDriverBrowserConfiguration implements BrowserConfiguration
 {
     private final File targetDir = new File("target");
@@ -23,6 +19,6 @@ public class WebDriverBrowserConfiguration implements BrowserConfiguration
 
     public String getBrowserName()
     {
-        return System.getProperty("webdriver.browser", BrowserVersion.FIREFOX_3_5.getBrowserName());
+        return System.getProperty("webdriver.browser", BrowserType.FIREFOX.getName());
     }
 }

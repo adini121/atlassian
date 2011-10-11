@@ -1,6 +1,7 @@
 package com.atlassian.webdriver.browsers.firefox;
 
 import com.atlassian.browsers.BrowserConfig;
+import com.atlassian.webdriver.browsers.profile.ProfilePreferences;
 import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
@@ -10,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * A helper utility for obtaining a FirefoxDriver.
@@ -21,7 +23,7 @@ public final class FirefoxBrowser
 
     private FirefoxBrowser()
     {
-        throw new IllegalStateException("FirefoxBrwoser is not constructable");
+        throw new IllegalStateException("FirefoxBrowser is not constructable");
     }
 
     /**
@@ -56,34 +58,8 @@ public final class FirefoxBrowser
 
                 profile = new FirefoxProfile();
 
-                File extensionsDir = new File(profilePath, "extensions");
-                if (extensionsDir.exists())
-                {
-                    // Filter the extentions path to only include directories
-                    for (File extension : extensionsDir.listFiles(
-                            new FileFilter()
-                            {
-                                public boolean accept(final File file)
-                                {
-                                    if (file.isDirectory())
-                                    {
-                                        return true;
-                                    }
-
-                                    return false;
-                                }
-                            }))
-                    {
-                        try
-                        {
-                            profile.addExtension(extension);
-                        }
-                        catch (IOException e)
-                        {
-                            log.error("Unable to load extension: " + extension, e);
-                        }
-                    }
-                }
+                addExtensionsToProfile(profile, profilePath);
+                addPreferencesToProfile(profile, profilePath);
             }
 
             setSystemProperties(firefox);
@@ -92,6 +68,60 @@ public final class FirefoxBrowser
 
         // Fall back on default firefox driver
         return getFirefoxDriver();
+    }
+
+    private static void addPreferencesToProfile(FirefoxProfile profile, File profilePath)
+    {
+        File profilePreferencesFile = new File(profilePath, "profile.preferences");
+
+        if (profilePreferencesFile.exists())
+        {
+            ProfilePreferences profilePreferences = new ProfilePreferences(profilePreferencesFile);
+            Map<String, Object> preferences = profilePreferences.getPreferences();
+            for (String key : preferences.keySet())
+            {
+                Object value = preferences.get(key);
+                if (value instanceof Integer)
+                {
+                    profile.setPreference(key, (Integer)value);
+                }
+                else if (value instanceof Boolean)
+                {
+                    profile.setPreference(key, (Boolean)value);
+                }
+                else
+                {
+                    profile.setPreference(key, (String)value);
+                }
+            }
+        }
+    }
+
+    private static void addExtensionsToProfile(FirefoxProfile profile, File profilePath)
+    {
+        // Filter the extentions path to only include extensions.
+        for (File extension : profilePath.listFiles(new FileFilter()
+            {
+                public boolean accept(final File file)
+                {
+                    if (file.getName().matches(".*\\.xpi$"))
+                    {
+                        return true;
+                    }
+
+                    return false;
+                }
+            }))
+        {
+            try
+            {
+                profile.addExtension(extension);
+            }
+            catch (IOException e)
+            {
+                log.error("Unable to load extension: " + extension, e);
+            }
+        }
     }
 
     /**

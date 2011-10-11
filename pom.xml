@@ -26,8 +26,9 @@
 
     <properties>
         <jdkLevel>1.5</jdkLevel>
-        <atlassian-browsers-version>1.1-beta13</atlassian-browsers-version>
-        <selenium.version>2.5.0</selenium.version>
+        <selenium-browsers-version>1.1-beta13</selenium-browsers-version>
+        <webdriver-browsers-version>2.0</webdriver-browsers-version>
+        <selenium.version>2.8.0</selenium.version>
         <mockito.version>1.8.5</mockito.version>
         <junit.version>4.8.2</junit.version>
         <hamcrest.version>1.1</hamcrest.version>

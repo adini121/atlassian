@@ -22,21 +22,21 @@ public class TestAutoBrowserInstaller extends AbstractFileBasedServerTest
     }
 
     @Test
-    @TestBrowser("firefox-3.5")
-    public void testFirefox_3_5() throws Exception
+    @TestBrowser("chrome")
+    public void testChrome() throws Exception
     {
-        String formattedError = String.format("The user agent: '%s' does not contain 'Firefox/3.5'",
+        String formattedError = String.format("The user agent: '%s' does not contain 'Chrome/'",
             userAgentPage.getUserAgent());
-        assertTrue(formattedError, userAgentPage.getUserAgent().contains("Firefox/3.5"));
+        assertTrue(formattedError, userAgentPage.getUserAgent().contains("Chrome/"));
     }
 
     @Test
-    @TestBrowser("firefox-3.6")
-    public void testFirefox_3_6() throws Exception
+    @TestBrowser("firefox")
+    public void testFirefox() throws Exception
     {
-        String formattedError = String.format("The user agent: '%s' does not contain 'Firefox/3.6'",
+        String formattedError = String.format("The user agent: '%s' does not contain 'Firefox/'",
             userAgentPage.getUserAgent());
-        assertTrue(formattedError, userAgentPage.getUserAgent().contains("Firefox/3.6"));
+        assertTrue(formattedError, userAgentPage.getUserAgent().contains("Firefox/"));
     }
 
     @Test
