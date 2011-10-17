@@ -8,6 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @since 2.1
@@ -35,6 +37,8 @@ public class ChromeBrowser
     {
         if (browserConfig != null)
         {
+            ChromeDriverService.Builder chromeServiceBuilder = new ChromeDriverService.Builder();
+
             DesiredCapabilities capabilities = DesiredCapabilities.chrome();
             capabilities.setCapability("chrome.binary", browserConfig.getBinaryPath());
 
@@ -45,12 +49,15 @@ public class ChromeBrowser
 
                 if (chromeDriverFile.exists())
                 {
-                    String pathToChromeDriver = System.getProperty(ChromeDriverService.CHROME_DRIVER_EXE_PROPERTY, chromeDriverFile.getAbsolutePath());
-                    System.setProperty(ChromeDriverService.CHROME_DRIVER_EXE_PROPERTY, pathToChromeDriver);
+                    chromeServiceBuilder.usingChromeDriverExecutable(chromeDriverFile);
                 }
             }
 
-            return new ChromeDriver(capabilities);
+            chromeServiceBuilder.usingAnyFreePort();
+            setSystemProperties(chromeServiceBuilder);
+            ChromeDriverService chromeDriverService = chromeServiceBuilder.build();
+
+            return new ChromeDriver(chromeDriverService, capabilities);
         }
 
         // Fall back on default chrome driver
@@ -75,6 +82,22 @@ public class ChromeBrowser
         // Fall back on default chrome driver
         log.info("Browser path was null, falling back to default chrome driver.");
         return getChromeDriver();
+    }
+
+    /**
+     * Sets up system properties on the chrome driver service.
+     * @param chromeDriverServiceBuilder the chrome driver service to set environment map on.
+     */
+    private static void setSystemProperties(ChromeDriverService.Builder chromeDriverServiceBuilder)
+    {
+        Map<String, String> env = new HashMap<String, String>();
+
+        if (System.getProperty("DISPLAY") != null)
+        {
+            env.put("DISPLAY", System.getProperty("DISPLAY"));
+        }
+
+        chromeDriverServiceBuilder.withEnvironment(env);
     }
 
 }
