@@ -4,6 +4,7 @@ import com.atlassian.webdriver.it.AbstractFileBasedServerTest;
 import com.atlassian.webdriver.it.pageobjects.page.UserAgentPage;
 import com.atlassian.webdriver.testing.annotation.TestBrowser;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertTrue;
@@ -22,6 +23,7 @@ public class TestAutoBrowserInstaller extends AbstractFileBasedServerTest
     }
 
     @Test
+    @Ignore
     @TestBrowser("chrome")
     public void testChrome() throws Exception
     {
