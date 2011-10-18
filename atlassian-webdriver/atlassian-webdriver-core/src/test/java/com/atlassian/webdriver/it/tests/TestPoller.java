@@ -264,13 +264,13 @@ public class TestPoller extends AbstractFileBasedServerTest
         WebElement addTextEl = driver.findElement(By.id("dialog-eleven-addtext-button"));
         WebElement el = driver.findElement(By.id("dialog-eleven"));
 
-        assertTrue(el.getText().isEmpty());
+        assertTrue("".equals(el.getText()));
 
         addTextEl.click();
 
         poller.until(1).element(el).getText().isNotEmpty().execute();
 
-        assertFalse(el.getText().isEmpty());
+        assertFalse("".equals(el.getText()));
         assertEquals("Element text did not match expected.", "Dialog eleven", el.getText());
     }
 
@@ -286,7 +286,7 @@ public class TestPoller extends AbstractFileBasedServerTest
 
         poller.until(1).element(el).getAttribute("data-test").isNotEmpty().execute();
 
-        assertFalse(el.getAttribute("data-test").isEmpty());
+        assertFalse("".equals(el.getAttribute("data-test")));
         assertEquals("Element attribute data-test did not match expected.",
                 "value", el.getAttribute("data-test"));
     }
@@ -310,7 +310,7 @@ public class TestPoller extends AbstractFileBasedServerTest
         WebElement el = driver.findElement(By.id("dialog-thirteen"));
 
         assertFalse(Check.hasClass("awesome", el));
-        assertTrue(el.getText().isEmpty());
+        assertTrue("".equals(el.getText()));
 
         addClassAndTextEl.click();
 
@@ -318,7 +318,7 @@ public class TestPoller extends AbstractFileBasedServerTest
                 .element(el).getText().isNotEmpty().execute();
 
         assertTrue(Check.hasClass("awesome", el));
-        assertFalse(el.getText().isEmpty());
+        assertFalse("".equals(el.getText()));
         assertEquals("element text was not what was expected.", "Dialog thirteen", el.getText());
     }
 
@@ -365,7 +365,7 @@ public class TestPoller extends AbstractFileBasedServerTest
         WebElement el = driver.findElement(By.id("dialog-thirteen"));
 
         assertFalse(Check.hasClass("awesome", el));
-        assertTrue(el.getText().isEmpty());
+        assertTrue("".equals(el.getText()));
 
         addClassAndTextEl.click();
 
@@ -375,7 +375,7 @@ public class TestPoller extends AbstractFileBasedServerTest
                 .element(el).getText().isNotEmpty().execute();
 
         assertTrue(Check.hasClass("awesome", el));
-        assertFalse(el.getText().isEmpty());
+        assertFalse("".equals(el.getText()));
         assertEquals("element text was not what was expected.", "Dialog thirteen", el.getText());
     }
 
