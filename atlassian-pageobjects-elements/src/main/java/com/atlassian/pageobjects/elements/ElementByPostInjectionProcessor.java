@@ -4,7 +4,6 @@ import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.binder.PostInjectionProcessor;
 import com.atlassian.pageobjects.util.InjectUtils;
 import org.openqa.selenium.By;
-import org.openqa.selenium.internal.seleniumemulation.ElementFinder;
 
 import javax.inject.Inject;
 import java.lang.reflect.Field;
@@ -119,7 +118,7 @@ public class ElementByPostInjectionProcessor implements PostInjectionProcessor
 
     /**
      * Returns the type of requested PageElement: it is the type of the field
-     * overriden by the attribute 'pageElementClass' in the annotation.
+     * overridden by the attribute 'pageElementClass' in the annotation.
      * 
      * @param field the field to inject
      * @param annotation the ElementBy annotation on the field 
@@ -135,7 +134,7 @@ public class ElementByPostInjectionProcessor implements PostInjectionProcessor
         // Checks whether annotatedType is more specific than PageElement
         if (Iterable.class.isAssignableFrom(fieldType))
         {
-            return (Class<? extends PageElement>) annotatedType;
+            return annotatedType;
         }
         else if (annotatedType != PageElement.class)
         {
