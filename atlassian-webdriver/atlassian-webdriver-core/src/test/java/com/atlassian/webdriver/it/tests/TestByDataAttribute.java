@@ -18,7 +18,7 @@ import static org.junit.Assert.assertThat;
 /**
  * Test {@link com.atlassian.webdriver.utils.by.ByDataAttribute}.
  *
- * @since v2.2
+ * @since 2.1
  */
 public class TestByDataAttribute extends AbstractFileBasedServerTest
 {
