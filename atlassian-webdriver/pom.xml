@@ -19,7 +19,7 @@
         <module>atlassian-webdriver-greenhopper</module>
     </modules>
 
-     <properties>
+    <properties>
         <xvfb.enable>false</xvfb.enable>
         <xvfb.display>:20</xvfb.display>
     </properties>

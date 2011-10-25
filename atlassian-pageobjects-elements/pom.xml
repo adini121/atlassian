@@ -19,6 +19,11 @@
         </repository>
     </repositories>
 
+    <properties>
+        <xvfb.enable>false</xvfb.enable>
+        <xvfb.display>:20</xvfb.display>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -68,7 +73,7 @@
                         <systemProperties>
                             <property>
                                 <name>xvfb.enable</name>
-                                <value>true</value>
+                                <value>${xvfb.enable}</value>
                             </property>
                         </systemProperties>
                     </configuration>
@@ -76,6 +81,20 @@
             </plugins>
         </pluginManagement>
     </build>
+
+    <profiles>
+        <profile>
+            <id>linux</id>
+            <activation>
+                <os>
+                    <family>unix</family>
+                </os>
+            </activation>
+            <properties>
+                <xvfb.enable>true</xvfb.enable>
+            </properties>
+        </profile>
+    </profiles>
 
 
 </project>
