@@ -8,8 +8,8 @@ var proto = "prototype",
 var oldjQuery = window.jQuery;
 var old$ = window.$;
 
-// potential to namspace things away for WebDriver
-var ATLWD = window.ATLWD ? ATLWD : {};
+// potential to namespace things away for WebDriver
+var ATLWD = window.ATLWD || {};
 
 ATLWD.byJquery = {};
 
@@ -21,8 +21,7 @@ if(typeof console !== 'object') {
     };
 }
 
-ATLWD.loadJquery = function()
-{
+ATLWD.loadJquery = function() {
     ATLWD.byJquery.$ = $.noConflict();
 
     if (oldjQuery) {

@@ -53,7 +53,7 @@ public class AuiInlineDialog implements ActivatedComponent<AuiInlineDialog>
 
     public AuiInlineDialog open()
     {
-        triggerElement.javascript().click();
+        triggerElement.click();
         Poller.waitUntilTrue(viewElement.timed().isVisible());
         return this;
     }

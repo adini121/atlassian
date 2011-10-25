@@ -5,10 +5,8 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 
 /**
  * JavaScript Utilities for executing specific javascript events.
@@ -27,6 +25,13 @@ public class JavaScriptUtils
         return WebElementUtil.getInnerHtml(element, driver);
     }
 
+
+    public static void dispatchEvent(String eventType, WebElement element, WebDriver webDriver)
+    {
+        loadScript("js/atlassian/events/customevents.js", webDriver);
+        execute("ATLWD.events.fireEventForElement(arguments[0],'" + eventType + "');", webDriver, element);
+    }
+
     /**
      * Dispatches a javascript mouse event in the browser on a specified element
      *
@@ -36,64 +41,73 @@ public class JavaScriptUtils
      */
     public static void dispatchMouseEvent(String event, WebElement el, WebDriver driver)
     {
-
-        // TODO(jwilson): move this to a real js file and import the file if needed.
-        String js = "if ( document.createEvent ) {"
-                + "var eventObj = document.createEvent('MouseEvents');"
-                + "eventObj.initEvent('" + event + "', false, true);"
-                + "arguments[0].dispatchEvent(eventObj)"
-                + "} else if ( document.createEventObject ) {"
-                + "arguments[0].fireEvent('on" + event + "');"
-                + "}";
-
-        execute(js, driver, el);
+        dispatchEvent(event, el, driver);
     }
+
 
     public static void loadScript(String jsScriptName, WebDriver driver)
     {
+        if (!isScriptLoaded(jsScriptName,driver))
+        {
+            doLoadScript(jsScriptName, driver, true);
+        }
+    }
+
+    public static boolean isScriptLoaded(String jsScriptName, WebDriver webDriver)
+    {
+        loadCoreScript(webDriver);
+        return execute(Boolean.class, "return window.ATLWD.scriptloader.isLoaded('" + jsScriptName + "');" , webDriver);
+    }
+
+    private static void doLoadScript(String jsScriptName, WebDriver driver, boolean addToLoaded)
+    {
+        InputStream scriptStream = null;
         try
         {
-            String lineSep = System.getProperty("line.separator");
-            BufferedReader br = null;
-            try {
-                InputStream is = ClassLoader.getSystemClassLoader().getResourceAsStream(jsScriptName);
-                if (is == null) {
-                    is = Thread.currentThread().getContextClassLoader().getResourceAsStream(jsScriptName);
-                }
-                if (is == null) {
-                    throw new RuntimeException("javascript resource " + jsScriptName + " not found by system or context classloaders.");
-                }
-                br = new BufferedReader(new InputStreamReader(is));
-                String nextLine = "";
-                StringBuffer sb = new StringBuffer();
-                while ((nextLine = br.readLine()) != null)
-                {
-                    sb.append(nextLine);
-                    //
-                    // note:
-                    //   BufferedReader strips the EOL character
-                    //   so we add a new one!
-                    //
-                    sb.append(lineSep);
-                }
-                String jsSource = sb.toString();
-
-                JavaScriptUtils.execute(jsSource, driver);
-            } finally {
-                IOUtils.closeQuietly(br);
+            scriptStream = loadResource(jsScriptName);
+            String jsSource = IOUtils.toString(scriptStream);
+            if (addToLoaded)
+            {
+                jsSource = "window.ATLWD.scriptloader.scriptLoaded('" + jsScriptName + "');" + jsSource;
             }
-
+            JavaScriptUtils.execute(jsSource, driver);
         }
         catch (IOException e)
         {
             throw new RuntimeException("Unable to load the javascript file: " + jsScriptName, e);
         }
-        
+        finally
+        {
+            IOUtils.closeQuietly(scriptStream);
+        }
+
     }
 
-    public static <T> T execute(String js, WebDriver driver)
+
+    private static void loadCoreScript(WebDriver webDriver)
     {
-        return (T) execute(js, driver, new Object[0]);
+        if (Boolean.FALSE.equals(isCoreLoaded(webDriver)))
+        {
+            doLoadScript("js/atlassian/scriptloader/scriptloader.js", webDriver, false);
+        }
+    }
+
+    private static boolean isCoreLoaded(WebDriver webDriver)
+    {
+        return execute(Boolean.class, "return window.ATLWD != undefined && window.ATLWD.scriptloader != undefined", webDriver);
+    }
+
+    private static InputStream loadResource(String jsScriptName)
+    {
+        InputStream is = ClassLoader.getSystemClassLoader().getResourceAsStream(jsScriptName);
+        if (is == null) {
+            is = Thread.currentThread().getContextClassLoader().getResourceAsStream(jsScriptName);
+        }
+        if (is == null) {
+            throw new RuntimeException("javascript resource " + jsScriptName
+                    + " not found by system or context classloaders.");
+        }
+        return is;
     }
 
     public static <T> T execute(String js, WebDriver driver, Object... arguments)
@@ -103,4 +117,9 @@ public class JavaScriptUtils
     }
 
 
+    public static <T> T execute(Class<T> expectedReturn, String js, WebDriver driver, Object... arguments)
+    {
+        JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
+        return expectedReturn.cast(jsExecutor.executeScript(js, arguments));
+    }
 }

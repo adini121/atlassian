@@ -146,11 +146,11 @@ public interface PageElement extends PageElementFinder
     TimedElement timed();
 
     /**
-     * Gets a <tt>PageElementJavascriptExecutor</tt> for this element
+     * Gets a <tt>PageElementJavascript</tt> for this element
      * 
-     * @return Object that can execute javascript on this element.
+     * @return API to execute javascript on this element.
      */
-    PageElementJavascriptExecutor javascript();
+    PageElementJavascript javascript();
 
     /**
      * Returns an instance equivalent to this element, with a changed <tt>timeoutType</tt>.
