@@ -8,8 +8,8 @@ import com.atlassian.webdriver.utils.element.ElementLocated;
 import com.atlassian.webdriver.utils.element.ElementNotLocated;
 import com.atlassian.webdriver.utils.element.ElementNotVisible;
 import com.google.common.base.Function;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.xmlbeans.impl.common.IOUtil;
 import org.openqa.selenium.By;
 import org.openqa.selenium.HasCapabilities;
 import org.openqa.selenium.HasInputDevices;
@@ -27,8 +27,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
@@ -97,7 +95,7 @@ public class DefaultAtlassianWebDriver implements AtlassianWebDriver
             File screenshot = shotter.getScreenshotAs(OutputType.FILE);
             try
             {
-                IOUtil.copyCompletely(new FileInputStream(screenshot), new FileOutputStream(destFile));
+                FileUtils.copyFile(screenshot, destFile);
             }
             catch (IOException e)
             {

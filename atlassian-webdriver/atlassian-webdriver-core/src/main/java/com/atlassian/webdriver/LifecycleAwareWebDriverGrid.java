@@ -16,6 +16,7 @@ import java.util.Map;
  * Once the driver is running it will be re-used if the same
  * browser property is retrieved again.
  * When the runtime is shutdown it will handle cleaning up the browser.
+ *
  * @since 2.1.0
  */
 public class LifecycleAwareWebDriverGrid
@@ -26,10 +27,11 @@ public class LifecycleAwareWebDriverGrid
     private LifecycleAwareWebDriverGrid() {}
 
     /**
-     * Retreieves the driver from the {@link WebDriverFactory}. If an instance
+     * Retrieves the driver from the {@link WebDriverFactory}. If an instance
      * of the driver is already running then it will be re-used instead of
      * creating a new instance.
-     * @return
+     *
+     * @return an instance of the driver
      */
     public static AtlassianWebDriver getDriver()
     {

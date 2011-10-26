@@ -13,9 +13,6 @@ import java.io.File;
  * A rule for taking screenshots when a webdriver test fails.
  * It will also dump the html source of the page to the target/webDriverTests directory.
  *
- * WARNING: If the destination directory for this test already exists then the directory will
- * be cleared up before it runs so you may lose the previous dumped html file and screenshot.
- *
  * @since 2.1.0
  */
 public class WebDriverScreenshotRule extends TestWatchman
@@ -28,23 +25,19 @@ public class WebDriverScreenshotRule extends TestWatchman
     public void starting(final FrameworkMethod method)
     {
         destinationFolder = "target/webdriverTests/" + method.getMethod().getDeclaringClass().getName();
-
         File dir = new File(destinationFolder);
-        // Clean up the directory for the next run
-        if (dir.exists())
+        if (!dir.exists())
         {
-            dir.delete();
+            dir.mkdirs();
         }
-
-        dir.mkdirs();
     }
 
     @Override
     public void failed(final Throwable e, final FrameworkMethod method)
     {
-        AtlassianWebDriver driver = LifecycleAwareWebDriverGrid.getCurrentDriver();
-        String baseFileName = destinationFolder + "/" + method.getName();
-        File dumpFile = new File(baseFileName + ".html");
+        final AtlassianWebDriver driver = LifecycleAwareWebDriverGrid.getCurrentDriver();
+        final String baseFileName = destinationFolder + File.separator + method.getName();
+        final File dumpFile = new File(baseFileName + ".html");
         log.error(e.getMessage(), e);
         log.info("----- Test Failed. " + e.getMessage());
         log.info("----- At page: " + driver.getCurrentUrl());
