@@ -10,17 +10,7 @@ import com.atlassian.webdriver.utils.element.ElementNotVisible;
 import com.google.common.base.Function;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.openqa.selenium.By;
-import org.openqa.selenium.HasCapabilities;
-import org.openqa.selenium.HasInputDevices;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Keyboard;
-import org.openqa.selenium.Mouse;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.SearchContext;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -92,14 +82,20 @@ public class DefaultAtlassianWebDriver implements AtlassianWebDriver
         if (getDriver() instanceof TakesScreenshot) {
             TakesScreenshot shotter = (TakesScreenshot) getDriver();
             log.info("Saving screenshot to: " + destFile.getAbsolutePath());
-            File screenshot = shotter.getScreenshotAs(OutputType.FILE);
             try
             {
+                File screenshot = shotter.getScreenshotAs(OutputType.FILE);
                 FileUtils.copyFile(screenshot, destFile);
             }
             catch (IOException e)
             {
                 log.warn("Could not capture screenshot to: " + destFile, e);
+            }
+            catch (WebDriverException e)
+            {
+                // This will occur in Chrome for platforms (e.g. linux) where screenshots aren't supported.
+                // Webdriver already spams the logs, so only debug log it.
+                log.debug("Details: ", e);
             }
         }
         else
