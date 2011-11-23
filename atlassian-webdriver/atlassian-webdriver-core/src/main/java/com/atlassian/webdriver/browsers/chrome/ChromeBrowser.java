@@ -1,6 +1,7 @@
 package com.atlassian.webdriver.browsers.chrome;
 
 import com.atlassian.browsers.BrowserConfig;
+import org.apache.commons.lang.StringUtils;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -8,7 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -41,6 +44,7 @@ public class ChromeBrowser
 
             DesiredCapabilities capabilities = DesiredCapabilities.chrome();
             capabilities.setCapability("chrome.binary", browserConfig.getBinaryPath());
+            addCapabilities(capabilities);
 
             if (browserConfig.getProfilePath() != null)
             {
@@ -62,6 +66,25 @@ public class ChromeBrowser
 
         // Fall back on default chrome driver
         return getChromeDriver();
+    }
+
+    /**
+     * Add capabilities as defined in the system properties:
+     *
+     * <dl>
+     *    <dt>webdriver.chrome.switches</dt>
+     *    <dd>command line switches, separated by commas</dd>
+     * </dl>
+     *
+     */
+    private static void addCapabilities(final DesiredCapabilities capabilities)
+    {
+        String[] switches = StringUtils.split(System.getProperty("webdriver.chrome.switches"), ",");
+        if(switches != null && switches.length > 0) {
+            List<String> switchList = Arrays.asList(switches);
+            System.out.println("Setting chrome.switches with: " + switchList);
+            capabilities.setCapability("chrome.switches", switchList);
+        }
     }
 
     /**
