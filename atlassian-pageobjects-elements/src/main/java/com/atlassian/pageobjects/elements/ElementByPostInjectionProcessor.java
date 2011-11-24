@@ -2,13 +2,21 @@ package com.atlassian.pageobjects.elements;
 
 import com.atlassian.pageobjects.binder.PostInjectionProcessor;
 import com.atlassian.pageobjects.util.InjectUtils;
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import org.apache.commons.lang.StringUtils;
 import org.openqa.selenium.By;
 
 import javax.inject.Inject;
 import java.lang.reflect.Field;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import static com.atlassian.pageobjects.util.InjectUtils.forEachFieldWithAnnotation;
 import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.collect.Lists.transform;
 
 /**
  * Find fields marked with @ElementBy annotation and set them to instances of WebDriverElement
@@ -26,47 +34,93 @@ public class ElementByPostInjectionProcessor implements PostInjectionProcessor
 
     private void injectElements(final Object instance)
     {
+        final Map<String,Object> populatedFields = Maps.newHashMap();
+        final List<Field> childFields = Lists.newArrayList();
         forEachFieldWithAnnotation(instance, ElementBy.class, new InjectUtils.FieldVisitor<ElementBy>()
         {
             public void visit(Field field, ElementBy annotation)
             {
                 // Create the element to inject
-                Object value;
-                if (isIterable(field))
+                if (StringUtils.isNotEmpty(annotation.parent()))
                 {
-                    value = createIterable(field, annotation);
+                    childFields.add(field);
                 }
                 else
                 {
-                    value = createPageElement(field, annotation);
-                }
-                
-                // Assign the value
-                try
-                {
-                    field.setAccessible(true);
-                    field.set(instance, value);
-                }
-                catch (IllegalAccessException e)
-                {
-                    throw new RuntimeException(e);
+                    final Object result = createAndInject(field, annotation, instance, finder);
+                    populatedFields.put(field.getName(), result);
                 }
             }
         });
+        int previousChildSize;
+        do
+        {
+            previousChildSize = childFields.size();
+            for (Iterator<Field> childFieldIterator = childFields.iterator(); childFieldIterator.hasNext();)
+            {
+                final Field childField = childFieldIterator.next();
+                final ElementBy elementBy = childField.getAnnotation(ElementBy.class);
+                final Object parent = populatedFields.get(elementBy.parent());
+                if (parent != null && parent instanceof PageElementFinder)
+                {
+                    final Object result = createAndInject(childField, elementBy, instance, (PageElementFinder)parent);
+                    populatedFields.put(childField.getName(), result);
+                    childFieldIterator.remove();
+                }
+                else if (parent != null)
+                {
+                    throw new IllegalStateException("@ElementBy for field " + childField.getName() + " defines parent '"
+                     + elementBy.parent() + "' whose value is of type '" + parent.getClass().getName() + "'. Parent "
+                     + "fields must be strictly instances of '" + PageElementFinder.class.getName() + "' (usually "
+                    + " that would be '" + PageElement.class.getName() + "')");
+                }
+
+            }
+        }
+        while (!childFields.isEmpty() && childFields.size() < previousChildSize);
+        if (!childFields.isEmpty())
+        {
+            throw new IllegalStateException("Could not find parents for fields "
+                    + transform(childFields, FieldToName.INSTANCE) + " annotated with @ElementBy in <" + instance
+                    + ">. Please verify the problematic fields in the page object class");
+        }
     }
 
-    private Iterable<? extends PageElement> createIterable(Field field, ElementBy elementBy)
+    private Object createAndInject(Field field, ElementBy annotation, Object instance, PageElementFinder elementFinder)
+    {
+        Object value;
+        if (isIterable(field))
+        {
+            value = createIterable(field, annotation, elementFinder);
+        } else
+        {
+            value = createPageElement(field, annotation, elementFinder);
+        }
+
+        // Assign the value
+        try
+        {
+            field.setAccessible(true);
+            field.set(instance, value);
+        } catch (IllegalAccessException e)
+        {
+            throw new RuntimeException(e);
+        }
+        return value;
+    }
+
+    private Iterable<? extends PageElement> createIterable(Field field, ElementBy elementBy, PageElementFinder elementFinder)
     {
         By by = getSelector(elementBy);
         Class<? extends PageElement> fieldType = getFieldType(field, elementBy);
-        return new PageElementIterableImpl(finder, fieldType, by, elementBy.timeoutType());
+        return new PageElementIterableImpl(elementFinder, fieldType, by, elementBy.timeoutType());
     }
 
-    private PageElement createPageElement(Field field, ElementBy elementBy)
+    private PageElement createPageElement(Field field, ElementBy elementBy, PageElementFinder elementFinder)
     {
         By by = getSelector(elementBy);
         Class<? extends PageElement> fieldType = getFieldType(field, elementBy);
-        return finder.find(by, fieldType, elementBy.timeoutType());
+        return elementFinder.find(by, fieldType, elementBy.timeoutType());
     }
 
     private By getSelector(ElementBy elementBy)
@@ -148,6 +202,16 @@ public class ElementByPostInjectionProcessor implements PostInjectionProcessor
     private boolean isIterable(Field field) {
         return Iterable.class.isAssignableFrom(field.getType());
     }
-    
-    
+
+    private static enum FieldToName implements Function<Field,String>
+    {
+        INSTANCE;
+
+        public String apply(Field from)
+        {
+            return from.getName();
+        }
+    }
+
+
 }
