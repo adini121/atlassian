@@ -1,53 +1,41 @@
-(function(window, undefined) {
-    var ATLWD = window.ATLWD || {};
-
-    // Silence console calls if there is no console.
-    if(typeof window.console !== 'object') {
-        window.console = {
-            log: function() {}, alert: function() {}, warn: function() {}, info: function() {},
-            time: function() {}, timeEnd: function() {}, error: function() {}
-        };
-    }
+(function(window) {
 
     function extend(destination, source) {
-        for (var property in source)
+        for (var property in source) {
             destination[property] = source[property];
+        }
         return destination;
     }
 
     ATLWD.events = {
 
-        fireEventForElement: function(element, eventName, eventOptions)
-        {
+        fireEventForElement: function(element, eventName, eventOptions) {
             window.console.log("fireEventForElement");
             var options = extend(this.defaultOptions, eventOptions || {});
             var oEvent, eventType = null;
 
-            for (var name in this.eventMatchers)
-            {
-                if (this.eventMatchers[name].test(eventName)) { eventType = name; break; }
+            for (var name in this.eventMatchers) {
+                if (this.eventMatchers[name].test(eventName)) {
+                    eventType = name;
+                    break;
+                }
             }
 
-            if (!eventType)
+            if (!eventType) {
                 throw new SyntaxError('Only HTMLEvents and MouseEvents interfaces are supported');
+            }
 
-            if (document.createEvent)
-            {
+            if (document.createEvent) {
                 oEvent = document.createEvent(eventType);
-                if (eventType == 'HTMLEvents')
-                {
+                if (eventType == 'HTMLEvents') {
                     oEvent.initEvent(eventName, options.bubbles, options.cancelable);
-                }
-                else
-                {
+                } else {
                     oEvent.initMouseEvent(eventName, options.bubbles, options.cancelable, document.defaultView,
                             options.button, options.pointerX, options.pointerY, options.pointerX, options.pointerY,
                             options.ctrlKey, options.altKey, options.shiftKey, options.metaKey, options.button, element);
                 }
                 element.dispatchEvent(oEvent);
-            }
-            else
-            {
+            } else {
                 options.clientX = options.pointerX;
                 options.clientY = options.pointerY;
                 var evt = document.createEventObject();
@@ -74,9 +62,6 @@
             cancelable: true
         }
     };
-
-
-    window.ATLWD = ATLWD;
 })(window);
 
 

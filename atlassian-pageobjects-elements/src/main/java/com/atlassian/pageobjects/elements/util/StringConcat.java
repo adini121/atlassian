@@ -16,16 +16,24 @@ public final class StringConcat
     }
 
     /**
+     * <p/>
      * Concatenate array of objects into a string in accordance with
      * JLS $15.18.1 (except that primitive values are not accepted
      * by this method other than by autoboxing).
+     *
+     * <p/>
+     * A <code>null</code> passed as the whole <tt>elements</tt> array will
+     * result in empty string being returned.
      *
      * @param elements elements to convert
      * @return string resulting from concatenating <tt>elements</tt>
      */
     public static String asString(@Nullable Object... elements)
     {
-        // don't rename to toString, its not usable for static imports
+        // NOTE: don't rename to toString, its not usable for static imports
+        if (elements == null) {
+            return "";
+        }
         int length = elements.length;
         if (length  == 0)
         {

@@ -88,6 +88,7 @@ public class JavaScriptUtils
     {
         if (Boolean.FALSE.equals(isCoreLoaded(webDriver)))
         {
+            doLoadScript("js/atlassian/atlassian-webdriver-core.js", webDriver, false);
             doLoadScript("js/atlassian/scriptloader/scriptloader.js", webDriver, false);
         }
     }

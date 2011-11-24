@@ -3,37 +3,33 @@ package com.atlassian.webdriver.utils.by;
 import com.atlassian.webdriver.utils.element.ElementLocated;
 import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
+import static com.atlassian.webdriver.LifecycleAwareWebDriverGrid.getDriver;
+
 /**
  * Looks for an element by using the WebDriver wait and ElementLocated condition.
  * It will wait up to 20 seconds for the element to be located.
+ *
  * @since 2.0
  */
 public abstract class DeferredBy extends By
 {
+
     private static final Logger log = LoggerFactory.getLogger(DeferredBy.class);
 
     private static final int DEFERRED_BY_WAIT = 20;
 
-    private static WebDriver driver;
-    private static WebDriverWait wait;
 
-    /**
-     * Needs to be called before this class can be used.
-     * @param driver
-     */
-    public static void init(WebDriver driver)
+    private static WebDriverWait getWait()
     {
-        DeferredBy.driver = driver;
-        DeferredBy.wait = new WebDriverWait(driver, DEFERRED_BY_WAIT);
+        return new WebDriverWait(getDriver(), DEFERRED_BY_WAIT);
     }
 
     private static DeferredBy by(final By selector) {
@@ -50,7 +46,7 @@ public abstract class DeferredBy extends By
             {
                 try
                 {
-                    wait.until(new ElementLocated(selector));
+                    getWait().until(new ElementLocated(selector));
                     return context.findElements(selector);
                 }
                 catch(TimeoutException e)
@@ -65,7 +61,7 @@ public abstract class DeferredBy extends By
             {
                 try
                 {
-                    wait.until(new ElementLocated(selector));
+                    getWait().until(new ElementLocated(selector));
                     return context.findElement(selector);
                 }
                 catch(TimeoutException e)

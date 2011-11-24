@@ -1,8 +1,6 @@
 package com.atlassian.webdriver;
 
 import com.atlassian.webdriver.utils.Check;
-import com.atlassian.webdriver.utils.by.ByJquery;
-import com.atlassian.webdriver.utils.by.DeferredBy;
 import com.atlassian.webdriver.utils.element.ElementIsVisible;
 import com.atlassian.webdriver.utils.element.ElementLocated;
 import com.atlassian.webdriver.utils.element.ElementNotLocated;
@@ -10,7 +8,18 @@ import com.atlassian.webdriver.utils.element.ElementNotVisible;
 import com.google.common.base.Function;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.HasCapabilities;
+import org.openqa.selenium.HasInputDevices;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keyboard;
+import org.openqa.selenium.Mouse;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.SearchContext;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,8 +46,6 @@ public class DefaultAtlassianWebDriver implements AtlassianWebDriver
     public DefaultAtlassianWebDriver(WebDriver driver)
     {
         this.driver = driver;
-        ByJquery.init(driver);
-        DeferredBy.init(driver);
     }
 
     public WebDriver getDriver()

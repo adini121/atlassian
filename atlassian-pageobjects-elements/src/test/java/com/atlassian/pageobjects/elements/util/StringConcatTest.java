@@ -13,5 +13,6 @@ public class StringConcatTest
         assertEquals("x", StringConcat.asString("x"));
         assertEquals("xnullx", StringConcat.asString("x", null, "x"));
         assertEquals("1", StringConcat.asString(1));
+        assertEquals("", StringConcat.asString((Object[])null));
     }
 }
