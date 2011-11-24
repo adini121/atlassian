@@ -1,6 +1,5 @@
 package com.atlassian.pageobjects.elements;
 
-import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.binder.PostInjectionProcessor;
 import com.atlassian.pageobjects.util.InjectUtils;
 import org.openqa.selenium.By;
@@ -16,9 +15,6 @@ import static com.google.common.base.Preconditions.checkArgument;
  */
 public class ElementByPostInjectionProcessor implements PostInjectionProcessor
 {
-    @Inject
-    PageBinder pageBinder;
-    
     @Inject
     PageElementFinder finder;
 
@@ -70,7 +66,7 @@ public class ElementByPostInjectionProcessor implements PostInjectionProcessor
     {
         By by = getSelector(elementBy);
         Class<? extends PageElement> fieldType = getFieldType(field, elementBy);
-        return pageBinder.bind(WebDriverElementMappings.findMapping(fieldType), by, elementBy.timeoutType());
+        return finder.find(by, fieldType, elementBy.timeoutType());
     }
 
     private By getSelector(ElementBy elementBy)
