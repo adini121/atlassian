@@ -82,7 +82,7 @@ public class ChromeBrowser
         String[] switches = StringUtils.split(System.getProperty("webdriver.chrome.switches"), ",");
         if(switches != null && switches.length > 0) {
             List<String> switchList = Arrays.asList(switches);
-            System.out.println("Setting chrome.switches with: " + switchList);
+            log.info("Setting chrome.switches with: " + switchList);
             capabilities.setCapability("chrome.switches", switchList);
         }
     }
