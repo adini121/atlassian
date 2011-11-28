@@ -20,7 +20,7 @@ public class PageBindingException extends RuntimeException
 
     public PageBindingException(Object pageObject, Throwable cause)
     {
-        super(cause);
+        super(String.format("[PageObject:%s]", pageObject), cause);
         this.pageObject = pageObject;
     }
 
