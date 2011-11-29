@@ -81,16 +81,34 @@ public class LifecycleAwareWebDriverGrid
                     driver.quit();
                 } catch (WebDriverException e)
                 {
-                    // WebDriver's RemoteWebDriver will try to close the browser
-                    // when it has already been closed, and as a result throws a
-                    // WebDriverException caused by a SocketException. We want
-                    // to ignore this exception.
-                    if (!(e.getCause() instanceof SocketException))
+                    if(!isKnownQuitException(e))
                     {
                         throw e;
                     }
                 }
             }
         });
+    }
+
+    /**
+     * WebDriver's RemoteWebDriver will try to close the browser
+     * when it has already been closed (e.g if xvfb is stopped
+     * and kills the browser), and as a result throws a
+     * WebDriverException.
+     *
+     * This checks if the exception is a known and expected.
+     */
+    private static boolean isKnownQuitException(WebDriverException e) {
+        Throwable cause = e.getCause();
+        String msg = e.getMessage();
+
+        if (cause instanceof SocketException)
+            return true;
+
+        // Chrome does not have a cause, so need to check the message.
+        if (msg != null && msg.indexOf("Chrome did not respond to 'WaitForAllTabsToStopLoading'") >= 0)
+            return true;
+
+        return false;
     }
 }
