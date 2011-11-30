@@ -20,6 +20,8 @@ public enum Browser
     IPHONE_SIMULATOR,
     /** Uses a real live iPhone, iPad or other iOS device. */
     IPHONE,
+    /** Android emulator - runs on your desktop. */
+    ANDROID_EMULATOR,
     /** Uses a real live Android phone, tablet or other android device. */
     ANDROID;
 

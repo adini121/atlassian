@@ -8,6 +8,7 @@ import com.atlassian.webdriver.utils.WebDriverUtil;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.opera.core.systems.OperaDriver;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.android.AndroidDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
@@ -137,6 +138,16 @@ public class WebDriverFactory
                 {
                     throw new RuntimeException("Unable to configure iPhone driver", e);
                 }
+                break;
+
+            case ANDROID_EMULATOR:
+                // TODO what extra config is needed for an android emulator?
+                driver = new AndroidDriver();
+                break;
+
+            case ANDROID:
+                // TODO what extra config is needed for an android device?
+                driver = new AndroidDriver();
                 break;
 
             case SAFARI:
