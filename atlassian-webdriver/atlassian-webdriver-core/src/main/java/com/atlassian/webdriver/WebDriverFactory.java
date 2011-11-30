@@ -17,7 +17,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Checks the Sytem property webdriver.browser to see what browser driver to return. Defaults to
+ * Checks the System property webdriver.browser to see what browser driver to return. Defaults to
  * firefox-3.5.
  */
 public class WebDriverFactory
@@ -97,6 +97,12 @@ public class WebDriverFactory
             case IE:
                 driver = new InternetExplorerDriver();
                 break;
+
+            case HTMLUNIT_NOJS:
+                driver = new HtmlUnitDriver(BrowserVersion.FIREFOX_3_6);
+                ((HtmlUnitDriver) driver).setJavascriptEnabled(false);
+                break;
+
             case HTMLUNIT:
                 driver = new HtmlUnitDriver(BrowserVersion.FIREFOX_3_6);
                 ((HtmlUnitDriver) driver).setJavascriptEnabled(true);
