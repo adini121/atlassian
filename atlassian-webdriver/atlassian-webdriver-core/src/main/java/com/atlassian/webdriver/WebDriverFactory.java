@@ -11,9 +11,13 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.iphone.IPhoneDriver;
+import org.openqa.selenium.iphone.IPhoneSimulatorBinary;
+import org.openqa.selenium.iphone.IPhoneSimulatorDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -76,7 +80,7 @@ public class WebDriverFactory
                 {
                     driver = FirefoxBrowser.getFirefoxDriver();
                 }
-               break;
+                break;
 
             case CHROME:
 
@@ -107,6 +111,32 @@ public class WebDriverFactory
             case HTMLUNIT:
                 driver = new HtmlUnitDriver(BrowserVersion.FIREFOX_3_6);
                 ((HtmlUnitDriver) driver).setJavascriptEnabled(true);
+                break;
+
+            case IPHONE_SIMULATOR:
+                String simulatorPath = System.getProperty("webdriver.iphone.simulator.path");
+                try
+                {
+                    IPhoneSimulatorBinary binary = new IPhoneSimulatorBinary(new File(simulatorPath));
+                    driver = new IPhoneSimulatorDriver(binary);
+                }
+                catch (Exception e)
+                {
+                    throw new RuntimeException("Unable to configure iPhone simulator driver", e);
+                }
+                break;
+
+            case IPHONE:
+                // device at this address must have iWebDriver app installed
+                String iphoneAddress = System.getProperty("webdriver.iphone.address");
+                try
+                {
+                    driver = new IPhoneDriver(iphoneAddress);
+                }
+                catch (Exception e)
+                {
+                    throw new RuntimeException("Unable to configure iPhone driver", e);
+                }
                 break;
 
             case SAFARI:

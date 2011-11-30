@@ -16,6 +16,8 @@ public enum Browser
     HTMLUNIT_NOJS,
     /** HtmlUnit with javascript enabled. */
     HTMLUNIT,
+    /** Simulator for any iOS device - runs on your OSX desktop. */
+    IPHONE_SIMULATOR,
     /** Uses a real live iPhone, iPad or other iOS device. */
     IPHONE,
     /** Uses a real live Android phone, tablet or other android device. */
