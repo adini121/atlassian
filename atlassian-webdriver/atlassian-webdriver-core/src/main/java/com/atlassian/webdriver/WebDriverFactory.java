@@ -6,7 +6,6 @@ import com.atlassian.webdriver.browsers.firefox.FirefoxBrowser;
 import com.atlassian.webdriver.utils.Browser;
 import com.atlassian.webdriver.utils.WebDriverUtil;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
-import com.opera.core.systems.OperaDriver;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.android.AndroidDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -151,15 +150,9 @@ public class WebDriverFactory
                 break;
 
             case SAFARI:
-// TODO enable SafariDriver when the safari extension approach is implemented upstream
-//            driver = new SafariDriver();
-//                break;
                 throw new UnsupportedOperationException("Safari is not a supported Browser Type");
-
             case OPERA:
-                driver = new OperaDriver();
-                break;
-
+                throw new UnsupportedOperationException("Opera is not a supported Browser Type");
             default:
                 log.error("Unknown browser: {}, defaulting to firefox.", BROWSER);
                 browserType = Browser.FIREFOX;
