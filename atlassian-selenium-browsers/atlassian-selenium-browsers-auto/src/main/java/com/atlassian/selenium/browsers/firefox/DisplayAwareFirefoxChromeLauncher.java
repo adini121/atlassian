@@ -19,12 +19,13 @@ package com.atlassian.selenium.browsers.firefox;
 
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Platform;
-import org.openqa.selenium.browserlaunchers.AsyncExecute;
+import org.openqa.selenium.browserlaunchers.Sleeper;
 import org.openqa.selenium.browserlaunchers.LauncherUtils;
 import org.openqa.selenium.browserlaunchers.Proxies;
 import org.openqa.selenium.browserlaunchers.locators.BrowserInstallation;
 import org.openqa.selenium.browserlaunchers.locators.CombinedFirefoxLocator;
 import org.openqa.selenium.os.CommandLine;
+import org.openqa.selenium.remote.BrowserType;
 import org.openqa.selenium.server.ApplicationRegistry;
 import org.openqa.selenium.server.RemoteControlConfiguration;
 import org.openqa.selenium.server.browserlaunchers.AbstractBrowserLauncher;
@@ -39,30 +40,37 @@ import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * This is an override of the {@link org.openqa.selenium.server.browserlaunchers.FirefoxChromeLauncher}
+ * class from selenium so we can control the display system property
+ * to get xvfb to work.
+ */
 public class DisplayAwareFirefoxChromeLauncher extends AbstractBrowserLauncher {
   private static final Logger log = Logger.getLogger(DisplayAwareFirefoxChromeLauncher.class.getName());
 
   private File customProfileDir = null;
   private boolean closed = false;
   private BrowserInstallation browserInstallation;
-  private Process process = null;
+  private CommandLine process = null;
 
   private boolean changeMaxConnections = false;
 
-  public DisplayAwareFirefoxChromeLauncher(Capabilities browserOptions, RemoteControlConfiguration configuration, String sessionId, String browserString)
-      throws InvalidBrowserExecutableException
-  {
+  public DisplayAwareFirefoxChromeLauncher(Capabilities browserOptions,
+      RemoteControlConfiguration configuration, String sessionId, String browserString)
+      throws InvalidBrowserExecutableException {
     this(browserOptions, configuration,
         sessionId, ApplicationRegistry.instance()
             .browserInstallationCache().locateBrowserInstallation(
-            "chrome", browserString, new CombinedFirefoxLocator()));
+                BrowserType.CHROME, browserString, new CombinedFirefoxLocator()));
     if (browserInstallation == null) {
       throw new InvalidBrowserExecutableException(
           "The specified path to the browser executable is invalid.");
     }
   }
 
-  public DisplayAwareFirefoxChromeLauncher(Capabilities browserOptions, RemoteControlConfiguration configuration, String sessionId, BrowserInstallation browserInstallation) {
+  public DisplayAwareFirefoxChromeLauncher(Capabilities browserOptions,
+      RemoteControlConfiguration configuration, String sessionId,
+      BrowserInstallation browserInstallation) {
     super(sessionId, configuration, browserOptions);
 
     if (browserInstallation == null) {
@@ -73,9 +81,12 @@ public class DisplayAwareFirefoxChromeLauncher extends AbstractBrowserLauncher {
   }
 
 
-  /* (non-Javadoc)
-  * @see org.openqa.selenium.server.browserlaunchers.AbstractBrowserLauncher#launch(java.lang.String)
-  */
+  /*
+   * (non-Javadoc)
+   *
+   * @see
+   * org.openqa.selenium.server.browserlaunchers.AbstractBrowserLauncher#launch(java.lang.String)
+   */
 
   @Override
   protected void launch(String url) {
@@ -88,30 +99,29 @@ public class DisplayAwareFirefoxChromeLauncher extends AbstractBrowserLauncher {
       populateCustomProfileDirectory(profilePath);
 
       log.info("Launching Firefox...");
-      CommandLine command = prepareCommand(
+      process = prepareCommand(
           browserInstallation.launcherFilePath(),
           "-profile",
           profilePath
-      );
-      command.setEnvironmentVariable("NO_EM_RESTART", "1");
-      process = command.executeAsync();
+          );
+      process.setEnvironmentVariable("NO_EM_RESTART", "1");
+      process.executeAsync();
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
   }
 
-  private void populateCustomProfileDirectory(String profilePath) throws IOException {
+  private void populateCustomProfileDirectory(String profilePath) {
     /*
-    * The first time we launch Firefox with an empty profile directory,
-    * Firefox will launch itself, populate the profile directory, then
-    * kill/relaunch itself, so our process handle goes out of date.
-    * So, the first time we launch Firefox, we'll start it up at an URL
-    * that will immediately shut itself down.
-    */
+     * The first time we launch Firefox with an empty profile directory, Firefox will launch itself,
+     * populate the profile directory, then kill/relaunch itself, so our process handle goes out of
+     * date. So, the first time we launch Firefox, we'll start it up at an URL that will immediately
+     * shut itself down.
+     */
     CommandLine command = prepareCommand(browserInstallation.launcherFilePath(),
         "-profile", profilePath,
         "-silent"
-    );
+        );
     command.setDynamicLibraryPath(browserInstallation.libraryPath());
     log.info("Preparing Firefox profile...");
     command.execute();
@@ -130,9 +140,9 @@ public class DisplayAwareFirefoxChromeLauncher extends AbstractBrowserLauncher {
     // don't set the library path on Snow Leopard
     Platform platform = Platform.getCurrent();
     if (!platform.is(Platform.MAC) || ((platform.is(Platform.MAC))
-                                       && platform.getMajorVersion() <= 10
-                                       && platform.getMinorVersion() <= 5)) {
-        command.setDynamicLibraryPath(browserInstallation.libraryPath());
+        && platform.getMajorVersion() <= 10
+        && platform.getMinorVersion() <= 5)) {
+      command.setDynamicLibraryPath(browserInstallation.libraryPath());
     }
 
     if (System.getProperty("DISPLAY") != null) {
@@ -166,10 +176,11 @@ public class DisplayAwareFirefoxChromeLauncher extends AbstractBrowserLauncher {
       if (!firefoxProfileTemplate.exists()) {
         throw new RuntimeException(
             "The profile specified '" + firefoxProfileTemplate.getAbsolutePath()
-            + "' does not exist");
+                + "' does not exist");
       }
     } else {
-      firefoxProfileTemplate = BrowserOptions.getFile(browserConfigurationOptions, "firefoxProfileTemplate");
+      firefoxProfileTemplate =
+          BrowserOptions.getFile(browserConfigurationOptions, "firefoxProfileTemplate");
     }
 
     if (firefoxProfileTemplate != null) {
@@ -269,12 +280,10 @@ public class DisplayAwareFirefoxChromeLauncher extends AbstractBrowserLauncher {
         if (fileLockException != null) {
           log.log(Level.SEVERE, "Couldn't delete custom Firefox profile directory", e);
           log.severe("Perhaps caused by this exception:");
-          if (fileLockException != null) {
-            log.log(Level.SEVERE, "Perhaps caused by this exception:", fileLockException);
-          }
+          log.log(Level.SEVERE, "Perhaps caused by this exception:", fileLockException);
           throw new RuntimeException("Couldn't delete custom Firefox " +
-                                     "profile directory, presumably because task kill failed; " +
-                                     "see error LOGGER!", e);
+              "profile directory, presumably because task kill failed; " +
+              "see error LOGGER!", e);
         }
         throw e;
       }
@@ -294,22 +303,18 @@ public class DisplayAwareFirefoxChromeLauncher extends AbstractBrowserLauncher {
    */
   protected void killFirefoxProcess() throws FileLockRemainedException {
     log.info("Killing Firefox...");
-    int exitValue = AsyncExecute.killProcess(process);
+    int exitValue = process.destroy();
     if (exitValue == 0) {
       log.warning("Firefox seems to have ended on its own (did we kill the real browser???)");
     }
     waitForFileLockToGoAway(0, 500);
   }
 
-  public Process getProcess() {
-    return process;
-  }
-
   /**
-   * Firefox knows it's running by using a "parent.lock" file in
-   * the profile directory.  Wait for this file to go away (and stay gone)
+   * Firefox knows it's running by using a "parent.lock" file in the profile directory. Wait for
+   * this file to go away (and stay gone)
    *
-   * @param timeout    max time to wait for the file to go away
+   * @param timeout max time to wait for the file to go away
    * @param timeToWait minimum time to wait to make sure the file is gone
    * @throws FileLockRemainedException
    */
@@ -317,7 +322,7 @@ public class DisplayAwareFirefoxChromeLauncher extends AbstractBrowserLauncher {
       throws FileLockRemainedException {
     File lock = new File(customProfileDir, "parent.lock");
     for (long start = System.currentTimeMillis(); System.currentTimeMillis() < start + timeout;) {
-      AsyncExecute.sleepTight(500);
+      Sleeper.sleepTight(500);
       if (!lock.exists() && makeSureFileLockRemainsGone(lock, timeToWait)) {
         return;
       }
@@ -328,19 +333,18 @@ public class DisplayAwareFirefoxChromeLauncher extends AbstractBrowserLauncher {
   }
 
   /**
-   * When initializing the profile, Firefox rapidly starts, stops, restarts and
-   * stops again; we need to wait a bit to make sure the file lock is really gone.
+   * When initializing the profile, Firefox rapidly starts, stops, restarts and stops again; we need
+   * to wait a bit to make sure the file lock is really gone.
    *
-   * @param lock       the parent.lock file in the profile directory
-   * @param timeToWait minimum time to wait to see if the file shows back
-   *                   up again. This is not a timeout; we will always wait this amount of time or more.
-   * @return true if the file stayed gone for the entire timeToWait; false if the
-   *         file exists (or came back)
+   * @param lock the parent.lock file in the profile directory
+   * @param timeToWait minimum time to wait to see if the file shows back up again. This is not a
+   *        timeout; we will always wait this amount of time or more.
+   * @return true if the file stayed gone for the entire timeToWait; false if the file exists (or
+   *         came back)
    */
   private boolean makeSureFileLockRemainsGone(File lock, long timeToWait) {
-    for (long start = System.currentTimeMillis();
-         System.currentTimeMillis() < start + timeToWait;) {
-      AsyncExecute.sleepTight(500);
+    for (long start = System.currentTimeMillis(); System.currentTimeMillis() < start + timeToWait;) {
+      Sleeper.sleepTight(500);
       if (lock.exists()) {
         return false;
       }
@@ -349,8 +353,8 @@ public class DisplayAwareFirefoxChromeLauncher extends AbstractBrowserLauncher {
   }
 
   /**
-   * Wait for one of the Firefox-generated files to come into existence, then wait
-   * for Firefox to exit
+   * Wait for one of the Firefox-generated files to come into existence, then wait for Firefox to
+   * exit
    *
    * @param timeout the maximum amount of time to wait for the profile to be created
    */
@@ -360,7 +364,7 @@ public class DisplayAwareFirefoxChromeLauncher extends AbstractBrowserLauncher {
     long start = System.currentTimeMillis();
     for (; System.currentTimeMillis() < start + timeout;) {
 
-      AsyncExecute.sleepTight(500);
+      Sleeper.sleepTight(500);
       if (testFile.exists()) {
         break;
       }
@@ -385,7 +389,7 @@ public class DisplayAwareFirefoxChromeLauncher extends AbstractBrowserLauncher {
 
   // visible for testing
 
-  protected void setProcess(Process p) {
+  protected void setCommandLine(CommandLine p) {
     process = p;
   }
 

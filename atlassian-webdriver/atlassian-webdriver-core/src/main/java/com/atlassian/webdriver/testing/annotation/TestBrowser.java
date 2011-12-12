@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  * the browser string that will be set if using the  {@link TestBrowserRule}
  * so that when the test runs it runs with a specific browser.
  *
- * eg. @TestBrowser("firefox-3.5")
+ * eg. @TestBrowser("firefox")
  * @see {@link TestBrowserRule}
  *
  * @since 2.1.0

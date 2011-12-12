@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 
 /**
  * Checks the System property webdriver.browser to see what browser driver to return. Defaults to
- * firefox-3.5.
+ * firefox.
  */
 public class WebDriverFactory
 {

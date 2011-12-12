@@ -19,28 +19,35 @@ package com.atlassian.selenium.browsers.firefox;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.browserlaunchers.BrowserLauncher;
 import org.openqa.selenium.browserlaunchers.locators.*;
+import org.openqa.selenium.remote.BrowserType;
+import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.server.ApplicationRegistry;
 import org.openqa.selenium.server.RemoteControlConfiguration;
 import org.openqa.selenium.server.browserlaunchers.FirefoxCustomProfileLauncher;
 import org.openqa.selenium.server.browserlaunchers.InvalidBrowserExecutableException;
 import org.openqa.selenium.server.browserlaunchers.ProxyInjectionFirefoxCustomProfileLauncher;
 
+/**
+ * This is an override of the {@link org.openqa.selenium.server.browserlaunchers.FirefoxLauncher}
+ * class from selenium. This allows us to control the display system property
+ * for xvfb.
+ */
 public class DisplayAwareFirefoxLauncher implements BrowserLauncher {
 
   final BrowserLauncher realLauncher;
 
-  public DisplayAwareFirefoxLauncher(Capabilities browserOptions, RemoteControlConfiguration configuration, String sessionId, String browserLaunchLocation)
-      throws InvalidBrowserExecutableException
-  {
-    String browserName = "firefox";
+  public DisplayAwareFirefoxLauncher(Capabilities browserOptions, RemoteControlConfiguration configuration,
+      String sessionId, String browserLaunchLocation)
+      throws InvalidBrowserExecutableException {
+    String browserName = BrowserType.FIREFOX;
     BrowserLocator locator = new CombinedFirefoxLocator();
-    String version = (String) browserOptions.getCapability("version");
+    String version = (String) browserOptions.getCapability(CapabilityType.VERSION);
     if ("2".equals(version)) {
-      browserName = "firefox2";
+      browserName = BrowserType.FIREFOX_2;
       locator = new Firefox2Locator();
     }
     if ("3".equals(version)) {
-      browserName = "firefox3";
+      browserName = BrowserType.FIREFOX_3;
       locator = new Firefox3Locator();
     }
     String mode = (String) browserOptions.getCapability("mode");
@@ -69,7 +76,8 @@ public class DisplayAwareFirefoxLauncher implements BrowserLauncher {
     boolean proxyInjectionMode =
         browserOptions.is("proxyInjectionMode") || "proxyInjection".equals(mode);
 
-    // You can't just individually configure a browser for PI mode; it's a server-level configuration parameter
+    // You can't just individually configure a browser for PI mode; it's a server-level
+    // configuration parameter
     boolean globalProxyInjectionMode = configuration.getProxyInjectionModeArg();
     if (proxyInjectionMode && !globalProxyInjectionMode) {
       if (proxyInjectionMode) {
@@ -87,8 +95,9 @@ public class DisplayAwareFirefoxLauncher implements BrowserLauncher {
       return;
     }
 
-    // the mode isn't "chrome" or "proxyInjection"; at this point it had better be "proxy"
-    if (!"proxy".equals(mode)) {
+    // the mode isn't "chrome" or "proxyInjection"; at this point it had better be
+    // CapabilityType.PROXY
+    if (!CapabilityType.PROXY.equals(mode)) {
       throw new RuntimeException("Unrecognized browser mode: " + mode);
     }
 
@@ -99,10 +108,6 @@ public class DisplayAwareFirefoxLauncher implements BrowserLauncher {
 
   public void close() {
     realLauncher.close();
-  }
-
-  public Process getProcess() {
-    return realLauncher.getProcess();
   }
 
   public void launchHTMLSuite(String suiteUrl, String baseUrl) {

@@ -4,11 +4,16 @@ import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.binder.Init;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.confluence.page.LogoutPage;
+import com.atlassian.webdriver.poller.Poller;
+import com.atlassian.webdriver.poller.webdriver.function.ConditionFunction;
 import com.atlassian.webdriver.utils.by.ByJquery;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.util.Date;
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 
 /**

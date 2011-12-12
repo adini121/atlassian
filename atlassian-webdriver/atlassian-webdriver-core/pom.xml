@@ -19,7 +19,7 @@
     </repositories>
 
     <properties>
-        <webdriver.browser>firefox-3.5</webdriver.browser>
+        <webdriver.browser>firefox</webdriver.browser>
     </properties>
 
     <dependencyManagement>
