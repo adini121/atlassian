@@ -11,7 +11,6 @@ import org.openqa.selenium.android.AndroidDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
-import org.openqa.selenium.iphone.IPhoneDriver;
 import org.openqa.selenium.iphone.IPhoneSimulatorBinary;
 import org.openqa.selenium.iphone.IPhoneSimulatorDriver;
 import org.slf4j.Logger;
@@ -114,10 +113,13 @@ public class WebDriverFactory
                 break;
 
             case IPHONE_SIMULATOR:
-                String simulatorPath = System.getProperty("webdriver.iphone.simulator.path");
+                if (browserPath == null)
+                {
+                    throw new RuntimeException("iPhone simulator driver must be configured with a path parameter");
+                }
                 try
                 {
-                    IPhoneSimulatorBinary binary = new IPhoneSimulatorBinary(new File(simulatorPath));
+                    IPhoneSimulatorBinary binary = new IPhoneSimulatorBinary(new File(browserPath));
                     driver = new IPhoneSimulatorDriver(binary);
                 }
                 catch (Exception e)
@@ -127,17 +129,11 @@ public class WebDriverFactory
                 break;
 
             case IPHONE:
-                // device at this address must have iWebDriver app installed
-                String iphoneAddress = System.getProperty("webdriver.iphone.address");
-                try
-                {
-                    driver = new IPhoneDriver(iphoneAddress);
-                }
-                catch (Exception e)
-                {
-                    throw new RuntimeException("Unable to configure iPhone driver", e);
-                }
-                break;
+                // iPhones can only be driven via a RemoteWebDriver
+                throw new RuntimeException("iPhone driver must be configured with a url parameter");
+            case IPAD:
+                // iPads can only be driven via a RemoteWebDriver
+                throw new RuntimeException("iPad driver must be configured with a url parameter");
 
             case ANDROID_EMULATOR:
                 // TODO what extra config is needed for an android emulator?

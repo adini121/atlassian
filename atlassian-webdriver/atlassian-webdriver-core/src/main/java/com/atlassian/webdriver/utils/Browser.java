@@ -18,8 +18,10 @@ public enum Browser
     HTMLUNIT,
     /** Simulator for any iOS device - runs on your OSX desktop. */
     IPHONE_SIMULATOR,
-    /** Uses a real live iPhone, iPad or other iOS device. */
+    /** Uses a real live iPhone. */
     IPHONE,
+    /** Uses a real live iPad. */
+    IPAD,
     /** Android emulator - runs on your desktop. */
     ANDROID_EMULATOR,
     /** Uses a real live Android phone, tablet or other android device. */

@@ -85,6 +85,14 @@ class RemoteWebDriverFactory
             case HTMLUNIT:
                 capabilities = DesiredCapabilities.htmlUnit();
                 break;
+            case IPHONE:
+                // iPhone must have iWebDriver app installed
+                capabilities = DesiredCapabilities.iphone();
+                break;
+            case IPAD:
+                // iPad must have iWebDriver app installed
+                capabilities = DesiredCapabilities.ipad();
+                break;
             case SAFARI:
                 throw new UnsupportedOperationException("Safari is not a supported Browser Type");
             case OPERA:
