@@ -85,7 +85,12 @@
             </dependency>
             <dependency>
                 <groupId>org.hamcrest</groupId>
-                <artifactId>hamcrest-all</artifactId>
+                <artifactId>hamcrest-core</artifactId>
+                <version>${hamcrest.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hamcrest</groupId>
+                <artifactId>hamcrest-library</artifactId>
                 <version>${hamcrest.version}</version>
             </dependency>
         </dependencies>
@@ -109,10 +114,11 @@
                                 <rules>
                                     <bannedDependencies>
                                         <searchTransitive>true</searchTransitive>
-                                        <message>make sure junit and mockito-all are not accidentally included as transitive dependency. Use junit-dep or mockito-core instead</message>
+                                        <message>make sure junit, hamcrest-all and mockito-all are not accidentally included as transitive dependency. Use junit-dep, hamcrest-core, hamcrest-library or mockito-core instead</message>
                                         <excludes>
                                             <exclude>junit:junit</exclude>
                                             <exclude>org.mockito:mockito-all</exclude>
+                                            <exclude>org.hamcrest:hamcrest-all</exclude>
                                         </excludes>
                                     </bannedDependencies>
                                 </rules>
