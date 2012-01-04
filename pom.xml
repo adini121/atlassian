@@ -25,7 +25,7 @@
     </scm>
 
     <properties>
-        <jdkLevel>1.5</jdkLevel>
+        <jdkLevel>1.6</jdkLevel>
         <selenium-browsers-version>1.1-beta13</selenium-browsers-version>
         <webdriver-browsers-version>2.1.1</webdriver-browsers-version>
         <selenium.version>2.15.0</selenium.version>
