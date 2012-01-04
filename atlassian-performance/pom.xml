@@ -22,7 +22,6 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit-dep</artifactId>
-            <version>${junit.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
