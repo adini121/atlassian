@@ -136,12 +136,12 @@ public class WebDriverFactory
                 throw new RuntimeException("iPad driver must be configured with a url parameter");
 
             case ANDROID_EMULATOR:
-                // TODO what extra config is needed for an android emulator?
+                // android emulator must have android-server.apk installed and running
                 driver = new AndroidDriver();
                 break;
 
             case ANDROID:
-                // TODO what extra config is needed for an android device?
+                // android must have android-server.apk installed and running
                 driver = new AndroidDriver();
                 break;
 

@@ -93,6 +93,10 @@ class RemoteWebDriverFactory
                 // iPad must have iWebDriver app installed
                 capabilities = DesiredCapabilities.ipad();
                 break;
+            case ANDROID:
+                // android must have android-server.apk installed and running
+                capabilities = DesiredCapabilities.android();
+                break;
             case SAFARI:
                 throw new UnsupportedOperationException("Safari is not a supported Browser Type");
             case OPERA:
