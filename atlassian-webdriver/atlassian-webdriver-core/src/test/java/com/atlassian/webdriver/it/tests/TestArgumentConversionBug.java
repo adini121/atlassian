@@ -3,6 +3,8 @@ package com.atlassian.webdriver.it.tests;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.it.AbstractFileBasedServerTest;
 import com.atlassian.webdriver.it.pageobjects.page.ArgumentConversionBugPage;
+import com.atlassian.webdriver.testing.annotation.IgnoreBrowser;
+import com.atlassian.webdriver.utils.Browser;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -11,6 +13,7 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
+@IgnoreBrowser(Browser.HTMLUNIT_NOJS)
 public class TestArgumentConversionBug extends AbstractFileBasedServerTest
 {
 

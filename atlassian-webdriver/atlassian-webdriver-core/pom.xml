@@ -116,20 +116,11 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
-                     <systemProperties>
-                        <property>
-                            <name>xvfb.enable</name>
-                            <value>${xvfb.enable}</value>
-                        </property>
-                        <property>
-                            <name>xvfb.display</name>
-                            <value>${xvfb.display}</value>
-                        </property>
-                        <property>
-                            <name>webdriver.browser</name>
-                            <value>${webdriver.browser}</value>
-                        </property>
-                    </systemProperties>
+                     <systemPropertyVariables>
+                        <xvfb.enable>${xvfb.enable}</xvfb.enable>
+                        <xvfb.display>${xvfb.display}</xvfb.display>
+                        <webdriver.browser>${webdriver.browser}</webdriver.browser>
+                    </systemPropertyVariables>
                 </configuration>
             </plugin>
         </plugins>

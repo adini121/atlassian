@@ -19,6 +19,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * Test for checking ByJquery functionality in Atlassian WebDriver.
  */
+@IgnoreBrowser(Browser.HTMLUNIT_NOJS)
 public class TestJavaScriptUtils extends AbstractFileBasedServerTest
 {
 
@@ -54,6 +55,7 @@ public class TestJavaScriptUtils extends AbstractFileBasedServerTest
     }
 
     @Test
+    @IgnoreBrowser(value = {Browser.HTMLUNIT}, reason = "jQuery hovering on elements does not work.")
     public void testJQueryHoverRespondsToMouseover()
     {
         WebElement hoveringDiv = driver.findElement(By.id("hovering-jquery-element"));

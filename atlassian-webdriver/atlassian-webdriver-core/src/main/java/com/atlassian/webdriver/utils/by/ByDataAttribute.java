@@ -13,6 +13,16 @@ import java.util.List;
  */
 public final class ByDataAttribute
 {
+    private abstract static class ByData extends By
+    {
+        /** Override to avoid a stack overflow in {@link Object#toString} and {@link By#hashCode}. */
+        @Override
+        public String toString()
+        {
+            return "ByData";
+        }
+    }
+
     private ByDataAttribute()
     {
         throw new AssertionError("Don't instantiate me");
@@ -21,7 +31,7 @@ public final class ByDataAttribute
 
     public static By byData(final String attributeName)
     {
-        return new By()
+        return new ByData()
         {
             @Override
             public List<WebElement> findElements(SearchContext context)
@@ -33,7 +43,7 @@ public final class ByDataAttribute
 
     public static By byData(final String attributeName, final String attributeValue)
     {
-        return new By()
+        return new ByData()
         {
             @Override
             public List<WebElement> findElements(SearchContext context)
@@ -45,7 +55,7 @@ public final class ByDataAttribute
 
     public static By byTagAndData(final String tagName, final String dataAttributeName)
     {
-        return new By()
+        return new ByData()
         {
             @Override
             public List<WebElement> findElements(SearchContext context)
@@ -57,7 +67,7 @@ public final class ByDataAttribute
 
     public static By byTagAndData(final String tagName, final String dataAttributeName, final String dataAttributeValue)
     {
-        return new By()
+        return new ByData()
         {
             @Override
             public List<WebElement> findElements(SearchContext context)

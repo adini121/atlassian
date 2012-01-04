@@ -41,6 +41,31 @@ public class WebDriverFactory
         return System.getProperty("webdriver.browser", "firefox");
     }
 
+    public static Browser getBrowser()
+    {
+        String browserProperty = getBrowserProperty();
+
+        return getBrowser(browserProperty);
+    }
+
+    public static Browser getBrowser(String browserProperty)
+    {
+        if (RemoteWebDriverFactory.matches(browserProperty))
+        {
+            return RemoteWebDriverFactory.getBrowser(browserProperty);
+        }
+
+        Matcher matcher = browserPathPattern.matcher(browserProperty);
+
+        if (matcher.matches())
+        {
+            browserProperty = matcher.group(1);
+        }
+
+        Browser browserType = Browser.typeOf(browserProperty);
+        return browserType;
+    }
+
     public static AtlassianWebDriver getDriver(BrowserConfig browserConfig)
     {
         WebDriver driver;

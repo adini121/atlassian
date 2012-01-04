@@ -14,7 +14,8 @@ public abstract class AbstractFileBasedServerTest
     @Rule public IgnoreBrowserRule ignoreRule = new IgnoreBrowserRule();
     @Rule public TestedProductRule<SimpleTestedProduct> product =
         new TestedProductRule<SimpleTestedProduct>(SimpleTestedProduct.class);
-    @Rule public TestBrowserRule testBrowserRule = new TestBrowserRule();
+// enable TestBrowserRule (and make sure it's listed after IgnoreBrowserRule) if you want to be able to switch browsers mid-suite
+//    @Rule public TestBrowserRule testBrowserRule = new TestBrowserRule();
     @Rule public WebDriverScreenshotRule webDriverScreenshotRule = new WebDriverScreenshotRule();
     @Rule public SessionCleanupRule sessionCleanupRule = new SessionCleanupRule();
 

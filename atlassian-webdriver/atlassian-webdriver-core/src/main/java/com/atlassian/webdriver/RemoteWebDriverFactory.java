@@ -30,6 +30,19 @@ class RemoteWebDriverFactory
         return remoteBrowserPathPattern.matcher(browserProperty).matches();
     }
 
+    public static Browser getBrowser(String browserProperty)
+    {
+        Matcher matcher = remoteBrowserPathPattern.matcher(browserProperty);
+
+        if (!matcher.matches())
+        {
+            // this shouldn't happen anyway.
+            return Browser.FIREFOX;
+        }
+        Browser browserType = Browser.typeOf(matcher.group(1));
+        return browserType;
+    }
+
     public static AtlassianWebDriver getDriver(String browserProperty, BrowserConfig browserConfig)
     {
         Matcher matcher = remoteBrowserPathPattern.matcher(browserProperty);

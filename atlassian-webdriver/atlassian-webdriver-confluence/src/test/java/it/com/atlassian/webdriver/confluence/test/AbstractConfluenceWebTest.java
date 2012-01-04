@@ -1,7 +1,5 @@
 package it.com.atlassian.webdriver.confluence.test;
 
-import com.atlassian.pageobjects.PageBinder;
-import com.atlassian.pageobjects.TestedProductFactory;
 import com.atlassian.pageobjects.page.LoginPage;
 import com.atlassian.webdriver.confluence.ConfluenceTestedProduct;
 import com.atlassian.webdriver.confluence.page.DashboardPage;
@@ -23,7 +21,8 @@ public abstract class AbstractConfluenceWebTest
     public IgnoreBrowserRule ignoreRule = new IgnoreBrowserRule();
     @Rule public TestedProductRule<ConfluenceTestedProduct> product =
         new TestedProductRule<ConfluenceTestedProduct>(ConfluenceTestedProduct.class);
-    @Rule public TestBrowserRule testBrowserRule = new TestBrowserRule();
+// enable TestBrowserRule (and make sure it's listed after IgnoreBrowserRule) if you want to be able to switch browsers mid-suite
+//    @Rule public TestBrowserRule testBrowserRule = new TestBrowserRule();
     @Rule public WebDriverScreenshotRule webDriverScreenshotRule = new WebDriverScreenshotRule();
     @Rule public SessionCleanupRule sessionCleanupRule = new SessionCleanupRule();
 

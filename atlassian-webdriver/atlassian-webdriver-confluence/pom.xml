@@ -16,7 +16,6 @@
             <plugin>
                 <groupId>com.atlassian.maven.plugins</groupId>
                 <artifactId>maven-confluence-plugin</artifactId>
-                <version>3.3-m8</version>
                 <executions>
                     <execution>
                         <goals>
@@ -30,6 +29,8 @@
                     <productVersion>3.5</productVersion>
                     <systemPropertyVariables>
                         <xvfb.enable>${xvfb.enable}</xvfb.enable>
+                        <xvfb.display>${xvfb.display}</xvfb.display>
+                        <webdriver.browser>${webdriver.browser}</webdriver.browser>
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
@@ -51,4 +52,7 @@
         </dependency>
     </dependencies>
 
+    <properties>
+        <webdriver.browser>firefox</webdriver.browser>
+    </properties>
 </project>

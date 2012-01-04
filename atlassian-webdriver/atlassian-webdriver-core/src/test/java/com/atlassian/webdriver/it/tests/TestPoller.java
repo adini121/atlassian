@@ -4,6 +4,8 @@ import com.atlassian.webdriver.it.AbstractFileBasedServerTest;
 import com.atlassian.webdriver.it.pageobjects.page.PollerPage;
 import com.atlassian.webdriver.poller.Poller;
 import com.atlassian.webdriver.poller.webdriver.function.ConditionFunction;
+import com.atlassian.webdriver.testing.annotation.IgnoreBrowser;
+import com.atlassian.webdriver.utils.Browser;
 import com.atlassian.webdriver.utils.Check;
 import org.junit.Assert;
 import org.junit.Before;
@@ -24,6 +26,7 @@ import static org.junit.Assert.fail;
  *
  * @since 2.1.0
  */
+@IgnoreBrowser(Browser.HTMLUNIT_NOJS)
 public class TestPoller extends AbstractFileBasedServerTest
 {
 
