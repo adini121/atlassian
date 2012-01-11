@@ -17,8 +17,7 @@ import org.junit.Rule;
 public abstract class AbstractConfluenceWebTest
 {
 
-    @Rule
-    public IgnoreBrowserRule ignoreRule = new IgnoreBrowserRule();
+    @Rule public IgnoreBrowserRule ignoreRule = new IgnoreBrowserRule();
     @Rule public TestedProductRule<ConfluenceTestedProduct> product =
         new TestedProductRule<ConfluenceTestedProduct>(ConfluenceTestedProduct.class);
 // enable TestBrowserRule (and make sure it's listed after IgnoreBrowserRule) if you want to be able to switch browsers mid-suite

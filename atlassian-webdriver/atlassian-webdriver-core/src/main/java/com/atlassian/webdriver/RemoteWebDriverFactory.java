@@ -37,6 +37,7 @@ class RemoteWebDriverFactory
         if (!matcher.matches())
         {
             // this shouldn't happen anyway.
+            log.warn("Cannot find a url to connect to with a RemoteWebDriver. Falling back to using a local FirefoxDriver instead");
             return Browser.FIREFOX;
         }
         Browser browserType = Browser.typeOf(matcher.group(1));
@@ -50,6 +51,7 @@ class RemoteWebDriverFactory
         if (!matcher.matches())
         {
             // this shouldn't happen anyway.
+            log.warn("Cannot find a url to connect to with a RemoteWebDriver. Falling back to using a local FirefoxDriver instead");
             return new DefaultAtlassianWebDriver(new FirefoxDriver());
         }
 
