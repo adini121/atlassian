@@ -4,6 +4,8 @@ import com.atlassian.pageobjects.elements.query.Poller;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.AuiPage;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.ElementsPage;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.JQueryPage;
+import com.atlassian.webdriver.testing.annotation.IgnoreBrowser;
+import com.atlassian.webdriver.utils.Browser;
 import org.junit.Test;
 
 import java.util.List;
@@ -12,6 +14,7 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 
+@IgnoreBrowser(Browser.HTMLUNIT_NOJS)
 public class TestComponents extends AbstractFileBasedServerTest
 {
     @Test

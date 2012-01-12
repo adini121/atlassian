@@ -3,8 +3,11 @@ package com.atlassian.pageobjects.elements.test;
 import com.atlassian.pageobjects.TestedProductFactory;
 import com.atlassian.pageobjects.elements.test.pageobjects.SampleTestedProduct;
 import com.atlassian.webdriver.AtlassianWebDriver;
+import com.atlassian.webdriver.testing.rule.IgnoreBrowserRule;
+import com.atlassian.webdriver.testing.rule.WebDriverScreenshotRule;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 
 public abstract class AbstractFileBasedServerTest 
 {
@@ -12,6 +15,9 @@ public abstract class AbstractFileBasedServerTest
     public static String rootUrl;
     public static AtlassianWebDriver driver;
     public static SampleTestedProduct product;
+
+    @Rule public IgnoreBrowserRule ignoreRule = new IgnoreBrowserRule();
+    @Rule public WebDriverScreenshotRule webDriverScreenshotRule = new WebDriverScreenshotRule();
 
     @BeforeClass
     public static void startServer() throws Exception

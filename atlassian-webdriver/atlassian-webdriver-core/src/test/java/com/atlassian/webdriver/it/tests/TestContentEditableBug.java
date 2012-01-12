@@ -18,6 +18,7 @@ import static org.junit.Assert.assertFalse;
 /**
  * @since 2.1
  */
+@IgnoreBrowser(value = {Browser.HTMLUNIT, Browser.HTMLUNIT_NOJS}, reason = "SELENIUM-165 HtmlUnit does not support contenteditable")
 public class TestContentEditableBug extends AbstractFileBasedServerTest
 {
 

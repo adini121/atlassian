@@ -4,6 +4,8 @@ import com.atlassian.pageobjects.elements.GlobalElementFinder;
 import com.atlassian.pageobjects.elements.PageElement;
 import com.atlassian.pageobjects.elements.PageElementFinder;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.EventsPage;
+import com.atlassian.webdriver.testing.annotation.IgnoreBrowser;
+import com.atlassian.webdriver.utils.Browser;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -16,6 +18,7 @@ import static com.atlassian.pageobjects.elements.query.Poller.waitUntilTrue;
  *
  * @since 2.1
  */
+@IgnoreBrowser(Browser.HTMLUNIT_NOJS)
 public class TestPageElementJavaScriptEvents extends AbstractFileBasedServerTest
 {
 
@@ -50,6 +53,7 @@ public class TestPageElementJavaScriptEvents extends AbstractFileBasedServerTest
     }
 
     @Test
+    @IgnoreBrowser(value = {Browser.HTMLUNIT}, reason = "SELENIUM-167 :focus selector not supported")
     public void testFormEvents()
     {
         final PageElement formEventListener = elementFinder.find(By.id("form-event-listener"));

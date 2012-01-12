@@ -6,6 +6,8 @@ import static junit.framework.Assert.assertTrue;
 
 import java.util.Iterator;
 
+import com.atlassian.webdriver.testing.annotation.IgnoreBrowser;
+import com.atlassian.webdriver.utils.Browser;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -56,6 +58,7 @@ public class TestIterable extends AbstractFileBasedServerTest
     }
 
     @Test
+    @IgnoreBrowser(Browser.HTMLUNIT_NOJS)
     public void testIterableThreeElements()
     {
         Iterator<PageElement> elements = elementsPage.getThreeElements().iterator();

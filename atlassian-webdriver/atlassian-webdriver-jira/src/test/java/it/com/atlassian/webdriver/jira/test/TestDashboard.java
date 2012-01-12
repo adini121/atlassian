@@ -8,6 +8,8 @@ import com.atlassian.webdriver.jira.component.menu.AdminMenu;
 import com.atlassian.webdriver.jira.page.DashboardPage;
 import com.atlassian.webdriver.jira.page.LicenseDetailsPage;
 import com.atlassian.webdriver.jira.page.LogoutPage;
+import com.atlassian.webdriver.testing.annotation.IgnoreBrowser;
+import com.atlassian.webdriver.utils.Browser;
 import org.junit.After;
 import org.junit.Test;
 
@@ -29,6 +31,7 @@ public class TestDashboard
     }
 
     @Test
+    @IgnoreBrowser(Browser.HTMLUNIT_NOJS)
     public void testDashboardMenu()
     {
         DashboardPage dashboard = JIRA.gotoLoginPage().loginAsSysAdmin(DashboardPage.class);

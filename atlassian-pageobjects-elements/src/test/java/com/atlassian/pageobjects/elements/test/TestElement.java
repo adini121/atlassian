@@ -9,6 +9,8 @@ import com.atlassian.pageobjects.elements.query.Poller;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.DynamicPage;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.ElementsPage;
 import com.atlassian.pageobjects.elements.timeout.TimeoutType;
+import com.atlassian.webdriver.testing.annotation.IgnoreBrowser;
+import com.atlassian.webdriver.utils.Browser;
 import com.atlassian.webdriver.utils.by.ByJquery;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,6 +24,7 @@ import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
 
+@IgnoreBrowser(Browser.HTMLUNIT_NOJS)
 public class TestElement extends AbstractFileBasedServerTest
 {
     private PageElementFinder elementFinder;
@@ -94,7 +97,7 @@ public class TestElement extends AbstractFileBasedServerTest
         product.find(By.id("test3_addElementsButton")).click();
         assertEquals("Delayed Span", product.find(By.id("test3_delayedSpan")).getText());
 
-        // Delayed postive - click on button that sets the text of span with delay, verify getText does not wait
+        // Delayed positive - click on button that sets the text of span with delay, verify getText does not wait
         product.find(By.id("test3_setTextButton")).click();
         assertEquals("", product.find(By.id("test3_spanEmpty")).getText());
     }
@@ -287,7 +290,7 @@ public class TestElement extends AbstractFileBasedServerTest
     @Test
     public void testExecuteScriptOnAnElement()
     {
-        ElementsPage page = product.visit(ElementsPage.class);
+        product.visit(ElementsPage.class);
         PageElement button = elementFinder.find(By.id(("test11_button")));
 
         assertFalse(button.hasClass("test"));

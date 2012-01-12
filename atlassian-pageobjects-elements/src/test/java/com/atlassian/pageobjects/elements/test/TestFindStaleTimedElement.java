@@ -5,6 +5,8 @@ import com.atlassian.pageobjects.elements.PageElement;
 import com.atlassian.pageobjects.elements.PageElementFinder;
 import com.atlassian.pageobjects.elements.query.Poller;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.ElementsPage;
+import com.atlassian.webdriver.testing.annotation.IgnoreBrowser;
+import com.atlassian.webdriver.utils.Browser;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -13,6 +15,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
+@IgnoreBrowser(Browser.HTMLUNIT_NOJS)
 public class TestFindStaleTimedElement extends AbstractFileBasedServerTest
 {
     private PageElementFinder elementFinder;

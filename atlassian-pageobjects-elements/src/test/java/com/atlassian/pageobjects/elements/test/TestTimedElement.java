@@ -5,12 +5,15 @@ import com.atlassian.pageobjects.elements.TimedElement;
 import com.atlassian.pageobjects.elements.query.Poller;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.ElementsPage;
 import com.atlassian.pageobjects.elements.timeout.TimeoutType;
+import com.atlassian.webdriver.testing.annotation.IgnoreBrowser;
+import com.atlassian.webdriver.utils.Browser;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
 import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.Matchers.equalToIgnoringCase;
 
+@IgnoreBrowser(Browser.HTMLUNIT_NOJS)
 public class TestTimedElement extends AbstractFileBasedServerTest
 {
     @Test

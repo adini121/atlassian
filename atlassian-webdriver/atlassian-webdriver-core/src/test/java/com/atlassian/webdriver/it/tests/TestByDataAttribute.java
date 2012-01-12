@@ -2,6 +2,8 @@ package com.atlassian.webdriver.it.tests;
 
 import com.atlassian.webdriver.it.AbstractFileBasedServerTest;
 import com.atlassian.webdriver.it.pageobjects.page.ByDataAttributePage;
+import com.atlassian.webdriver.testing.annotation.IgnoreBrowser;
+import com.atlassian.webdriver.utils.Browser;
 import com.atlassian.webdriver.utils.by.ByDataAttribute;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,6 +37,7 @@ public class TestByDataAttribute extends AbstractFileBasedServerTest
 
 
     @Test
+    @IgnoreBrowser(value = {Browser.HTMLUNIT, Browser.HTMLUNIT_NOJS}, reason = "SELENIUM-166 HtmlUnit has partial support for data- attributes")
     public void shouldFindAllByAttributeName()
     {
         final List<WebElement> elements = driver.findElements(ByDataAttribute.byData("type"));
@@ -56,6 +59,7 @@ public class TestByDataAttribute extends AbstractFileBasedServerTest
     }
 
     @Test
+    @IgnoreBrowser(value = {Browser.HTMLUNIT, Browser.HTMLUNIT_NOJS}, reason = "SELENIUM-166 HtmlUnit has partial support for data- attributes")
     public void shouldFindByTagNameAndData()
     {
         final List<WebElement> listElements = driver.findElements(ByDataAttribute.byTagAndData("li", "type"));
@@ -75,6 +79,7 @@ public class TestByDataAttribute extends AbstractFileBasedServerTest
     }
 
     @Test
+    @IgnoreBrowser(value = {Browser.HTMLUNIT, Browser.HTMLUNIT_NOJS}, reason = "SELENIUM-166 HtmlUnit has partial support for data- attributes")
     public void shouldFindByWeirdDataAttributeValues()
     {
         final WebElement weirdOne = driver.findElement(ByDataAttribute.byTagAndData("li", "a-attribute"));
