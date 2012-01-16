@@ -44,13 +44,21 @@ public class JavaScriptUtils
         dispatchEvent(event, el, driver);
     }
 
-
-    public static void loadScript(String jsScriptName, WebDriver driver)
+    /**
+     * Will load a javascript file from the class loader.
+     * @param jsScriptName the name of the javascipt file
+     * @param driver the webdriver to execute the javascript
+     * @return true if the file was loaded. false if it was already loaded.
+     */
+    public static boolean loadScript(String jsScriptName, WebDriver driver)
     {
         if (!isScriptLoaded(jsScriptName,driver))
         {
             doLoadScript(jsScriptName, driver, true);
+            return true;
         }
+
+        return false;
     }
 
     public static boolean isScriptLoaded(String jsScriptName, WebDriver webDriver)
@@ -83,13 +91,14 @@ public class JavaScriptUtils
 
     }
 
-
     private static void loadCoreScript(WebDriver webDriver)
     {
         if (Boolean.FALSE.equals(isCoreLoaded(webDriver)))
         {
             doLoadScript("js/atlassian/atlassian-webdriver-core.js", webDriver, false);
             doLoadScript("js/atlassian/scriptloader/scriptloader.js", webDriver, false);
+            loadScript("js/jquery/jquery-1.4.2.min.js", webDriver);
+            execute("ATLWD.loadJquery()", webDriver);
         }
     }
 

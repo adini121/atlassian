@@ -1,31 +1,11 @@
 (function(window, undefined) {
 
-var proto = "prototype",
-    toString = "toString",
-    objectToString = Object[proto][toString],
-    lowerCase = String[proto].toLowerCase;
-
-var oldjQuery = window.jQuery;
-var old$ = window.$;
-
 ATLWD.byJquery = {};
-
-ATLWD.loadJquery = function() {
-    ATLWD.byJquery.$ = $.noConflict();
-
-    if (oldjQuery) {
-        window.jQuery = oldjQuery;
-    }
-
-    if (old$) {
-        window.$ = old$;
-    }
-};
 
 ATLWD.byJquery.execute = function(jq, context) {
     console.log("ATLWD.byJquery.execute: " + jq + ", context:" + context);
 
-    var result = ATLWD.byJquery.$.makeArray(eval(jq));
+    var result = ATLWD.$.makeArray(eval(jq));
 
     console.log("execute result: ");
     console.log(result);

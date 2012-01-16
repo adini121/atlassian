@@ -5,6 +5,9 @@
 (function(window) {
     var ATLWD = window.ATLWD || {};
 
+    var oldjQuery = window.jQuery;
+    var old$ = window.$;
+
     // Silence console calls if there is no console.
     if(typeof window.console !== 'object') {
         window.console = {
@@ -14,6 +17,17 @@
     }
 
     // util functions
+    ATLWD.loadJquery = function() {
+        ATLWD.$ = $.noConflict();
+
+        if (oldjQuery) {
+            window.jQuery = oldjQuery;
+        }
+
+        if (old$) {
+            window.$ = old$;
+        }
+    };
 
     ATLWD.arrayContains = function(array, obj) {
         for (var i = 0; i < array.length; i++) {

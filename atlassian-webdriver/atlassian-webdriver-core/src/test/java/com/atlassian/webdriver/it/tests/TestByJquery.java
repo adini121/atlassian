@@ -88,6 +88,26 @@ public class TestByJquery extends AbstractFileBasedServerTest
         }
     }
 
+    @Test
+    public void testContainsSelector()
+    {
+        List<WebElement> els = driver.findElements(ByJquery.$("div:contains('contains1')"));
+        assertTrue("Expected two elements to be found.", els.size() == 2);
+
+        assertEquals("contains-test", els.get(0).getAttribute("className"));
+        assertEquals("contains1", els.get(1).getText());
+    }
+
+    @Test
+    public void testMultipleSelectorWithContains()
+    {
+        List<WebElement> els = driver.findElements(ByJquery.$(".contains-test div:contains('contains1')"));
+
+        assertTrue("Only expected one element to be found", els.size() == 1);
+
+        assertEquals("contains1", els.get(0).getText());
+    }
+
     @Test(expected = NoSuchElementException.class)
     public void testSingleSelectorElementNotFoundShouldThrowException()
     {

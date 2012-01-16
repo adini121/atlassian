@@ -1,6 +1,7 @@
 package com.atlassian.webdriver.utils.by;
 
 import com.atlassian.webdriver.utils.JavaScriptUtils;
+import com.google.common.base.Preconditions;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.openqa.selenium.By;
@@ -116,7 +117,7 @@ public abstract class ByJquery extends By
                 case CHILDREN:
                 case PREV:
                 case CLOSEST:
-                    args = new Object[]{"ATLWD.byJquery.$(context)." + selector.type.name().toLowerCase() + "(" + selectorStr + ")", elements };
+                    args = new Object[]{"ATLWD.$(context)." + selector.type.name().toLowerCase() + "(" + selectorStr + ")", elements };
                     elements = JavaScriptUtils.execute("return ATLWD.byJquery.execute(arguments[0],arguments[1])", getDriver(), args);
                     break;
 
@@ -224,12 +225,12 @@ public abstract class ByJquery extends By
 
         if (context instanceof WebElement)
         {
-            Object[] args = { "ATLWD.byJquery.$(context).find(" + fixedSelector + ")", (WebElement) context };
+            Object[] args = { "ATLWD.$(context).find(" + fixedSelector + ")", (WebElement) context };
             return JavaScriptUtils.execute("return ATLWD.byJquery.execute(arguments[0],arguments[1])", getDriver(), args);
         }
         else
         {
-            Object[] args = { "ATLWD.byJquery.$(document).find(" + fixedSelector  + ")"};
+            Object[] args = { "ATLWD.$(document).find(" + fixedSelector  + ")"};
             return JavaScriptUtils.execute("return ATLWD.byJquery.execute(arguments[0])", getDriver(), args);
         }
     }
@@ -242,7 +243,7 @@ public abstract class ByJquery extends By
         List<WebElement> newElements = new ArrayList<WebElement>();
         for (WebElement element : els)
         {
-            Object[] args = { "ATLWD.byJquery.$(context).find('" + selector + "')", element };
+            Object[] args = { "ATLWD.$(context).find(" + fixSelector(selector) + ")", element };
             List<WebElement> temp = JavaScriptUtils.execute("return ATLWD.byJquery.execute(arguments[0],arguments[1])", getDriver(), args);
             newElements.addAll(temp);
         }
@@ -417,24 +418,7 @@ public abstract class ByJquery extends By
 
     private static void loadJqueryLocator(WebDriver driver)
     {
-        if (!isLoaded(driver))
-        {
-            JavaScriptUtils.loadScript("js/byjquery/byJquery.js", driver);
-            JavaScriptUtils.loadScript("js/jquery/jquery-1.4.2.min.js", driver);
-            JavaScriptUtils.execute("ATLWD.loadJquery()", driver);
-        }
-
-    }
-
-    private static boolean isLoaded(WebDriver driver)
-    {
-        if (driver == null)
-        {
-            throw new NullPointerException("driver is null, have you called ByJquery.init()?");
-        }
-        String js = "return window.ATLWD != undefined && window.ATLWD.byJquery != undefined";
-        Boolean jQueryLocatorDefined = JavaScriptUtils.execute(js, driver);
-        return jQueryLocatorDefined;
+        JavaScriptUtils.loadScript("js/byjquery/byJquery.js", driver);
     }
 
     @Override
