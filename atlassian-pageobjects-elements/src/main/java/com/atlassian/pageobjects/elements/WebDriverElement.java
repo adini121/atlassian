@@ -248,6 +248,14 @@ public class WebDriverElement implements PageElement
         return elements;
     }
 
+    /**
+     * This allows retreiving the webelement from the page element
+     * @return the web element that represents the page element.
+     */
+    public WebElement asWebElement()
+    {
+        return waitForWebElement();
+    }
 
     public PageElement withTimeout(TimeoutType timeoutType)
     {

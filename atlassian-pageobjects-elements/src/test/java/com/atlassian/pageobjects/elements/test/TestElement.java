@@ -5,6 +5,7 @@ import com.atlassian.pageobjects.elements.Options;
 import com.atlassian.pageobjects.elements.PageElement;
 import com.atlassian.pageobjects.elements.PageElementFinder;
 import com.atlassian.pageobjects.elements.SelectElement;
+import com.atlassian.pageobjects.elements.WebDriverElement;
 import com.atlassian.pageobjects.elements.query.Poller;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.DynamicPage;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.ElementsPage;
@@ -234,6 +235,29 @@ public class TestElement extends AbstractFileBasedServerTest
         //recreate the fields
         page.createFieldSet();
         username.type("Developer");
+        button.click();
+        assertEquals("Hello Developer!", message.getText());
+    }
+
+    @Test
+    public void elementShouldBeConvertedToWebElement()
+    {
+        DynamicPage page = product.visit(DynamicPage.class);
+        PageElementFinder elementFinder = page.getElementFinder();
+
+        PageElement div = elementFinder.find(By.id("placeHolderDiv"));
+        WebDriverElement username = (WebDriverElement) div.find(By.tagName("fieldset")).find(By.id("nameTextBox"));
+        PageElement button = div.find(By.tagName("fieldset")).find(By.id("helloWorldButton"));
+        PageElement message = div.find(By.tagName("fieldset")).find(By.id("messageSpan"));
+
+        page.createFieldSet();
+        username.asWebElement().sendKeys("Tester");
+        button.click();
+        assertEquals("Hello Tester!", message.getText());
+
+        //recreate the fields
+        page.createFieldSet();
+        username.asWebElement().sendKeys("Developer");
         button.click();
         assertEquals("Hello Developer!", message.getText());
     }
