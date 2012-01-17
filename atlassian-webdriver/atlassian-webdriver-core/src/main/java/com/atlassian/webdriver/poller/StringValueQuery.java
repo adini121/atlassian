@@ -10,35 +10,35 @@ import com.atlassian.annotations.ExperimentalApi;
 @ExperimentalApi
 public interface StringValueQuery
 {
-    ExecutablePollerQuery contains(String value);
-    ExecutablePollerQuery notContains(String value);
+    ExecutableWaiterQuery contains(String value);
+    ExecutableWaiterQuery notContains(String value);
 
     /**
      * isEqual will evaluate to true if both values are null or equal.
      */
-    ExecutablePollerQuery isEqual(String value);
-    ExecutablePollerQuery notEqual(String value);
+    ExecutableWaiterQuery isEqual(String value);
+    ExecutableWaiterQuery notEqual(String value);
 
     /**
      * isEmpty should evaludate to true if the value is null
      * or is the empty String
      */
-    ExecutablePollerQuery isEmpty();
+    ExecutableWaiterQuery isEmpty();
 
     /**
      * isNotEmpty should evaluate to true if the value is not null
      * and is not the empty String.
      */
-    ExecutablePollerQuery isNotEmpty();
+    ExecutableWaiterQuery isNotEmpty();
 
-    ExecutablePollerQuery endsWith(String value);
-    ExecutablePollerQuery doesNotEndWith(String value);
+    ExecutableWaiterQuery endsWith(String value);
+    ExecutableWaiterQuery doesNotEndWith(String value);
 
-    ExecutablePollerQuery matches(String value);
-    ExecutablePollerQuery doesNotMatch(String value);
+    ExecutableWaiterQuery matches(String value);
+    ExecutableWaiterQuery doesNotMatch(String value);
 
-    ExecutablePollerQuery startsWith(String value);
-    ExecutablePollerQuery doesNotStartWith(String value);
+    ExecutableWaiterQuery startsWith(String value);
+    ExecutableWaiterQuery doesNotStartWith(String value);
 
-    ExecutablePollerQuery equalsIgnoresCase(String value);
+    ExecutableWaiterQuery equalsIgnoresCase(String value);
 }

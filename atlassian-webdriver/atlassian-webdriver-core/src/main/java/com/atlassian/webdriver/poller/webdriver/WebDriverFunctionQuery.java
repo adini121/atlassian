@@ -2,10 +2,10 @@ package com.atlassian.webdriver.poller.webdriver;
 
 import com.atlassian.annotations.ExperimentalApi;
 import com.atlassian.webdriver.poller.webdriver.function.ConditionFunction;
-import com.atlassian.webdriver.poller.ExecutablePollerQuery;
+import com.atlassian.webdriver.poller.ExecutableWaiterQuery;
 import com.atlassian.webdriver.poller.FunctionQuery;
 import com.atlassian.webdriver.poller.Query;
-import com.atlassian.webdriver.poller.webdriver.function.FalseFunction;
+import com.atlassian.webdriver.poller.webdriver.function.NotFunction;
 
 /**
  *
@@ -19,52 +19,36 @@ class WebDriverFunctionQuery implements FunctionQuery
     private final WebDriverQueryBuilder builder;
     private final ConditionFunction func;
 
-    enum FunctionQueryType {
-        IS_TRUE,
-        IS_FALSE;
-    }
-
-    private class WrappedWebDriverFunctionQuery implements Query
-    {
-        private final ConditionFunction func;
-        private final FunctionQueryType type;
-
-        public WrappedWebDriverFunctionQuery(ConditionFunction func, FunctionQueryType type)
-        {
-            this.func = func;
-            this.type = type;
-        }
-
-        public ConditionFunction build()
-        {
-            switch(type)
-            {
-                case IS_TRUE:
-                    return func;
-                case IS_FALSE:
-                    return new FalseFunction(func);
-                default:
-                    throw new UnsupportedOperationException("Unsupported function query type:" + type);
-            }
-        }
-    }
-
     public WebDriverFunctionQuery(WebDriverQueryBuilder builder, ConditionFunction func)
     {
         this.builder = builder;
         this.func = func;
     }
 
-    public ExecutablePollerQuery isTrue()
+    public ExecutableWaiterQuery isTrue()
     {
-        builder.add(new WrappedWebDriverFunctionQuery(func, FunctionQueryType.IS_TRUE));
-        return new WebDriverPollerQuery.WebDriverExecutablePollerQuery(builder);
+        builder.add(new Query()
+        {
+            @Override
+            public ConditionFunction build()
+            {
+                return func;
+            }
+        });
+        return new WebDriverWaiterQuery.WebDriverExecutableWaiterQuery(builder);
     }
 
-    public ExecutablePollerQuery isFalse()
+    public ExecutableWaiterQuery isFalse()
     {
-        builder.add(new WrappedWebDriverFunctionQuery(func, FunctionQueryType.IS_FALSE));
-        return new WebDriverPollerQuery.WebDriverExecutablePollerQuery(builder);
+        builder.add(new Query()
+        {
+            @Override
+            public ConditionFunction build()
+            {
+                return new NotFunction(func);
+            }
+        });
+        return new WebDriverWaiterQuery.WebDriverExecutableWaiterQuery(builder);
     }
 
 }

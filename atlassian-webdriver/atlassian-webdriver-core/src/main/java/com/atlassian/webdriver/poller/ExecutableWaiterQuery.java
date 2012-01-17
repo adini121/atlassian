@@ -8,7 +8,7 @@ import com.atlassian.annotations.ExperimentalApi;
  * @since 2.1.0
  */
 @ExperimentalApi
-public interface ExecutablePollerQuery
+public interface ExecutableWaiterQuery
 {
     /**
      * Executes the built up poller query.
@@ -19,11 +19,11 @@ public interface ExecutablePollerQuery
      * Allows chaining of queries together and will pass when
      * both queries evaluates to true
      */
-    PollerQuery and();
+    WaiterQuery and();
 
     /**
      * Allows chaining of queries together and will pass when
      * either query evaluates to true
      */
-    PollerQuery or();
+    WaiterQuery or();
 }

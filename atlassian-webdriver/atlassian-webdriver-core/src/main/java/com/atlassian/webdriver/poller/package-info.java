@@ -1,6 +1,6 @@
 /**
  *
- * WebDriver Poller utility for performing timed queries on
+ * WebDriver Waiter utility for performing timed queries on
  * elements and executing timed functions
  *
  * WARNING: This API is still experimental and may be changed between versions.

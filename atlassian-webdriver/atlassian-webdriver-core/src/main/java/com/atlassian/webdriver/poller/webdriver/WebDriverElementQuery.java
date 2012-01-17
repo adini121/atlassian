@@ -1,19 +1,20 @@
 package com.atlassian.webdriver.poller.webdriver;
 
 import com.atlassian.annotations.ExperimentalApi;
-import com.atlassian.webdriver.element.WebElementFieldRetriever;
-import com.atlassian.webdriver.element.WebElementRetriever;
+
 import com.atlassian.webdriver.poller.webdriver.function.ConditionFunction;
 import com.atlassian.webdriver.poller.ElementQuery;
-import com.atlassian.webdriver.poller.ExecutablePollerQuery;
+import com.atlassian.webdriver.poller.ExecutableWaiterQuery;
 import com.atlassian.webdriver.poller.Query;
 import com.atlassian.webdriver.poller.StringValueQuery;
-import com.atlassian.webdriver.poller.webdriver.function.FalseFunction;
+import com.atlassian.webdriver.poller.webdriver.function.NotFunction;
 import com.atlassian.webdriver.poller.webdriver.function.element.ExistsFunction;
 import com.atlassian.webdriver.poller.webdriver.function.element.HasClassFunction;
 import com.atlassian.webdriver.poller.webdriver.function.element.IsEnabledFunction;
 import com.atlassian.webdriver.poller.webdriver.function.element.IsSelectedFunction;
 import com.atlassian.webdriver.poller.webdriver.function.element.IsVisibleFunction;
+import com.atlassian.webdriver.poller.webdriver.retriever.WebElementFieldRetriever;
+import com.atlassian.webdriver.poller.webdriver.retriever.WebElementRetriever;
 
 /**
  *
@@ -24,71 +25,8 @@ import com.atlassian.webdriver.poller.webdriver.function.element.IsVisibleFuncti
 @ExperimentalApi
 public class WebDriverElementQuery implements ElementQuery
 {
-
     private final WebDriverQueryBuilder builder;
     private final WebElementRetriever webElementRetriever;
-
-    enum ElementQueryType {
-        VISIBLE,
-        IS_NOT_VISIBLE,
-        EXISTS,
-        DOES_NOT_EXIST,
-        IS_SELECTED,
-        IS_NOT_SELECTED,
-        IS_ENABLED,
-        IS_NOT_ENABLED,
-        HAS_CLASS,
-        DOES_NOT_HAVE_CLASS;
-    }
-
-    private class WrappedWebDriverElementQuery implements Query
-    {
-        private final WebElementRetriever webElementRetriever;
-        private final ElementQueryType type;
-        private final String value;
-
-        public WrappedWebDriverElementQuery(WebElementRetriever webElementRetriever, ElementQueryType type)
-        {
-            this(webElementRetriever, type, null);
-        }
-
-        public WrappedWebDriverElementQuery(WebElementRetriever webElementRetriever, ElementQueryType type,
-                String value)
-        {
-            this.webElementRetriever = webElementRetriever;
-            this.type = type;
-            this.value = value;
-        }
-
-        public ConditionFunction build()
-        {
-            switch(type)
-            {
-                case VISIBLE:
-                    return new IsVisibleFunction(webElementRetriever);
-                case IS_NOT_VISIBLE:
-                    return new FalseFunction(new IsVisibleFunction(webElementRetriever));
-                case EXISTS:
-                    return new ExistsFunction(webElementRetriever);
-                case DOES_NOT_EXIST:
-                    return new FalseFunction(new ExistsFunction(webElementRetriever));
-                case IS_SELECTED:
-                    return new IsSelectedFunction(webElementRetriever);
-                case IS_NOT_SELECTED:
-                    return new FalseFunction(new IsSelectedFunction(webElementRetriever));
-                case IS_ENABLED:
-                    return new IsEnabledFunction(webElementRetriever);
-                case IS_NOT_ENABLED:
-                    return new FalseFunction(new IsEnabledFunction(webElementRetriever));
-                case HAS_CLASS:
-                    return new HasClassFunction(webElementRetriever, value);
-                case DOES_NOT_HAVE_CLASS:
-                    return new FalseFunction(new HasClassFunction(webElementRetriever, value));
-                default:
-                    throw new UnsupportedOperationException("Unsupported element query type:" + type);
-            }
-        }
-    }
 
     public WebDriverElementQuery(WebDriverQueryBuilder builder, WebElementRetriever webElementRetriever)
     {
@@ -96,78 +34,84 @@ public class WebDriverElementQuery implements ElementQuery
         this.webElementRetriever = webElementRetriever;
     }
 
-    public ExecutablePollerQuery isVisible()
+    public ExecutableWaiterQuery isVisible()
     {
-        return createExecutablePollerQuery(ElementQueryType.VISIBLE);
+        return createExecutableWaiterQuery(new IsVisibleFunction(webElementRetriever));
     }
 
-    public ExecutablePollerQuery isNotVisible()
+    public ExecutableWaiterQuery isNotVisible()
     {
-        return createExecutablePollerQuery(ElementQueryType.IS_NOT_VISIBLE);
+        return createExecutableWaiterQuery(not(new IsVisibleFunction(webElementRetriever)));
     }
 
-    public ExecutablePollerQuery exists()
+    public ExecutableWaiterQuery exists()
     {
-        return createExecutablePollerQuery(ElementQueryType.EXISTS);
+        return createExecutableWaiterQuery(new ExistsFunction(webElementRetriever));
     }
 
-    public ExecutablePollerQuery doesNotExist()
+    public ExecutableWaiterQuery doesNotExist()
     {
-        return createExecutablePollerQuery(ElementQueryType.DOES_NOT_EXIST);
+        return createExecutableWaiterQuery(not(new ExistsFunction(webElementRetriever)));
     }
 
     public StringValueQuery getAttribute(String attributeName)
     {
         return new WebDriverFieldQuery(builder, 
-                new WebElementFieldRetriever(webElementRetriever,
-                        WebElementFieldRetriever.FieldType.ATTRIBUTE, attributeName));
+                WebElementFieldRetriever.newAttributeRetriever(webElementRetriever, attributeName));
     }
 
-    public ExecutablePollerQuery isSelected()
+    public ExecutableWaiterQuery isSelected()
     {
-        return createExecutablePollerQuery(ElementQueryType.IS_SELECTED);
+        return createExecutableWaiterQuery(new IsSelectedFunction(webElementRetriever));
     }
 
-    public ExecutablePollerQuery isNotSelected()
+    public ExecutableWaiterQuery isNotSelected()
     {
-        return createExecutablePollerQuery(ElementQueryType.IS_NOT_SELECTED);
+        return createExecutableWaiterQuery(not(new IsSelectedFunction(webElementRetriever)));
     }
 
-    public ExecutablePollerQuery isEnabled()
+    public ExecutableWaiterQuery isEnabled()
     {
-        return createExecutablePollerQuery(ElementQueryType.IS_ENABLED);
+        return createExecutableWaiterQuery(new IsEnabledFunction(webElementRetriever));
     }
 
-    public ExecutablePollerQuery isNotEnabled()
+    public ExecutableWaiterQuery isNotEnabled()
     {
-        return createExecutablePollerQuery(ElementQueryType.IS_NOT_ENABLED);
+        return createExecutableWaiterQuery(not(new IsEnabledFunction(webElementRetriever)));
     }
 
-    public ExecutablePollerQuery hasClass(String className)
+    public ExecutableWaiterQuery hasClass(String className)
     {
-        return createExecutablePollerQuery(ElementQueryType.HAS_CLASS, className);
+        return createExecutableWaiterQuery(new HasClassFunction(webElementRetriever, className));
     }
 
-    public ExecutablePollerQuery doesNotHaveClass(final String className)
+    public ExecutableWaiterQuery doesNotHaveClass(final String className)
     {
-        return createExecutablePollerQuery(ElementQueryType.DOES_NOT_HAVE_CLASS, className);
+        return createExecutableWaiterQuery(not(new HasClassFunction(webElementRetriever, className)));
     }
 
     public StringValueQuery getText()
     {
         return new WebDriverFieldQuery(builder,
-                new WebElementFieldRetriever(webElementRetriever, WebElementFieldRetriever.FieldType.TEXT));
+                WebElementFieldRetriever.newTextRetriever(webElementRetriever));
     }
 
-    private ExecutablePollerQuery createExecutablePollerQuery(ElementQueryType type)
+    private ConditionFunction not(ConditionFunction func)
     {
-        return createExecutablePollerQuery(type, null);
+        return new NotFunction(func);
     }
 
-    private ExecutablePollerQuery createExecutablePollerQuery(ElementQueryType type, String value)
+    private ExecutableWaiterQuery createExecutableWaiterQuery(final ConditionFunction function)
     {
-        builder.add(new WrappedWebDriverElementQuery(webElementRetriever, type, value));
-        return new WebDriverPollerQuery.WebDriverExecutablePollerQuery(builder);
+        builder.add(new Query()
+        {
+            @Override
+            public ConditionFunction build()
+            {
+                return function;
+            }
+        });
+        return new WebDriverWaiterQuery.WebDriverExecutableWaiterQuery(builder);
     }
 
 }

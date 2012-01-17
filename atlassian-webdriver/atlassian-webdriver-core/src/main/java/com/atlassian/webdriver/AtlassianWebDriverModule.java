@@ -3,8 +3,8 @@ package com.atlassian.webdriver;
 import com.atlassian.pageobjects.TestedProduct;
 import com.atlassian.webdriver.pageobjects.PageFactoryPostInjectionProcessor;
 import com.atlassian.webdriver.pageobjects.WebDriverTester;
-import com.atlassian.webdriver.poller.Poller;
-import com.atlassian.webdriver.poller.webdriver.WebDriverPoller;
+import com.atlassian.webdriver.poller.Waiter;
+import com.atlassian.webdriver.poller.webdriver.WebDriverWaiter;
 import com.google.inject.Binder;
 import com.google.inject.Module;
 import org.openqa.selenium.SearchContext;
@@ -28,6 +28,6 @@ public class AtlassianWebDriverModule implements Module
         binder.bind(WebDriver.class).toInstance(testedProduct.getTester().getDriver());
         binder.bind(SearchContext.class).toInstance(testedProduct.getTester().getDriver());
         binder.bind(PageFactoryPostInjectionProcessor.class);
-        binder.bind(Poller.class).to(WebDriverPoller.class);
+        binder.bind(Waiter.class).to(WebDriverWaiter.class);
     }
 }

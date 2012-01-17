@@ -1,5 +1,6 @@
 package com.atlassian.webdriver.poller.webdriver;
 
+import com.atlassian.annotations.ExperimentalApi;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.poller.webdriver.function.ConditionFunction;
 import com.atlassian.webdriver.poller.Query;
@@ -10,15 +11,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * <strong>WARNING</strong>: This API is still experimental and may be changed between versions.
+ * 
  * @since 2.1
  */
+@ExperimentalApi
 class WebDriverQueryBuilder
 {
     private final AtlassianWebDriver driver;
-    private final int timeout;
+    private final long timeout;
     List<Query> queries = new ArrayList<Query>();
 
-    public WebDriverQueryBuilder(AtlassianWebDriver driver, int timeout)
+    public WebDriverQueryBuilder(AtlassianWebDriver driver, long timeout)
     {
         this.driver = driver;
         this.timeout = timeout;
@@ -65,19 +69,19 @@ class WebDriverQueryBuilder
         return driver;
     }
 
-    public int getTimeout()
+    public long getTimeout()
     {
         return timeout;
     }
 
     private boolean isAndQuery(Query query)
     {
-        return query.getClass().isAssignableFrom(WebDriverPollerQuery.AndQuery.class);
+        return query.getClass().isAssignableFrom(WebDriverWaiterQuery.AndQuery.class);
     }
 
     private boolean isOrQuery(Query query)
     {
-        return query.getClass().isAssignableFrom(WebDriverPollerQuery.OrQuery.class);
+        return query.getClass().isAssignableFrom(WebDriverWaiterQuery.OrQuery.class);
     }
 
     private static class AndFunction implements ConditionFunction

@@ -5,11 +5,11 @@ import org.openqa.selenium.WebDriver;
 /**
  * @since 2.1.0
  */
-public class FalseFunction implements ConditionFunction
+public class NotFunction implements ConditionFunction
 {
     private final ConditionFunction func;
 
-    public FalseFunction(ConditionFunction func)
+    public NotFunction(ConditionFunction func)
     {
         this.func = func;
     }

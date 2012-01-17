@@ -1,6 +1,6 @@
 package com.atlassian.webdriver.poller.webdriver.function.field;
 
-import com.atlassian.webdriver.element.WebElementFieldRetriever;
+import com.atlassian.webdriver.poller.webdriver.retriever.WebElementFieldRetriever;
 import com.atlassian.webdriver.poller.webdriver.function.ConditionFunction;
 import org.openqa.selenium.WebDriver;
 

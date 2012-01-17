@@ -10,6 +10,6 @@ import com.atlassian.annotations.ExperimentalApi;
 @ExperimentalApi
 public interface FunctionQuery
 {
-    ExecutablePollerQuery isTrue();
-    ExecutablePollerQuery isFalse();
+    ExecutableWaiterQuery isTrue();
+    ExecutableWaiterQuery isFalse();
 }

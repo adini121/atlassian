@@ -1,11 +1,8 @@
 package com.atlassian.webdriver.poller;
 
 import com.atlassian.annotations.ExperimentalApi;
-import com.google.common.base.Function;
-import org.openqa.selenium.By;
-import org.openqa.selenium.SearchContext;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * Exposes a set of methods to allow for polling elements for particular conditions
@@ -15,9 +12,9 @@ import org.openqa.selenium.WebElement;
  * @since 2.1.0
  */
 @ExperimentalApi
-public interface Poller
+public interface Waiter
 {
-    PollerQuery until();
-    PollerQuery until(int timeout);
-    PollerQuery until(String timeoutStr);
+    WaiterQuery until();
+    WaiterQuery until(long timeoutMillis);
+    WaiterQuery until(long timeout, TimeUnit unit);
 }

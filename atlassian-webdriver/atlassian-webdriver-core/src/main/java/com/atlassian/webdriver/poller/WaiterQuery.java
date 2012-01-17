@@ -12,7 +12,7 @@ import org.openqa.selenium.WebElement;
  * @since 2.1.0
  */
 @ExperimentalApi
-public interface PollerQuery
+public interface WaiterQuery
 {
     FunctionQuery function(ConditionFunction func);
     ElementQuery element(By locator);

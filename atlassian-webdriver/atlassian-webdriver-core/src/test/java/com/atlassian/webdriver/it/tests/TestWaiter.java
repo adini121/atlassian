@@ -1,8 +1,8 @@
 package com.atlassian.webdriver.it.tests;
 
 import com.atlassian.webdriver.it.AbstractFileBasedServerTest;
-import com.atlassian.webdriver.it.pageobjects.page.PollerPage;
-import com.atlassian.webdriver.poller.Poller;
+import com.atlassian.webdriver.it.pageobjects.page.WaiterTestPage;
+import com.atlassian.webdriver.poller.Waiter;
 import com.atlassian.webdriver.poller.webdriver.function.ConditionFunction;
 import com.atlassian.webdriver.testing.annotation.IgnoreBrowser;
 import com.atlassian.webdriver.utils.Browser;
@@ -16,6 +16,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 
+import java.util.concurrent.TimeUnit;
+
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -27,11 +29,11 @@ import static org.junit.Assert.fail;
  * @since 2.1.0
  */
 @IgnoreBrowser(Browser.HTMLUNIT_NOJS)
-public class TestPoller extends AbstractFileBasedServerTest
+public class TestWaiter extends AbstractFileBasedServerTest
 {
 
-    PollerPage pollerPage;
-    Poller poller;
+    WaiterTestPage waiterTestPage;
+    Waiter waiter;
     WebDriver driver;
 
     ConditionFunction falseFunc = new ConditionFunction()
@@ -45,18 +47,18 @@ public class TestPoller extends AbstractFileBasedServerTest
     @Before
     public void setup()
     {
-        pollerPage = product.visit(PollerPage.class);
-        poller = pollerPage.getPoller();
+        waiterTestPage = product.visit(WaiterTestPage.class);
+        waiter = waiterTestPage.getWaiter();
         driver = product.getTester().getDriver();
     }
 
     @Test
-    public void testFunctionPollerIsTrue()
+    public void testFunctionWaiterIsTrue()
     {
         assertEquals("Title was not what it was expected to be", "JavaScriptUtils test page",
                 driver.getTitle());
 
-        poller.until("10ms").function(new ConditionFunction() {
+        waiter.until(10, TimeUnit.MILLISECONDS).function(new ConditionFunction() {
             public Boolean apply(WebDriver from)
             {
                 return from.getTitle().equals("JavaScriptUtils test page");
@@ -65,12 +67,12 @@ public class TestPoller extends AbstractFileBasedServerTest
     }
 
     @Test
-    public void testFunctionPollerIsFalse()
+    public void testFunctionWaiterIsFalse()
     {
         assertEquals("Title was not what it was expected to be", "JavaScriptUtils test page",
                 driver.getTitle());
         Assert.assertNotSame("Not real title", driver.getTitle());
-        poller.until("10ms").function(new ConditionFunction() {
+        waiter.until(10, TimeUnit.MILLISECONDS).function(new ConditionFunction() {
             public Boolean apply(WebDriver from)
             {
                 return from.getTitle().equals("Not real title");
@@ -86,7 +88,20 @@ public class TestPoller extends AbstractFileBasedServerTest
         assertFalse(el.isDisplayed());
         showEl.click();
 
-        poller.until(1).element(el).isVisible().execute();
+        waiter.until(1).element(el).isVisible().execute();
+
+        assertTrue(el.isDisplayed());
+    }
+
+    @Test
+    public void testWebElementIsVisibleWithDefaultWait()
+    {
+        WebElement showEl = driver.findElement(By.id("dialog-one-show-button"));
+        WebElement el = driver.findElement(By.id("dialog-one"));
+        assertFalse(el.isDisplayed());
+        showEl.click();
+
+        waiter.until().element(el).isVisible().execute();
 
         assertTrue(el.isDisplayed());
     }
@@ -99,7 +114,7 @@ public class TestPoller extends AbstractFileBasedServerTest
         assertFalse(el.isDisplayed());
         showEl.click();
 
-        poller.until(1).element(By.id("dialog-one")).isVisible().execute();
+        waiter.until(1).element(By.id("dialog-one")).isVisible().execute();
 
         assertTrue(el.isDisplayed());
     }
@@ -114,7 +129,7 @@ public class TestPoller extends AbstractFileBasedServerTest
         assertFalse(el.isDisplayed());
         showEl.click();
 
-        poller.until(1).element(By.id("dialog-one"), container).isVisible().execute();
+        waiter.until(1).element(By.id("dialog-one"), container).isVisible().execute();
 
         assertTrue(el.isDisplayed());
 
@@ -129,7 +144,7 @@ public class TestPoller extends AbstractFileBasedServerTest
         assertTrue(el.isDisplayed());
         hideEl.click();
 
-        poller.until(1).element(el).isNotVisible().execute();
+        waiter.until(1).element(el).isNotVisible().execute();
 
         assertFalse(el.isDisplayed());
     }
@@ -147,7 +162,7 @@ public class TestPoller extends AbstractFileBasedServerTest
 
         createEl.click();
 
-        poller.until(1).element(By.id("dialog-three")).exists().execute();
+        waiter.until(1).element(By.id("dialog-three")).exists().execute();
         
         assertTrue(driver.findElement(By.id("dialog-three")).isDisplayed());
     }
@@ -160,7 +175,7 @@ public class TestPoller extends AbstractFileBasedServerTest
 
         removeEl.click();
 
-        poller.until(1).element(By.id("dialog-four")).doesNotExist().execute();
+        waiter.until(1).element(By.id("dialog-four")).doesNotExist().execute();
 
         try
         {
@@ -181,7 +196,7 @@ public class TestPoller extends AbstractFileBasedServerTest
 
         checkEl.click();
 
-        poller.until(1).element(el).isSelected().execute();
+        waiter.until(1).element(el).isSelected().execute();
 
         assertTrue(el.isSelected());
     }
@@ -196,7 +211,7 @@ public class TestPoller extends AbstractFileBasedServerTest
 
         unCheckEl.click();
 
-        poller.until(1).element(el).isNotSelected().execute();
+        waiter.until(1).element(el).isNotSelected().execute();
 
         assertFalse(el.isSelected());
     }
@@ -211,7 +226,7 @@ public class TestPoller extends AbstractFileBasedServerTest
 
         enableEl.click();
 
-        poller.until(1).element(el).isEnabled().execute();
+        waiter.until(1).element(el).isEnabled().execute();
 
         assertTrue(el.isEnabled());
     }
@@ -226,7 +241,7 @@ public class TestPoller extends AbstractFileBasedServerTest
 
         disableEl.click();
 
-        poller.until(1).element(el).isNotEnabled().execute();
+        waiter.until(1).element(el).isNotEnabled().execute();
 
         assertFalse(el.isEnabled());
     }
@@ -241,7 +256,7 @@ public class TestPoller extends AbstractFileBasedServerTest
 
         addClassEl.click();
 
-        poller.until(1).element(el).hasClass("awesome").execute();
+        waiter.until(1).element(el).hasClass("awesome").execute();
 
         assertTrue(Check.hasClass("awesome", el));
     }
@@ -256,7 +271,7 @@ public class TestPoller extends AbstractFileBasedServerTest
 
         removeClassEl.click();
 
-        poller.until(1).element(el).doesNotHaveClass("awesome").execute();
+        waiter.until(1).element(el).doesNotHaveClass("awesome").execute();
 
         assertFalse(Check.hasClass("awesome", el));
     }
@@ -271,7 +286,7 @@ public class TestPoller extends AbstractFileBasedServerTest
 
         addTextEl.click();
 
-        poller.until(1).element(el).getText().isNotEmpty().execute();
+        waiter.until(1).element(el).getText().isNotEmpty().execute();
 
         assertFalse("".equals(el.getText()));
         assertEquals("Element text did not match expected.", "Dialog eleven", el.getText());
@@ -287,7 +302,7 @@ public class TestPoller extends AbstractFileBasedServerTest
 
         addAttrEl.click();
 
-        poller.until(1).element(el).getAttribute("data-test").isNotEmpty().execute();
+        waiter.until(1).element(el).getAttribute("data-test").isNotEmpty().execute();
 
         assertFalse("".equals(el.getAttribute("data-test")));
         assertEquals("Element attribute data-test did not match expected.",
@@ -295,9 +310,9 @@ public class TestPoller extends AbstractFileBasedServerTest
     }
 
     @Test(expected = org.openqa.selenium.TimeoutException.class)
-    public void testPollerFailure()
+    public void testWaiterFailure()
     {
-        poller.until(1).function(new ConditionFunction() {
+        waiter.until(1).function(new ConditionFunction() {
             public Boolean apply(WebDriver from)
             {
                 return false;
@@ -306,7 +321,7 @@ public class TestPoller extends AbstractFileBasedServerTest
     }
 
     @Test
-    public void testAndPollerQuery()
+    public void testAndWaiterQuery()
     {
         WebElement addClassAndTextEl =
                 driver.findElement(By.id("dialog-thirteen-addattributeandclass-button"));
@@ -317,7 +332,7 @@ public class TestPoller extends AbstractFileBasedServerTest
 
         addClassAndTextEl.click();
 
-        poller.until("1500ms").element(el).hasClass("awesome").and()
+        waiter.until(1500, TimeUnit.MILLISECONDS).element(el).hasClass("awesome").and()
                 .element(el).getText().isNotEmpty().execute();
 
         assertTrue(Check.hasClass("awesome", el));
@@ -326,7 +341,7 @@ public class TestPoller extends AbstractFileBasedServerTest
     }
 
     @Test
-    public void testOrPolleryQuery()
+    public void testOrWaiterQuery()
     {
         WebElement addClassEl = driver.findElement(By.id("dialog-nine-addclass-button"));
         WebElement el = driver.findElement(By.id("dialog-nine"));
@@ -335,7 +350,7 @@ public class TestPoller extends AbstractFileBasedServerTest
 
         addClassEl.click();
 
-        poller.until(1)
+        waiter.until(1)
                 .function(falseFunc).isTrue().or()
                 .element(el).hasClass("awesome").execute();
 
@@ -343,7 +358,7 @@ public class TestPoller extends AbstractFileBasedServerTest
     }
 
     @Test
-    public void testAndOrPollerQuery()
+    public void testAndOrWaiterQuery()
     {
         WebElement addClassEl = driver.findElement(By.id("dialog-nine-addclass-button"));
         WebElement el = driver.findElement(By.id("dialog-nine"));
@@ -352,7 +367,7 @@ public class TestPoller extends AbstractFileBasedServerTest
 
         addClassEl.click();
 
-        poller.until(1)
+        waiter.until(1)
             .function(falseFunc).isFalse().and()
             .function(falseFunc).isTrue().or()
             .element(el).hasClass("awesome").execute();
@@ -361,7 +376,7 @@ public class TestPoller extends AbstractFileBasedServerTest
     }
 
     @Test
-    public void testOrAndPolleryQuery()
+    public void testOrAndWaiterQuery()
     {
         WebElement addClassAndTextEl =
                 driver.findElement(By.id("dialog-thirteen-addattributeandclass-button"));
@@ -372,7 +387,7 @@ public class TestPoller extends AbstractFileBasedServerTest
 
         addClassAndTextEl.click();
 
-        poller.until("1500ms")
+        waiter.until(1500, TimeUnit.MILLISECONDS)
                 .function(falseFunc).isTrue().or()
                 .element(el).hasClass("awesome").and()
                 .element(el).getText().isNotEmpty().execute();

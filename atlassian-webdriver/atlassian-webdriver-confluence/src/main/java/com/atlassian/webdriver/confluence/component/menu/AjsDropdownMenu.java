@@ -2,10 +2,9 @@ package com.atlassian.webdriver.confluence.component.menu;
 
 import com.atlassian.pageobjects.binder.Init;
 import com.atlassian.webdriver.AtlassianWebDriver;
-import com.atlassian.webdriver.poller.Poller;
+import com.atlassian.webdriver.poller.Waiter;
 import com.atlassian.webdriver.utils.Check;
 import com.atlassian.webdriver.utils.MouseEvents;
-import com.atlassian.webdriver.utils.by.ByJquery;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
@@ -22,7 +21,7 @@ public class AjsDropdownMenu
     protected WebElement menuItem;
 
     @Inject
-    Poller poller;
+    Waiter waiter;
 
     private final By componentLocator;
 
@@ -51,7 +50,7 @@ public class AjsDropdownMenu
         }
 
         // Wait until the menu has finished loading items
-        poller.until().element(By.className("ajs-drop-down"), menuItem).isVisible().and()
+        waiter.until().element(By.className("ajs-drop-down"), menuItem).isVisible().and()
             .element(By.cssSelector(".ajs-drop-down.assistive"), menuItem).doesNotExist().execute();
 
 

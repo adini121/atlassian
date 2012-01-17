@@ -1,12 +1,12 @@
 package com.atlassian.webdriver.poller.webdriver;
 
 import com.atlassian.annotations.ExperimentalApi;
-import com.atlassian.webdriver.element.WebElementRetriever;
+import com.atlassian.webdriver.poller.webdriver.retriever.WebElementRetriever;
+import com.atlassian.webdriver.poller.WaiterQuery;
 import com.atlassian.webdriver.poller.webdriver.function.ConditionFunction;
 import com.atlassian.webdriver.poller.ElementQuery;
-import com.atlassian.webdriver.poller.ExecutablePollerQuery;
+import com.atlassian.webdriver.poller.ExecutableWaiterQuery;
 import com.atlassian.webdriver.poller.FunctionQuery;
-import com.atlassian.webdriver.poller.PollerQuery;
 import com.atlassian.webdriver.poller.Query;
 import com.google.common.base.Function;
 import org.apache.commons.lang.NotImplementedException;
@@ -22,11 +22,11 @@ import org.openqa.selenium.WebElement;
  * @since 2.1.0
  */
 @ExperimentalApi
-class WebDriverPollerQuery implements PollerQuery
+class WebDriverWaiterQuery implements WaiterQuery
 {
     private final WebDriverQueryBuilder queryBuilder;
 
-    public WebDriverPollerQuery(WebDriverQueryBuilder builder)
+    public WebDriverWaiterQuery(WebDriverQueryBuilder builder)
     {
         this.queryBuilder = builder;
     }
@@ -43,21 +43,21 @@ class WebDriverPollerQuery implements PollerQuery
 
     public ElementQuery element(final By locator, final SearchContext context)
     {
-        return new WebDriverElementQuery(queryBuilder, new WebElementRetriever(locator, context));
+        return new WebDriverElementQuery(queryBuilder, WebElementRetriever.newLocatorRetriever(locator, context));
     }
 
     public ElementQuery element(final WebElement element)
     {
-        return new WebDriverElementQuery(queryBuilder, new WebElementRetriever(element));
+        return new WebDriverElementQuery(queryBuilder, WebElementRetriever.newWebElementRetriever(element));
     }
 
-    static class WebDriverExecutablePollerQuery
-            implements ExecutablePollerQuery
+    static class WebDriverExecutableWaiterQuery
+            implements ExecutableWaiterQuery
     {
 
         private final WebDriverQueryBuilder queryBuilder;
 
-        public WebDriverExecutablePollerQuery(WebDriverQueryBuilder queryBuilder) {
+        public WebDriverExecutableWaiterQuery(WebDriverQueryBuilder queryBuilder) {
             this.queryBuilder = queryBuilder;
         }
 
@@ -67,16 +67,16 @@ class WebDriverPollerQuery implements PollerQuery
             new AtlassianWebDriverWait(queryBuilder.getDriver(), queryBuilder.getTimeout()).until(func);
         }
 
-        public PollerQuery and()
+        public WaiterQuery and()
         {
             queryBuilder.add(new AndQuery());
-            return new WebDriverPollerQuery(queryBuilder);
+            return new WebDriverWaiterQuery(queryBuilder);
         }
 
-        public PollerQuery or()
+        public WaiterQuery or()
         {
             queryBuilder.add(new OrQuery());
-            return new WebDriverPollerQuery(queryBuilder);
+            return new WebDriverWaiterQuery(queryBuilder);
         }
     }
 

@@ -10,22 +10,22 @@ import com.atlassian.annotations.ExperimentalApi;
 @ExperimentalApi
 public interface ElementQuery
 {
-    ExecutablePollerQuery isVisible();
-    ExecutablePollerQuery isNotVisible();
+    ExecutableWaiterQuery isVisible();
+    ExecutableWaiterQuery isNotVisible();
 
-    ExecutablePollerQuery exists();
-    ExecutablePollerQuery doesNotExist();
+    ExecutableWaiterQuery exists();
+    ExecutableWaiterQuery doesNotExist();
 
     StringValueQuery getAttribute(String attributeName);
 
-    ExecutablePollerQuery isSelected();
-    ExecutablePollerQuery isNotSelected();
+    ExecutableWaiterQuery isSelected();
+    ExecutableWaiterQuery isNotSelected();
 
-    ExecutablePollerQuery isEnabled();
-    ExecutablePollerQuery isNotEnabled();
+    ExecutableWaiterQuery isEnabled();
+    ExecutableWaiterQuery isNotEnabled();
 
-    ExecutablePollerQuery hasClass(String className);
-    ExecutablePollerQuery doesNotHaveClass(String className);
+    ExecutableWaiterQuery hasClass(String className);
+    ExecutableWaiterQuery doesNotHaveClass(String className);
 
     StringValueQuery getText();
 }

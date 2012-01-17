@@ -1,6 +1,6 @@
 package com.atlassian.webdriver.poller.webdriver.function.element;
 
-import com.atlassian.webdriver.element.WebElementRetriever;
+import com.atlassian.webdriver.poller.webdriver.retriever.WebElementRetriever;
 import com.atlassian.webdriver.poller.webdriver.function.ConditionFunction;
 import com.atlassian.webdriver.utils.Check;
 import com.google.common.base.Preconditions;
