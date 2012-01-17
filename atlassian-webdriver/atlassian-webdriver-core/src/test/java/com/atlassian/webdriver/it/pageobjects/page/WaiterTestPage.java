@@ -1,7 +1,7 @@
 package com.atlassian.webdriver.it.pageobjects.page;
 
 import com.atlassian.pageobjects.Page;
-import com.atlassian.webdriver.poller.Waiter;
+import com.atlassian.webdriver.waiter.Waiter;
 import org.openqa.selenium.WebDriver;
 
 import javax.inject.Inject;

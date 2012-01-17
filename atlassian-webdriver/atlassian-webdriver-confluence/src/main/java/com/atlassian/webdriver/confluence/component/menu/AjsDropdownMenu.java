@@ -2,7 +2,7 @@ package com.atlassian.webdriver.confluence.component.menu;
 
 import com.atlassian.pageobjects.binder.Init;
 import com.atlassian.webdriver.AtlassianWebDriver;
-import com.atlassian.webdriver.poller.Waiter;
+import com.atlassian.webdriver.waiter.Waiter;
 import com.atlassian.webdriver.utils.Check;
 import com.atlassian.webdriver.utils.MouseEvents;
 import org.openqa.selenium.By;
