@@ -47,7 +47,8 @@ public abstract class ByJquery extends By
         SIBLINGS,
         CHILDREN,
         PREV,
-        CLOSEST;
+        CLOSEST,
+        FILTER;
     }
 
     private class Selector {
@@ -118,6 +119,10 @@ public abstract class ByJquery extends By
                 case PREV:
                 case CLOSEST:
                     args = new Object[]{"ATLWD.$(context)." + selector.type.name().toLowerCase() + "(" + selectorStr + ")", elements };
+                    elements = JavaScriptUtils.execute("return ATLWD.byJquery.execute(arguments[0],arguments[1])", getDriver(), args);
+                    break;
+                case FILTER:
+                    args = new Object[]{"ATLWD.$(context)." + selector.type.name().toLowerCase() + "(" + selector.getSelector() + ")", elements };
                     elements = JavaScriptUtils.execute("return ATLWD.byJquery.execute(arguments[0],arguments[1])", getDriver(), args);
                     break;
 
@@ -397,6 +402,19 @@ public abstract class ByJquery extends By
     public ByJquery closest(String selector)
     {
         addSelector(new Selector(selector, SelectorType.CLOSEST));
+        return this;
+    }
+
+    /**
+     * This allows filtering results based on a selector or a function.
+     * elements are currently not supported.
+     * @param selector can represent a selector expression or a function
+     * @return
+     */
+    // TODO(jwilson): SELENIUM-173 Fix up filter method.
+    public ByJquery filter(String selector)
+    {
+        addSelector(new Selector(selector, SelectorType.FILTER));
         return this;
     }
 

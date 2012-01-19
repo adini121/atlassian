@@ -133,4 +133,37 @@ public class TestByJquery extends AbstractFileBasedServerTest
         WebElement el = driver.findElement(ByJquery.$("li.item-a").closest("li"));
         assertEquals("item-a", el.getAttribute("class"));
     }
+
+    @Test
+    public void testFilterUsingASelector()
+    {
+        List<WebElement> els = driver.findElements(ByJquery.$("#filter-test div").filter("':odd'"));
+
+        assertEquals("Expected to find 3 elements", 3, els.size());
+
+        assertEquals("First element should be 2", "2", els.get(0).getText());
+        assertEquals("Second element should be 12", "12", els.get(1).getText());
+        assertEquals("Third element should be 22", "22", els.get(2).getText());
+    }
+
+    @Test
+    public void testFilterUsingAFunction()
+    {
+        List<WebElement> els = driver.findElements(ByJquery.$("#filter-test div").filter("function() { return ATLWD.$(this).text() == '1' }"));
+
+        assertEquals("Expected to find 1 element", 1, els.size());
+
+        assertEquals("Element text should be 1", "1", els.get(0).getText());
+    }
+
+    @Test
+    public void testFilterUsingFunctionWithIndex()
+    {
+        List<WebElement> els = driver.findElements(ByJquery.$("#filter-test div").filter("function(index) { return index % 3 == 2 }"));
+
+        assertEquals("Expected to find 2 elements", 2, els.size());
+
+        assertEquals("The first element text should be 11", "11", els.get(0).getText());
+        assertEquals("The second element text should be 22", "22", els.get(1).getText());
+    }
 }
