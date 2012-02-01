@@ -55,7 +55,7 @@ public class TestJavaScriptUtils extends AbstractFileBasedServerTest
     }
 
     @Test
-    @IgnoreBrowser(value = {Browser.FIREFOX, Browser.HTMLUNIT, Browser.IE}, reason = "jQuery hovering on elements does not work.")
+    @IgnoreBrowser(value = {Browser.HTMLUNIT, Browser.IE}, reason = "jQuery hovering on elements does not work.")
     public void testJQueryHoverRespondsToMouseover()
     {
         WebElement hoveringDiv = driver.findElement(By.id("hovering-jquery-element"));
@@ -99,22 +99,21 @@ public class TestJavaScriptUtils extends AbstractFileBasedServerTest
 
     @Test
     @TestBrowser("firefox")
-    public void testJQueryHoverBreaksForFirefox()
+    public void testCssHoverBreaksForFirefox()
     {
-        WebElement hoveringDiv = driver.findElement(By.id("hovering-jquery-element"));
+        WebElement hoveringDiv = driver.findElement(By.id("hovering-element"));
         assertTrue(hoveringDiv.isDisplayed());
-
-        driver.waitUntilElementIsNotVisible(By.id("child-jquery-element-one"));
-        assertFalse(driver.elementIsVisible(By.id("child-jquery-element-one")));
-        assertFalse(driver.elementIsVisible(By.id("child-jquery-element-two")));
-        assertFalse(driver.elementIsVisible(By.id("child-jquery-element-three")));
-
+        assertFalse(driver.elementIsVisible(By.id("child-element-one")));
+        assertFalse(driver.elementIsVisible(By.id("child-element-two")));
+        assertFalse(driver.elementIsVisible(By.id("child-element-three")));
         // now hover over div to show the children
+
         MouseEvents.hover(hoveringDiv, driver);
+
         try
         {
-            driver.waitUntilElementIsVisible(By.id("child-jquery-element-one"));
-            fail("firefox jquery hovers are working now");
+            driver.waitUntilElementIsVisible(By.id("child-element-one"));
+            fail("firefox css hovers are working now");
         }
         catch (TimeoutException expected) {}
     }
