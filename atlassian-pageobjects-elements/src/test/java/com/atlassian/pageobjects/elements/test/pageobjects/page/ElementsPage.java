@@ -1,7 +1,9 @@
 package com.atlassian.pageobjects.elements.test.pageobjects.page;
 
+import com.atlassian.pageobjects.Browser;
 import com.atlassian.pageobjects.Page;
 import com.atlassian.pageobjects.PageBinder;
+import com.atlassian.pageobjects.binder.IgnoreBrowser;
 import com.atlassian.pageobjects.binder.WaitUntil;
 import com.atlassian.pageobjects.elements.ElementBy;
 import com.atlassian.pageobjects.elements.PageElement;
@@ -34,7 +36,8 @@ public class ElementsPage implements Page
     }
 
     @WaitUntil
-    public void doWait()
+    @IgnoreBrowser(value = Browser.HTMLUNIT_NOJS, reason = "Selector is not possible without jQuery")
+    public void waitForTitle()
     {
         Poller.waitUntilTrue(elementFinder.find(ByJquery.$("h1:contains(Html Elements Page)")).timed().isPresent());
     }

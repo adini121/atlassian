@@ -39,7 +39,7 @@ public abstract class JiraAbstractPage implements Page
      * The default doWait for JIRA is to wait for the footer to be located.
      */
     @WaitUntil
-    public void doWait()
+    public final void doWait()
     {
         driver.waitUntilElementIsLocated(By.className("footer"));
     }

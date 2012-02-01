@@ -1,5 +1,7 @@
 package com.atlassian.webdriver.jira.page;
 
+import com.atlassian.pageobjects.Browser;
+import com.atlassian.pageobjects.binder.IgnoreBrowser;
 import com.atlassian.pageobjects.binder.WaitUntil;
 import com.atlassian.webdriver.utils.by.ByJquery;
 import org.openqa.selenium.By;
@@ -31,7 +33,8 @@ public class LogoutPage extends JiraAbstractPage
     }
 
     @WaitUntil
-    public void doWait()
+    @IgnoreBrowser(value = Browser.HTMLUNIT_NOJS, reason = "Selector is not possible without jQuery")
+    public void waitForLogoutPrompt()
     {
         driver.waitUntilElementIsLocated(ByJquery.$("h2:contains(ogout)")); /*in one page is Logout in the other is logout*/
     }

@@ -1,6 +1,9 @@
 package com.atlassian.webdriver.jira.page;
 
 
+import com.atlassian.pageobjects.Browser;
+import com.atlassian.pageobjects.binder.IgnoreBrowser;
+import com.atlassian.pageobjects.binder.RequireBrowser;
 import com.atlassian.pageobjects.binder.WaitUntil;
 import com.atlassian.pageobjects.page.HomePage;
 import com.atlassian.webdriver.jira.component.dashboard.Gadget;
@@ -29,7 +32,8 @@ public class DashboardPage extends JiraAbstractPage implements HomePage<JiraHead
     }
 
     @WaitUntil
-    public void doWait()
+    @IgnoreBrowser(value = Browser.HTMLUNIT_NOJS, reason = "layout is added via javascript")
+    public void waitForLayout()
     {
         driver.waitUntilElementIsLocated(By.className("layout"));
     }

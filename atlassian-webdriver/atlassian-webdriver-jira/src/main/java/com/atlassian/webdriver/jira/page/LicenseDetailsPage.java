@@ -110,7 +110,7 @@ public class LicenseDetailsPage extends JiraAdminAbstractPage
     }
 
     @WaitUntil
-    public void doWait()
+    public void waitForTable()
     {
         driver.waitUntilElementIsLocated(By.id("license_table"));
     }
