@@ -40,7 +40,7 @@ public class ViewAttachmentsSettingsPage extends JiraAdminAbstractPage
     public void readAttachmentSettings()
     {
 
-        By colLocator = ByJquery.$("td ~ td");
+        By colLocator = By.cssSelector("td ~ td");
         List<WebElement> attachSettingsRows = attachmentSettingsTable.findElements(By.tagName("tr"));
 
         attachmentsEnabled = attachSettingsRows.get(1).findElement(colLocator).getText().equals(ENABLED);

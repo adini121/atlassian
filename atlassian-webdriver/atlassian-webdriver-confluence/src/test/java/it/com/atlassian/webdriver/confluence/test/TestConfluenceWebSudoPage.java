@@ -1,9 +1,11 @@
 package it.com.atlassian.webdriver.confluence.test;
 
+import com.atlassian.pageobjects.Browser;
 import com.atlassian.pageobjects.component.WebSudoBanner;
 import com.atlassian.pageobjects.page.WebSudoPage;
 import com.atlassian.webdriver.confluence.page.DashboardPage;
 import com.atlassian.webdriver.confluence.page.PeopleDirectoryPage;
+import com.atlassian.webdriver.testing.annotation.IgnoreBrowser;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertTrue;
@@ -21,6 +23,7 @@ public class TestConfluenceWebSudoPage extends AbstractConfluenceWebTest
     }
 
     @Test
+    @IgnoreBrowser(value = Browser.HTMLUNIT_NOJS, reason = "Test uses AJAX to drop websudo privileges")
     public void testWebSudoBanner()
     {
         PeopleDirectoryPage peoplePage = product.visit(WebSudoPage.class).confirm(PeopleDirectoryPage.class);

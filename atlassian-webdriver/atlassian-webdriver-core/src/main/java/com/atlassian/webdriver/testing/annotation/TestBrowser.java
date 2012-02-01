@@ -3,6 +3,7 @@ package com.atlassian.webdriver.testing.annotation;
 import com.atlassian.webdriver.testing.rule.TestBrowserRule;
 
 import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
@@ -19,6 +20,7 @@ import java.lang.annotation.Target;
  */
 @Retention (RetentionPolicy.RUNTIME)
 @Target ({ElementType.TYPE, ElementType.PACKAGE, ElementType.METHOD})
+@Inherited
 public @interface TestBrowser
 {
     String value();

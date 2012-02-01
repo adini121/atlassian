@@ -1,8 +1,10 @@
 package it.com.atlassian.webdriver.confluence.test;
 
+import com.atlassian.pageobjects.Browser;
 import com.atlassian.pageobjects.page.LoginPage;
 import com.atlassian.webdriver.confluence.ConfluenceTestedProduct;
 import com.atlassian.webdriver.confluence.page.DashboardPage;
+import com.atlassian.webdriver.testing.annotation.IgnoreBrowser;
 import com.atlassian.webdriver.testing.rule.IgnoreBrowserRule;
 import com.atlassian.webdriver.testing.rule.SessionCleanupRule;
 import com.atlassian.webdriver.testing.rule.TestBrowserRule;
@@ -14,6 +16,7 @@ import org.junit.Rule;
 
 /**
  */
+@IgnoreBrowser(value = Browser.HTMLUNIT, reason = "HtmlUnit and Raphael.js don't mix")
 public abstract class AbstractConfluenceWebTest
 {
 

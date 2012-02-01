@@ -22,6 +22,7 @@
     <properties>
         <xvfb.enable>false</xvfb.enable>
         <xvfb.display>:20</xvfb.display>
+        <webdriver.browser>firefox</webdriver.browser>
     </properties>
 
     <dependencies>
@@ -67,12 +68,11 @@
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <configuration>
-                        <systemProperties>
-                            <property>
-                                <name>xvfb.enable</name>
-                                <value>${xvfb.enable}</value>
-                            </property>
-                        </systemProperties>
+                        <systemPropertyVariables>
+                            <xvfb.enable>${xvfb.enable}</xvfb.enable>
+                            <xvfb.display>${xvfb.display}</xvfb.display>
+                            <webdriver.browser>${webdriver.browser}</webdriver.browser>
+                        </systemPropertyVariables>
                     </configuration>
                 </plugin>
             </plugins>

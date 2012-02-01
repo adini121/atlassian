@@ -1,8 +1,10 @@
 package it.com.atlassian.webdriver.confluence.test;
 
+import com.atlassian.pageobjects.Browser;
 import com.atlassian.webdriver.confluence.page.ConfluenceAdminHomePage;
 import com.atlassian.webdriver.confluence.page.DashboardPage;
 import com.atlassian.webdriver.confluence.page.LogoutPage;
+import com.atlassian.webdriver.testing.annotation.IgnoreBrowser;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
@@ -25,6 +27,7 @@ public class TestDashboard extends AbstractConfluenceWebTest
     }
 
     @Test
+    @IgnoreBrowser(Browser.HTMLUNIT_NOJS)
     public void testDashboardMenu()
     {
         DashboardPage dashboard = product.getTestedProduct().gotoHomePage();
