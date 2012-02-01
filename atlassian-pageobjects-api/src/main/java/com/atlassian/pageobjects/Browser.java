@@ -1,4 +1,4 @@
-package com.atlassian.webdriver.utils;
+package com.atlassian.pageobjects;
 
 import java.util.Locale;
 

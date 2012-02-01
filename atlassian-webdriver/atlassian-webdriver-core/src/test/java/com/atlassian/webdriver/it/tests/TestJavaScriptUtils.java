@@ -1,11 +1,10 @@
 package com.atlassian.webdriver.it.tests;
 
+import com.atlassian.pageobjects.Browser;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.it.AbstractFileBasedServerTest;
 import com.atlassian.webdriver.it.pageobjects.page.JavaScriptUtilsPage;
 import com.atlassian.webdriver.testing.annotation.IgnoreBrowser;
-import com.atlassian.webdriver.testing.annotation.TestBrowser;
-import com.atlassian.webdriver.utils.Browser;
 import com.atlassian.webdriver.utils.MouseEvents;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,13 +48,14 @@ public class TestJavaScriptUtils extends AbstractFileBasedServerTest
 
         MouseEvents.hover(hoveringDiv, driver);
 
+        driver.waitUntilElementIsVisible(By.id("child-element-one"));
         assertTrue(driver.elementIsVisible(By.id("child-element-one")));
         assertTrue(driver.elementIsVisible(By.id("child-element-two")));
         assertTrue(driver.elementIsVisible(By.id("child-element-three")));
     }
 
     @Test
-    @IgnoreBrowser(value = {Browser.HTMLUNIT}, reason = "jQuery hovering on elements does not work.")
+    @IgnoreBrowser(value = {Browser.FIREFOX, Browser.HTMLUNIT}, reason = "jQuery hovering on elements does not work.")
     public void testJQueryHoverRespondsToMouseover()
     {
         WebElement hoveringDiv = driver.findElement(By.id("hovering-jquery-element"));

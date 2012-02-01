@@ -1,5 +1,7 @@
 package com.atlassian.webdriver.utils;
 
+import com.atlassian.pageobjects.Browser;
+
 import java.util.ArrayList;
 import java.util.List;
 

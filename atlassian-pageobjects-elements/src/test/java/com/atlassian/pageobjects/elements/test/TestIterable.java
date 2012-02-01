@@ -6,13 +6,12 @@ import static junit.framework.Assert.assertTrue;
 
 import java.util.Iterator;
 
+import com.atlassian.pageobjects.Browser;
 import com.atlassian.webdriver.testing.annotation.IgnoreBrowser;
-import com.atlassian.webdriver.utils.Browser;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.atlassian.pageobjects.elements.CheckboxElement;
-import com.atlassian.pageobjects.elements.ElementBy;
 import com.atlassian.pageobjects.elements.MultiSelectElement;
 import com.atlassian.pageobjects.elements.PageElement;
 import com.atlassian.pageobjects.elements.SelectElement;

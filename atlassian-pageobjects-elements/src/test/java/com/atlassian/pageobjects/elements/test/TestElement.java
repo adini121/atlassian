@@ -1,5 +1,6 @@
 package com.atlassian.pageobjects.elements.test;
 
+import com.atlassian.pageobjects.Browser;
 import com.atlassian.pageobjects.elements.GlobalElementFinder;
 import com.atlassian.pageobjects.elements.Options;
 import com.atlassian.pageobjects.elements.PageElement;
@@ -11,7 +12,6 @@ import com.atlassian.pageobjects.elements.test.pageobjects.page.DynamicPage;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.ElementsPage;
 import com.atlassian.pageobjects.elements.timeout.TimeoutType;
 import com.atlassian.webdriver.testing.annotation.IgnoreBrowser;
-import com.atlassian.webdriver.utils.Browser;
 import com.atlassian.webdriver.utils.by.ByJquery;
 import org.junit.Before;
 import org.junit.Test;

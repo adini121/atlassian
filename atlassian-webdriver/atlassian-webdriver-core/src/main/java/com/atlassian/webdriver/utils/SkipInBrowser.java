@@ -1,5 +1,7 @@
 package com.atlassian.webdriver.utils;
 
+import com.atlassian.pageobjects.Browser;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

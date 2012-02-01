@@ -1,8 +1,8 @@
 package com.atlassian.webdriver;
 
 import com.atlassian.browsers.BrowserConfig;
-import com.atlassian.webdriver.utils.Browser;
-import com.atlassian.webdriver.utils.WebDriverUtil;
+import com.atlassian.pageobjects.Browser;
+import com.atlassian.pageobjects.util.BrowserUtil;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -121,7 +121,7 @@ class RemoteWebDriverFactory
                 capabilities = DesiredCapabilities.firefox();
         }
 
-        WebDriverUtil.setLatestBrowser(browserType);
+        BrowserUtil.setCurrentBrowser(browserType);
 
         RemoteWebDriver driver = new RemoteWebDriver(serverUrl, capabilities);
 

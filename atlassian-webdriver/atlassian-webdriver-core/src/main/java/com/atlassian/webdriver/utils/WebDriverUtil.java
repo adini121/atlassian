@@ -1,5 +1,7 @@
 package com.atlassian.webdriver.utils;
 
+import com.atlassian.pageobjects.Browser;
+import com.atlassian.pageobjects.util.BrowserUtil;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -12,19 +14,7 @@ import org.openqa.selenium.ie.InternetExplorerDriver;
  */
 public class WebDriverUtil
 {
-    private static Browser latestBrowser;
-
     private WebDriverUtil() {}
-
-    public static void setLatestBrowser(Browser browser)
-    {
-        latestBrowser = browser;
-    }
-
-    public static Browser getLatestBrowser()
-    {
-        return latestBrowser;
-    }
 
     public static boolean isFirefox(WebDriver driver)
     {

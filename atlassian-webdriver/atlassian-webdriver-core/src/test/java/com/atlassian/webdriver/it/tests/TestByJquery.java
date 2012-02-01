@@ -1,9 +1,10 @@
 package com.atlassian.webdriver.it.tests;
 
+import com.atlassian.pageobjects.Browser;
 import com.atlassian.webdriver.it.AbstractFileBasedServerTest;
 import com.atlassian.webdriver.it.pageobjects.page.ByJqueryPage;
 import com.atlassian.webdriver.testing.annotation.IgnoreBrowser;
-import com.atlassian.webdriver.utils.Browser;
+import com.atlassian.webdriver.testing.annotation.TestBrowser;
 import com.atlassian.webdriver.utils.by.ByJquery;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,6 +15,7 @@ import org.openqa.selenium.WebElement;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -49,6 +51,26 @@ public class TestByJquery extends AbstractFileBasedServerTest
         assertEquals("div", el.getTagName());
         assertEquals("class1", el.getAttribute("class"));
         assertEquals("Simple class test", el.getText());
+    }
+
+    @Test
+    @IgnoreBrowser(value = {Browser.HTMLUNIT}, reason = "HtmlUnit does not support className magic")
+    public void testClassNameReturnsClass()
+    {
+        List<WebElement> els = driver.findElements(ByJquery.$(".class1"));
+        assertEquals(1, els.size());
+
+        assertEquals("class1", els.get(0).getAttribute("className"));
+    }
+
+    @Test
+    @TestBrowser("htmlunit")
+    public void testClassNameFailsToReturnsClassInHtmlUnit()
+    {
+        List<WebElement> els = driver.findElements(ByJquery.$(".class1"));
+        assertEquals(1, els.size());
+
+        assertNull(els.get(0).getAttribute("className"));
     }
 
     @Test
@@ -94,7 +116,7 @@ public class TestByJquery extends AbstractFileBasedServerTest
         List<WebElement> els = driver.findElements(ByJquery.$("div:contains('contains1')"));
         assertTrue("Expected two elements to be found.", els.size() == 2);
 
-        assertEquals("contains-test", els.get(0).getAttribute("className"));
+        assertEquals("contains-test", els.get(0).getAttribute("class"));
         assertEquals("contains1", els.get(1).getText());
     }
 

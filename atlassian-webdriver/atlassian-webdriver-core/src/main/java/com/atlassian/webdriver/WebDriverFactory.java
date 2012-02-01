@@ -1,10 +1,10 @@
 package com.atlassian.webdriver;
 
 import com.atlassian.browsers.BrowserConfig;
+import com.atlassian.pageobjects.Browser;
+import com.atlassian.pageobjects.util.BrowserUtil;
 import com.atlassian.webdriver.browsers.chrome.ChromeBrowser;
 import com.atlassian.webdriver.browsers.firefox.FirefoxBrowser;
-import com.atlassian.webdriver.utils.Browser;
-import com.atlassian.webdriver.utils.WebDriverUtil;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.android.AndroidDriver;
@@ -180,7 +180,7 @@ public class WebDriverFactory
                 driver = new FirefoxDriver();
         }
 
-        WebDriverUtil.setLatestBrowser(browserType);
+        BrowserUtil.setCurrentBrowser(browserType);
 
         return new DefaultAtlassianWebDriver(driver);
     }

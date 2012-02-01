@@ -1,10 +1,10 @@
 package com.atlassian.webdriver.testing.rule;
 
+import com.atlassian.pageobjects.Browser;
+import com.atlassian.pageobjects.util.BrowserUtil;
 import com.atlassian.webdriver.WebDriverFactory;
 import com.atlassian.webdriver.testing.annotation.IgnoreBrowser;
 import com.atlassian.webdriver.testing.annotation.TestBrowser;
-import com.atlassian.webdriver.utils.Browser;
-import com.atlassian.webdriver.utils.WebDriverUtil;
 import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
@@ -35,11 +35,13 @@ public class IgnoreBrowserRule implements MethodRule
             @Override
             public void evaluate() throws Throwable
             {
+                Class<?> clazz = method.getMethod().getDeclaringClass();
+                Package pkg = clazz.getPackage();
                 checkRequiredBrowsers(method.getAnnotation(TestBrowser.class));
-                checkRequiredBrowsers(method.getMethod().getDeclaringClass().getAnnotation(TestBrowser.class));
-                checkRequiredBrowsers(method.getMethod().getDeclaringClass().getPackage().getAnnotation(TestBrowser.class));
+                checkRequiredBrowsers(clazz.getAnnotation(TestBrowser.class));
+                checkRequiredBrowsers(pkg.getAnnotation(TestBrowser.class));
                 checkIgnoredBrowsers(method.getAnnotation(IgnoreBrowser.class));
-                checkIgnoredBrowsers(method.getMethod().getDeclaringClass().getAnnotation(IgnoreBrowser.class));
+                checkIgnoredBrowsers(clazz.getAnnotation(IgnoreBrowser.class));
                 base.evaluate();
             }
 
@@ -47,7 +49,7 @@ public class IgnoreBrowserRule implements MethodRule
             {
                 if (testBrowser != null)
                 {
-                    Browser latestBrowser = WebDriverUtil.getLatestBrowser();
+                    Browser latestBrowser = BrowserUtil.getCurrentBrowser();
                     Browser browser = WebDriverFactory.getBrowser(testBrowser.value());
                     if (browser != latestBrowser)
                     {
@@ -61,7 +63,7 @@ public class IgnoreBrowserRule implements MethodRule
             {
                 if (ignoreBrowser != null && ignoreBrowser.value().length > 0)
                 {
-                    Browser latestBrowser = WebDriverUtil.getLatestBrowser();
+                    Browser latestBrowser = BrowserUtil.getCurrentBrowser();
 
                     for (Browser browser : ignoreBrowser.value())
                     {

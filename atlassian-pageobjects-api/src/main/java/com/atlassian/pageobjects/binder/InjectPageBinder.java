@@ -1,10 +1,12 @@
 package com.atlassian.pageobjects.binder;
 
+import com.atlassian.pageobjects.Browser;
 import com.atlassian.pageobjects.DelayedBinder;
 import com.atlassian.pageobjects.Page;
 import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.ProductInstance;
 import com.atlassian.pageobjects.Tester;
+import com.atlassian.pageobjects.util.BrowserUtil;
 import com.google.common.collect.Lists;
 import com.google.inject.Binder;
 import com.google.inject.Binding;
@@ -20,7 +22,6 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -140,11 +141,14 @@ public final class InjectPageBinder implements PageBinder
     }
 
     /**
-     * Iterates over all superclasses in reverse order and the class of the instance and
-     * checks public, protected and private methods for the provided annotation.
+     * Calls all methods with the given annotation, starting with methods found in the topmost superclass, then calling
+     * more specific methods in subclasses. Note that this can mean that this will attempt to call the same method
+     * multiple times - once per override in the hierarchy. Will call the methods even if they're private. Skips methods
+     * if they are also annotated with {@link IgnoreBrowser} (or {@link RequireBrowser}) if the current {@link Browser}
+     * matches (does not match) any of the browsers listed in that annotation.
      * @param instance the page object to check for the annotation
      * @param annotation the annotation to find
-     * @throws InvocationTargetException
+     * @throws InvocationTargetException if any matching method throws any exception.
      */
     private void callLifecycleMethod(Object instance, Class<? extends Annotation> annotation) throws InvocationTargetException
     {
@@ -159,6 +163,13 @@ public final class InjectPageBinder implements PageBinder
             {
                 if (method.getAnnotation(annotation) != null)
                 {
+                    Browser currentBrowser = BrowserUtil.getCurrentBrowser();
+                    if (isIgnoredBrowser(method, method.getAnnotation(IgnoreBrowser.class), currentBrowser) ||
+                        !isRequiredBrowser(method, method.getAnnotation(RequireBrowser.class), currentBrowser))
+                    {
+                        continue;
+                    }
+
                     try
                     {
                         if (!method.isAccessible())
@@ -175,6 +186,38 @@ public final class InjectPageBinder implements PageBinder
                 }
             }
         }
+    }
+
+    private boolean isRequiredBrowser(Method method, RequireBrowser requireBrowser, Browser currentBrowser)
+    {
+        if (requireBrowser == null)
+            return true;
+
+        for (Browser browser : requireBrowser.value())
+        {
+            if (browser != currentBrowser)
+            {
+                log.info(method.getName() + " ignored, since it requires <" + browser + ">");
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean isIgnoredBrowser(Method method, IgnoreBrowser ignoreBrowser, Browser currentBrowser)
+    {
+        if (ignoreBrowser == null)
+            return false;
+
+        for (Browser browser : ignoreBrowser.value())
+        {
+            if (browser == currentBrowser || browser == Browser.ALL)
+            {
+                log.info(method.getName() + " ignored, reason: " + ignoreBrowser.reason());
+                return true;
+            }
+        }
+        return false;
     }
 
     private static interface Phase<T>

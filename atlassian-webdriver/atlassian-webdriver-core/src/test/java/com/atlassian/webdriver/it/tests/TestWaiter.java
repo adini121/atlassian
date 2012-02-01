@@ -1,11 +1,11 @@
 package com.atlassian.webdriver.it.tests;
 
+import com.atlassian.pageobjects.Browser;
 import com.atlassian.webdriver.it.AbstractFileBasedServerTest;
 import com.atlassian.webdriver.it.pageobjects.page.WaiterTestPage;
 import com.atlassian.webdriver.waiter.Waiter;
 import com.atlassian.webdriver.waiter.webdriver.function.ConditionFunction;
 import com.atlassian.webdriver.testing.annotation.IgnoreBrowser;
-import com.atlassian.webdriver.utils.Browser;
 import com.atlassian.webdriver.utils.Check;
 import org.junit.Assert;
 import org.junit.Before;

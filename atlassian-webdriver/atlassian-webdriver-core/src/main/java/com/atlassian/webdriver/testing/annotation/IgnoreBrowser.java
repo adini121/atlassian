@@ -1,6 +1,6 @@
 package com.atlassian.webdriver.testing.annotation;
 
-import com.atlassian.webdriver.utils.Browser;
+import com.atlassian.pageobjects.Browser;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

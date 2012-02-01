@@ -1,11 +1,11 @@
 package com.atlassian.pageobjects.elements.test;
 
+import com.atlassian.pageobjects.Browser;
 import com.atlassian.pageobjects.elements.query.Poller;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.AuiPage;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.ElementsPage;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.JQueryPage;
 import com.atlassian.webdriver.testing.annotation.IgnoreBrowser;
-import com.atlassian.webdriver.utils.Browser;
 import org.junit.Test;
 
 import java.util.List;
