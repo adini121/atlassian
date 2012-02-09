@@ -1,8 +1,11 @@
 package com.atlassian.pageobjects;
 
+import javax.annotation.concurrent.NotThreadSafe;
+
 /**
  * A delayed binder that gives the caller full control over the creation and lifecycle of the page object.
  */
+@NotThreadSafe
 public interface DelayedBinder<T>
 {
     /**

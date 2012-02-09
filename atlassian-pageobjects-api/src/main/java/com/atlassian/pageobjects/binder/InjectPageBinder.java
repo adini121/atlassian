@@ -18,6 +18,7 @@ import org.apache.commons.lang.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -27,7 +28,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import javax.inject.Inject;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.concat;
@@ -433,12 +433,10 @@ public final class InjectPageBinder implements PageBinder
 
             if (found)
             {
-                Phase<T> currentPhase;
                 while (!phases.isEmpty())
                 {
-                    currentPhase = phases.removeFirst();
-                    pageObject = currentPhase.execute(pageObject);
-                    if (currentPhase.getClass() == phaseClass)
+                    pageObject = phases.getFirst().execute(pageObject);
+                    if (phases.removeFirst().getClass() == phaseClass)
                     {
                         break;
                     }
