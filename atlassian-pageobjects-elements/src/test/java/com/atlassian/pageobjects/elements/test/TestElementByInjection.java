@@ -78,13 +78,13 @@ public class TestElementByInjection extends AbstractFileBasedServerTest
         @ElementBy(id = "test4_parentList")
         private PageElement parentList;
 
-        @ElementBy(parent = "parentList", id = "test4_childList")
+        @ElementBy(within = "parentList", id = "test4_childList")
         private PageElement childList;
 
-        @ElementBy(parent = "childList", tagName = "ul")
+        @ElementBy(within = "childList", tagName = "ul")
         private PageElement leafList;
 
-        @ElementBy(parent = "leafList", className = "test4_item")
+        @ElementBy(within = "leafList", className = "test4_item")
         private Iterable<PageElement> children;
 
 
@@ -105,13 +105,13 @@ public class TestElementByInjection extends AbstractFileBasedServerTest
         @ElementBy(id = "test4_parentList")
         private PageElement parentList;
 
-        @ElementBy(parent = "parentList", tagName = "td")
+        @ElementBy(within = "parentList", tagName = "td")
         private PageElement nonExistingTag;
 
-        @ElementBy(parent = "parentList", id = "no-such-id")
+        @ElementBy(within = "parentList", id = "no-such-id")
         private PageElement nonExistingId;
 
-        @ElementBy(parent = "parentList", className = "no-such-class")
+        @ElementBy(within = "parentList", className = "no-such-class")
         private Iterable<PageElement> nonExistingClassName;
 
 
@@ -132,7 +132,7 @@ public class TestElementByInjection extends AbstractFileBasedServerTest
         @ElementBy(id = "test4_parentList")
         private PageElement parentList;
 
-        @ElementBy(parent = "noSuchField", id = "test4_childList")
+        @ElementBy(within = "noSuchField", id = "test4_childList")
         private PageElement nonExistingParent;
 
         public String getUrl()
@@ -152,10 +152,10 @@ public class TestElementByInjection extends AbstractFileBasedServerTest
         @ElementBy(id = "test4_parentList")
         private PageElement parentList;
 
-        @ElementBy(parent = "parentList", className = "test4_item")
+        @ElementBy(within = "parentList", className = "test4_item")
         private Iterable<PageElement> iterableParent;
 
-        @ElementBy(parent = "iterableParent", tagName = "td")
+        @ElementBy(within = "iterableParent", tagName = "td")
         private PageElement childWithBadParents;
 
         public String getUrl()

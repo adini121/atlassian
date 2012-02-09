@@ -62,12 +62,12 @@ public @interface ElementBy
 
     /**
      * The name of the instance variable in the same page object class (or superclass) that is
-     * also annotated with @ElementBy and is a parent of the page element annotated with
-     * this annotation. This parent page element will be used to find this page element
-     * withing its scope.
+     * also annotated with @ElementBy and is a parent context of the page element annotated with
+     * this annotation (i.e. this element on the page is a descendant of the parent element).
+     * That parent page element will be used to find this page element withing its scope.
      *
      * @return parent of page element represented by this annotation
      * @since 2.1
      */
-    String parent() default "";
+    String within() default "";
 }

@@ -41,7 +41,7 @@ public class ElementByPostInjectionProcessor implements PostInjectionProcessor
             public void visit(Field field, ElementBy annotation)
             {
                 // Create the element to inject
-                if (StringUtils.isNotEmpty(annotation.parent()))
+                if (StringUtils.isNotEmpty(annotation.within()))
                 {
                     childFields.add(field);
                 }
@@ -60,7 +60,7 @@ public class ElementByPostInjectionProcessor implements PostInjectionProcessor
             {
                 final Field childField = childFieldIterator.next();
                 final ElementBy elementBy = childField.getAnnotation(ElementBy.class);
-                final Object parent = populatedFields.get(elementBy.parent());
+                final Object parent = populatedFields.get(elementBy.within());
                 if (parent != null && parent instanceof PageElementFinder)
                 {
                     final Object result = createAndInject(childField, elementBy, instance, (PageElementFinder)parent);
@@ -70,7 +70,7 @@ public class ElementByPostInjectionProcessor implements PostInjectionProcessor
                 else if (parent != null)
                 {
                     throw new IllegalStateException("@ElementBy for field " + childField.getName() + " defines parent '"
-                     + elementBy.parent() + "' whose value is of type '" + parent.getClass().getName() + "'. Parent "
+                     + elementBy.within() + "' whose value is of type '" + parent.getClass().getName() + "'. Parent "
                      + "fields must be strictly instances of '" + PageElementFinder.class.getName() + "' (usually "
                     + " that would be '" + PageElement.class.getName() + "')");
                 }
