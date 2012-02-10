@@ -19,7 +19,7 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Test {@link com.atlassian.pageobjects.elements.PageElementJavascript} events API.
+ * Test {@link com.atlassian.pageobjects.elements.PageElementJavascript} execute script methods.
  *
  * @since 2.1
  */
