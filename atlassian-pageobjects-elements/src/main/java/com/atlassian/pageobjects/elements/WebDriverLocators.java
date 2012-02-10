@@ -76,6 +76,11 @@ public class WebDriverLocators
         return new WebDriverListLocator(element,locator, locatorIndex, parent);
     }
 
+    public static WebDriverLocatable staticElement(WebElement element)
+    {
+        return new WebDriverStaticLocator(element);
+    }
+
     /**
      * Whether the given WebElement is stale (needs to be relocated)
      * @param webElement WebElement
@@ -98,6 +103,50 @@ public class WebDriverLocators
     {
         checkArgument(timeoutInSeconds >= 0, "timeoutInSeconds must be >= 0");
         return timeoutInSeconds > 0 ? by(timeoutInSeconds, TimeUnit.SECONDS) : now();
+    }
+
+
+    /**
+     * A static locator that will blow if the associated WebElement is stale. Not recommended unless no other option.
+     *
+     */
+    private static class WebDriverStaticLocator implements WebDriverLocatable
+    {
+        private final WebElement element;
+
+        public WebDriverStaticLocator(WebElement element)
+        {
+            this.element = element;
+        }
+
+        @Override
+        public By getLocator()
+        {
+            // can't get locator from WebElement :(
+            return null;
+        }
+
+        @Override
+        public WebDriverLocatable getParent()
+        {
+            return root();
+        }
+
+        @Override
+        public SearchContext waitUntilLocated(AtlassianWebDriver driver, int timeoutInSeconds) throws NoSuchElementException
+        {
+            if (isStale(element))
+            {
+                throw new NoSuchElementException("WebElement got stale");
+            }
+            return element;
+        }
+
+        @Override
+        public boolean isPresent(AtlassianWebDriver driver, int timeoutForParentInSeconds)
+        {
+            return !isStale(element);
+        }
     }
 
     private static class WebDriverRootLocator implements WebDriverLocatable

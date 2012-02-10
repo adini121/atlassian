@@ -99,7 +99,7 @@ public class WebDriverLocatableBasedTimedQuery<T> extends GenericWebDriverTimedQ
             catch(StaleElementReferenceException e)
             {
                 // element became stale between the time we got it from the locatable and we called the
-                //  value provider. Error out here and try on next poll.
+                // value provider. Error out here and try on next poll.
                 throw new InvalidValue(invalidValue);
             }
             catch (NoSuchElementException e1)

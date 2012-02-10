@@ -1,5 +1,7 @@
 package com.atlassian.pageobjects.elements;
 
+import com.atlassian.pageobjects.elements.query.TimedQuery;
+
 /**
  * <p/>
  * Encapsulates Javascript functionality of the {@link com.atlassian.pageobjects.elements.PageElement}.
@@ -49,8 +51,12 @@ public interface PageElementJavascript
      *
      * <p/>
      * The arguments and return type are as in
-     * {@link org.openqa.selenium.JavascriptExecutor#executeScript(String, Object...)} with one exception - when a
-     * DOM element is return from the script, a corresponding {@link com.atlassian.pageobjects.elements.PageElement}
+     * {@link org.openqa.selenium.JavascriptExecutor#executeScript(String, Object...)} with addition of
+     * {@link com.atlassian.pageobjects.elements.PageElement}s as valid argument type.
+     *
+     * <p/>
+     * When a DOM element is returnd\ed from the script, a corresponding
+     * {@link com.atlassian.pageobjects.elements.PageElement}
      * instance will be returned from this method
      *
      * @param script javascript to execute
@@ -61,6 +67,37 @@ public interface PageElementJavascript
      * @see org.openqa.selenium.JavascriptExecutor#executeScript(String, Object...)
      */
     public Object execute(String script, Object... arguments);
+
+
+    /**
+     * <p/>
+     * Executes custom script on this element in a periodic manner, allowing the client to wait for a particular
+     * expected result to occur (via the returned {@link TimedQuery}).
+     *
+     * <p/>
+     * All rules (in particular with regards to the result type) of {@link #execute(String, Object...)} apply to this
+     * method.
+     *
+     * <p/>
+     * The caller must provide the expected return type as <tt>resultType</tt>. It must be one of the valid result types
+     * or an exception will be raised.
+     *
+     * @param script javascript to execute
+     * @param resultType type of the result. One of Boolean, Long, String, List or
+     * {@link com.atlassian.pageobjects.elements.PageElement}. Must not be <code>null</code>
+     * @param arguments custom arguments to the script. a number, a boolean, a String,
+     * a {@link com.atlassian.pageobjects.elements.PageElement}, a {@link org.openqa.selenium.WebElement} or a List of
+     * any combination of the above
+     * @return {@link com.atlassian.pageobjects.elements.query.TimedQuery} to query for the expected result
+     * @throws NullPointerException if <tt>script</tt> or <tt>resultType</tt> is <code>null</code>
+     * @throws IllegalStateException if <tt>resultType</tt> is not one of the expected types
+     *
+     * @see org.openqa.selenium.JavascriptExecutor#executeScript(String, Object...)
+     * @see #execute(String, Object...)
+     *
+     */
+    public <T> TimedQuery<T> execute(String script, Class<T> resultType, Object... arguments);
+
 
     /**
      * <p/>

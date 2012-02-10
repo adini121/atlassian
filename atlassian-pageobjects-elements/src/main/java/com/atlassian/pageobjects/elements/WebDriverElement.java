@@ -34,6 +34,16 @@ public class WebDriverElement implements PageElement
     protected final WebDriverLocatable locatable;
     protected final TimeoutType defaultTimeout;
 
+    static WebElement getWebElement(PageElement element)
+    {
+        if (!WebDriverElement.class.isInstance(element))
+        {
+            throw new IllegalStateException("Unknown implementation of PageElement, cannot use to create WebDriver "
+                    + "actions: " + element);
+        }
+        return WebDriverElement.class.cast(element).asWebElement();
+    }
+
     /**
      * Creates a WebDriverElement within the driver's search context and default timeout
      * @param locator The locator mechanism to use.
@@ -197,7 +207,7 @@ public class WebDriverElement implements PageElement
 
     public PageElementJavascript javascript()
     {
-        return new WebDriverElementJavascript(driver, this);
+        return new WebDriverElementJavascript(this);
     }
 
     public PageElement find(By locator)

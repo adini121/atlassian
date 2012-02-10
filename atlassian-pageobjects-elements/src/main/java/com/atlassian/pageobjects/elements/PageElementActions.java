@@ -2,11 +2,12 @@ package com.atlassian.pageobjects.elements;
 
 import com.atlassian.webdriver.AtlassianWebDriver;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
 
 import javax.inject.Inject;
+
+import static com.atlassian.pageobjects.elements.WebDriverElement.getWebElement;
 
 /**
  * <p/>
@@ -36,16 +37,6 @@ public class PageElementActions
             actions = new Actions(webDriver.getDriver());
         }
         return actions;
-    }
-
-    private static WebElement getWebElement(PageElement element)
-    {
-        if (!WebDriverElement.class.isInstance(element))
-        {
-            throw new IllegalStateException("Unknown implementation of PageElement, cannot use to create WebDriver "
-                    + "actions: " + element);
-        }
-        return WebDriverElement.class.cast(element).asWebElement();
     }
 
     /**
