@@ -34,8 +34,6 @@ public class TestPageElementActions extends AbstractFileBasedServerTest
         final PageElementActions actions = product.getPageBinder().bind(PageObjectWithActions.class).actions;
         assertNotNull(actions);
         testActions(actions);
-
-        actions.contextClick(elementFinder.find(By.id("test1_addElementsButton"))).perform();
     }
 
     @Test
@@ -44,8 +42,6 @@ public class TestPageElementActions extends AbstractFileBasedServerTest
         final PageElementActions actions = product.getPageBinder().bind(PageElementActions.class);
         assertNotNull(actions);
         testActions(actions);
-
-        actions.contextClick(elementFinder.find(By.id("test1_addElementsButton"))).perform();
     }
 
     private void testActions(PageElementActions actions)
@@ -63,6 +59,8 @@ public class TestPageElementActions extends AbstractFileBasedServerTest
                 .click(input)
                 .doubleClick()
                 .doubleClick(firstButton)
+                .contextClick(secondButton)
+                .sendKeys(Keys.ESCAPE) // Closes the context menu
                 .dragAndDrop(firstButton, secondButton)
                 .dragAndDropBy(secondButton, 10, 10)
                 .keyDown(Keys.ALT)
