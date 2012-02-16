@@ -13,6 +13,8 @@ import com.atlassian.webdriver.utils.by.ByJquery;
 
 import javax.inject.Inject;
 
+import static org.hamcrest.Matchers.is;
+
 /**
  * Represents the elements.html
  */
@@ -30,6 +32,7 @@ public class ElementsPage implements Page
     @ElementBy(id="test1_delayedSpan")
     private PageElement test1_delayedSpan;
 
+    @Override
     public String getUrl()
     {
         return "/html/elements.html";
