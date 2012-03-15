@@ -122,7 +122,17 @@ public class WebDriverLocators
         @Override
         public By getLocator()
         {
-            // can't get locator from WebElement :(
+            if (isStale(element))
+            {
+                return null;
+            }
+            // happy reverse engineering from ID
+            final String id = element.getAttribute("id");
+            if (id != null)
+            {
+                return By.id(id);
+            }
+            // can't get :(
             return null;
         }
 

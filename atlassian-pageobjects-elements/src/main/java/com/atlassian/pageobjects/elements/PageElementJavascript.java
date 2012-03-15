@@ -55,7 +55,7 @@ public interface PageElementJavascript
      * {@link com.atlassian.pageobjects.elements.PageElement}s as valid argument type.
      *
      * <p/>
-     * When a DOM element is returnd\ed from the script, a corresponding
+     * When a DOM element is returned from the script, a corresponding
      * {@link com.atlassian.pageobjects.elements.PageElement}
      * instance will be returned from this method
      *
@@ -63,10 +63,34 @@ public interface PageElementJavascript
      * @param arguments custom arguments to the script. a number, a boolean, a String,
      * a {@link com.atlassian.pageobjects.elements.PageElement}, a {@link org.openqa.selenium.WebElement} or a List of
      * any combination of the above
-     * @return One of Boolean, Long, String, List or {@link com.atlassian.pageobjects.elements.PageElement}. Or null.
+     * @return One of Boolean, Long, String, List or {@link com.atlassian.pageobjects.elements.PageElement},
+     * or <code>null</code>.
+     * @throws NullPointerException if <tt>script</tt> is <code>null</code>
+     *
      * @see org.openqa.selenium.JavascriptExecutor#executeScript(String, Object...)
      */
     public Object execute(String script, Object... arguments);
+
+    /**
+     * <p/>
+     * Provides the same functionality as {@link #execute(String, Object...)}, but lets the client specify the
+     * expected result type. The expected result type must not be <code>null</code> and must match the actual
+     * result from the executed script.
+     *
+     * @param resultType expected type of the result. One of Boolean, Long, String, List or
+     * {@link com.atlassian.pageobjects.elements.PageElement} . Must not be <code>null</code>
+     * @param script javascript to execute
+     * @param arguments custom arguments to the script. a number, a boolean, a String,
+     * a {@link com.atlassian.pageobjects.elements.PageElement}, a {@link org.openqa.selenium.WebElement} or a List of
+     * any combination of the above
+     * @return result of the script converted to the <tt>resultType</tt>
+     * @throws NullPointerException if <tt>script</tt> or <tt>resultType</tt> is <code>null</code>
+     * @throws IllegalArgumentException if <tt>resultType</tt> is not one of the expected types
+     * @throws ClassCastException if the actual result type does not match <tt>resultType</tt>
+     *
+     * @see #execute(String, Object...)
+     */
+    public <T> T execute(Class<T> resultType, String script, Object... arguments);
 
 
     /**
@@ -82,21 +106,21 @@ public interface PageElementJavascript
      * The caller must provide the expected return type as <tt>resultType</tt>. It must be one of the valid result types
      * or an exception will be raised.
      *
+     * @param resultType expected type of the result. One of Boolean, Long, String or List. Must not be <code>null</code>
      * @param script javascript to execute
-     * @param resultType type of the result. One of Boolean, Long, String, List or
-     * {@link com.atlassian.pageobjects.elements.PageElement}. Must not be <code>null</code>
      * @param arguments custom arguments to the script. a number, a boolean, a String,
      * a {@link com.atlassian.pageobjects.elements.PageElement}, a {@link org.openqa.selenium.WebElement} or a List of
      * any combination of the above
      * @return {@link com.atlassian.pageobjects.elements.query.TimedQuery} to query for the expected result
      * @throws NullPointerException if <tt>script</tt> or <tt>resultType</tt> is <code>null</code>
-     * @throws IllegalStateException if <tt>resultType</tt> is not one of the expected types
+     * @throws IllegalArgumentException if <tt>resultType</tt> is not one of the expected types
+     * @throws ClassCastException if the actual result type does not match <tt>resultType</tt>
      *
      * @see org.openqa.selenium.JavascriptExecutor#executeScript(String, Object...)
      * @see #execute(String, Object...)
      *
      */
-    public <T> TimedQuery<T> execute(String script, Class<T> resultType, Object... arguments);
+    public <T> TimedQuery<T> executeTimed(Class<T> resultType, String script, Object... arguments);
 
 
     /**
@@ -109,15 +133,44 @@ public interface PageElementJavascript
      * so that this method returns. See {@link org.openqa.selenium.JavascriptExecutor#executeAsyncScript(String, Object...)}
      * for details.
      *
+     * <p/>
+     * Consider using {@link #executeTimed(Class, String, Object...)} instead.
+     *
      * @param script javascript to execute
      * @param  arguments custom arguments to the script. a number, a boolean, a String,
      * a {@link com.atlassian.pageobjects.elements.PageElement}, a {@link org.openqa.selenium.WebElement} or a List of
      * any combination of the above
      * @return One of Boolean, Long, String, List or {@link com.atlassian.pageobjects.elements.PageElement}. Or null.
+     * @throws NullPointerException if <tt>script</tt> is <code>null</code>
+     *
      * @see org.openqa.selenium.JavascriptExecutor#executeAsyncScript(String, Object...) (String, Object...)
      * @see #execute(String, Object...)
      */
     public Object executeAsync(String script, Object... arguments);
+
+    /**
+     * <p/>
+     * Provides the same functionality as {@link #executeAsync(Class, String, Object...)}, but lets the client specify
+     * the expected result type. The expected result type must not be <code>null</code> and must match the actual
+     * result from the executed script.
+     *
+     * <p/>
+     * Consider using {@link #executeTimed(Class, String, Object...)} instead.
+     *
+     * @param resultType expected type of the result. One of Boolean, Long, String, List or
+     * {@link com.atlassian.pageobjects.elements.PageElement} . Must not be <code>null</code>
+     * @param script javascript to execute
+     * @param arguments custom arguments to the script. a number, a boolean, a String,
+     * a {@link com.atlassian.pageobjects.elements.PageElement}, a {@link org.openqa.selenium.WebElement} or a List of
+     * any combination of the above
+     * @return result of the script converted to the <tt>resultType</tt>
+     * @throws NullPointerException if <tt>script</tt> or <tt>resultType</tt> is <code>null</code>
+     * @throws IllegalArgumentException if <tt>resultType</tt> is not one of the expected types
+     * @throws ClassCastException if the actual result type does not match <tt>resultType</tt>
+     *
+     * @see #executeAsync(String, Object...) (String, Object...)
+     */
+    public <T> T executeAsync(Class<T> resultType, String script, Object... arguments);
 
 
 }

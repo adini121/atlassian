@@ -2,8 +2,10 @@ package com.atlassian.pageobjects.elements.test;
 
 import com.atlassian.pageobjects.Browser;
 import com.atlassian.pageobjects.elements.GlobalElementFinder;
+import com.atlassian.pageobjects.elements.Options;
 import com.atlassian.pageobjects.elements.PageElement;
 import com.atlassian.pageobjects.elements.PageElementFinder;
+import com.atlassian.pageobjects.elements.SelectElement;
 import com.atlassian.pageobjects.elements.query.Poller;
 import com.atlassian.pageobjects.elements.query.TimedQuery;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.ElementsPage;
@@ -50,10 +52,18 @@ public class TestPageElementJavaScript extends AbstractFileBasedServerTest
     public void shouldExecuteTimedScript()
     {
         final PageElement delayedDiv = elementFinder.find(By.id("test1_delayedDiv"));
-        TimedQuery<Boolean> delayedSpanPresent = delayedDiv.javascript().execute("return $(arguments[0]).find('#test1_delayedSpan').length > 0", Boolean.class);
+        TimedQuery<Boolean> delayedSpanPresent = delayedDiv.javascript().executeTimed(Boolean.class,
+                "return $(arguments[0]).find('#test1_delayedSpan').length > 0");
         assertFalse(delayedSpanPresent.now());
         elementFinder.find(By.id("test1_addElementsButton")).click();
         Poller.waitUntilTrue(delayedSpanPresent);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void executeTimedShouldNotAcceptPageElementAsResultType()
+    {
+        final PageElement delayedDiv = elementFinder.find(By.id("test1_delayedDiv"));
+        delayedDiv.javascript().executeTimed(PageElement.class, "return arguments[0]");
     }
 
     @Test
@@ -65,6 +75,14 @@ public class TestPageElementJavaScript extends AbstractFileBasedServerTest
     }
 
     @Test
+    public void shouldReturnSamePageElementWithCast()
+    {
+        final PageElement delayedDiv = elementFinder.find(By.id("test1_delayedDiv"));
+        PageElement result = delayedDiv.javascript().execute(PageElement.class, "return arguments[0]");
+        assertSame(delayedDiv, result);
+    }
+
+    @Test
     public void shouldReturnNewPageElement()
     {
         final PageElement delayedDiv = elementFinder.find(By.id("test1_delayedDiv"));
@@ -72,5 +90,57 @@ public class TestPageElementJavaScript extends AbstractFileBasedServerTest
         assertTrue(result instanceof PageElement);
         final PageElement element = (PageElement) result;
         assertEquals("test1_addElementsButton", element.getAttribute("id"));
+    }
+
+    @Test
+    public void shouldReturnSelectElement()
+    {
+        final PageElement delayedDiv = elementFinder.find(By.id("test1_delayedDiv"));
+        SelectElement awesomeSelect = delayedDiv.javascript().execute(SelectElement.class, "return arguments[1]", elementFinder.find(By.id("awesome-select")));
+        awesomeSelect.select(Options.value("volvo"));
+    }
+
+    @Test
+    public void executeAsyncNonTypedShouldWorkForSimpleType()
+    {
+        final PageElement delayedDiv = elementFinder.find(By.id("test1_delayedDiv"));
+        Object result = delayedDiv.javascript().executeAsync("arguments[1](true)");
+        assertTrue(result instanceof Boolean);
+        assertEquals(Boolean.TRUE, result);
+    }
+
+    @Test
+    public void executeAsyncNonTypedShouldWorkForPageElement()
+    {
+        final PageElement delayedDiv = elementFinder.find(By.id("test1_delayedDiv"));
+        Object result = delayedDiv.javascript().executeAsync("arguments[1](arguments[0])");
+        assertTrue(result instanceof PageElement);
+        assertSame(delayedDiv, result);
+    }
+
+    @Test
+    public void executeAsyncTypedShouldWorkForSimpleType()
+    {
+        final PageElement delayedDiv = elementFinder.find(By.id("test1_delayedDiv"));
+        String result = delayedDiv.javascript().executeAsync(String.class, "arguments[1]('woohoo')");
+        assertEquals("woohoo", result);
+    }
+
+    @Test
+    public void executeAsyncTypedShouldWorkForPageElement()
+    {
+        final PageElement delayedDiv = elementFinder.find(By.id("test1_delayedDiv"));
+        PageElement result = delayedDiv.javascript().executeAsync(PageElement.class, "arguments[1](arguments[0])");
+        assertSame(delayedDiv, result);
+    }
+
+    @Test
+    public void executeAsyncTypedShouldWorkForSelectElement()
+    {
+        final PageElement delayedDiv = elementFinder.find(By.id("test1_delayedDiv"));
+        SelectElement result = delayedDiv.javascript().executeAsync(SelectElement.class, "arguments[2](arguments[1])",
+                elementFinder.find(By.id("awesome-select")));
+        assertEquals("awesome-select", result.getAttribute("id"));
+        result.select(Options.value("volvo"));
     }
 }

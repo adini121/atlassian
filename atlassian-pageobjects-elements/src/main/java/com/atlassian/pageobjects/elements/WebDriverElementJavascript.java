@@ -23,13 +23,13 @@ import static com.google.common.base.Preconditions.checkState;
  */
 final class WebDriverElementJavascript implements PageElementJavascript
 {
-    private static final Iterable<String> JS_RESULT_TYPES = ImmutableSet.of(
+    private static final Iterable<String> SIMPLE_JS_RESULT_TYPES = ImmutableSet.of(
             Boolean.class.getName(),
             String.class.getName(),
             Long.class.getName(),
-            List.class.getName(),
-            PageElement.class.getName()
+            List.class.getName()
     );
+
 
     private final WebDriver driver;
     private final PageBinder pageBinder;
@@ -42,9 +42,9 @@ final class WebDriverElementJavascript implements PageElementJavascript
 
     WebDriverElementJavascript(WebDriverElement element)
     {
+        this.element = checkNotNull(element, "element");
         this.driver = element.driver;
         this.pageBinder = element.pageBinder;
-        this.element = element;
     }
 
     public PageElementMouseJavascript mouse()
@@ -60,14 +60,27 @@ final class WebDriverElementJavascript implements PageElementJavascript
 
     public Object execute(String script, Object... arguments)
     {
+        checkNotNull(script, "script");
         return convertResult(getExecutor().executeScript(script, convertArguments(arguments)));
     }
 
-    @Override
-    public <T> TimedQuery<T> execute(final String script, final Class<T> resultType, final Object... arguments)
+    public <T> T execute(Class<T> resultType, String script, Object... arguments)
     {
         checkNotNull(script, "script");
         validateResultType(resultType);
+        return executeConverted(resultType, script, arguments);
+    }
+
+    private <T> T executeConverted(Class<T> resultType, String script, Object[] arguments)
+    {
+        return convertResult(getExecutor().executeScript(script, convertArguments(arguments)), resultType);
+    }
+
+    @Override
+    public <T> TimedQuery<T> executeTimed(final Class<T> resultType, final String script, final Object... arguments)
+    {
+        checkNotNull(script, "script");
+        validateSimpleResultType(resultType);
         return new AbstractTimedQuery<T>(element.timed().isPresent(), ExpirationHandler.RETURN_CURRENT)
         {
             @Override
@@ -79,14 +92,28 @@ final class WebDriverElementJavascript implements PageElementJavascript
             @Override
             protected T currentValue()
             {
-                return resultType.cast(execute(script, arguments));
+                return executeConverted(resultType, script, arguments);
             }
         };
     }
 
+    @Override
+    public <T> T executeAsync(Class<T> resultType, String script, Object... arguments)
+    {
+        checkNotNull(script, "script");
+        validateResultType(resultType);
+        return executeAsyncConverted(resultType, script, arguments);
+    }
+
     public Object executeAsync(String script, Object... arguments)
     {
+        checkNotNull(script, "script");
         return convertResult(getExecutor().executeAsyncScript(script, convertArguments(arguments)));
+    }
+
+    private <T> T executeAsyncConverted(Class<T> resultType, String script, Object[] arguments)
+    {
+        return convertResult(getExecutor().executeAsyncScript(script, convertArguments(arguments)), resultType);
     }
 
     private Object[] convertArguments(Object[] arguments)
@@ -119,18 +146,56 @@ final class WebDriverElementJavascript implements PageElementJavascript
         }
     }
 
+    private <T> T convertResult(Object result, Class<T> expected)
+    {
+        if (result instanceof WebElement)
+        {
+            if (!PageElement.class.isAssignableFrom(expected))
+            {
+                throw new ClassCastException("Expected instance of PageElement, was: " + expected);
+            }
+            final WebElement webElement = (WebElement) result;
+            if (element.getAttribute("id") != null && element.getAttribute("id").equals(webElement.getAttribute("id")))
+            {
+                // result same as owning element
+                return expected.cast(element);
+            }
+            @SuppressWarnings("unchecked") final Object stupidWorkaroundsForStupidGenericsProblemsHaaaaaateIt =
+                    pageBinder.bind(WebDriverElementMappings.findMapping((Class)expected), staticElement(webElement), element.defaultTimeout);
+            return expected.cast(stupidWorkaroundsForStupidGenericsProblemsHaaaaaateIt);
+        }
+        else
+        {
+            return expected.cast(result);
+        }
+    }
+
     private JavascriptExecutor getExecutor()
     {
         checkState(driver instanceof JavascriptExecutor, driver + " does not support Javascript");
         return (JavascriptExecutor) driver;
     }
 
+    private <T> void validateSimpleResultType(Class<T> resultType)
+    {
+        checkNotNull(resultType, "resultType");
+        if (!Iterables.contains(SIMPLE_JS_RESULT_TYPES, resultType.getName()))
+        {
+            throw new IllegalArgumentException("Class '" + resultType.getName() + "' is not a simple JS return type");
+        }
+    }
+
     private <T> void validateResultType(Class<T> resultType)
     {
-        if (!Iterables.contains(JS_RESULT_TYPES, resultType.getName()))
+        if (Iterables.contains(SIMPLE_JS_RESULT_TYPES, resultType.getName()))
         {
-            throw new IllegalArgumentException("Class '" + resultType.getName() + "' is a not support JS return type");
+            return;
         }
+        if (PageElement.class.isAssignableFrom(resultType))
+        {
+            return;
+        }
+        throw new IllegalArgumentException("Class '" + resultType.getName() + "' is not a supported JS return type");
     }
 
     private class JSMouse implements PageElementMouseJavascript

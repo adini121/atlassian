@@ -38,6 +38,7 @@ public class WebDriverSelectElement extends WebDriverElement implements SelectEl
         super(locator, parent, timeoutType);
     }
 
+
     private Option buildOption(WebElement option)
     {
         return Options.full(

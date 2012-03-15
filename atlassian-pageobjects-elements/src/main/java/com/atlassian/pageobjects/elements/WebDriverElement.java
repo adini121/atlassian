@@ -38,8 +38,7 @@ public class WebDriverElement implements PageElement
     {
         if (!WebDriverElement.class.isInstance(element))
         {
-            throw new IllegalStateException("Unknown implementation of PageElement, cannot use to create WebDriver "
-                    + "actions: " + element);
+            throw new IllegalStateException("Unknown implementation of PageElement, cannot use to retrieve WebElement");
         }
         return WebDriverElement.class.cast(element).asWebElement();
     }

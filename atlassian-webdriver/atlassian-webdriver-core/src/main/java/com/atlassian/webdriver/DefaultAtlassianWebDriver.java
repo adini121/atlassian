@@ -256,7 +256,7 @@ public class DefaultAtlassianWebDriver implements AtlassianWebDriver
 
     public Object executeAsyncScript(String s, Object... objects)
     {
-        return ((JavascriptExecutor) driver).executeScript(s, objects);
+        return ((JavascriptExecutor) driver).executeAsyncScript(s, objects);
     }
 
     public boolean isJavascriptEnabled()
