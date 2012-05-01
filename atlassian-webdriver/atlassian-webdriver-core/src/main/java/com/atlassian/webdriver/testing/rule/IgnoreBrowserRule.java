@@ -5,8 +5,8 @@ import com.atlassian.pageobjects.util.BrowserUtil;
 import com.atlassian.webdriver.WebDriverFactory;
 import com.atlassian.webdriver.testing.annotation.IgnoreBrowser;
 import com.atlassian.webdriver.testing.annotation.TestBrowser;
-import org.junit.rules.MethodRule;
-import org.junit.runners.model.FrameworkMethod;
+import org.junit.rules.TestRule;
+import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,24 +24,24 @@ import static org.junit.Assume.assumeThat;
  * Requires surefire 2.7.2 or higher to show skipped tests in test results.
  * @since 2.1.0
  */
-public class IgnoreBrowserRule implements MethodRule
+public class IgnoreBrowserRule implements TestRule
 {
     private static final Logger log = LoggerFactory.getLogger(IgnoreBrowserRule.class);
 
-    public Statement apply(final Statement base, final FrameworkMethod method, Object target)
+    public Statement apply(final Statement base, final Description description)
     {
         return new Statement()
         {
             @Override
             public void evaluate() throws Throwable
             {
-                Class<?> clazz = method.getMethod().getDeclaringClass();
+                Class<?> clazz = description.getTestClass();
                 Package pkg = clazz.getPackage();
-                checkRequiredBrowsers(method.getAnnotation(TestBrowser.class));
-                checkRequiredBrowsers(clazz.getAnnotation(TestBrowser.class));
+                checkRequiredBrowsers(description.getAnnotation(TestBrowser.class));
+                checkRequiredBrowsers(description.isSuite() ? null : clazz.getAnnotation(TestBrowser.class));
                 checkRequiredBrowsers(pkg.getAnnotation(TestBrowser.class));
-                checkIgnoredBrowsers(method.getAnnotation(IgnoreBrowser.class));
-                checkIgnoredBrowsers(clazz.getAnnotation(IgnoreBrowser.class));
+                checkIgnoredBrowsers(description.getAnnotation(IgnoreBrowser.class));
+                checkIgnoredBrowsers(description.isSuite() ? null : clazz.getAnnotation(IgnoreBrowser.class));
                 base.evaluate();
             }
 
@@ -53,7 +53,7 @@ public class IgnoreBrowserRule implements MethodRule
                     Browser browser = WebDriverFactory.getBrowser(testBrowser.value());
                     if (browser != latestBrowser)
                     {
-                        log.info(method.getName() + " ignored, since it requires <" + browser + ">");
+                        log.info(description.getDisplayName() + " ignored, since it requires <" + browser + ">");
                         assumeThat(browser, equalTo(latestBrowser));
                     }
                 }
@@ -71,7 +71,7 @@ public class IgnoreBrowserRule implements MethodRule
                         // or the if around the Assume calls
                         if (browser == latestBrowser || browser == Browser.ALL)
                         {
-                            log.info(method.getName() + " ignored, reason: " + ignoreBrowser.reason());
+                            log.info(description.getDisplayName() + " ignored, reason: " + ignoreBrowser.reason());
                             assumeThat(browser, not(latestBrowser));
                             assumeThat(browser, not(Browser.ALL));
                         }

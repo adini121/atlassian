@@ -3,8 +3,8 @@ package com.atlassian.webdriver.testing.rule;
 import com.atlassian.webdriver.WebDriverFactory;
 import com.atlassian.webdriver.testing.annotation.TestBrowser;
 import org.junit.Before;
-import org.junit.rules.MethodRule;
-import org.junit.runners.model.FrameworkMethod;
+import org.junit.rules.TestRule;
+import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
 /**
@@ -27,18 +27,18 @@ import org.junit.runners.model.Statement;
  *
  * @since 2.1.0
  */
-public class TestBrowserRule implements MethodRule
+public class TestBrowserRule implements TestRule
 {
     private static String originalBrowserValue = WebDriverFactory.getBrowserProperty();
 
-    public Statement apply(final Statement base, final FrameworkMethod method, final Object target)
+    public Statement apply(final Statement base, final Description description)
     {
         return new Statement()
         {
             @Override
             public void evaluate() throws Throwable
             {
-                TestBrowser testBrowser = getTestBrowserAnnotation(method, target);
+                TestBrowser testBrowser = getTestBrowserAnnotation(description);
                 if (testBrowser != null)
                 {
                     System.setProperty("webdriver.browser", testBrowser.value());
@@ -56,10 +56,11 @@ public class TestBrowserRule implements MethodRule
      * Checks if there is a {@link TestBrowser} annotation on the test method, class or package
      * @return the {@link TestBrowser} annotation or null if there isn't one defined.
      */
-    private TestBrowser getTestBrowserAnnotation(FrameworkMethod method, Object target) {
-        TestBrowser methodTestBrowser = method.getAnnotation(TestBrowser.class);
-        TestBrowser classTestBrowser = target.getClass().getAnnotation(TestBrowser.class);
-        TestBrowser packageTestBrowser = target.getClass().getPackage().getAnnotation(TestBrowser.class);
+    private TestBrowser getTestBrowserAnnotation(Description description)
+    {
+        TestBrowser methodTestBrowser = description.isTest() ? description.getAnnotation(TestBrowser.class) : null;
+        TestBrowser classTestBrowser = description.getTestClass().getAnnotation(TestBrowser.class);
+        TestBrowser packageTestBrowser = description.getTestClass().getPackage().getAnnotation(TestBrowser.class);
 
         return methodTestBrowser != null ? methodTestBrowser :
             (classTestBrowser != null ? classTestBrowser : packageTestBrowser);

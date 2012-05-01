@@ -2,8 +2,8 @@ package com.atlassian.webdriver.testing.rule;
 
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.LifecycleAwareWebDriverGrid;
-import org.junit.rules.TestWatchman;
-import org.junit.runners.model.FrameworkMethod;
+import org.junit.rules.TestWatcher;
+import org.junit.runner.Description;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,7 +15,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  * @since 2.1
  */
-public final class LogPageSourceRule extends TestWatchman
+public final class LogPageSourceRule extends TestWatcher
 {
     private static final Logger DEFAULT_LOGGER = LoggerFactory.getLogger(LogPageSourceRule.class);
 
@@ -32,10 +32,10 @@ public final class LogPageSourceRule extends TestWatchman
     }
 
     @Override
-    public void failed(final Throwable e, final FrameworkMethod method)
+    public void failed(final Throwable e, final Description description)
     {
         final AtlassianWebDriver driver = LifecycleAwareWebDriverGrid.getCurrentDriver();
-        logger.info("----- %s Failed. ", method.getName());
+        logger.info("----- %s Failed. ", description.getMethodName());
         logger.info("----- Page source:\n");
         logger.info(driver.getPageSource());
     }

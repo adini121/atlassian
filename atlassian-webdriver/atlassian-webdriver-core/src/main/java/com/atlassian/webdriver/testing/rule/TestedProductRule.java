@@ -2,8 +2,8 @@ package com.atlassian.webdriver.testing.rule;
 
 import com.atlassian.pageobjects.*;
 import com.atlassian.webdriver.pageobjects.WebDriverTester;
-import org.junit.rules.MethodRule;
-import org.junit.runners.model.FrameworkMethod;
+import org.junit.rules.TestRule;
+import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
 /**
@@ -17,7 +17,7 @@ import org.junit.runners.model.Statement;
  *
  * @since 2.1.0
  */
-public class TestedProductRule<T extends TestedProduct<WebDriverTester>> implements MethodRule, TestedProduct<WebDriverTester>
+public class TestedProductRule<T extends TestedProduct<WebDriverTester>> implements TestRule, TestedProduct<WebDriverTester>
 {
     private Class<T> testedProductClass;
     private T product;
@@ -27,7 +27,7 @@ public class TestedProductRule<T extends TestedProduct<WebDriverTester>> impleme
         this.testedProductClass = testedProductClass;
     }
 
-    public Statement apply(final Statement base, final FrameworkMethod method, final Object target)
+    public Statement apply(final Statement base, final Description description)
     {
         return new Statement() {
             @Override
