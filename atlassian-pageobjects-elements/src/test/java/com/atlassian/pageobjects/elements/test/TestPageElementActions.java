@@ -29,6 +29,7 @@ public class TestPageElementActions extends AbstractFileBasedServerTest
     }
 
     @Test
+    @IgnoreBrowser(value = Browser.CHROME, reason = "http://code.google.com/p/selenium/issues/detail?id=3851")
     public void shouldGetActionsViaContext()
     {
         final PageElementActions actions = product.getPageBinder().bind(PageObjectWithActions.class).actions;
@@ -37,6 +38,7 @@ public class TestPageElementActions extends AbstractFileBasedServerTest
     }
 
     @Test
+    @IgnoreBrowser(value = Browser.CHROME, reason = "http://code.google.com/p/selenium/issues/detail?id=3851")
     public void shouldGetActionsViaPageBinder()
     {
         final PageElementActions actions = product.getPageBinder().bind(PageElementActions.class);
