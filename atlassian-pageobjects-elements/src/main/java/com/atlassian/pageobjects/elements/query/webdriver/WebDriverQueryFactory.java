@@ -10,6 +10,8 @@ import com.atlassian.pageobjects.elements.timeout.TimeoutType;
 import com.atlassian.pageobjects.elements.timeout.Timeouts;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.google.common.base.Supplier;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.Point;
 
 import javax.annotation.concurrent.NotThreadSafe;
 import javax.inject.Inject;
@@ -190,6 +192,18 @@ public class WebDriverQueryFactory
     public TimedCondition hasValue(String value)
     {
         return hasValue(value, DEFAULT);
+    }
+
+    public TimedQuery<Point> getLocation(TimeoutType timeoutType)
+    {
+        return new WebDriverLocatableBasedTimedQuery<Point>(locatable, webDriver, WebDriverQueryFunctions.getLocation(),
+                timeouts.timeoutFor(timeoutType), interval());
+    }
+
+    public TimedQuery<Dimension> getSize(TimeoutType timeoutType)
+    {
+        return new WebDriverLocatableBasedTimedQuery<Dimension>(locatable, webDriver, WebDriverQueryFunctions.getSize(),
+                timeouts.timeoutFor(timeoutType), interval());
     }
 
     public <T> TimedQuery<T> forSupplier(final Supplier<T> supplier, TimeoutType timeoutType)

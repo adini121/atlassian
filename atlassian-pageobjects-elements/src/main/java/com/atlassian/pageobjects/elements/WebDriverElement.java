@@ -7,6 +7,8 @@ import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.utils.Check;
 import com.google.common.collect.Lists;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.WebElement;
 
 import javax.inject.Inject;
@@ -165,6 +167,18 @@ public class WebDriverElement implements PageElement
         return waitForWebElement().getAttribute("value");
     }
 
+    @Override
+    public Point getLocation()
+    {
+        return waitForWebElement().getLocation();
+    }
+
+    @Override
+    public Dimension getSize()
+    {
+        return waitForWebElement().getSize();
+    }
+
     public PageElement click()
     {
         waitForWebElement().click();
@@ -258,7 +272,8 @@ public class WebDriverElement implements PageElement
     }
 
     /**
-     * This allows retreiving the webelement from the page element
+     * This allows retrieving the webelement from the page element.
+     *
      * @return the web element that represents the page element.
      */
     public WebElement asWebElement()

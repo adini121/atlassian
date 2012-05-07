@@ -2,6 +2,8 @@ package com.atlassian.pageobjects.elements;
 
 import com.atlassian.pageobjects.elements.query.TimedCondition;
 import com.atlassian.pageobjects.elements.query.TimedQuery;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.Point;
 
 /**
  * Represents an HTML element that is expected in the DOM of a page, all queries return TimedQueries.
@@ -102,10 +104,26 @@ public interface TimedElement
 
     /**
      * Query representing whether this element's value attribute is equal to the provided string.
-      *
+     *
      * @param value The expected value attribute
      * @return timed condition that returns <code>true</code> if this element has given value attribute equal to
      * expected, <code>false</code> otherwise
      */
     TimedCondition hasValue(String value);
+
+    /**
+     * Timed query representing the location of the element on the page.
+     *
+     * @return query for location of the element on the page. Returns <code>null</code>, if the element cannot be located
+     * by given timeout
+     */
+    TimedQuery<Point> getLocation();
+
+    /**
+     * Timed query representing the dimension of the element.
+     *
+     * @return query for dimension of the element on the page. Returns <code>null</code>, if the element cannot be located
+     * by given timeout
+     */
+    TimedQuery<Dimension> getSize();
 }

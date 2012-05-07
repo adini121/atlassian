@@ -4,6 +4,8 @@ import com.atlassian.webdriver.utils.Check;
 import com.google.common.base.Function;
 import com.google.common.base.Supplier;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 
@@ -15,8 +17,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public final class WebDriverQueryFunctions
 {
-    private static final String CLASS_ATTR_NAME = "class";
-
     private WebDriverQueryFunctions()
     {
         throw new AssertionError("Don't instantiate me");
@@ -141,6 +141,28 @@ public final class WebDriverQueryFunctions
             public String apply(WebElement from)
             {
                 return from.getAttribute("value");
+            }
+        };
+    }
+
+    public static Function<WebElement, Point> getLocation()
+    {
+        return new Function<WebElement, Point>()
+        {
+            public Point apply(WebElement from)
+            {
+                return from.getLocation();
+            }
+        };
+    }
+
+    public static Function<WebElement, Dimension> getSize()
+    {
+        return new Function<WebElement, Dimension>()
+        {
+            public Dimension apply(WebElement from)
+            {
+                return from.getSize();
             }
         };
     }

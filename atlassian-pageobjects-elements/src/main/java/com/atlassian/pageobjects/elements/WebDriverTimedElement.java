@@ -6,6 +6,8 @@ import com.atlassian.pageobjects.elements.query.TimedCondition;
 import com.atlassian.pageobjects.elements.query.TimedQuery;
 import com.atlassian.pageobjects.elements.query.webdriver.WebDriverQueryFactory;
 import com.atlassian.pageobjects.elements.timeout.TimeoutType;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.Point;
 
 import javax.inject.Inject;
 
@@ -101,5 +103,17 @@ public class WebDriverTimedElement implements TimedElement
     public TimedCondition hasValue(String value)
     {
         return queryFactory.hasValue(value, defaultTimeout);
+    }
+
+    @Override
+    public TimedQuery<Point> getLocation()
+    {
+        return queryFactory.getLocation(defaultTimeout);
+    }
+
+    @Override
+    public TimedQuery<Dimension> getSize()
+    {
+        return queryFactory.getSize(defaultTimeout);
     }
 }

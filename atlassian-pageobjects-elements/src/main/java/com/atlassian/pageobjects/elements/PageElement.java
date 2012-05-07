@@ -2,6 +2,8 @@ package com.atlassian.pageobjects.elements;
 
 import com.atlassian.pageobjects.elements.timeout.TimeoutType;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.Point;
 
 import java.util.List;
 
@@ -81,6 +83,21 @@ public interface PageElement extends PageElementFinder
      * @return The value of this element's "value" attribute, or null if the value is not set.
      */
     String getValue();
+
+    /**
+     * Location of this element on the page (top-left corner)
+     *
+     * @return location of the element on the page
+     */
+    Point getLocation();
+
+    /**
+     * Dimension of this element on the page
+     *
+     * @return
+     */
+    Dimension getSize();
+
 
     /**
      * Click this element
