@@ -24,5 +24,13 @@
         <xvfb.display>:20</xvfb.display>
     </properties>
 
+   <profiles>
+       <profile>
+           <id>release</id>
+           <properties>
+               <xvfb.enable>true</xvfb.enable>
+           </properties>
+       </profile>
+   </profiles>
 
 </project>
