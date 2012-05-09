@@ -47,7 +47,7 @@ public class ElementByPostInjectionProcessor implements PostInjectionProcessor
                 }
                 else
                 {
-                    final Object result = createAndInject(field, annotation, instance, finder);
+                    final Object result = createAndInject(field, annotation, instance, getFinder(instance));
                     populatedFields.put(field.getName(), result);
                 }
             }
@@ -83,6 +83,25 @@ public class ElementByPostInjectionProcessor implements PostInjectionProcessor
             throw new IllegalStateException("Could not find parents for fields "
                     + transform(childFields, FieldToName.INSTANCE) + " annotated with @ElementBy in <" + instance
                     + ">. Please verify the problematic fields in the page object class");
+        }
+    }
+
+    /**
+     * If the object we're injecting into implements {@link com.atlassian.pageobjects.elements.PageElementFinder},
+     * we let it do the job! Otherwise we use global finder.
+     *
+     * @param instance instance we're injecting into
+     * @return page element finder to use
+     */
+    private PageElementFinder getFinder(Object instance)
+    {
+        if (instance instanceof PageElementFinder)
+        {
+            return (PageElementFinder) instance;
+        }
+        else
+        {
+            return finder;
         }
     }
 
