@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
  * @since 2.0
  * @deprecated This class is no longer necessary as most of this is provided
  * by the rules in: {@link com.atlassian.webdriver.testing.rule}
+ * Scheduled for removal in 2.3
  */
 @Deprecated
 public abstract class AtlassianWebDriverTestBase
