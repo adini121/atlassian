@@ -10,10 +10,10 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 
 /**
- * A rule for taking screenshots when a webdriver test fails.
- * It will also dump the html source of the page to the target/webDriverTests directory.
+ * A rule for taking screen-shots when a WebDriver test fails. It will also dump the html source of the page to
+ * the target/webDriverTests directory.
  *
- * @since 2.1.0
+ * @since 2.1
  */
 public class WebDriverScreenshotRule extends TestWatcher
 {
