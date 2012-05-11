@@ -55,6 +55,11 @@
             <groupId>com.atlassian.bundles</groupId>
             <artifactId>jsr305</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.atlassian.annotations</groupId>
+            <artifactId>atlassian-annotations</artifactId>
+            <version>${atlassian.annotations.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

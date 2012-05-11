@@ -6,8 +6,10 @@ import com.atlassian.pageobjects.Page;
 import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.ProductInstance;
 import com.atlassian.pageobjects.Tester;
+import com.atlassian.pageobjects.inject.InjectionContext;
 import com.atlassian.pageobjects.util.BrowserUtil;
 import com.google.common.collect.Lists;
+import com.google.inject.AbstractModule;
 import com.google.inject.Binder;
 import com.google.inject.Binding;
 import com.google.inject.ConfigurationException;
@@ -53,7 +55,7 @@ import static java.util.Collections.unmodifiableList;
  * <p>When going to a page via the {@link #navigateToAndBind(Class, Object...)} method, the page's URL is retrieved and navigated to
  * via {@link Tester#gotoUrl(String)} after construction and initializing but before {@link WaitUntil} methods are called.
  */
-public final class InjectPageBinder implements PageBinder
+public final class InjectPageBinder implements PageBinder, InjectionContext
 {
     private final Tester tester;
     private final ProductInstance productInstance;
@@ -219,6 +221,29 @@ public final class InjectPageBinder implements PageBinder
         }
         return false;
     }
+
+    // -----------------------------------------------------------------------------------------------  InjectionContext
+
+    @Override
+    public void injectStatic(final Class<?> targetClass)
+    {
+        injector.createChildInjector(new AbstractModule()
+        {
+            @Override
+            protected void configure()
+            {
+                requestStaticInjection(targetClass);
+            }
+        });
+    }
+
+    @Override
+    public void injectMembers(Object targetInstance)
+    {
+        injector.injectMembers(targetInstance);
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- Phases
 
     private static interface Phase<T>
     {

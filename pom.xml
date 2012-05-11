@@ -33,6 +33,7 @@
         <junit.version>4.10</junit.version>
         <hamcrest.version>1.1</hamcrest.version>
         <amps.version>3.7.2</amps.version>
+        <atlassian.annotations.version>0.6</atlassian.annotations.version>
     </properties>
 
     <modules>
