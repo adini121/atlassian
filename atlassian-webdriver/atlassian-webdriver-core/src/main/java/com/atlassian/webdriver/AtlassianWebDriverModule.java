@@ -11,7 +11,9 @@ import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 
 /**
+ * Guice module providing Atlassian WebDriver components.
  *
+ * @since 2.0
  */
 public class AtlassianWebDriverModule implements Module
 {
