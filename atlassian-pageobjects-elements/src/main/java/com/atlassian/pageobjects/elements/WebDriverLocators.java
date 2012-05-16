@@ -262,7 +262,15 @@ public class WebDriverLocators
 
         public boolean isPresent(AtlassianWebDriver driver, int timeoutForParentInSeconds)
         {
-            return driver.elementExistsAt(this.locator, parent.waitUntilLocated(driver, timeoutForParentInSeconds));
+            try
+            {
+                return driver.elementExistsAt(this.locator, parent.waitUntilLocated(driver, timeoutForParentInSeconds));
+            }
+            catch (NoSuchElementException e)
+            {
+                // parent cannot be located
+                return false;
+            }
         }
 
         @Override

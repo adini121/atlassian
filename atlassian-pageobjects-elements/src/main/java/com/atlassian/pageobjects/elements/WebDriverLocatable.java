@@ -14,6 +14,8 @@ import org.openqa.selenium.SearchContext;
  * Locatables form a list representing the parent-child relationship of SearchContexts. The root locatable
  * is always the locatable for WebDriver itself (think of it as a global search context).
  * To locate a SearchContext, first the parent is located then the locator is applied to it.
+ *
+ * @since 2.0
  */
 public interface WebDriverLocatable
 {
@@ -44,9 +46,9 @@ public interface WebDriverLocatable
     /**
      * Whether this SearchContext is present by given <tt>timeout</tt>.
      *
-     * @param driver AtlassianWebDriver
+     * @param driver the AtlassianWebDriver instance
      * @param timeoutForParentInSeconds Timout to wait until parent is located
-     * @return True if SearchContext is located before the timeout expires, false otherwise.
+     * @return <code>true</code> if SearchContext is located before the timeout expires, <code>false</code> otherwise.
      */
     boolean isPresent(AtlassianWebDriver driver, int timeoutForParentInSeconds);
 }

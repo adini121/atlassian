@@ -38,15 +38,15 @@ public class TestElement extends AbstractFileBasedServerTest
 
     @Test
     public void testFieldInjection()
-   {
-       ElementsPage elementsPage = product.visit(ElementsPage.class);
+    {
+        ElementsPage elementsPage = product.visit(ElementsPage.class);
 
-       // click on a button that was injected via @ElementBy
-       elementsPage.test1_addElementsButton().click();
+        // click on a button that was injected via @ElementBy
+        elementsPage.test1_addElementsButton().click();
 
-       // verify delayed element that was injected via @ElementBy waits
-       Poller.waitUntilTrue(elementsPage.test1_delayedSpan().timed().isPresent());
-   }
+        // verify delayed element that was injected via @ElementBy waits
+        Poller.waitUntilTrue(elementsPage.test1_delayedSpan().timed().isPresent());
+    }
 
 
     @Test
@@ -66,18 +66,39 @@ public class TestElement extends AbstractFileBasedServerTest
     }
 
     @Test
+    public void testIsPresentWithParent()
+    {
+        product.visit(ElementsPage.class);
+
+        final PageElement parentContainer = product.find(By.id("parent-container"));
+        assertTrue(parentContainer.isPresent());
+        assertTrue(parentContainer.find(By.className("child-button")).isPresent());
+    }
+
+
+    @Test
+    public void testIsPresentWhenParentIsNotPresent()
+    {
+        product.visit(ElementsPage.class);
+
+        final PageElement notExistingParent = product.find(By.id("not-existing-parent"));
+        assertFalse(notExistingParent.isPresent());
+        assertFalse(notExistingParent.find(By.className("child-button")).isPresent());
+    }
+
+    @Test
     public void testIsVisible()
     {
         product.visit(ElementsPage.class);
 
-       PageElement testInput = product.find(By.id("test2_input"));
+        PageElement testInput = product.find(By.id("test2_input"));
 
-       // Positive - verify input that is visible
-       assertTrue(testInput.isVisible());
+        // Positive - verify input that is visible
+        assertTrue(testInput.isVisible());
 
-       // Delayed presence - click on a button that adds an element with delay, verify isVisible waits
-       product.find(By.id("test2_addElementsButton")).click();
-       assertTrue(product.find(By.id("test2_delayedSpan")).isVisible());
+        // Delayed presence - click on a button that adds an element with delay, verify isVisible waits
+        product.find(By.id("test2_addElementsButton")).click();
+        assertTrue(product.find(By.id("test2_delayedSpan")).isVisible());
 
         // Delayed positive - click on button to make input visible with delay and verify that it did not wait
         product.find(By.id("test2_toggleInputVisibility")).click();
@@ -180,7 +201,7 @@ public class TestElement extends AbstractFileBasedServerTest
     public void shouldRebindElementIfStale_whenOriginalElementBecomesStaleAfterSomeTime()
     {
         // This strategy can be used by pabeobjects that reload the same page after an action
-        
+
         DynamicPage page = product.visit(DynamicPage.class);
         page.createFieldSet();
 
@@ -197,7 +218,7 @@ public class TestElement extends AbstractFileBasedServerTest
     public void shouldRebindElementIfStale_whenLocatedByElementFinder()
     {
         DynamicPage page = product.visit(DynamicPage.class);
-        
+
         PageElementFinder elementFinder = page.getElementFinder();
         PageElement username = elementFinder.find(By.id("nameTextBox"));
         PageElement button = elementFinder.find(By.id("helloWorldButton"));
