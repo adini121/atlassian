@@ -436,7 +436,7 @@ public final class InjectPageBinder implements PageBinder, InjectionContext
         {
             try
             {
-                advanceTo(ValidateStatePhase.class);
+                advanceTo(InitializePhase.class);
                 return true;
             }
             catch (PageBindingException ex)
