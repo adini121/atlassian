@@ -30,7 +30,9 @@ public interface DelayedBinder<T>
 
     /**
      * Goes through the full binding, including lifecycle methods, to determine whether the page object can be bound.
-     * @return True if the binding was successful
+     *
+     * @return True if the binding was successful, in which case {@link #bind()} will return the page object instance
+     * without failing
      */
     boolean canBind();
 

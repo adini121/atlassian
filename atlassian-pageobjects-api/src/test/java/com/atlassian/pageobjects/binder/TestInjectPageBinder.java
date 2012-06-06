@@ -7,18 +7,11 @@ import com.atlassian.pageobjects.TestedProduct;
 import com.atlassian.pageobjects.Tester;
 import com.google.inject.Binder;
 import com.google.inject.Module;
-import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import javax.inject.Inject;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
-
-import static com.google.common.collect.Lists.asList;
-import static java.util.Collections.singletonMap;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;

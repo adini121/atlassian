@@ -58,6 +58,15 @@ public class TestDelayedBinder
     }
 
 
+    @Test
+    public void canBindMustReturnFalseIfInitFails()
+    {
+        final PageBinder binder = createBinder();
+        final DelayedBinder<PageObjectWithInitializeThrowingException> delayedBinder = binder.delayedBind(PageObjectWithInitializeThrowingException.class);
+        assertFalse(delayedBinder.canBind());
+    }
+
+
     /**
      * A typical failing page object.
      *
@@ -91,5 +100,15 @@ public class TestDelayedBinder
         {
         }
     }
+
+    static class PageObjectWithInitializeThrowingException
+    {
+        @Init
+        private void badStuff()
+        {
+            throw new RuntimeException("HAHAHAHAHA");
+        }
+    }
+
 
 }
