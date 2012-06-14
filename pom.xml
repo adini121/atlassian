@@ -10,7 +10,7 @@
 
     <groupId>com.atlassian.selenium</groupId>
     <artifactId>atlassian-selenium</artifactId>
-    <version>1.9</version>
+    <version>1.9-SNAPSHOT</version>
     <description>
         A suite of tools to help with Selenium test harness, assertions
         etc.
