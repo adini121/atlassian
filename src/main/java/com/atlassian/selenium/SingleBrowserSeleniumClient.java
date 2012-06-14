@@ -4,6 +4,7 @@ package com.atlassian.selenium;
 
 import com.thoughtworks.selenium.DefaultSelenium;
 
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -426,7 +427,8 @@ public class SingleBrowserSeleniumClient extends DefaultSelenium implements Sele
 
     private static String readFile(String file) throws IOException
     {
-        BufferedReader reader =  new BufferedReader(new InputStreamReader(ClassLoader.getSystemClassLoader().getResourceAsStream(file)));
+        InputStream stream = SingleBrowserSeleniumClient.class.getClassLoader().getResourceAsStream(file);
+        BufferedReader reader =  new BufferedReader(new InputStreamReader(stream));
 
         String line = reader.readLine();
         StringBuffer contents = new StringBuffer();
