@@ -1,5 +1,7 @@
 package com.atlassian.pageobjects.elements.query;
 
+import com.atlassian.pageobjects.elements.timeout.TimeoutType;
+import com.atlassian.pageobjects.elements.timeout.Timeouts;
 import com.google.common.base.Supplier;
 import com.google.common.collect.Iterables;
 import org.apache.commons.lang.ArrayUtils;
@@ -210,6 +212,22 @@ public final class Conditions
         };
     }
 
+    /**
+     * Returns a timed condition, whose current evaluation is based on a value provided by given <tt>supplier</tt>.
+     *
+     * @param timeouts an instance of timeouts to use for the new condition
+     * @param supplier supplier of the current condition value
+     * @return new query based on supplier
+     */
+    public static TimedCondition forSupplier(Timeouts timeouts, final Supplier<Boolean> supplier)
+    {
+        return new AbstractTimedCondition(timeouts.timeoutFor(TimeoutType.DEFAULT), timeouts.timeoutFor(TimeoutType.EVALUATION_INTERVAL)) {
+            @Override
+            protected Boolean currentValue() {
+                return supplier.get();
+            }
+        };
+    }
 
     /**
      * A timed condition that always returns <code>true</code>
