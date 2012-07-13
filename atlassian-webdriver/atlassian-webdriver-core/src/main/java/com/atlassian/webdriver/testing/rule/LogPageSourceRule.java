@@ -1,9 +1,9 @@
 package com.atlassian.webdriver.testing.rule;
 
-import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.LifecycleAwareWebDriverGrid;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
+import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,11 +19,21 @@ public final class LogPageSourceRule extends TestWatcher
 {
     private static final Logger DEFAULT_LOGGER = LoggerFactory.getLogger(LogPageSourceRule.class);
 
+    private static final String ENABLE_LOG_KEY = "atlassian.test.logSourceOnFailure";
+
     private final Logger logger;
+    private final WebDriver webDriver;
+
+    public LogPageSourceRule(WebDriver webDriver, Logger logger)
+    {
+        this.webDriver = checkNotNull(webDriver, "webDriver");
+        this.logger = checkNotNull(logger, "logger");
+    }
+
 
     public LogPageSourceRule(Logger logger)
     {
-        this.logger = checkNotNull(logger);
+        this(LifecycleAwareWebDriverGrid.getCurrentDriver(), logger);
     }
 
     public LogPageSourceRule()
@@ -34,9 +44,17 @@ public final class LogPageSourceRule extends TestWatcher
     @Override
     public void failed(final Throwable e, final Description description)
     {
-        final AtlassianWebDriver driver = LifecycleAwareWebDriverGrid.getCurrentDriver();
+        if (!logPageSourceEnabled())
+        {
+            return;
+        }
         logger.info("----- %s Failed. ", description.getMethodName());
         logger.info("----- Page source:\n");
-        logger.info(driver.getPageSource());
+        logger.info(webDriver.getPageSource());
+    }
+
+    private boolean logPageSourceEnabled()
+    {
+        return Boolean.TRUE.toString().equals(System.getProperty(ENABLE_LOG_KEY));
     }
 }

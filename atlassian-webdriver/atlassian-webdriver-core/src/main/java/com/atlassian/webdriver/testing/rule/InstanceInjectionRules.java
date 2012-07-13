@@ -1,9 +1,9 @@
 package com.atlassian.webdriver.testing.rule;
 
 import com.atlassian.pageobjects.TestedProduct;
-import com.atlassian.pageobjects.TestedProductFactory;
 import com.atlassian.pageobjects.inject.InjectionContext;
 import com.atlassian.pageobjects.util.InjectingTestedProducts;
+import com.google.common.base.Supplier;
 import org.junit.ClassRule;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
@@ -59,24 +59,24 @@ final class InstanceInjectionRules
 
     static final class InstanceStandaloneInjectionRule<T extends TestedProduct<?>> extends AbstractInstanceInjectionRule
     {
-        private final T product;
+        private final Supplier<T> product;
 
-        InstanceStandaloneInjectionRule(Object target, Class<T> productClass)
+        InstanceStandaloneInjectionRule(Object target, Supplier<T> productSupplier)
         {
             super(target);
-            this.product = TestedProductFactory.create(checkNotNull(productClass, "productClass"));
+            this.product = checkNotNull(productSupplier, "productSupplier");
         }
 
         @Override
         protected boolean supportsInjection(Statement base, Description description)
         {
-            return InjectingTestedProducts.supportsInjection(product);
+            return InjectingTestedProducts.supportsInjection(product.get());
         }
 
         @Override
         protected InjectionContext injectionContext(Statement base, Description description)
         {
-            return InjectingTestedProducts.asInjectionContext(product);
+            return InjectingTestedProducts.asInjectionContext(product.get());
         }
     }
 

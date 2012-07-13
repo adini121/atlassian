@@ -1,7 +1,11 @@
 package com.atlassian.webdriver.testing.rule;
 
 import com.atlassian.pageobjects.TestedProduct;
+import com.google.common.base.Supplier;
 import org.junit.rules.TestRule;
+
+import static com.atlassian.pageobjects.TestedProductFactory.fromFactory;
+import static com.google.common.base.Suppliers.memoize;
 
 /**
  * <p/>
@@ -75,10 +79,14 @@ public final class InjectionRules
         throw new AssertionError("Don't instantiate me");
     }
 
-
     public static <T extends TestedProduct<?>> TestRule forTestClass(Class<T> productClass)
     {
-        return new ClassInjectionRule<T>(productClass);
+        return new ClassInjectionRule<T>(memoize(fromFactory(productClass)));
+    }
+
+    public static <T extends TestedProduct<?>> TestRule forTestClass(Supplier<T> productSupplier)
+    {
+        return new ClassInjectionRule<T>(productSupplier);
     }
 
     public static TestRule forTestInContext(Object testInstance)
@@ -88,6 +96,11 @@ public final class InjectionRules
 
     public static <T extends TestedProduct<?>> TestRule forTest(Object testInstance, Class<T> testedProductClass)
     {
-        return new InstanceInjectionRules.InstanceStandaloneInjectionRule<T>(testInstance, testedProductClass);
+        return new InstanceInjectionRules.InstanceStandaloneInjectionRule<T>(testInstance, memoize(fromFactory(testedProductClass)));
+    }
+
+    public static <T extends TestedProduct<?>> TestRule forTest(Object testInstance, Supplier<T> productSupplier)
+    {
+        return new InstanceInjectionRules.InstanceStandaloneInjectionRule<T>(testInstance, productSupplier);
     }
 }

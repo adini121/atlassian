@@ -1,9 +1,9 @@
 package com.atlassian.webdriver.testing.rule;
 
 import com.atlassian.pageobjects.TestedProduct;
-import com.atlassian.pageobjects.TestedProductFactory;
 import com.atlassian.pageobjects.inject.InjectionContext;
 import com.atlassian.pageobjects.util.InjectingTestedProducts;
+import com.google.common.base.Supplier;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
@@ -17,12 +17,13 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public final class ClassInjectionRule<T extends TestedProduct<?>> implements TestRule
 {
-    private final T product;
+    private final Supplier<T> product;
 
-    ClassInjectionRule(Class<T> productClass)
+    ClassInjectionRule(Supplier<T> productSupplier)
     {
-        this.product = TestedProductFactory.create(checkNotNull(productClass, "productClass"));
+        this.product = checkNotNull(productSupplier, "productSupplier");
     }
+
 
     @Override
     public Statement apply(final Statement base, final Description description)
@@ -42,11 +43,11 @@ public final class ClassInjectionRule<T extends TestedProduct<?>> implements Tes
 
     boolean supportsInjection()
     {
-        return InjectingTestedProducts.supportsInjection(product);
+        return InjectingTestedProducts.supportsInjection(product.get());
     }
 
     InjectionContext injectionContext()
     {
-        return InjectingTestedProducts.asInjectionContext(product);
+        return InjectingTestedProducts.asInjectionContext(product.get());
     }
 }

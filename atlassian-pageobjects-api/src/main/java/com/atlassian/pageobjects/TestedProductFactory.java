@@ -1,5 +1,7 @@
 package com.atlassian.pageobjects;
 
+import com.google.common.base.Supplier;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.InetAddress;
@@ -43,6 +45,18 @@ public class TestedProductFactory
         {
             return tester;
         }
+    }
+
+    public static <T extends TestedProduct<?>> Supplier<T> fromFactory(final Class<T> productClass)
+    {
+        return new Supplier<T>()
+        {
+            @Override
+            public T get()
+            {
+                return create(productClass);
+            }
+        };
     }
 
     /**
