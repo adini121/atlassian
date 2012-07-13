@@ -3,6 +3,7 @@ package com.atlassian.webdriver;
 import com.atlassian.browsers.BrowserConfig;
 import com.atlassian.webdriver.browsers.AutoInstallConfiguration;
 import com.google.common.base.Preconditions;
+import com.google.common.base.Supplier;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 
@@ -56,6 +57,18 @@ public class LifecycleAwareWebDriverGrid
     {
         Preconditions.checkState(currentDriver != null, "The current driver has not been initialised");
         return currentDriver;
+    }
+
+    public static Supplier<AtlassianWebDriver> currentDriverSupplier()
+    {
+        return new Supplier<AtlassianWebDriver>()
+        {
+            @Override
+            public AtlassianWebDriver get()
+            {
+                return getCurrentDriver();
+            }
+        };
     }
 
     private static boolean browserIsConfigured(String browserProperty)
