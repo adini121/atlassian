@@ -4,22 +4,25 @@ import com.atlassian.pageobjects.TestedProduct;
 import com.atlassian.pageobjects.inject.InjectionContext;
 import com.atlassian.pageobjects.util.InjectingTestedProducts;
 import com.google.common.base.Supplier;
-import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
+ * <p/>
  * Class injection rule. Access via {@link com.atlassian.webdriver.testing.rule.InjectionRules}.
+ *
+ * <p/>
+ * Also implement {@link com.atlassian.pageobjects.inject.InjectionContext} for convenience in tests.
  *
  * @since 2.1
  */
-public final class ClassInjectionRule<T extends TestedProduct<?>> implements TestRule
+public final class ClassInjectionRule<P extends TestedProduct<?>> implements InjectingTestRule
 {
-    private final Supplier<T> product;
+    private final Supplier<P> product;
 
-    ClassInjectionRule(Supplier<T> productSupplier)
+    ClassInjectionRule(Supplier<P> productSupplier)
     {
         this.product = checkNotNull(productSupplier, "productSupplier");
     }
@@ -49,5 +52,23 @@ public final class ClassInjectionRule<T extends TestedProduct<?>> implements Tes
     InjectionContext injectionContext()
     {
         return InjectingTestedProducts.asInjectionContext(product.get());
+    }
+
+    @Override
+    public <T> T getInstance(Class<T> type)
+    {
+        return injectionContext().getInstance(type);
+    }
+
+    @Override
+    public void injectStatic(Class<?> targetClass)
+    {
+        injectionContext().injectStatic(targetClass);
+    }
+
+    @Override
+    public void injectMembers(Object targetInstance)
+    {
+        injectionContext().injectMembers(targetInstance);
     }
 }

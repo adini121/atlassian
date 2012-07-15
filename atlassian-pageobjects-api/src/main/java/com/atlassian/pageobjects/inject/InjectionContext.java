@@ -12,6 +12,17 @@ public interface InjectionContext
 {
 
     /**
+     * Get an instance of given <tt>type</tt> from context.
+     *
+     * @param type type of the requested instance
+     * @param <T> type param
+     * @return an instance of requested type. An exception may be raised if the context is unable to instantiate
+     * given <tt>type</tt>.
+     * @throws IllegalArgumentException if instantiating given class according to JSR-330 rules was impossible
+     */
+    <T> T getInstance(Class<T> type);
+
+    /**
      * Execute injection of static fields on given <tt>targetClass</tt>.
      *
      * @param targetClass class to inject into

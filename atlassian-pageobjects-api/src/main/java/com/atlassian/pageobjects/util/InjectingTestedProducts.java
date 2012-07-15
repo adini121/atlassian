@@ -38,7 +38,7 @@ public final class InjectingTestedProducts
      *
      * @param product product to retrieve context from
      * @return associated injection context, either from the product, or its page binder
-     * @throws IllegalStateException if the product is not providing injection (which can be verified by
+     * @throws IllegalArgumentException if the product is not providing injection (which can be verified by
      * calling {@link #supportsInjection(com.atlassian.pageobjects.TestedProduct)}
      */
     public static InjectionContext asInjectionContext(TestedProduct<?> product)
@@ -53,7 +53,7 @@ public final class InjectingTestedProducts
         }
         else
         {
-            throw new IllegalStateException("Product <" + product + "> does not support injection");
+            throw new IllegalArgumentException("Product <" + product + "> does not support injection");
         }
     }
 }

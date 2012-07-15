@@ -16,6 +16,7 @@ import com.google.inject.ConfigurationException;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
+import com.google.inject.ProvisionException;
 import org.apache.commons.lang.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +32,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.concat;
 import static java.util.Arrays.asList;
@@ -61,8 +63,7 @@ public final class InjectPageBinder implements PageBinder, InjectionContext
     private final ProductInstance productInstance;
     private static final Logger log = LoggerFactory.getLogger(InjectPageBinder.class);
 
-    private final Map<Class<?>, Class<?>> overrides =
-            new HashMap<Class<?>, Class<?>>();
+    private final Map<Class<?>, Class<?>> overrides = new HashMap<Class<?>, Class<?>>();
     private final Injector injector;
     private final List<Binding<PostInjectionProcessor>> postInjectionProcessors;
 
@@ -167,7 +168,7 @@ public final class InjectPageBinder implements PageBinder, InjectionContext
                 {
                     Browser currentBrowser = BrowserUtil.getCurrentBrowser();
                     if (isIgnoredBrowser(method, method.getAnnotation(IgnoreBrowser.class), currentBrowser) ||
-                        !isRequiredBrowser(method, method.getAnnotation(RequireBrowser.class), currentBrowser))
+                            !isRequiredBrowser(method, method.getAnnotation(RequireBrowser.class), currentBrowser))
                     {
                         continue;
                     }
@@ -223,6 +224,25 @@ public final class InjectPageBinder implements PageBinder, InjectionContext
     }
 
     // -----------------------------------------------------------------------------------------------  InjectionContext
+
+
+    @Override
+    public <T> T getInstance(Class<T> type)
+    {
+        checkArgument(type != null, "type was null");
+        try
+        {
+            return injector.getInstance(type);
+        }
+        catch (ProvisionException e)
+        {
+            throw new IllegalArgumentException(e);
+        }
+        catch (ConfigurationException e)
+        {
+            throw new IllegalArgumentException(e);
+        }
+    }
 
     @Override
     public void injectStatic(final Class<?> targetClass)

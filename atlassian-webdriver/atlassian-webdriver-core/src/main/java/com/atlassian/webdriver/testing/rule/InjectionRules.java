@@ -79,12 +79,12 @@ public final class InjectionRules
         throw new AssertionError("Don't instantiate me");
     }
 
-    public static <T extends TestedProduct<?>> TestRule forTestClass(Class<T> productClass)
+    public static <T extends TestedProduct<?>> InjectingTestRule forTestClass(Class<T> productClass)
     {
         return new ClassInjectionRule<T>(memoize(fromFactory(productClass)));
     }
 
-    public static <T extends TestedProduct<?>> TestRule forTestClass(Supplier<T> productSupplier)
+    public static <T extends TestedProduct<?>> InjectingTestRule forTestClass(Supplier<T> productSupplier)
     {
         return new ClassInjectionRule<T>(productSupplier);
     }
