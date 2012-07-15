@@ -54,8 +54,8 @@ public final class LogPageSourceRule extends TestWatcher
         {
             return;
         }
-        logger.info("----- %s Failed. ", description.getMethodName());
-        logger.info("----- START PAGE SOURCE DUMP\n\n\n%s\n\n\n", webDriver.get().getPageSource());
+        logger.info("----- {} Failed. ", description.getMethodName());
+        logger.info("----- START PAGE SOURCE DUMP\n\n\n{}\n\n\n", webDriver.get().getPageSource());
         logger.info("----- END PAGE SOURCE DUMP");
     }
 
