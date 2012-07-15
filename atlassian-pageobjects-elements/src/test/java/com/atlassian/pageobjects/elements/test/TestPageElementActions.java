@@ -16,7 +16,7 @@ import javax.inject.Inject;
 
 import static junit.framework.Assert.assertNotNull;
 
-@IgnoreBrowser(Browser.HTMLUNIT_NOJS)
+@IgnoreBrowser({ Browser.HTMLUNIT_NOJS, Browser.HTMLUNIT })
 public class TestPageElementActions extends AbstractFileBasedServerTest
 {
     private PageElementFinder elementFinder;

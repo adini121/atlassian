@@ -10,6 +10,7 @@ import com.atlassian.pageobjects.elements.query.Poller;
 import com.atlassian.pageobjects.elements.query.TimedQuery;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.ElementsPage;
 import com.atlassian.webdriver.testing.annotation.IgnoreBrowser;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -18,6 +19,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -110,11 +112,12 @@ public class TestPageElementJavaScript extends AbstractFileBasedServerTest
     }
 
     @Test
+    @IgnoreBrowser(value = Browser.HTMLUNIT, reason = "http://code.google.com/p/selenium/issues/detail?id=4257")
     public void executeAsyncNonTypedShouldWorkForPageElement()
     {
         final PageElement delayedDiv = elementFinder.find(By.id("test1_delayedDiv"));
         Object result = delayedDiv.javascript().executeAsync("arguments[1](arguments[0])");
-        assertTrue(result instanceof PageElement);
+        assertThat(result, Matchers.instanceOf(PageElement.class));
         assertSame(delayedDiv, result);
     }
 
@@ -127,6 +130,7 @@ public class TestPageElementJavaScript extends AbstractFileBasedServerTest
     }
 
     @Test
+    @IgnoreBrowser(value = Browser.HTMLUNIT, reason = "http://code.google.com/p/selenium/issues/detail?id=4257")
     public void executeAsyncTypedShouldWorkForPageElement()
     {
         final PageElement delayedDiv = elementFinder.find(By.id("test1_delayedDiv"));
@@ -135,6 +139,7 @@ public class TestPageElementJavaScript extends AbstractFileBasedServerTest
     }
 
     @Test
+    @IgnoreBrowser(value = Browser.HTMLUNIT, reason = "http://code.google.com/p/selenium/issues/detail?id=4257")
     public void executeAsyncTypedShouldWorkForSelectElement()
     {
         final PageElement delayedDiv = elementFinder.find(By.id("test1_delayedDiv"));
