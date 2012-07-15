@@ -42,7 +42,7 @@ public class TestLogPageSourceRule
         when(mockWebDriver.getPageSource()).thenReturn("The Source");
         final LogPageSourceRule rule = createRule();
         rule.failed(new RuntimeException(), Description.createTestDescription(TestLogPageSourceRule.class, "testMethod"));
-        verify(mockLogger).info("----- {} Failed. ", "testMethod");
+        verify(mockLogger).info("----- Test '{}' Failed. ", "testMethod");
         verify(mockLogger).info("----- START PAGE SOURCE DUMP\n\n\n{}\n\n\n", "The Source");
         verify(mockLogger).info("----- END PAGE SOURCE DUMP");
         verifyNoMoreInteractions(mockLogger);
