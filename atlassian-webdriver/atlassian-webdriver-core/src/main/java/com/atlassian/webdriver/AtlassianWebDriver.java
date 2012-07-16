@@ -14,6 +14,7 @@ import java.io.File;
  *
  * @deprecated scheduled for removal. See https://studio.atlassian.com/browse/SELENIUM-187
  */
+@Deprecated
 public interface AtlassianWebDriver extends WebDriver, JavascriptExecutor, HasInputDevices
 {
     /**
