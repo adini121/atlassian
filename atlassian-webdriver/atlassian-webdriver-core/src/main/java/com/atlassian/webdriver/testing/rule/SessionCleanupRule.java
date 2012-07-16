@@ -1,14 +1,19 @@
 package com.atlassian.webdriver.testing.rule;
 
-import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.LifecycleAwareWebDriverGrid;
+import com.google.common.base.Supplier;
+import com.google.common.base.Suppliers;
 import org.junit.rules.ExternalResource;
+import org.openqa.selenium.WebDriver;
+
+import javax.inject.Inject;
 
 /**
- * A simple rule to clear the browsers session at the end of a test.
- * This removes the need to have an @After method that logs the user out of the
- * TestedProduct.
+ * <p/>
+ * A simple rule to clear the browsers session at the end of a test. This removes the need to have an @After
+ * method that logs the user out of the TestedProduct.
  *
+ * <p/>
  * This simply clears the cookies from the browser making it much quicker then actually
  * going through the products logout process.
  *
@@ -16,10 +21,40 @@ import org.junit.rules.ExternalResource;
  */
 public class SessionCleanupRule extends ExternalResource
 {
+
+    private final Supplier<? extends WebDriver> webDriver;
+
+    public SessionCleanupRule(Supplier<? extends WebDriver> webDriver)
+    {
+        this.webDriver = webDriver;
+    }
+
+    @Inject
+    public SessionCleanupRule(WebDriver webDriver)
+    {
+        this(Suppliers.ofInstance(webDriver));
+    }
+
+    public SessionCleanupRule()
+    {
+        this(LifecycleAwareWebDriverGrid.currentDriverSupplier());
+    }
+
+    @Override
+    protected void before() throws Throwable
+    {
+        cleanUp();
+    }
+
     @Override
     protected void after()
     {
-        AtlassianWebDriver driver = LifecycleAwareWebDriverGrid.getCurrentDriver();
+        cleanUp();
+    }
+
+    private void cleanUp()
+    {
+        final WebDriver driver = webDriver.get();
         if (driver != null)
         {
             driver.manage().deleteAllCookies();

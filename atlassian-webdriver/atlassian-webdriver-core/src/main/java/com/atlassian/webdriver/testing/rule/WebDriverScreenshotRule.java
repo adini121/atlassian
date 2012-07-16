@@ -1,13 +1,18 @@
 package com.atlassian.webdriver.testing.rule;
 
 import com.atlassian.webdriver.AtlassianWebDriver;
-import com.atlassian.webdriver.LifecycleAwareWebDriverGrid;
+import com.google.common.base.Supplier;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nonnull;
+import javax.inject.Inject;
 import java.io.File;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkState;
 
 /**
  * A rule for taking screen-shots when a WebDriver test fails. It will also dump the html source of the page to
@@ -19,33 +24,75 @@ public class WebDriverScreenshotRule extends TestWatcher
 {
     private static final Logger log = LoggerFactory.getLogger(WebDriverScreenshotRule.class);
 
-    private String destinationFolder;
+    private final WebDriverSupport<AtlassianWebDriver> webDriverSupport;
+    private final File artifactDir;
+
+    private static File defaultArtifactDir()
+    {
+        return new File("target/webdriverTests");
+    }
+
+    protected WebDriverScreenshotRule(@Nonnull WebDriverSupport<AtlassianWebDriver> support, @Nonnull File artifactDir)
+    {
+        this.webDriverSupport = checkNotNull(support, "support");
+        this.artifactDir = artifactDir;
+    }
+
+    public WebDriverScreenshotRule(@Nonnull Supplier<? extends AtlassianWebDriver> driverSupplier, @Nonnull File artifactDir)
+    {
+        this(WebDriverSupport.forSupplier(driverSupplier), artifactDir);
+    }
+
+    public WebDriverScreenshotRule(@Nonnull Supplier<? extends AtlassianWebDriver> driverSupplier)
+    {
+        this(driverSupplier, defaultArtifactDir());
+    }
+
+    @Inject
+    public WebDriverScreenshotRule(@Nonnull AtlassianWebDriver webDriver)
+    {
+        this(WebDriverSupport.forInstance(webDriver), defaultArtifactDir());
+    }
+
+    public WebDriverScreenshotRule()
+    {
+        this(WebDriverSupport.fromGrid(), defaultArtifactDir());
+    }
+
+
 
     @Override
     public void starting(final Description description)
     {
-        destinationFolder = "target/webdriverTests/" + description.getClassName();
-        File dir = new File(destinationFolder);
+        File dir = getTargetDir(description);
         if (!dir.exists())
         {
-            dir.mkdirs();
+            checkState(dir.mkdirs(), "Unable to create screenshot output directory " + dir.getAbsolutePath());
         }
     }
 
     @Override
     public void failed(final Throwable e, final Description description)
     {
-        final AtlassianWebDriver driver = LifecycleAwareWebDriverGrid.getCurrentDriver();
-        final String baseFileName = destinationFolder + File.separator + description.getMethodName();
-        final File dumpFile = new File(baseFileName + ".html");
-        log.error(e.getMessage(), e);
-        log.info("----- Test Failed. " + e.getMessage());
+        final AtlassianWebDriver driver = webDriverSupport.getDriver();
+        final File dumpFile = getTargetFile(description, "html");
+        final File screenShotFile = getTargetFile(description, "png");
+        log.info("----- {} failed. ", description.getDisplayName());
         log.info("----- At page: " + driver.getCurrentUrl());
-        log.info("----- Dumping page source to: " + dumpFile.getAbsolutePath());
-
-        // Take a screen shot and dump it.
+        log.info("----- Dumping page source to {} and screenshot to {}", dumpFile.getAbsolutePath(),
+                screenShotFile.getAbsolutePath());
         driver.dumpSourceTo(dumpFile);
-        driver.takeScreenshotTo(new File(baseFileName + ".png"));
+        driver.takeScreenshotTo(screenShotFile);
+    }
+
+    private File getTargetDir(Description description)
+    {
+        return new File(artifactDir, description.getClassName());
+    }
+
+    private File getTargetFile(Description description, String extension)
+    {
+        return new File(getTargetDir(description), description.getMethodName() + "." + extension);
     }
 
 }

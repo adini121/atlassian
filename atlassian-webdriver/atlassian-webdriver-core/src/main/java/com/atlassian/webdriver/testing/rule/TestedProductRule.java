@@ -1,6 +1,10 @@
 package com.atlassian.webdriver.testing.rule;
 
-import com.atlassian.pageobjects.*;
+import com.atlassian.pageobjects.Page;
+import com.atlassian.pageobjects.PageBinder;
+import com.atlassian.pageobjects.ProductInstance;
+import com.atlassian.pageobjects.TestedProduct;
+import com.atlassian.pageobjects.TestedProductFactory;
 import com.atlassian.webdriver.pageobjects.WebDriverTester;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
@@ -12,10 +16,11 @@ import org.junit.runners.model.Statement;
  * an @BeforeClass or @Before rule.
  *
  * <code>
- * @Rule public TestedProductRule product = new TestedProductRule(YourTestedProduct.class);
+ * &#64;Rule public TestedProductRule product = new TestedProductRule(YourTestedProduct.class);
  * </code>
  *
  * @since 2.1.0
+ * @see InjectionRules
  */
 public class TestedProductRule<T extends TestedProduct<WebDriverTester>> implements TestRule, TestedProduct<WebDriverTester>
 {

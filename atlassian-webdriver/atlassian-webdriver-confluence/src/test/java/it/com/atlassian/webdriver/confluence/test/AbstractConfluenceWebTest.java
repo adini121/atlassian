@@ -7,10 +7,8 @@ import com.atlassian.webdriver.confluence.page.DashboardPage;
 import com.atlassian.webdriver.testing.annotation.IgnoreBrowser;
 import com.atlassian.webdriver.testing.rule.IgnoreBrowserRule;
 import com.atlassian.webdriver.testing.rule.SessionCleanupRule;
-import com.atlassian.webdriver.testing.rule.TestBrowserRule;
 import com.atlassian.webdriver.testing.rule.TestedProductRule;
 import com.atlassian.webdriver.testing.rule.WebDriverScreenshotRule;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 

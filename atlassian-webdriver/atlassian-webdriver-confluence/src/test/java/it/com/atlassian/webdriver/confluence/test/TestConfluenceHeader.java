@@ -1,12 +1,10 @@
 package it.com.atlassian.webdriver.confluence.test;
 
 import com.atlassian.pageobjects.Browser;
-import com.atlassian.pageobjects.TestedProductFactory;
 import com.atlassian.pageobjects.page.LoginPage;
 import com.atlassian.webdriver.confluence.ConfluenceTestedProduct;
 import com.atlassian.webdriver.confluence.component.header.ConfluenceHeader;
 import com.atlassian.webdriver.confluence.page.DashboardPage;
-
 import com.atlassian.webdriver.testing.annotation.IgnoreBrowser;
 import com.atlassian.webdriver.testing.rule.IgnoreBrowserRule;
 import com.atlassian.webdriver.testing.rule.SessionCleanupRule;

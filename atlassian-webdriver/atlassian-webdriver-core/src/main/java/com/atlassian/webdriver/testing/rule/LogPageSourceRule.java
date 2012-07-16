@@ -9,6 +9,8 @@ import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
+
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -26,6 +28,7 @@ public final class LogPageSourceRule extends TestWatcher
     private final Logger logger;
     private final Supplier<? extends WebDriver> webDriver;
 
+    @Inject
     public LogPageSourceRule(WebDriver webDriver, Logger logger)
     {
         this(Suppliers.ofInstance(checkNotNull(webDriver, "webDriver")),logger);
