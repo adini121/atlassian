@@ -56,13 +56,13 @@ public class WebDriverScreenshotRule extends TestWatcher
 
     public WebDriverScreenshotRule()
     {
-        this(WebDriverSupport.fromGrid(), defaultArtifactDir());
+        this(WebDriverSupport.fromAutoInstall(), defaultArtifactDir());
     }
 
 
 
     @Override
-    public void starting(final Description description)
+    protected void starting(final Description description)
     {
         File dir = getTargetDir(description);
         if (!dir.exists())
@@ -72,7 +72,7 @@ public class WebDriverScreenshotRule extends TestWatcher
     }
 
     @Override
-    public void failed(final Throwable e, final Description description)
+    protected void failed(final Throwable e, final Description description)
     {
         final AtlassianWebDriver driver = webDriverSupport.getDriver();
         final File dumpFile = getTargetFile(description, "html");
