@@ -1,6 +1,7 @@
 package com.atlassian.pageobjects.util;
 
 import com.atlassian.pageobjects.Browser;
+import com.google.common.base.Supplier;
 
 /**
  * Utilities for manipulating the current browser.
@@ -17,5 +18,17 @@ public class BrowserUtil
     public static Browser getCurrentBrowser()
     {
         return currentBrowser;
+    }
+
+    public static Supplier<Browser> currentBrowserSupplier()
+    {
+        return new Supplier<Browser>()
+        {
+            @Override
+            public Browser get()
+            {
+                return getCurrentBrowser();
+            }
+        };
     }
 }

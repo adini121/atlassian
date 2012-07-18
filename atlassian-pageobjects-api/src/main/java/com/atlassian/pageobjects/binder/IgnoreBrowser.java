@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  * Marks a method that should not be called if the current test browser matches any of the given browsers.
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
+@Target({ ElementType.METHOD, ElementType.TYPE, ElementType.PACKAGE })
 public @interface IgnoreBrowser
 {
     Browser[] value() default {Browser.ALL};

@@ -26,6 +26,8 @@ import org.junit.runners.model.Statement;
  * </code>
  *
  * @since 2.1.0
+ * @deprecated Use {@link com.atlassian.webdriver.testing.rule.IgnoreBrowserRule} instead, which handles all browser-related
+ * annotations.
  */
 public class TestBrowserRule implements TestRule
 {

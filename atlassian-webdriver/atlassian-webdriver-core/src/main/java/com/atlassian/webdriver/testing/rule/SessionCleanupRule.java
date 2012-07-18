@@ -1,6 +1,6 @@
 package com.atlassian.webdriver.testing.rule;
 
-import com.atlassian.webdriver.LifecycleAwareWebDriverGrid;
+import com.atlassian.webdriver.browsers.WebDriverBrowserAutoInstall;
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
 import org.junit.rules.ExternalResource;
@@ -37,7 +37,7 @@ public class SessionCleanupRule extends ExternalResource
 
     public SessionCleanupRule()
     {
-        this(LifecycleAwareWebDriverGrid.currentDriverSupplier());
+        this(WebDriverBrowserAutoInstall.driverSupplier());
     }
 
     @Override

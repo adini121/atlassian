@@ -8,10 +8,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Marks a method that should only be called if the current test browser matches any of the given browsers.
+ * Marks elements that should only be called if the current test browser matches any of the given browsers.
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
+@Target({ ElementType.METHOD, ElementType.TYPE, ElementType.PACKAGE })
 public @interface RequireBrowser
 {
     Browser[] value() default {Browser.ALL};

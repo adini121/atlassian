@@ -1,10 +1,10 @@
 package com.atlassian.webdriver.browsers;
 
+import com.atlassian.pageobjects.Browser;
+import com.atlassian.pageobjects.binder.RequireBrowser;
 import com.atlassian.webdriver.it.AbstractFileBasedServerTest;
 import com.atlassian.webdriver.it.pageobjects.page.UserAgentPage;
-import com.atlassian.webdriver.testing.annotation.TestBrowser;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertTrue;
@@ -23,8 +23,7 @@ public class TestAutoBrowserInstaller extends AbstractFileBasedServerTest
     }
 
     @Test
-    @Ignore
-    @TestBrowser("chrome")
+    @RequireBrowser(Browser.CHROME)
     public void testChrome() throws Exception
     {
         String formattedError = String.format("The user agent: '%s' does not contain 'Chrome/'",
@@ -33,7 +32,7 @@ public class TestAutoBrowserInstaller extends AbstractFileBasedServerTest
     }
 
     @Test
-    @TestBrowser("firefox")
+    @RequireBrowser(Browser.FIREFOX)
     public void testFirefox() throws Exception
     {
         String formattedError = String.format("The user agent: '%s' does not contain 'Firefox/'",
@@ -42,7 +41,7 @@ public class TestAutoBrowserInstaller extends AbstractFileBasedServerTest
     }
 
     @Test
-    @TestBrowser("htmlunit")
+    @RequireBrowser(Browser.HTMLUNIT)
     public void testHtmlUnit() throws Exception
     {
         String formattedError = String.format("The user agent: '%s' does not contain '%s'",

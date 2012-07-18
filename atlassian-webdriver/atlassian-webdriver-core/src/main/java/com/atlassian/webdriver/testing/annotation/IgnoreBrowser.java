@@ -15,10 +15,12 @@ import java.lang.annotation.Target;
  * {@link com.atlassian.webdriver.testing.rule.IgnoreBrowserRule}, the test method will be skipped.
  *
  * @since 2.1.0
+ * @deprecated use {@link com.atlassian.pageobjects.binder.IgnoreBrowser} instead
  */
 @Retention (RetentionPolicy.RUNTIME)
 @Target ({ElementType.METHOD, ElementType.TYPE})
 @Inherited
+@Deprecated
 public @interface IgnoreBrowser
 {
     Browser[] value() default {Browser.ALL};

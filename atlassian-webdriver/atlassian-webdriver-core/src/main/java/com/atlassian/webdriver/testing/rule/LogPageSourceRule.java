@@ -1,6 +1,6 @@
 package com.atlassian.webdriver.testing.rule;
 
-import com.atlassian.webdriver.LifecycleAwareWebDriverGrid;
+import com.atlassian.webdriver.browsers.WebDriverBrowserAutoInstall;
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
 import org.junit.rules.TestWatcher;
@@ -42,7 +42,7 @@ public final class LogPageSourceRule extends TestWatcher
 
     public LogPageSourceRule(Logger logger)
     {
-        this(LifecycleAwareWebDriverGrid.currentDriverSupplier(), logger);
+        this(WebDriverBrowserAutoInstall.driverSupplier(), logger);
     }
 
     public LogPageSourceRule()

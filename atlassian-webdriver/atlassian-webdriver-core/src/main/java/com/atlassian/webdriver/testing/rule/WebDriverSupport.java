@@ -1,7 +1,7 @@
 package com.atlassian.webdriver.testing.rule;
 
 import com.atlassian.webdriver.AtlassianWebDriver;
-import com.atlassian.webdriver.LifecycleAwareWebDriverGrid;
+import com.atlassian.webdriver.browsers.WebDriverBrowserAutoInstall;
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
 import org.openqa.selenium.WebDriver;
@@ -22,9 +22,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public final class WebDriverSupport<WD extends WebDriver>
 {
-    public static WebDriverSupport<AtlassianWebDriver> fromGrid()
+    public static WebDriverSupport<AtlassianWebDriver> fromAutoInstall()
     {
-        return new WebDriverSupport<AtlassianWebDriver>(LifecycleAwareWebDriverGrid.currentDriverSupplier());
+        return new WebDriverSupport<AtlassianWebDriver>(WebDriverBrowserAutoInstall.driverSupplier());
     }
 
     public static <VE extends WebDriver> WebDriverSupport<VE> forSupplier(Supplier<? extends VE> driverSupplier)

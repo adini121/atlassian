@@ -1,10 +1,10 @@
 package com.atlassian.webdriver.it.tests;
 
 import com.atlassian.pageobjects.Browser;
+import com.atlassian.pageobjects.binder.IgnoreBrowser;
+import com.atlassian.pageobjects.binder.RequireBrowser;
 import com.atlassian.webdriver.it.AbstractFileBasedServerTest;
 import com.atlassian.webdriver.it.pageobjects.page.ByJqueryPage;
-import com.atlassian.webdriver.testing.annotation.IgnoreBrowser;
-import com.atlassian.webdriver.testing.annotation.TestBrowser;
 import com.atlassian.webdriver.utils.by.ByJquery;
 import org.junit.Before;
 import org.junit.Test;
@@ -64,7 +64,7 @@ public class TestByJquery extends AbstractFileBasedServerTest
     }
 
     @Test
-    @TestBrowser("htmlunit")
+    @RequireBrowser(Browser.HTMLUNIT)
     public void testClassNameFailsToReturnsClassInHtmlUnit()
     {
         List<WebElement> els = driver.findElements(ByJquery.$(".class1"));
