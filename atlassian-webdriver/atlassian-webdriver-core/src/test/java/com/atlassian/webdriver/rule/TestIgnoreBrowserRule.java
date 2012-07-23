@@ -1,8 +1,8 @@
 package com.atlassian.webdriver.rule;
 
-import com.atlassian.pageobjects.Browser;
-import com.atlassian.pageobjects.binder.IgnoreBrowser;
-import com.atlassian.pageobjects.binder.RequireBrowser;
+import com.atlassian.pageobjects.browser.Browser;
+import com.atlassian.pageobjects.browser.IgnoreBrowser;
+import com.atlassian.pageobjects.browser.RequireBrowser;
 import com.atlassian.webdriver.testing.rule.IgnoreBrowserRule;
 import org.junit.Test;
 import org.junit.internal.AssumptionViolatedException;

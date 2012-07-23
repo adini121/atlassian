@@ -1,21 +1,20 @@
 package com.atlassian.pageobjects.elements.test;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertTrue;
-
-import java.util.Iterator;
-
-import com.atlassian.pageobjects.Browser;
-import com.atlassian.webdriver.testing.annotation.IgnoreBrowser;
-import org.junit.Before;
-import org.junit.Test;
-
+import com.atlassian.pageobjects.browser.Browser;
 import com.atlassian.pageobjects.elements.CheckboxElement;
 import com.atlassian.pageobjects.elements.MultiSelectElement;
 import com.atlassian.pageobjects.elements.PageElement;
 import com.atlassian.pageobjects.elements.SelectElement;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.PageElementIterablePage;
+import com.atlassian.webdriver.testing.annotation.IgnoreBrowser;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.Iterator;
+
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertTrue;
 
 /**
  * Tests that {@code @ElementBy} works on {@code Iterable<PageElement>}

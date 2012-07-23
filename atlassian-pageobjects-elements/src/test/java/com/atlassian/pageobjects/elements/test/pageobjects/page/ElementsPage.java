@@ -1,10 +1,10 @@
 package com.atlassian.pageobjects.elements.test.pageobjects.page;
 
-import com.atlassian.pageobjects.Browser;
 import com.atlassian.pageobjects.Page;
 import com.atlassian.pageobjects.PageBinder;
-import com.atlassian.pageobjects.binder.IgnoreBrowser;
 import com.atlassian.pageobjects.binder.WaitUntil;
+import com.atlassian.pageobjects.browser.Browser;
+import com.atlassian.pageobjects.browser.IgnoreBrowser;
 import com.atlassian.pageobjects.elements.ElementBy;
 import com.atlassian.pageobjects.elements.PageElement;
 import com.atlassian.pageobjects.elements.PageElementFinder;
@@ -12,8 +12,6 @@ import com.atlassian.pageobjects.elements.query.Poller;
 import com.atlassian.webdriver.utils.by.ByJquery;
 
 import javax.inject.Inject;
-
-import static org.hamcrest.Matchers.is;
 
 /**
  * Represents the elements.html

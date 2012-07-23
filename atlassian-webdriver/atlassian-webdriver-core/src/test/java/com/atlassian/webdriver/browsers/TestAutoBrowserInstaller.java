@@ -1,7 +1,7 @@
 package com.atlassian.webdriver.browsers;
 
-import com.atlassian.pageobjects.Browser;
-import com.atlassian.pageobjects.binder.RequireBrowser;
+import com.atlassian.pageobjects.browser.Browser;
+import com.atlassian.pageobjects.browser.RequireBrowser;
 import com.atlassian.webdriver.it.AbstractFileBasedServerTest;
 import com.atlassian.webdriver.it.pageobjects.page.UserAgentPage;
 import org.junit.Before;

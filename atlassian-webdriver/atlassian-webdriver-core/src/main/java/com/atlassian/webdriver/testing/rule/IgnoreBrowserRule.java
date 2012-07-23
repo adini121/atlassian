@@ -1,7 +1,7 @@
 package com.atlassian.webdriver.testing.rule;
 
-import com.atlassian.pageobjects.Browser;
-import com.atlassian.pageobjects.binder.RequireBrowser;
+import com.atlassian.pageobjects.browser.Browser;
+import com.atlassian.pageobjects.browser.RequireBrowser;
 import com.atlassian.pageobjects.util.BrowserUtil;
 import com.atlassian.webdriver.WebDriverFactory;
 import com.atlassian.webdriver.testing.annotation.IgnoreBrowser;
@@ -26,12 +26,12 @@ import static org.junit.Assume.assumeThat;
 
 /**
  * <p/>
- * A rule that allows annotating test methods with the {@link com.atlassian.pageobjects.binder.IgnoreBrowser}
+ * A rule that allows annotating test methods with the {@link com.atlassian.pageobjects.browser.IgnoreBrowser}
  * annotation and will skip the test if the current running driver
  * is in the list of browsers to ignore.
  *
  * <p/>
- * Also skips tests annotated with {@link com.atlassian.pageobjects.binder.RequireBrowser} if they require a
+ * Also skips tests annotated with {@link com.atlassian.pageobjects.browser.RequireBrowser} if they require a
  * particular browser that is not currently running.
  *
  * <p/>
@@ -86,9 +86,9 @@ public class IgnoreBrowserRule implements TestRule
                         .checkBrowser(currentBrowser(), description);
                 IgnoredBrowsers.fromLegacyAnnotation(description.isSuite() ? null : clazz.getAnnotation(IgnoreBrowser.class))
                         .checkBrowser(currentBrowser(), description);
-                IgnoredBrowsers.fromAnnotation(description.getAnnotation(com.atlassian.pageobjects.binder.IgnoreBrowser.class))
+                IgnoredBrowsers.fromAnnotation(description.getAnnotation(com.atlassian.pageobjects.browser.IgnoreBrowser.class))
                         .checkBrowser(currentBrowser(), description);
-                IgnoredBrowsers.fromAnnotation(description.isSuite() ? null : clazz.getAnnotation(com.atlassian.pageobjects.binder.IgnoreBrowser.class))
+                IgnoredBrowsers.fromAnnotation(description.isSuite() ? null : clazz.getAnnotation(com.atlassian.pageobjects.browser.IgnoreBrowser.class))
                         .checkBrowser(currentBrowser(), description);
                 base.evaluate();
             }
@@ -153,7 +153,7 @@ public class IgnoreBrowserRule implements TestRule
             }
         }
 
-        public static IgnoredBrowsers fromAnnotation(com.atlassian.pageobjects.binder.IgnoreBrowser ignoreBrowser)
+        public static IgnoredBrowsers fromAnnotation(com.atlassian.pageobjects.browser.IgnoreBrowser ignoreBrowser)
         {
             if (ignoreBrowser == null)
             {

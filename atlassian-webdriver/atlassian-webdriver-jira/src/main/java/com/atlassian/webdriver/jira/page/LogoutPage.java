@@ -1,8 +1,8 @@
 package com.atlassian.webdriver.jira.page;
 
-import com.atlassian.pageobjects.Browser;
-import com.atlassian.pageobjects.binder.IgnoreBrowser;
 import com.atlassian.pageobjects.binder.WaitUntil;
+import com.atlassian.pageobjects.browser.Browser;
+import com.atlassian.pageobjects.browser.IgnoreBrowser;
 import com.atlassian.webdriver.utils.by.ByJquery;
 import org.openqa.selenium.By;
 

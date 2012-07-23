@@ -1,5 +1,6 @@
 package com.atlassian.webdriver;
 
+import com.atlassian.pageobjects.browser.BrowserAware;
 import com.google.common.base.Function;
 import org.openqa.selenium.By;
 import org.openqa.selenium.HasInputDevices;
@@ -15,7 +16,7 @@ import java.io.File;
  * @deprecated scheduled for removal. See https://studio.atlassian.com/browse/SELENIUM-187
  */
 @Deprecated
-public interface AtlassianWebDriver extends WebDriver, JavascriptExecutor, HasInputDevices
+public interface AtlassianWebDriver extends WebDriver, JavascriptExecutor, HasInputDevices, BrowserAware
 {
     /**
      * Gets the underlying <tt>WebDriver</tt>.

@@ -1,11 +1,13 @@
 package com.atlassian.pageobjects.binder;
 
-import com.atlassian.pageobjects.Browser;
 import com.atlassian.pageobjects.DelayedBinder;
 import com.atlassian.pageobjects.Page;
 import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.ProductInstance;
 import com.atlassian.pageobjects.Tester;
+import com.atlassian.pageobjects.browser.Browser;
+import com.atlassian.pageobjects.browser.IgnoreBrowser;
+import com.atlassian.pageobjects.browser.RequireBrowser;
 import com.atlassian.pageobjects.inject.InjectionContext;
 import com.atlassian.pageobjects.util.BrowserUtil;
 import com.google.common.collect.Lists;
@@ -147,7 +149,7 @@ public final class InjectPageBinder implements PageBinder, InjectionContext
      * Calls all methods with the given annotation, starting with methods found in the topmost superclass, then calling
      * more specific methods in subclasses. Note that this can mean that this will attempt to call the same method
      * multiple times - once per override in the hierarchy. Will call the methods even if they're private. Skips methods
-     * if they are also annotated with {@link IgnoreBrowser} (or {@link RequireBrowser}) if the current {@link Browser}
+     * if they are also annotated with {@link com.atlassian.pageobjects.browser.IgnoreBrowser} (or {@link com.atlassian.pageobjects.browser.RequireBrowser}) if the current {@link Browser}
      * matches (does not match) any of the browsers listed in that annotation.
      * @param instance the page object to check for the annotation
      * @param annotation the annotation to find

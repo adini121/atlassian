@@ -1,7 +1,7 @@
 package com.atlassian.webdriver;
 
 import com.atlassian.browsers.BrowserConfig;
-import com.atlassian.pageobjects.Browser;
+import com.atlassian.pageobjects.browser.Browser;
 import com.atlassian.pageobjects.util.BrowserUtil;
 import com.atlassian.webdriver.browsers.chrome.ChromeBrowser;
 import com.atlassian.webdriver.browsers.firefox.FirefoxBrowser;
@@ -182,6 +182,6 @@ public class WebDriverFactory
 
         BrowserUtil.setCurrentBrowser(browserType);
 
-        return new DefaultAtlassianWebDriver(driver);
+        return new DefaultAtlassianWebDriver(driver, browserType);
     }
 }

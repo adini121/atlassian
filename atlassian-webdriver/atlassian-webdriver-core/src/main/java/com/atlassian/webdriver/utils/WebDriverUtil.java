@@ -1,7 +1,5 @@
 package com.atlassian.webdriver.utils;
 
-import com.atlassian.pageobjects.Browser;
-import com.atlassian.pageobjects.util.BrowserUtil;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;

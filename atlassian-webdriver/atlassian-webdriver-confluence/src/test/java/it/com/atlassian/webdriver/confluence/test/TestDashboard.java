@@ -1,6 +1,6 @@
 package it.com.atlassian.webdriver.confluence.test;
 
-import com.atlassian.pageobjects.Browser;
+import com.atlassian.pageobjects.browser.Browser;
 import com.atlassian.webdriver.confluence.page.ConfluenceAdminHomePage;
 import com.atlassian.webdriver.confluence.page.DashboardPage;
 import com.atlassian.webdriver.confluence.page.LogoutPage;

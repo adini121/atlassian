@@ -6,6 +6,7 @@ import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.ProductInstance;
 import com.atlassian.pageobjects.TestedProduct;
 import com.atlassian.pageobjects.TestedProductFactory;
+import com.atlassian.pageobjects.binder.BrowserModule;
 import com.atlassian.pageobjects.binder.InjectPageBinder;
 import com.atlassian.pageobjects.binder.StandardModule;
 import com.atlassian.webdriver.AtlassianWebDriverModule;
@@ -27,7 +28,7 @@ public class SimpleTestedProduct implements TestedProduct<WebDriverTester>
 
         this.webDriverTester =  new DefaultWebDriverTester();
         this.pageBinder = new InjectPageBinder(productInstance, webDriverTester, new StandardModule(this),
-                new AtlassianWebDriverModule(this));
+                new AtlassianWebDriverModule(this), new BrowserModule());
     }
 
     public <P extends Page> P visit(Class<P> pageClass, Object... args)
@@ -42,7 +43,6 @@ public class SimpleTestedProduct implements TestedProduct<WebDriverTester>
 
     public ProductInstance getProductInstance()
     {
-
         return productInstance;
     }
 

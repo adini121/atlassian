@@ -1,6 +1,6 @@
 package com.atlassian.pageobjects.elements.test;
 
-import com.atlassian.pageobjects.Browser;
+import com.atlassian.pageobjects.browser.Browser;
 import com.atlassian.pageobjects.elements.PageElement;
 import com.atlassian.pageobjects.elements.TimedElement;
 import com.atlassian.pageobjects.elements.query.Poller;

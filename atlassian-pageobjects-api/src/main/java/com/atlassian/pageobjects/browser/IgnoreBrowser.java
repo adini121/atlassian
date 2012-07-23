@@ -1,7 +1,5 @@
-package com.atlassian.pageobjects.binder;
+package com.atlassian.pageobjects.browser;
 
-
-import com.atlassian.pageobjects.Browser;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -10,6 +8,8 @@ import java.lang.annotation.Target;
 
 /**
  * Marks a method that should not be called if the current test browser matches any of the given browsers.
+ *
+ * @since 2.1
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.METHOD, ElementType.TYPE, ElementType.PACKAGE })

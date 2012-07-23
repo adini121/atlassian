@@ -1,6 +1,6 @@
 package com.atlassian.webdriver.rule;
 
-import com.atlassian.pageobjects.Browser;
+import com.atlassian.pageobjects.browser.Browser;
 import com.atlassian.webdriver.testing.annotation.IgnoreBrowser;
 import com.atlassian.webdriver.testing.annotation.TestBrowser;
 import com.atlassian.webdriver.testing.rule.IgnoreBrowserRule;

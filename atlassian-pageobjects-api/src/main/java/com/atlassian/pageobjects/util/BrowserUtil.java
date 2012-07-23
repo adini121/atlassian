@@ -1,6 +1,6 @@
 package com.atlassian.pageobjects.util;
 
-import com.atlassian.pageobjects.Browser;
+import com.atlassian.pageobjects.browser.Browser;
 import com.google.common.base.Supplier;
 
 /**

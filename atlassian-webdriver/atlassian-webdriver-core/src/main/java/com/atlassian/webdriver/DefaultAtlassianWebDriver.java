@@ -1,5 +1,6 @@
 package com.atlassian.webdriver;
 
+import com.atlassian.pageobjects.browser.Browser;
 import com.atlassian.webdriver.utils.Check;
 import com.atlassian.webdriver.utils.element.ElementIsVisible;
 import com.atlassian.webdriver.utils.element.ElementLocated;
@@ -32,6 +33,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * Exposes a set of common functions to use.
  */
@@ -40,13 +43,22 @@ public class DefaultAtlassianWebDriver implements AtlassianWebDriver
 
     private static final Logger log = LoggerFactory.getLogger(DefaultAtlassianWebDriver.class);
 
-    private final WebDriver driver;
     private static final int WAIT_TIME = 60;
 
+    private final WebDriver driver;
+    private final Browser browser;
+
     @Inject
-    public DefaultAtlassianWebDriver(WebDriver driver)
+    public DefaultAtlassianWebDriver(WebDriver driver, Browser browser)
     {
-        this.driver = driver;
+        this.driver = checkNotNull(driver, "driver");
+        this.browser = checkNotNull(browser, "browser");
+    }
+
+    @Override
+    public Browser getBrowser()
+    {
+        return browser;
     }
 
     public WebDriver getDriver()

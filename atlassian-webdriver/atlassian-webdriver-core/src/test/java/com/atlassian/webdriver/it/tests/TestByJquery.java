@@ -1,8 +1,8 @@
 package com.atlassian.webdriver.it.tests;
 
-import com.atlassian.pageobjects.Browser;
-import com.atlassian.pageobjects.binder.IgnoreBrowser;
-import com.atlassian.pageobjects.binder.RequireBrowser;
+import com.atlassian.pageobjects.browser.Browser;
+import com.atlassian.pageobjects.browser.IgnoreBrowser;
+import com.atlassian.pageobjects.browser.RequireBrowser;
 import com.atlassian.webdriver.it.AbstractFileBasedServerTest;
 import com.atlassian.webdriver.it.pageobjects.page.ByJqueryPage;
 import com.atlassian.webdriver.utils.by.ByJquery;

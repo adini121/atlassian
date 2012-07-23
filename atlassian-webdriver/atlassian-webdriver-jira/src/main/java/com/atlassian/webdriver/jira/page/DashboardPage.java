@@ -1,10 +1,9 @@
 package com.atlassian.webdriver.jira.page;
 
 
-import com.atlassian.pageobjects.Browser;
-import com.atlassian.pageobjects.binder.IgnoreBrowser;
-import com.atlassian.pageobjects.binder.RequireBrowser;
 import com.atlassian.pageobjects.binder.WaitUntil;
+import com.atlassian.pageobjects.browser.Browser;
+import com.atlassian.pageobjects.browser.IgnoreBrowser;
 import com.atlassian.pageobjects.page.HomePage;
 import com.atlassian.webdriver.jira.component.dashboard.Gadget;
 import com.atlassian.webdriver.jira.component.header.JiraHeader;

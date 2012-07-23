@@ -1,4 +1,4 @@
-package com.atlassian.pageobjects;
+package com.atlassian.pageobjects.browser;
 
 import java.util.Locale;
 

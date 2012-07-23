@@ -1,6 +1,6 @@
 package it.com.atlassian.webdriver.confluence.test;
 
-import com.atlassian.pageobjects.Browser;
+import com.atlassian.pageobjects.browser.Browser;
 import com.atlassian.pageobjects.component.WebSudoBanner;
 import com.atlassian.pageobjects.page.WebSudoPage;
 import com.atlassian.webdriver.confluence.page.DashboardPage;
