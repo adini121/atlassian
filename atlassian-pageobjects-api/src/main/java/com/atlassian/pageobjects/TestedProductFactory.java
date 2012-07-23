@@ -118,7 +118,7 @@ public class TestedProductFactory
             contextPath = defaults.contextPath();
             baseUrl = "http://" + getLocalHostName() + ":" + httpPort + contextPath;
         }
-        instance = new DefaultProductInstance(instanceId, httpPort, contextPath, baseUrl);
+        instance = new DefaultProductInstance(baseUrl, instanceId, httpPort, contextPath);
         return create(testedProductClass, instance, testerFactory);
     }
 
@@ -182,42 +182,4 @@ public class TestedProductFactory
         }
     }
 
-    /**
-     * Information representing the product instance being tested
-     */
-    private static class DefaultProductInstance implements ProductInstance
-    {
-        private final String baseUrl;
-        private final String instanceId;
-        private final int httpPort;
-        private final String contextPath;
-
-
-        public DefaultProductInstance(final String instanceId, final int httpPort, final String contextPath, final String baseUrl)
-        {
-            this.instanceId = instanceId;
-            this.httpPort = httpPort;
-            this.contextPath = contextPath;
-            this.baseUrl = baseUrl;
-        }
-
-        public String getBaseUrl()
-        {
-            return baseUrl.toLowerCase();
-        }
-
-        public int getHttpPort()
-        {
-            return httpPort;
-        }
-
-        public String getContextPath()
-        {
-            return contextPath;
-        }
-
-        public String getInstanceId() {
-            return instanceId;
-        }
-    }
 }

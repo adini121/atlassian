@@ -1,7 +1,9 @@
 package com.atlassian.pageobjects;
 
 /**
- * The product instance being tested
+ * Encapsulates information about the product instance being tested.
+ *
+ * @since 2.1
  */
 public interface ProductInstance
 {

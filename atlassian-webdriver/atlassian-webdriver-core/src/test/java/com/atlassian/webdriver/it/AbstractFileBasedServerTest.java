@@ -1,42 +1,23 @@
 package com.atlassian.webdriver.it;
 
 import com.atlassian.webdriver.it.pageobjects.SimpleTestedProduct;
+import com.atlassian.webdriver.testing.annotation.TestedProductClass;
 import com.atlassian.webdriver.testing.rule.IgnoreBrowserRule;
 import com.atlassian.webdriver.testing.rule.SessionCleanupRule;
-import com.atlassian.webdriver.testing.rule.TestedProductRule;
 import com.atlassian.webdriver.testing.rule.WebDriverScreenshotRule;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Rule;
+import org.junit.runner.RunWith;
 
+import javax.inject.Inject;
+
+@TestedProductClass(SimpleTestedProduct.class)
+@RunWith(FileBasedServerRunner.class)
 public abstract class AbstractFileBasedServerTest 
 {
-    public static FileBasedServer server;
-    public static String rootUrl;
+    @Inject protected static SimpleTestedProduct product;
 
-    @Rule public IgnoreBrowserRule ignoreRule = new IgnoreBrowserRule();
-    @Rule public TestedProductRule<SimpleTestedProduct> product = new TestedProductRule<SimpleTestedProduct>(SimpleTestedProduct.class);
-    @Rule public WebDriverScreenshotRule webDriverScreenshotRule = new WebDriverScreenshotRule();
-    @Rule public SessionCleanupRule sessionCleanupRule = new SessionCleanupRule();
-
-    @BeforeClass
-    public static void startServer() throws Exception
-    {
-        server = new FileBasedServer();
-        server.startServer();
-        int port = server.getPort();
-
-        rootUrl = "http://localhost:" + port;
-
-        System.setProperty("baseurl.testapp", rootUrl);
-        System.setProperty("http.testapp.port", String.valueOf(port));
-        System.setProperty("context.testapp.path", "/");
-    }
-
-    @AfterClass
-    public static void stopServer() throws Exception
-    {
-        server.stopServer();
-    }
+    @Inject @Rule public IgnoreBrowserRule ignoreRule;
+    @Inject @Rule public WebDriverScreenshotRule webDriverScreenshotRule;
+    @Inject @Rule public SessionCleanupRule sessionCleanupRule;
 
 }

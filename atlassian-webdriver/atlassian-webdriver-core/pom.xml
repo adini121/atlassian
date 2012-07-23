@@ -88,11 +88,16 @@
             <version>2.3.0</version>
         </dependency>
 
-
         <dependency>
             <groupId>com.atlassian.annotations</groupId>
             <artifactId>atlassian-annotations</artifactId>
             <version>${atlassian.annotations.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.atlassian.util.concurrent</groupId>
+            <artifactId>atlassian-util-concurrent</artifactId>
+            <version>2.3.0</version>
         </dependency>
 
         <!-- Test dependencies -->
