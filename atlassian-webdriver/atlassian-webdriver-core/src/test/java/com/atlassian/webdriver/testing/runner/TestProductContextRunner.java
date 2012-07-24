@@ -8,6 +8,7 @@ import com.atlassian.pageobjects.TestedProduct;
 import com.atlassian.pageobjects.TestedProductFactory;
 import com.atlassian.pageobjects.Tester;
 import com.atlassian.pageobjects.inject.InjectionContext;
+import com.atlassian.webdriver.matchers.LangMatchers;
 import com.atlassian.webdriver.testing.annotation.TestedProductClass;
 import org.hamcrest.Matchers;
 import org.junit.Rule;
@@ -20,6 +21,7 @@ import static com.atlassian.webdriver.matchers.ErrorMatchers.specificError;
 import static com.atlassian.webdriver.matchers.ErrorMatchers.withCause;
 import static com.atlassian.webdriver.matchers.ErrorMatchers.withCauses;
 import static com.atlassian.webdriver.matchers.ErrorMatchers.withMessage;
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -37,7 +39,7 @@ public class TestProductContextRunner
     @Test
     public void doesNotSupportTestClassesNotAnnotatedWithTestedProductClass() throws InitializationError
     {
-        expectedException.expect(specificError(InitializationError.class, withCauses(Matchers.<Throwable>hasItem(withMessage(
+        expectedException.expect(specificError(InitializationError.class, withCauses(hasItem(withMessage(
                 NotAnnotated.class.getName(),
                 "is missing the",
                 TestedProductClass.class.getName(),
@@ -49,7 +51,7 @@ public class TestProductContextRunner
     @Test
     public void supportsOnlyProductsThatAreInjectionContexts() throws InitializationError
     {
-        expectedException.expect(withCause(Matchers.<Throwable>allOf(instanceOf(AssertionError.class), withMessage(
+        expectedException.expect(withCause(Matchers.<Throwable>allOf(LangMatchers.<Throwable>isInstance(AssertionError.class), withMessage(
                 "TestedProduct instance ",
                 MockTestedProductNotInjectionContext.class.getName(),
                 "does not support injection"

@@ -2,6 +2,7 @@ package com.atlassian.webdriver.matchers;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.hamcrest.TypeSafeMatcher;
 
 /**
@@ -17,12 +18,18 @@ public final class LangMatchers
         throw new AssertionError("Don't instantiate me");
     }
 
+    @SuppressWarnings("unchecked")
+    public static <T> Matcher<T> isInstance(Class<? extends T> type)
+    {
+        return (Matcher<T>) Matchers.instanceOf(type);
+    }
+
     public static Matcher<String> containsInOrder(final CharSequence... substrings)
     {
         return new TypeSafeMatcher<String>()
         {
             @Override
-            protected boolean matchesSafely(String item)
+            public boolean matchesSafely(String item)
             {
                 int index = -1;
                 for (CharSequence substring : substrings)

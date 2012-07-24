@@ -2,7 +2,6 @@ package com.atlassian.webdriver.matchers;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.runners.model.InitializationError;
 
@@ -48,7 +47,8 @@ public final class ErrorMatchers
 
     public static Matcher<Throwable> withCause(Class<? extends Throwable> causeType)
     {
-        return withCause(Matchers.<Throwable>instanceOf(causeType));
+        // can be fixed when moved to Hamcrest 1.2
+        return withCause(LangMatchers.isInstance(causeType));
     }
 
     public static Matcher<Throwable> withCause(final Matcher<? extends Throwable> causeMatcher)
@@ -88,7 +88,7 @@ public final class ErrorMatchers
         };
     }
 
-    public static Matcher<InitializationError> withCauses(final Matcher<Iterable<? super Throwable>> causesMatcher)
+    public static Matcher<InitializationError> withCauses(final Matcher<Iterable<Throwable>> causesMatcher)
     {
         return new TypeSafeMatcher<InitializationError>()
         {
