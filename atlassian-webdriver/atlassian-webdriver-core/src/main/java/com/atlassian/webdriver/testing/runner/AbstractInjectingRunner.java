@@ -29,16 +29,8 @@ public abstract class AbstractInjectingRunner extends BlockJUnit4ClassRunner
     @Override
     protected Statement classBlock(RunNotifier notifier)
     {
-        final Statement original = super.classBlock(notifier);
-        return new Statement()
-        {
-            @Override
-            public void evaluate() throws Throwable
-            {
-                getInjectionContext().injectStatic(getTestClass().getJavaClass());
-                original.evaluate();
-            }
-        };
+        getInjectionContext().injectStatic(getTestClass().getJavaClass());
+        return super.classBlock(notifier);
     }
 
     @Override
