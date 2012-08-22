@@ -68,16 +68,19 @@ public class DefaultAtlassianWebDriver implements AtlassianWebDriver
 
     public void quit()
     {
+        log.debug("Quitting {}", this);
         if(driver instanceof RemoteWebDriver) {
             RemoteWebDriver remoteDriver = (RemoteWebDriver) driver;
             if(remoteDriver.getSessionId() == null) {
                 // already quit - avoid exceptions of trying to do it twice.
                 // It's important for quit IE before getting to the shutdown hook, as IE crashes the
                 // JVM (in IEDriver.dll) if quit is left until the shutdown hook.
+                log.debug("No remote session {}", this);
                 return;
             }
         }
         driver.quit();
+        log.debug("Quit complete {}", this);
     }
 
     public void waitUntil(final Function<WebDriver, Boolean> isTrue)

@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 @Deprecated
 public abstract class AtlassianWebDriverTestBase
 {
-    private final Logger log = LoggerFactory.getLogger(AtlassianWebDriverTestBase.class);
+    private static final Logger log = LoggerFactory.getLogger(AtlassianWebDriverTestBase.class);
 
     protected static AtlassianWebDriver driver;
 
@@ -39,8 +39,8 @@ public abstract class AtlassianWebDriverTestBase
 
     @AfterClass
     public static void cleanUp() throws Exception {
+        log.debug("Cleaning up driver {}", driver);
         driver.quit();
         driver = null;
     }
-
 }

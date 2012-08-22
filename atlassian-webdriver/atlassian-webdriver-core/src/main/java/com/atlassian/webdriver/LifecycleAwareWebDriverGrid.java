@@ -6,6 +6,9 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Supplier;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.SocketException;
 import java.util.HashMap;
@@ -22,6 +25,7 @@ import java.util.Map;
  */
 public class LifecycleAwareWebDriverGrid
 {
+    private static final Logger log = LoggerFactory.getLogger(LifecycleAwareWebDriverGrid.class);
     private static Map<String,AtlassianWebDriver> drivers = new HashMap<String,AtlassianWebDriver>();
     private static AtlassianWebDriver currentDriver;
 
@@ -82,17 +86,33 @@ public class LifecycleAwareWebDriverGrid
             @Override
             public void run()
             {
+                log.debug("Running shut down hook for {}", driver);
                 try
                 {
                     drivers.remove(browserProperty);
 
+                    boolean isIEDriver = true;
                     if (driver.equals(currentDriver))
                     {
                         currentDriver = null;
                     }
 
-                    driver.quit();
-                } catch (WebDriverException e)
+                    if (driver instanceof AtlassianWebDriver)
+                    {
+                        AtlassianWebDriver wrapperDriver = (AtlassianWebDriver) driver;
+                        final WebDriver webDriver = wrapperDriver.getDriver();
+                        isIEDriver = webDriver instanceof InternetExplorerDriver;
+                    }
+                    else
+                    {
+                        isIEDriver = driver instanceof InternetExplorerDriver;
+                    }
+
+                    // quitting InternetExplorerDriver in a shutdown hook crashes the JVM with a segfault
+                    if (!isIEDriver)
+                        driver.quit();
+                }
+                catch (WebDriverException e)
                 {
                     if(!isKnownQuitException(e))
                     {
