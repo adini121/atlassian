@@ -19,7 +19,7 @@ import javax.inject.Inject;
  *
  * @since 2.1.0
  */
-public class SessionCleanupRule extends ExternalResource
+public class SessionCleanupRule extends FailsafeExternalResource
 {
 
     private final Supplier<? extends WebDriver> webDriver;

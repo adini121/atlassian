@@ -10,7 +10,7 @@ import org.junit.rules.ExternalResource;
 /**
  * @since 2.1
  */
-public class VisualComparerRule extends ExternalResource
+public class VisualComparerRule extends FailsafeExternalResource
 {
     private VisualComparer comparer;
 
