@@ -5,7 +5,7 @@ package com.atlassian.pageobjects.binder;
  */
 public class PageBindingException extends RuntimeException
 {
-    private final Object pageObject;
+    private final transient Object pageObject;
 
     public PageBindingException(String message, Object pageObject)
     {
