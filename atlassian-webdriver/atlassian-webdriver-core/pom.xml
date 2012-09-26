@@ -143,6 +143,22 @@
                 <xvfb.enable>true</xvfb.enable>
             </properties>
         </profile>
+        <profile>
+            <id>force-linux64</id>
+            <activation>
+                <property>
+                    <name>os.arch.override</name>
+                    <value>64</value>
+                </property>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>com.atlassian.browsers</groupId>
+                    <artifactId>atlassian-browsers-linux64</artifactId>
+                    <version>${webdriver-browsers-version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
     </profiles>
 
 </project>
