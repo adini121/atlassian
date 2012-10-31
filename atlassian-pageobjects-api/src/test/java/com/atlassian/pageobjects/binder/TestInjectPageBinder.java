@@ -5,8 +5,10 @@ import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.ProductInstance;
 import com.atlassian.pageobjects.TestedProduct;
 import com.atlassian.pageobjects.Tester;
+import com.atlassian.pageobjects.inject.ConfigurableInjectionContext;
 import com.google.inject.Binder;
 import com.google.inject.Module;
+import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,12 +17,13 @@ import javax.inject.Inject;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 
 /**
  *
  */
-@SuppressWarnings("unchecked") 
+@SuppressWarnings("unchecked")
 public class TestInjectPageBinder
 {
     private MyTestedProduct product;
@@ -146,6 +149,37 @@ public class TestInjectPageBinder
         assertEquals("Bob", page.name.getValue());
     }
 
+    @Test
+    public void shouldImplementConfigurableInjectionContext()
+    {
+        final PageBinder binder = createBinder(StringField.class, StringFieldImpl.class);
+        assertThat(binder, CoreMatchers.instanceOf(ConfigurableInjectionContext.class));
+        assertEquals("Bob", binder.bind(OneFieldPage.class).name.getValue());
+        ConfigurableInjectionContext.class.cast(binder)
+                .configure()
+                .addImplementation(StringField.class, AnotherStringFieldImpl.class)
+                .finish();
+        assertEquals("Rob", binder.bind(OneFieldPage.class).name.getValue());
+    }
+
+    @Test
+    public void shouldAllowConfiguringNewImplementationInstance()
+    {
+        final PageBinder binder = createBinder(StringField.class, StringFieldImpl.class);
+        assertEquals("Bob", binder.bind(OneFieldPage.class).name.getValue());
+        ConfigurableInjectionContext.class.cast(binder)
+                .configure()
+                .addSingleton(StringField.class, new StringField()
+                {
+                    @Override
+                    public String getValue()
+                    {
+                        return "Boom!";
+                    }
+                })
+                .finish();
+        assertEquals("Boom!", binder.bind(OneFieldPage.class).name.getValue());
+    }
 
     static class AbstractPage implements Page
     {
@@ -246,6 +280,14 @@ public class TestInjectPageBinder
         public String getValue()
         {
             return "Bob";
+        }
+    }
+
+    static class AnotherStringFieldImpl implements StringField
+    {
+        public String getValue()
+        {
+            return "Rob";
         }
     }
 

@@ -1,6 +1,7 @@
 package com.atlassian.pageobjects.util;
 
 import com.atlassian.pageobjects.TestedProduct;
+import com.atlassian.pageobjects.inject.ConfigurableInjectionContext;
 import com.atlassian.pageobjects.inject.InjectionContext;
 
 /**
@@ -34,6 +35,22 @@ public final class InjectingTestedProducts
     }
 
     /**
+     * Checks whether given product supports injection. That is whether the product itself, or the associated page
+     * binder is instance of {@link com.atlassian.pageobjects.inject.ConfigurableInjectionContext}.
+     *
+     * @param product product to verify
+     * @return <code>true</code> if <tt>product</tt> supports configurable injection
+     */
+    public static boolean supportsConfigurableInjection(TestedProduct<?> product)
+    {
+        if (product == null)
+        {
+            return false;
+        }
+        return product instanceof ConfigurableInjectionContext || product.getPageBinder() instanceof ConfigurableInjectionContext;
+    }
+
+    /**
      * Returns injection context associated with given <tt>product</tt>.
      *
      * @param product product to retrieve context from
@@ -54,6 +71,31 @@ public final class InjectingTestedProducts
         else
         {
             throw new IllegalArgumentException("Product <" + product + "> does not support injection");
+        }
+    }
+
+
+    /**
+     * Returns configurable injection context associated with given <tt>product</tt>.
+     *
+     * @param product product to retrieve context from
+     * @return associated injection context, either from the product, or its page binder
+     * @throws IllegalArgumentException if the product is not providing configurable injection (which can be verified by
+     * calling {@link #supportsConfigurableInjection(com.atlassian.pageobjects.TestedProduct)}.
+     */
+    public static InjectionContext asConfigurableInjectionContext(TestedProduct<?> product)
+    {
+        if (product instanceof ConfigurableInjectionContext)
+        {
+            return (ConfigurableInjectionContext) product;
+        }
+        else if (product.getPageBinder() instanceof InjectionContext)
+        {
+            return (ConfigurableInjectionContext) product.getPageBinder();
+        }
+        else
+        {
+            throw new IllegalArgumentException("Product <" + product + "> does not support configurable injection");
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.atlassian.pageobjects.binder;
 
+import com.atlassian.annotations.Internal;
 import com.atlassian.pageobjects.DelayedBinder;
 import com.atlassian.pageobjects.Page;
 import com.atlassian.pageobjects.PageBinder;
@@ -8,8 +9,11 @@ import com.atlassian.pageobjects.Tester;
 import com.atlassian.pageobjects.browser.Browser;
 import com.atlassian.pageobjects.browser.IgnoreBrowser;
 import com.atlassian.pageobjects.browser.RequireBrowser;
-import com.atlassian.pageobjects.inject.InjectionContext;
+import com.atlassian.pageobjects.inject.AbstractInjectionConfiguration;
+import com.atlassian.pageobjects.inject.ConfigurableInjectionContext;
+import com.atlassian.pageobjects.inject.InjectionConfiguration;
 import com.atlassian.pageobjects.util.BrowserUtil;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.Binder;
@@ -17,12 +21,15 @@ import com.google.inject.Binding;
 import com.google.inject.ConfigurationException;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.ProvisionException;
+import com.google.inject.util.Modules;
 import org.apache.commons.lang.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.concurrent.NotThreadSafe;
 import javax.inject.Inject;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -36,9 +43,7 @@ import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.collect.Iterables.concat;
 import static java.util.Arrays.asList;
-import static java.util.Collections.singleton;
 import static java.util.Collections.unmodifiableList;
 
 /**
@@ -58,16 +63,23 @@ import static java.util.Collections.unmodifiableList;
  * <p/>
  * <p>When going to a page via the {@link #navigateToAndBind(Class, Object...)} method, the page's URL is retrieved and navigated to
  * via {@link Tester#gotoUrl(String)} after construction and initializing but before {@link WaitUntil} methods are called.
+ *
+ * <p/>
+ * This class also implements a mutable variant of {@link com.atlassian.pageobjects.inject.ConfigurableInjectionContext},
+ * where injection configuration changes are applied in-place, by creating a new Guice injector.
  */
-public final class InjectPageBinder implements PageBinder, InjectionContext
+@NotThreadSafe
+@Internal
+public final class InjectPageBinder implements PageBinder, ConfigurableInjectionContext
 {
     private final Tester tester;
     private final ProductInstance productInstance;
     private static final Logger log = LoggerFactory.getLogger(InjectPageBinder.class);
 
     private final Map<Class<?>, Class<?>> overrides = new HashMap<Class<?>, Class<?>>();
-    private final Injector injector;
-    private final List<Binding<PostInjectionProcessor>> postInjectionProcessors;
+    private volatile Module module;
+    private volatile Injector injector;
+    private volatile List<Binding<PostInjectionProcessor>> postInjectionProcessors;
 
     public InjectPageBinder(ProductInstance productInstance, Tester tester, Module... modules)
     {
@@ -76,15 +88,15 @@ public final class InjectPageBinder implements PageBinder, InjectionContext
         checkNotNull(modules);
         this.tester = tester;
         this.productInstance = productInstance;
-        this.injector = Guice.createInjector(concat(asList(modules), singleton(new Module()
-        {
-            public void configure(Binder binder)
-            {
-                binder.bind(PageBinder.class).toInstance(InjectPageBinder.this);
-            }
-        })));
+        this.module = Modules.override(modules).with(new ThisModule());
+        this.injector = Guice.createInjector(module);
+        initPostInjectionProcessors();
+    }
+
+    private void initPostInjectionProcessors()
+    {
         List<Binding<PostInjectionProcessor>> procs = Lists.newArrayList();
-        for (Binding binding : injector.getAllBindings().values())
+        for (Binding binding : collectBindings().values())
         {
             if (PostInjectionProcessor.class.isAssignableFrom(binding.getKey().getTypeLiteral().getRawType()))
             {
@@ -92,6 +104,18 @@ public final class InjectPageBinder implements PageBinder, InjectionContext
             }
         }
         postInjectionProcessors = unmodifiableList(procs);
+    }
+
+    private Map<Key<?>, Binding<?>> collectBindings()
+    {
+        ImmutableMap.Builder<Key<?>, Binding<?>> result = ImmutableMap.builder();
+        Injector current = this.injector;
+        while (current != null)
+        {
+            result.putAll(injector.getAllBindings());
+            current = current.getParent();
+        }
+        return result.build();
     }
 
 
@@ -263,6 +287,19 @@ public final class InjectPageBinder implements PageBinder, InjectionContext
     public void injectMembers(Object targetInstance)
     {
         injector.injectMembers(targetInstance);
+    }
+
+    @Override
+    public InjectionConfiguration configure()
+    {
+        return new InjectConfiguration();
+    }
+
+    void reconfigure(Module module)
+    {
+        this.module = Modules.override(this.module).with(module);
+        this.injector = Guice.createInjector(module);
+        initPostInjectionProcessors();
     }
 
     // ---------------------------------------------------------------------------------------------------------- Phases
@@ -524,6 +561,46 @@ public final class InjectPageBinder implements PageBinder, InjectionContext
         {
             advanceTo(InitializePhase.class);
             return pageObject;
+        }
+    }
+
+    private final class InjectConfiguration extends AbstractInjectionConfiguration
+    {
+
+        @Override
+        public ConfigurableInjectionContext finish()
+        {
+            reconfigure(getModule());
+            return InjectPageBinder.this;
+        }
+
+        Module getModule()
+        {
+            return new Module()
+            {
+                @Override
+                public void configure(Binder binder)
+                {
+                    for (InterfaceToImpl intToImpl : interfacesToImpls)
+                    {
+                        binder.bind((Class)intToImpl.interfaceType).to(intToImpl.implementation);
+                    }
+                    for (InterfaceToInstance intToInstance : interfacesToInstances)
+                    {
+                        binder.bind((Class)intToInstance.interfaceType).toInstance(intToInstance.instance);
+                    }
+                }
+            };
+        }
+    }
+
+    private final class ThisModule extends AbstractModule
+    {
+
+        @Override
+        protected void configure()
+        {
+            bind(PageBinder.class).toInstance(InjectPageBinder.this);
         }
     }
 }
