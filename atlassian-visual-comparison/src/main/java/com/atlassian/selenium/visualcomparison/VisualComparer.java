@@ -6,6 +6,7 @@ import com.atlassian.selenium.visualcomparison.utils.Screenshot;
 import com.atlassian.selenium.visualcomparison.utils.ScreenshotDiff;
 import junit.framework.Assert;
 
+import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
@@ -197,7 +198,26 @@ public class VisualComparer
     {
         if (oldScreenshots.size() != newScreenshots.size())
         {
-            throw new IllegalArgumentException("Did not find correct number of baseline images");
+            if (oldScreenshots.size() == 0)
+            {
+                if (reportingEnabled)
+                {
+                    String imageOutputDir = ScreenshotDiff.getImageOutputDir(reportOutputPath, imageSubDirName);
+                    for (Screenshot newScreenshot : newScreenshots)
+                    {
+                        // Copy the new image to the output directory.
+                        ImageIO.write(newScreenshot.getImage(), "png", new File(imageOutputDir + newScreenshot.getFileName()));
+                    }
+                }
+                throw new IllegalArgumentException("There were new screenshots, but no baseline images. Is this a new test?"
+                    + " If reporting is enabled, the new screenshots will be output in the report.");
+            }
+            else
+            {
+                throw new IllegalArgumentException("Incorrect number of images."
+                        + " There were " + oldScreenshots.size() + " baseline images,"
+                        + " but only " + newScreenshots.size() + " new images.");
+            }
         }
 
         boolean matches = true;

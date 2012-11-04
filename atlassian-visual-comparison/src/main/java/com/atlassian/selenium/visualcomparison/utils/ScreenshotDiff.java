@@ -74,6 +74,16 @@ public class ScreenshotDiff
         return boxes.size() > 0;
     }
 
+    public static String getImageOutputDir(String outputDir, String imageSubDir)
+    {
+        String imageOutputDir = outputDir + "/";
+        if (imageSubDir != null && !imageSubDir.equals(""))
+        {
+            imageOutputDir = imageOutputDir + imageSubDir + "/";
+        }
+        return imageOutputDir;
+    }
+
     public void writeDiffReport(String outputDir, String imageSubDir) throws Exception
     {
         if (!hasDifferences())
@@ -81,12 +91,8 @@ public class ScreenshotDiff
             return;
         }
 
-        String imageOutputDir = outputDir + "/";
-        if (imageSubDir != null && !imageSubDir.equals(""))
-        {
-            imageOutputDir = imageOutputDir + imageSubDir + "/";
-        }
-        
+        String imageOutputDir = getImageOutputDir(outputDir, imageSubDir);
+
         ArrayList<ReportDiffInfo> reportDiffs = new ArrayList<ReportDiffInfo>();
         int i = 0;
         for (BoundingBox box : boxes)
@@ -139,14 +145,15 @@ public class ScreenshotDiff
         ImageIO.write(oldScreenshot.getImage(), "png", new File(imageOutputDir + oldImageFile));
 
         // Copy the new image to the output directory.
-        ImageIO.write(newScreenshot.getImage(), "png", new File(imageOutputDir + newScreenshot.getFileName()));
+        final String newImageFile = newScreenshot.getFileName();
+        ImageIO.write(newScreenshot.getImage(), "png", new File(imageOutputDir + newImageFile));
 
         VelocityContext context = ReportRenderer.createContext();
         context.put("id", id);
         context.put("resolution", resolution);
         context.put("diffs", reportDiffs);
         context.put("oldImageFile", imageSubDir + "/" + oldImageFile);
-        context.put("newImageFile", imageSubDir + "/" + newScreenshot.getFileName());
+        context.put("newImageFile", imageSubDir + "/" + newImageFile);
         context.put("diffImageFile", imageSubDir + "/" + diffImageFile);
         String report = ReportRenderer.render(context, "visual-regression-report-single.vm");
 
