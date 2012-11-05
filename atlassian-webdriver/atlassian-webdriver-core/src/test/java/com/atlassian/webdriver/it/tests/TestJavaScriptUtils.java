@@ -1,11 +1,11 @@
 package com.atlassian.webdriver.it.tests;
 
 import com.atlassian.pageobjects.browser.Browser;
+import com.atlassian.pageobjects.browser.IgnoreBrowser;
+import com.atlassian.pageobjects.browser.RequireBrowser;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.it.AbstractFileBasedServerTest;
 import com.atlassian.webdriver.it.pageobjects.page.JavaScriptUtilsPage;
-import com.atlassian.webdriver.testing.annotation.IgnoreBrowser;
-import com.atlassian.webdriver.testing.annotation.TestBrowser;
 import com.atlassian.webdriver.utils.MouseEvents;
 import org.junit.Before;
 import org.junit.Test;
@@ -79,7 +79,7 @@ public class TestJavaScriptUtils extends AbstractFileBasedServerTest
     }
 
     @Test
-    @TestBrowser("htmlunit")
+    @RequireBrowser(Browser.HTMLUNIT)
     public void testCssHoverBreaksForHtmlUnit()
     {
         WebElement hoveringDiv = driver.findElement(By.id("hovering-element"));
@@ -100,7 +100,7 @@ public class TestJavaScriptUtils extends AbstractFileBasedServerTest
     }
 
     @Test
-    @TestBrowser("firefox")
+    @RequireBrowser(Browser.FIREFOX)
     public void testCssHoverBreaksForFirefox()
     {
         WebElement hoveringDiv = driver.findElement(By.id("hovering-element"));
@@ -122,7 +122,7 @@ public class TestJavaScriptUtils extends AbstractFileBasedServerTest
 
     // https://studio.atlassian.com/browse/SELENIUM-175
     @Test
-    @TestBrowser("ie")
+    @RequireBrowser(Browser.IE)
     public void testJQueryHoverBreaksForIE()
     {
         WebElement hoveringDiv = driver.findElement(By.id("hovering-jquery-element"));

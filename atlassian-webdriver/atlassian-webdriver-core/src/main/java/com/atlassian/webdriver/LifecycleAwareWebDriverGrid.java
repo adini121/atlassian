@@ -10,24 +10,30 @@ import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.ref.WeakReference;
 import java.net.SocketException;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Simple lifecycle aware webdriver helper that will setup
- * auto browsers and then retrieve a driver from the factory.
- * Once the driver is running it will be re-used if the same
- * browser property is retrieved again.
- * When the runtime is shutdown it will handle cleaning up the browser.
+ * <p/>
+ * Simple lifecycle aware Webdriver helper that will setup auto browsers and then retrieve a driver from the factory.
+ * Once the driver is running it will be re-used if the same browser property is retrieved again.
+ *
+ * <p/>
+ * When the runtime is shutdown it will handle cleaning up the browser. It also provides a way to manually quit all
+ * the registered drivers/browsers via {@link #shutdown()}. When that method is called, the shutdown hooks for those
+ * browser will be unregistered.
  *
  * @since 2.1.0
  */
 public class LifecycleAwareWebDriverGrid
 {
     private static final Logger log = LoggerFactory.getLogger(LifecycleAwareWebDriverGrid.class);
-    private static Map<String,AtlassianWebDriver> drivers = new HashMap<String,AtlassianWebDriver>();
-    private static AtlassianWebDriver currentDriver;
+    private final static Map<String,AtlassianWebDriver> drivers = new ConcurrentHashMap<String, AtlassianWebDriver>();
+    private volatile static AtlassianWebDriver currentDriver;
+
+    private static final Map<String,WeakReference<Thread>> SHUTDOWN_HOOKS = new ConcurrentHashMap<String, WeakReference<Thread>>();
 
     private LifecycleAwareWebDriverGrid() {}
 
@@ -75,13 +81,54 @@ public class LifecycleAwareWebDriverGrid
         };
     }
 
+    /**
+     * A manual shut down of the registered drivers. This basically resets the grid to a blank state. The shutdown hooks
+     * for the drivers that have been closed are also removed.
+     *
+     */
+    public static void shutdown()
+    {
+        for (Map.Entry<String,AtlassianWebDriver> driver: drivers.entrySet())
+        {
+            quit(driver.getValue());
+            removeHook(driver);
+        }
+        drivers.clear();
+        SHUTDOWN_HOOKS.clear();
+        currentDriver = null;
+    }
+
+    private static void removeHook(Map.Entry<String, AtlassianWebDriver> driver)
+    {
+        WeakReference<Thread> hookRef = SHUTDOWN_HOOKS.get(driver.getKey());
+        if (hookRef != null && hookRef.get() != null)
+        {
+            Runtime.getRuntime().removeShutdownHook(hookRef.get());
+        }
+    }
+
+    private static void quit(AtlassianWebDriver webDriver)
+    {
+        try
+        {
+            webDriver.quit();
+        }
+        catch (WebDriverException e)
+        {
+            if (!isKnownQuitException(e))
+            {
+                throw e;
+            }
+        }
+    }
+
     private static boolean browserIsConfigured(String browserProperty)
     {
         return drivers.containsKey(browserProperty);
     }
 
     private static void addShutdownHook(final String browserProperty, final WebDriver driver) {
-        Runtime.getRuntime().addShutdownHook(new Thread()
+        final Thread quitter = new Thread()
         {
             @Override
             public void run()
@@ -90,27 +137,15 @@ public class LifecycleAwareWebDriverGrid
                 try
                 {
                     drivers.remove(browserProperty);
-
-                    boolean isIEDriver = true;
                     if (driver.equals(currentDriver))
                     {
                         currentDriver = null;
                     }
-
-                    if (driver instanceof AtlassianWebDriver)
-                    {
-                        AtlassianWebDriver wrapperDriver = (AtlassianWebDriver) driver;
-                        final WebDriver webDriver = wrapperDriver.getDriver();
-                        isIEDriver = webDriver instanceof InternetExplorerDriver;
-                    }
-                    else
-                    {
-                        isIEDriver = driver instanceof InternetExplorerDriver;
-                    }
-
                     // quitting InternetExplorerDriver in a shutdown hook crashes the JVM with a segfault
-                    if (!isIEDriver)
+                    if (!isIeDriver(driver))
+                    {
                         driver.quit();
+                    }
                 }
                 catch (WebDriverException e)
                 {
@@ -120,7 +155,23 @@ public class LifecycleAwareWebDriverGrid
                     }
                 }
             }
-        });
+        };
+        SHUTDOWN_HOOKS.put(browserProperty, new WeakReference<Thread>(quitter));
+        Runtime.getRuntime().addShutdownHook(quitter);
+    }
+
+    private static boolean isIeDriver(WebDriver driver)
+    {
+        if (driver instanceof AtlassianWebDriver)
+        {
+            AtlassianWebDriver wrapperDriver = (AtlassianWebDriver) driver;
+            final WebDriver webDriver = wrapperDriver.getDriver();
+            return webDriver instanceof InternetExplorerDriver;
+        }
+        else
+        {
+            return driver instanceof InternetExplorerDriver;
+        }
     }
 
     /**
@@ -136,12 +187,14 @@ public class LifecycleAwareWebDriverGrid
         String msg = e.getMessage();
 
         if (cause instanceof SocketException)
+        {
             return true;
-
+        }
         // Chrome does not have a cause, so need to check the message.
-        if (msg != null && msg.indexOf("Chrome did not respond to 'WaitForAllTabsToStopLoading'") >= 0)
+        if (msg != null && msg.contains("Chrome did not respond to 'WaitForAllTabsToStopLoading'"))
+        {
             return true;
-
+        }
         return false;
     }
 }

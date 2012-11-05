@@ -21,6 +21,7 @@ import org.junit.runners.model.Statement;
  *
  * @since 2.1.0
  * @see InjectionRules
+ * @see com.atlassian.webdriver.testing.runner.ProductContextRunner
  */
 public class TestedProductRule<T extends TestedProduct<WebDriverTester>> implements TestRule, TestedProduct<WebDriverTester>
 {
