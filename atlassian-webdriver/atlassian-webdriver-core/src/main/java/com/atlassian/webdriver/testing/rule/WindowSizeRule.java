@@ -6,6 +6,9 @@ import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 
@@ -63,6 +66,7 @@ import static com.google.common.base.Preconditions.checkState;
  */
 public class WindowSizeRule extends TestWatcher
 {
+    private final static Logger log = LoggerFactory.getLogger(WindowSizeRule.class);
 
     private final WebDriverSupport<? extends WebDriver> support;
 
@@ -85,14 +89,23 @@ public class WindowSizeRule extends TestWatcher
     @Override
     protected void starting(Description description)
     {
-        WindowSize windowSize = findAnnotation(description);
-        if (windowSize != null)
+        try
         {
-            handleWindowSize(windowSize);
+            WindowSize windowSize = findAnnotation(description);
+            if (windowSize != null)
+            {
+                handleWindowSize(windowSize);
+            }
+            else
+            {
+                maximizeWindow();
+            }
         }
-        else
+        catch (WebDriverException e)
         {
-            maximizeWindow();
+            // half of the drivers does not support it, let's not break because of this
+            log.warn("Caught exception while trying to adjust window size.");
+            log.debug("Exception while trying to adjust window size", e);
         }
     }
 
