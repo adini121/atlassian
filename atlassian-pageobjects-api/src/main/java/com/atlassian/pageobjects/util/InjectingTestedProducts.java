@@ -83,7 +83,7 @@ public final class InjectingTestedProducts
      * @throws IllegalArgumentException if the product is not providing configurable injection (which can be verified by
      * calling {@link #supportsConfigurableInjection(com.atlassian.pageobjects.TestedProduct)}.
      */
-    public static InjectionContext asConfigurableInjectionContext(TestedProduct<?> product)
+    public static ConfigurableInjectionContext asConfigurableInjectionContext(TestedProduct<?> product)
     {
         if (product instanceof ConfigurableInjectionContext)
         {
