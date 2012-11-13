@@ -29,9 +29,28 @@ public final class Queries
      */
     public static <T> TimedQuery<T> forSupplier(Timeouts timeouts, final Supplier<T> supplier)
     {
+        return forSupplier(timeouts, supplier, TimeoutType.DEFAULT);
+    }
+
+    /**
+     * <p/>
+     * Returns a timed query, with current evaluation is based on a value provided by given <tt>supplier</tt>. The supplier
+     * will be periodically called to compute the value of the query.
+     *
+     * <p/>
+     * The resulting query's default timeout will be as specified by <tt>timeoutType</tt>.
+     *
+     * @param timeouts an instance of timeouts to use for configured the new condition
+     * @param supplier supplier of the query evaluation
+     * @param timeoutType timeout type for the resulting query
+     * @return new query based on supplier
+     */
+    public static <T> TimedQuery<T> forSupplier(Timeouts timeouts, final Supplier<T> supplier, TimeoutType timeoutType)
+    {
         checkNotNull("timeouts", timeouts);
+        checkNotNull("timeoutType", timeoutType);
         checkNotNull("supplier", supplier);
-        return new AbstractTimedQuery<T>(timeouts.timeoutFor(TimeoutType.DEFAULT),
+        return new AbstractTimedQuery<T>(timeouts.timeoutFor(timeoutType),
                 timeouts.timeoutFor(TimeoutType.EVALUATION_INTERVAL), ExpirationHandler.RETURN_CURRENT) {
             @Override
             protected T currentValue() {
