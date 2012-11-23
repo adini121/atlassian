@@ -190,7 +190,7 @@ public class VisualComparer
 
     protected void replaceUIHtml(String id, String newContent)
     {
-        client.evaluate("window.document.getElementById('" + id + "').innerHTML = \"" + newContent + "\"");
+        client.evaluate("var content, el = window.document.getElementById('" + id + "'); if (el) { content = el.innerHTML; el.innerHTML = \"" + newContent + "\"; } content;");
     }
 
     public boolean compareScreenshots(ArrayList<Screenshot> oldScreenshots, ArrayList<Screenshot> newScreenshots)
