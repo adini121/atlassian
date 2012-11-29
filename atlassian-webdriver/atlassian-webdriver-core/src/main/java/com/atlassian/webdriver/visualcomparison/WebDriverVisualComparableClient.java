@@ -53,20 +53,17 @@ public class WebDriverVisualComparableClient implements VisualComparableClient
         driver.navigate().refresh();
     }
 
-
     public boolean waitForJQuery (long waitTimeMillis)
     {
-        // For compatibility with VisualComparableClient
-        
-        driver.waitUntil(new Function<WebDriver, Boolean>() {
-            public Boolean apply(WebDriver webDriver) {
-                String jQueryActive = ((JavascriptExecutor)webDriver).executeScript("return (window.jQuery.active)").toString();
-                return (jQueryActive).equals ("0");
-            }
-        }, 400);
         try
         {
-            Thread.sleep(waitTimeMillis);
+            driver.waitUntil(new Function<WebDriver, Boolean>() {
+                public Boolean apply(WebDriver webDriver) {
+                    String jQueryActive = ((JavascriptExecutor)webDriver).executeScript("return (window.jQuery.active)").toString();
+                    return (jQueryActive).equals ("0");
+                }
+            }, (int)waitTimeMillis);
+            Thread.sleep(400);
         }
         catch (InterruptedException e)
         {

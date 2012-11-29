@@ -641,13 +641,17 @@ public class SingleBrowserSeleniumClient extends DefaultSelenium implements Sele
         this.waitForPageToLoad();
     }
 
+    /**
+     * Wait for jQuery AJAX calls to return.
+     * @param waitTimeMillis the time to wait for everything to finish.
+     * @return
+     */
     public boolean waitForJQuery (long waitTimeMillis)
     {
-        // For compatibility with VisualComparableClient
-        this.waitForCondition("selenium.browserbot.getCurrentWindow().jQuery.active == 0;", Long.toString(400));
         try
         {
-            Thread.sleep(waitTimeMillis);
+            this.waitForCondition("selenium.browserbot.getCurrentWindow().jQuery.active == 0;", Long.toString(waitTimeMillis));
+            Thread.sleep(400);
         }
         catch (InterruptedException e)
         {

@@ -27,5 +27,10 @@ public interface VisualComparableClient
 
     public void refreshAndWait ();
 
+    /**
+     * Wait until all active jQuery AJAX queries have returned -- i.e., no AJAX queries are active.
+     * @param waitTimeMillis the time to wait for everything to finish.
+     * @return true if no AJAX query is active, false otherwise.
+     */
     public boolean waitForJQuery (long waitTimeMillis);
 }
