@@ -919,6 +919,11 @@ public class MockSeleniumClient implements SeleniumClient
     {
     }
 
+    public Object execute (String command, Object... arguments)
+    {
+        return null;
+    }
+
     public void captureEntirePageScreenshot (String filePath)
     {
     }

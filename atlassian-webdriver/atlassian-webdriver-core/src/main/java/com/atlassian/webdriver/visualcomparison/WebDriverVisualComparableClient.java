@@ -29,7 +29,12 @@ public class WebDriverVisualComparableClient implements VisualComparableClient
 
     public void evaluate (String command)
     {
-        driver.executeScript(command);
+        execute(command);
+    }
+
+    public Object execute (String command, Object... arguments)
+    {
+        return driver.executeScript(command, arguments);
     }
 
     public boolean resizeScreen(ScreenResolution resolution, boolean refresh)

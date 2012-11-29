@@ -606,8 +606,19 @@ public class SingleBrowserSeleniumClient extends DefaultSelenium implements Sele
 
     public void evaluate (String command)
     {
+        execute(command);
+    }
+
+    /**
+     * Execute a script on the client.
+     * @param command a string of javascript to send to the client.
+     * @param arguments Selenium does not accept additional arguments. These will be ignored.
+     * @return The evaluated result of the script
+     */
+    public Object execute(String command, Object... arguments)
+    {
         // For compatibility with VisualComparableClient
-        this.getEval(command);
+        return this.getEval(command);
     }
 
     public void captureEntirePageScreenshot (String filePath)
