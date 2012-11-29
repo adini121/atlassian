@@ -49,6 +49,16 @@ public class Screenshot implements Comparable<Screenshot>
         return file.getName();
     }
 
+    public String getId()
+    {
+        return id;
+    }
+
+    public ScreenResolution getResolution()
+    {
+        return resolution;
+    }
+
     public BufferedImage getImage() throws IOException
     {
         return ImageIO.read(file);
