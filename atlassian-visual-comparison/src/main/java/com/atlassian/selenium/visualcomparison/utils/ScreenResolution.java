@@ -1,16 +1,25 @@
 package com.atlassian.selenium.visualcomparison.utils;
 
-import com.atlassian.selenium.visualcomparison.VisualComparableClient;
+import java.awt.*;
 
-public class ScreenResolution implements Comparable<ScreenResolution>
+public class ScreenResolution extends Dimension implements Comparable<ScreenResolution>
 {
-    private int width;
-    private int height;
-
     public ScreenResolution(int width, int height)
     {
-        this.width = width;
-        this.height = height;
+        super(width, height);
+    }
+
+    public ScreenResolution(String value)
+    {
+        String[] parts = value.split("x");
+        if (parts.length != 2)
+        {
+            throw new RuntimeException(value + " is not a valid screen resolution");
+        }
+        int width = Integer.parseInt(parts[0]);
+        int height = Integer.parseInt(parts[1]);
+
+        setSize(width, height);
     }
 
     public int compareTo(ScreenResolution other)
@@ -32,17 +41,6 @@ public class ScreenResolution implements Comparable<ScreenResolution>
             return 1;
         }
         return 0;
-    }
-
-    public ScreenResolution(String value)
-    {
-        String[] parts = value.split("x");
-        if (parts.length != 2)
-        {
-            throw new RuntimeException(value + " is not a valid screen resolution");
-        }
-        width = Integer.parseInt(parts[0]);
-        height = Integer.parseInt(parts[1]);
     }
 
     public String toString()
