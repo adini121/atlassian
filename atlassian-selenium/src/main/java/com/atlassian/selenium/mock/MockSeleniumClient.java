@@ -2,6 +2,7 @@ package com.atlassian.selenium.mock;
 
 import com.atlassian.selenium.Browser;
 import com.atlassian.selenium.SeleniumClient;
+import com.atlassian.selenium.visualcomparison.utils.ScreenResolution;
 import com.atlassian.webtest.ui.keys.KeyEventType;
 
 import java.util.ArrayList;
@@ -920,6 +921,11 @@ public class MockSeleniumClient implements SeleniumClient
 
     public void captureEntirePageScreenshot (String filePath)
     {
+    }
+
+    public boolean resizeScreen(ScreenResolution resolution, boolean refreshAfterResize)
+    {
+        return false;
     }
 
     public void refreshAndWait ()

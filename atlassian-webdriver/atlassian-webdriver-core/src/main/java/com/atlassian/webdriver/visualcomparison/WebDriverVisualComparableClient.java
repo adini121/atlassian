@@ -1,8 +1,10 @@
 package com.atlassian.webdriver.visualcomparison;
 
 import com.atlassian.selenium.visualcomparison.VisualComparableClient;
+import com.atlassian.selenium.visualcomparison.utils.ScreenResolution;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.google.common.base.Function;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 
@@ -28,6 +30,16 @@ public class WebDriverVisualComparableClient implements VisualComparableClient
     public void evaluate (String command)
     {
         driver.executeScript(command);
+    }
+
+    public boolean resizeScreen(ScreenResolution resolution, boolean refresh)
+    {
+        driver.getDriver().manage().window().setSize(new Dimension(resolution.width, resolution.height));
+        if (refresh)
+        {
+            refreshAndWait();
+        }
+        return true;
     }
 
     public void refreshAndWait ()

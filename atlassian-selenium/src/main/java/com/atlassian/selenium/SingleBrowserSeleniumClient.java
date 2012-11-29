@@ -4,6 +4,7 @@ package com.atlassian.selenium;
 
 import com.atlassian.selenium.keyboard.KeyEvent;
 import com.atlassian.selenium.keyboard.KeyEventSequence;
+import com.atlassian.selenium.visualcomparison.utils.ScreenResolution;
 import com.atlassian.webtest.ui.keys.KeyEventType;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -613,6 +614,13 @@ public class SingleBrowserSeleniumClient extends DefaultSelenium implements Sele
     {
         // For compatibility with VisualComparableClient
         this.captureEntirePageScreenshot(filePath, "");
+    }
+
+    public boolean resizeScreen(ScreenResolution resolution, boolean refreshAfterResize)
+    {
+        final String result = this.getEval("window.resizeTo(" + resolution.width + ", " + resolution.height + ");");
+        if (refreshAfterResize) refreshAndWait();
+        return true;
     }
 
     public void refreshAndWait ()

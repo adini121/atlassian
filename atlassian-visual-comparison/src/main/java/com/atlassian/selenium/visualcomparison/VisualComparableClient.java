@@ -1,10 +1,15 @@
 package com.atlassian.selenium.visualcomparison;
 
-public interface VisualComparableClient {
+import com.atlassian.selenium.visualcomparison.utils.ScreenResolution;
+
+public interface VisualComparableClient
+{
 
     public void captureEntirePageScreenshot (String filePath);
 
     public void evaluate (String command);
+
+    public boolean resizeScreen (ScreenResolution resolution, boolean refreshAfterResize);
 
     public void refreshAndWait ();
 
