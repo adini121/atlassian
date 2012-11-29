@@ -629,7 +629,7 @@ public class SingleBrowserSeleniumClient extends DefaultSelenium implements Sele
 
     public boolean resizeScreen(ScreenResolution resolution, boolean refreshAfterResize)
     {
-        final String result = this.getEval("window.resizeTo(" + resolution.width + ", " + resolution.height + ");");
+        final String result = this.getEval("selenium.browserbot.getCurrentWindow().resizeTo(" + resolution.width + ", " + resolution.height + ");");
         if (refreshAfterResize) refreshAndWait();
         return true;
     }
