@@ -147,7 +147,7 @@ public class VisualComparer
         ArrayList<Screenshot> screenshots = new ArrayList<Screenshot>();
         for (ScreenResolution res : resolutions)
         {
-            res.resize(client, refreshAfterResize);
+            client.resizeScreen(res, refreshAfterResize);
             if (waitforJQueryTimeout > 0)
             {
                 if (!client.waitForJQuery (waitforJQueryTimeout))

@@ -47,13 +47,4 @@ public class ScreenResolution extends Dimension implements Comparable<ScreenReso
     {
         return width + "x" + height;
     }
-
-    public void resize(VisualComparableClient client, boolean refresh)
-    {
-        client.evaluate("window.resizeTo(" + width + ", " + height + ");");
-        if (refresh)
-        {
-            client.refreshAndWait();
-        }
-    }
 }
