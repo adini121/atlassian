@@ -16,6 +16,8 @@ import java.io.File;
 public class WebDriverVisualComparableClient implements VisualComparableClient
 {
     private final AtlassianWebDriver driver;
+    private Dimension documentSize;
+    private Dimension viewportSize;
 
     public WebDriverVisualComparableClient(final AtlassianWebDriver driver)
     {
@@ -25,6 +27,26 @@ public class WebDriverVisualComparableClient implements VisualComparableClient
     public void captureEntirePageScreenshot (String filePath)
     {
         driver.takeScreenshotTo(new File(filePath));
+        documentSize = getDimensionsFor("document");
+        viewportSize = getDimensionsFor("window");
+    }
+
+    private Dimension getDimensionsFor(String selector)
+    {
+        int x = Integer.parseInt(execute("return jQuery(" + selector + ").width();").toString());
+        int y = Integer.parseInt(execute("return jQuery(" + selector + ").height();").toString());
+        return new Dimension(x,y);
+    }
+
+    public Object getElementAtPoint(int x, int y)
+    {
+        int delta = documentSize.height - viewportSize.height;
+        int scrollY = Math.min(delta, y);
+        int relY = y - scrollY; // number between 0 and viewportSize.height
+        execute(String.format("window.scrollTo(%d,%d)",x,scrollY));
+        Object thing = execute(String.format("var result, el = document.elementFromPoint(%d,%d);" +
+                "if (el) { result = el.outerHTML; } return ''+result;",x,relY)).toString();
+        return thing;
     }
 
     public void evaluate (String command)
@@ -40,6 +62,7 @@ public class WebDriverVisualComparableClient implements VisualComparableClient
     public boolean resizeScreen(ScreenResolution resolution, boolean refresh)
     {
         driver.getDriver().manage().window().setSize(new Dimension(resolution.width, resolution.height));
+        viewportSize = getDimensionsFor("window");
         if (refresh)
         {
             refreshAndWait();

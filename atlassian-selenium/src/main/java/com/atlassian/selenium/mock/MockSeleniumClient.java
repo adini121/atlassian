@@ -941,4 +941,10 @@ public class MockSeleniumClient implements SeleniumClient
     {
         return false;
     }
+
+    @Override
+    public Object getElementAtPoint(int x, int y)
+    {
+        throw new UnsupportedOperationException("Not implemented");
+    }
 }

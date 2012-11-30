@@ -7,6 +7,8 @@ public interface VisualComparableClient
 
     public void captureEntirePageScreenshot (String filePath);
 
+    public Object getElementAtPoint(int x, int y);
+
     /**
      * Execute a script in the client.
      * @param command a string of javascript to send to the client.

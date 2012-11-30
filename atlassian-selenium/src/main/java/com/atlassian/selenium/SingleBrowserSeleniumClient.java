@@ -659,4 +659,10 @@ public class SingleBrowserSeleniumClient extends DefaultSelenium implements Sele
         }
         return true;
     }
+
+    @Override
+    public Object getElementAtPoint(int x, int y)
+    {
+        throw new UnsupportedOperationException("Not implemented");
+    }
 }
