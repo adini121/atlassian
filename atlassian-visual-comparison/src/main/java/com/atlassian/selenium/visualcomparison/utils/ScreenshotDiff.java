@@ -1,5 +1,6 @@
 package com.atlassian.selenium.visualcomparison.utils;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.velocity.VelocityContext;
 
 import javax.imageio.ImageIO;
@@ -21,6 +22,7 @@ public class ScreenshotDiff
     private BufferedImage diffImage;
     private ArrayList<BoundingBox> boxes;
     private List<BoundingBox> ignoreAreas;
+    private List<PageElementInfo> pageElements;
 
     public ScreenshotDiff(Screenshot oldScreenshot, Screenshot newScreenshot,
             String id, ScreenResolution resolution,
@@ -33,11 +35,59 @@ public class ScreenshotDiff
         this.diffImage = diffImage;
         this.boxes = boxes;
         this.ignoreAreas = ignoreAreas;
+        this.pageElements = new ArrayList<PageElementInfo>();
     }
     
     public List<BoundingBox> getDiffAreas()
     {
     	return this.boxes;
+    }
+
+    public List<PageElementInfo> getPageElements()
+    {
+        return this.pageElements;
+    }
+
+    public static class PageElementInfo
+    {
+        public String htmlContent;
+        public Dimension size;
+        public Point position;
+
+        public String getHtmlContent()
+        {
+            return htmlContent;
+        }
+
+        public String getEscapedHtmlString()
+        {
+            return StringEscapeUtils.escapeHtml(htmlContent);
+        }
+
+        public Dimension getSize()
+        {
+            return size;
+        }
+
+        public int getOffsetLeft()
+        {
+            return (null == position) ? -1 : position.x;
+        }
+
+        public int getOffsetTop()
+        {
+            return (null == position) ? -1 : position.y;
+        }
+
+        public int getElementWidth()
+        {
+            return (null == size) ? -1 : size.width;
+        }
+
+        public int getElementHeight()
+        {
+            return (null == size) ? -1 : size.height;
+        }
     }
 
     public static class ReportDiffInfo
@@ -135,6 +185,7 @@ public class ScreenshotDiff
                 graphics.drawRect(ignoreArea.getLeft(), ignoreArea.getTop(), ignoreArea.getWidth(), ignoreArea.getHeight());
             }
         }
+
         // Write the full diff image to the output directory.
         String diffImageFile = "diff-" + id + "." + resolution + ".png";
         ImageIO.write(diffImage, "png", new File(imageOutputDir + diffImageFile));
@@ -152,6 +203,7 @@ public class ScreenshotDiff
         context.put("id", id);
         context.put("resolution", resolution);
         context.put("diffs", reportDiffs);
+        context.put("pageElements", pageElements);
         context.put("oldImageFile", imageSubDir + "/" + oldImageFile);
         context.put("newImageFile", imageSubDir + "/" + newImageFile);
         context.put("diffImageFile", imageSubDir + "/" + diffImageFile);

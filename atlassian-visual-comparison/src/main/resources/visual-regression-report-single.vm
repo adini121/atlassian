@@ -30,5 +30,14 @@
             </tr>
 #end
         </table>
+        <b>Differences in page elements:</b><br>
+        <table>
+#foreach($el in $pageElements)
+            <tr>
+                <td>${el.offsetLeft}, ${el.offsetTop}</td>
+                <td>${el.escapedHtmlString}</td>
+            </tr>
+#end
+        </table>
     </body>
 </html>

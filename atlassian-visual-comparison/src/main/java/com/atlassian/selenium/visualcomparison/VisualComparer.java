@@ -7,6 +7,7 @@ import com.atlassian.selenium.visualcomparison.utils.ScreenshotDiff;
 import junit.framework.Assert;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
@@ -227,6 +228,18 @@ public class VisualComparer
         for (int i = 0; i < oldScreenshots.size(); i++)
         {
             ScreenshotDiff diff = getScreenshotDiff(oldScreenshots.get(i), newScreenshots.get(i));
+
+            for (BoundingBox box : diff.getDiffAreas())
+            {
+                int x = new Double(Math.floor(box.getLeft() + box.getWidth() / 2)).intValue();
+                int y = new Double(Math.floor(box.getTop() + box.getHeight() / 2)).intValue();
+                String thing = String.valueOf(client.getElementAtPoint(x, y));
+                ScreenshotDiff.PageElementInfo info = new ScreenshotDiff.PageElementInfo();
+                info.htmlContent = thing;
+                info.position = new Point(x,y);
+                diff.getPageElements().add(info);
+            }
+
             if (reportingEnabled)
             {
                 diff.writeDiffReport(reportOutputPath, imageSubDirName);
