@@ -298,7 +298,7 @@ public final class InjectPageBinder implements PageBinder, ConfigurableInjection
     void reconfigure(Module module)
     {
         this.module = Modules.override(this.module).with(module);
-        this.injector = Guice.createInjector(module);
+        this.injector = Guice.createInjector(this.module);
         initPostInjectionProcessors();
     }
 
