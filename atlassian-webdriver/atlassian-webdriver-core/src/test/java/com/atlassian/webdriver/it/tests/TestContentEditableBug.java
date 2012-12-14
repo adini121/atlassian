@@ -32,20 +32,6 @@ public class TestContentEditableBug extends AbstractFileBasedServerTest
     }
 
     @Test
-    @TestBrowser("firefox")
-    public void testEditingContentEditableIframeWithFirefoxDoesNotWork()
-    {
-        WebElement el = contentEditablePage.getContentEditable();
-        WebElement el2 = el.findElement(By.id("test"));
-        el2.click();
-        el2.sendKeys("HELLO");
-
-        // This is expected to fail as this is a bug in firefox driver.
-        assertFalse(el2.getText().contains("HELLO"));
-    }
-
-    @Test
-    @IgnoreBrowser(Browser.FIREFOX)
     public void testEditingContentEditableIframeWorks()
     {
         WebElement el = contentEditablePage.getContentEditable();
@@ -53,7 +39,6 @@ public class TestContentEditableBug extends AbstractFileBasedServerTest
         el2.click();
         el2.sendKeys("HELLO");
 
-        // This is expected to pass for any driver that isn't firefox.
         assertTrue(el2.getText().contains("HELLO"));
     }
 
