@@ -4,11 +4,16 @@ import com.atlassian.selenium.visualcomparison.VisualComparableClient;
 import com.atlassian.selenium.visualcomparison.utils.ScreenResolution;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.google.common.base.Function;
+import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @since 2.1
@@ -44,9 +49,29 @@ public class WebDriverVisualComparableClient implements VisualComparableClient
         int scrollY = Math.min(delta, y);
         int relY = y - scrollY; // number between 0 and viewportSize.height
         execute(String.format("window.scrollTo(%d,%d)",x,scrollY));
-        Object thing = execute(String.format("var result, el = document.elementFromPoint(%d,%d);" +
-                "if (el) { result = el.outerHTML; } return ''+result;",x,relY)).toString();
-        return thing;
+        WebElement el = driver.findElement(atPointInDom(x,relY));
+        return el;
+    }
+
+    private By atPointInDom(int x, int relY)
+    {
+        final String domSel = String.format("return document.elementFromPoint(%d,%d);",x,relY);
+        final Object o = driver.executeScript(domSel);
+
+        if (o instanceof WebElement) {
+            return new By() {
+                @Override
+                public List<WebElement> findElements(SearchContext searchContext) {
+                    return new ArrayList<WebElement>() {
+                        {
+                            add((WebElement) o);
+                        }
+                    };
+                }
+            };
+        }
+
+        return null;
     }
 
     public void evaluate (String command)
