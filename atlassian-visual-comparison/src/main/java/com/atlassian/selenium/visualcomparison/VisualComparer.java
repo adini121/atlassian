@@ -229,15 +229,16 @@ public class VisualComparer
         {
             ScreenshotDiff diff = getScreenshotDiff(oldScreenshots.get(i), newScreenshots.get(i));
 
-            for (BoundingBox box : diff.getDiffAreas())
+            for (ScreenshotDiff.PageDifference difference : diff.getDifferences())
             {
+                BoundingBox box = difference.getBoundingBox();
                 int x = new Double(Math.floor(box.getLeft() + box.getWidth() / 2)).intValue();
                 int y = new Double(Math.floor(box.getTop() + box.getHeight() / 2)).intValue();
                 String thing = String.valueOf(client.getElementAtPoint(x, y));
                 ScreenshotDiff.PageElementInfo info = new ScreenshotDiff.PageElementInfo();
                 info.htmlContent = thing;
                 info.position = new Point(x,y);
-                diff.getPageElements().add(info);
+                difference.addPageElement(info);
             }
 
             if (reportingEnabled)

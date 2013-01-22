@@ -1,3 +1,4 @@
+#* @vtlvariable name="differences" type="java.util.Collection<com.atlassian.selenium.visualcomparison.utils.ScreenshotDiff.PageDifference>" *#
 <html>
     <head>
         <style type="text/css">
@@ -20,22 +21,24 @@
         <hr>
         <b>Page sections:</b> <br>
         <table>
-#foreach($diff in $diffs)
+#foreach($diff in $differences)
             <tr>
                 <td>
-                    <img src="${diff.oldImageFile}" title="Baseline image">
-                    <img src="${diff.newImageFile}" title="New image">
-                    <img src="${diff.diffImageFile}" title="Diff image">
+                    <img src="${diff.images.oldImageFile}" title="Baseline image">
+                    <img src="${diff.images.newImageFile}" title="New image">
+                    <img src="${diff.images.diffImageFile}" title="Diff image">
                 </td>
-            </tr>
-#end
-        </table>
-        <b>Differences in page elements:</b><br>
-        <table>
-#foreach($el in $pageElements)
-            <tr>
-                <td>${el.offsetLeft}, ${el.offsetTop}</td>
-                <td>${el.escapedHtmlString}</td>
+                <td>
+                    <table>
+    #foreach($el in $diff.pageElements)
+                            <tr>
+                                <td>${el.offsetLeft}, ${el.offsetTop}</td>
+                                <td>${el.escapedHtmlString}</td>
+                            </tr>
+    #end
+                    </table>
+
+                </td>
             </tr>
 #end
         </table>

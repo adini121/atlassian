@@ -1,4 +1,4 @@
-package com.atlassian.selenium.visualcomparison.test;
+package com.atlassian.selenium.visualcomparison.utils;
 
 import java.util.ArrayList;
 import org.junit.Test;
