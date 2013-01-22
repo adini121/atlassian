@@ -90,13 +90,13 @@ public class ScreenshotDiff
         }
     }
 
-    public static class ReportDiffInfo
+    public static class PageDifferenceImages
     {
         private String oldImageFile;
         private String newImageFile;
         private String diffImageFile;
 
-        public ReportDiffInfo(String oldImageFile, String newImageFile, String diffImageFile)
+        public PageDifferenceImages(String oldImageFile, String newImageFile, String diffImageFile)
         {
             this.oldImageFile = oldImageFile;
             this.newImageFile = newImageFile;
@@ -143,7 +143,7 @@ public class ScreenshotDiff
 
         String imageOutputDir = getImageOutputDir(outputDir, imageSubDir);
 
-        ArrayList<ReportDiffInfo> reportDiffs = new ArrayList<ReportDiffInfo>();
+        ArrayList<PageDifferenceImages> reportDiffs = new ArrayList<PageDifferenceImages>();
         int i = 0;
         for (BoundingBox box : boxes)
         {
@@ -167,7 +167,7 @@ public class ScreenshotDiff
             graphics.setStroke(stroke);
             graphics.drawRect(box.getMarginLeft(), box.getMarginTop(), box.getMarginWidth(diffImage.getWidth() - 1), box.getMarginHeight(diffImage.getHeight() - 1));
 
-            reportDiffs.add(new ReportDiffInfo(imageSubDir + "/" + oldImageFile, imageSubDir + "/" + newImageFile,
+            reportDiffs.add(new PageDifferenceImages(imageSubDir + "/" + oldImageFile, imageSubDir + "/" + newImageFile,
                     imageSubDir + "/" + diffImageFile));
         }
         if (ignoreAreas != null)
