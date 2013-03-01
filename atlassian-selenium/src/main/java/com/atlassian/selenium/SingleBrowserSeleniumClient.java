@@ -4,6 +4,7 @@ package com.atlassian.selenium;
 
 import com.atlassian.selenium.keyboard.KeyEvent;
 import com.atlassian.selenium.keyboard.KeyEventSequence;
+import com.atlassian.selenium.visualcomparison.ScreenElement;
 import com.atlassian.selenium.visualcomparison.utils.ScreenResolution;
 import com.atlassian.webtest.ui.keys.KeyEventType;
 import com.google.gson.Gson;
@@ -661,7 +662,7 @@ public class SingleBrowserSeleniumClient extends DefaultSelenium implements Sele
     }
 
     @Override
-    public Object getElementAtPoint(int x, int y)
+    public ScreenElement getElementAtPoint(int x, int y)
     {
         throw new UnsupportedOperationException("Not implemented");
     }

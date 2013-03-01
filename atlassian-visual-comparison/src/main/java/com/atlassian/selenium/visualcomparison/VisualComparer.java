@@ -234,9 +234,9 @@ public class VisualComparer
                 BoundingBox box = difference.getBoundingBox();
                 int x = new Double(Math.floor(box.getLeft() + box.getWidth() / 2)).intValue();
                 int y = new Double(Math.floor(box.getTop() + box.getHeight() / 2)).intValue();
-                String thing = String.valueOf(client.getElementAtPoint(x, y));
+                ScreenElement thing = client.getElementAtPoint(x, y);
                 ScreenshotDiff.PageElementInfo info = new ScreenshotDiff.PageElementInfo();
-                info.htmlContent = thing;
+                info.htmlContent = thing.getHtml();
                 info.position = new Point(x,y);
                 difference.addPageElement(info);
             }

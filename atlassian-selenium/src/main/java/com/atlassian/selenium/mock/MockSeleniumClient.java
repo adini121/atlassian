@@ -2,6 +2,7 @@ package com.atlassian.selenium.mock;
 
 import com.atlassian.selenium.Browser;
 import com.atlassian.selenium.SeleniumClient;
+import com.atlassian.selenium.visualcomparison.ScreenElement;
 import com.atlassian.selenium.visualcomparison.utils.ScreenResolution;
 import com.atlassian.webtest.ui.keys.KeyEventType;
 
@@ -943,7 +944,7 @@ public class MockSeleniumClient implements SeleniumClient
     }
 
     @Override
-    public Object getElementAtPoint(int x, int y)
+    public ScreenElement getElementAtPoint(int x, int y)
     {
         throw new UnsupportedOperationException("Not implemented");
     }

@@ -1,5 +1,6 @@
 package com.atlassian.webdriver.visualcomparison;
 
+import com.atlassian.selenium.visualcomparison.ScreenElement;
 import com.atlassian.selenium.visualcomparison.VisualComparableClient;
 import com.atlassian.selenium.visualcomparison.utils.ScreenResolution;
 import com.atlassian.webdriver.AtlassianWebDriver;
@@ -43,14 +44,14 @@ public class WebDriverVisualComparableClient implements VisualComparableClient
         return new Dimension(x,y);
     }
 
-    public Object getElementAtPoint(int x, int y)
+    public ScreenElement getElementAtPoint(int x, int y)
     {
         int delta = documentSize.height - viewportSize.height;
         int scrollY = Math.min(delta, y);
         int relY = y - scrollY; // number between 0 and viewportSize.height
         execute(String.format("window.scrollTo(%d,%d)",x,scrollY));
         WebElement el = driver.findElement(atPointInDom(x,relY));
-        return el;
+        return new WebDriverScreenElement(el);
     }
 
     private By atPointInDom(int x, int relY)
@@ -119,4 +120,21 @@ public class WebDriverVisualComparableClient implements VisualComparableClient
         }
         return true;
     }
+
+    private class WebDriverScreenElement implements ScreenElement
+    {
+        private final WebElement element;
+
+        WebDriverScreenElement(WebElement el)
+        {
+            this.element = el;
+        }
+
+        @Override
+        public String getHtml()
+        {
+            return (String)execute("var d = document.createElement('div'); d.appendChild(arguments[0].cloneNode(true)); return d.innerHTML;", element);
+        }
+    }
+
 }
