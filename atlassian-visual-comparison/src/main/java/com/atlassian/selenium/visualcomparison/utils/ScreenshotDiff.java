@@ -146,27 +146,29 @@ public class ScreenshotDiff
         private File oldImageFile;
         private File newImageFile;
         private File diffImageFile;
+        private String outputDir;
 
-        public PageDifferenceImages(File oldImageFile, File newImageFile, File diffImageFile)
+        public PageDifferenceImages(File oldImageFile, File newImageFile, File diffImageFile, String outputDir)
         {
             this.oldImageFile = oldImageFile;
             this.newImageFile = newImageFile;
             this.diffImageFile = diffImageFile;
+            this.outputDir = outputDir;
         }
 
         public String getOldImageFile()
         {
-            return oldImageFile.getPath();
+            return relativePath(oldImageFile, outputDir);
         }
 
         public String getNewImageFile()
         {
-            return newImageFile.getPath();
+            return relativePath(newImageFile, outputDir);
         }
 
         public String getDiffImageFile()
         {
-            return diffImageFile.getPath();
+            return relativePath(diffImageFile, outputDir);
         }
     }
 
@@ -221,7 +223,8 @@ public class ScreenshotDiff
             difference.setImages(
                 new PageDifferenceImages(oldImageFile,
                     newImageFile,
-                    diffImageFile)
+                    diffImageFile,
+                    outputDir)
             );
         }
         if (ignoreAreas != null)
@@ -257,9 +260,9 @@ public class ScreenshotDiff
         context.put("id", id);
         context.put("resolution", resolution);
         context.put("differences", differences);
-        context.put("oldImageFile", oldImageFile.getPath());
-        context.put("newImageFile", newImageFile.getPath());
-        context.put("diffImageFile", diffImageFile.getPath());
+        context.put("oldImageFile", relativePath(oldImageFile, outputDir));
+        context.put("newImageFile", relativePath(newImageFile, outputDir));
+        context.put("diffImageFile", relativePath(diffImageFile, outputDir));
         String report = ReportRenderer.render(context, "visual-regression-report-single.vm");
 
         OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(new File(outputDir + "/report-" + id + "-" + resolution + ".html")));
@@ -273,5 +276,13 @@ public class ScreenshotDiff
         File outputFile = new File(outputPath);
         ImageIO.write(boxImage, "png", outputFile);
         return outputFile;
+    }
+
+    private static String relativePath(final File file, final String relativeRoot)
+    {
+        final String fullPath = file.getAbsolutePath();
+        String relativePath = fullPath.substring(fullPath.indexOf(relativeRoot)+relativeRoot.length());
+        if (relativePath.startsWith("/")) relativePath = "." + relativePath;
+        return relativePath;
     }
 }
