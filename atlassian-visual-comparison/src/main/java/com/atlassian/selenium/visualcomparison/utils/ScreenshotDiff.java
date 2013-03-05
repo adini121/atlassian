@@ -61,117 +61,6 @@ public class ScreenshotDiff
         return boxes;
     }
 
-    public static class PageDifference
-    {
-        private final BoundingBox box;
-        private PageDifferenceImages images;
-        private final List<PageElementInfo> pageElements;
-
-        public PageDifference(BoundingBox box)
-        {
-            this.box = box;
-            this.pageElements = new ArrayList<PageElementInfo>();
-        }
-
-        public BoundingBox getBoundingBox()
-        {
-            return this.box;
-        }
-
-        public void setImages(PageDifferenceImages images)
-        {
-            this.images = images;
-        }
-
-        public PageDifferenceImages getImages()
-        {
-            return images;
-        }
-
-        public void addPageElement(PageElementInfo el)
-        {
-            getPageElements().add(el);
-        }
-
-        public List<PageElementInfo> getPageElements()
-        {
-            return this.pageElements;
-        }
-    }
-
-    public static class PageElementInfo
-    {
-        public String htmlContent;
-        public Dimension size;
-        public Point position;
-
-        public String getHtmlContent()
-        {
-            return htmlContent;
-        }
-
-        public String getEscapedHtmlString()
-        {
-            return StringEscapeUtils.escapeHtml(htmlContent);
-        }
-
-        public Dimension getSize()
-        {
-            return size;
-        }
-
-        public int getOffsetLeft()
-        {
-            return (null == position) ? -1 : position.x;
-        }
-
-        public int getOffsetTop()
-        {
-            return (null == position) ? -1 : position.y;
-        }
-
-        public int getElementWidth()
-        {
-            return (null == size) ? -1 : size.width;
-        }
-
-        public int getElementHeight()
-        {
-            return (null == size) ? -1 : size.height;
-        }
-    }
-
-    public static class PageDifferenceImages
-    {
-        private File oldImageFile;
-        private File newImageFile;
-        private File diffImageFile;
-        private String outputDir;
-
-        public PageDifferenceImages(File oldImageFile, File newImageFile, File diffImageFile, String outputDir)
-        {
-            this.oldImageFile = oldImageFile;
-            this.newImageFile = newImageFile;
-            this.diffImageFile = diffImageFile;
-            this.outputDir = outputDir;
-        }
-
-        public String getOldImageFile()
-        {
-            return relativePath(oldImageFile, outputDir);
-        }
-
-        public String getNewImageFile()
-        {
-            return relativePath(newImageFile, outputDir);
-        }
-
-        public String getDiffImageFile()
-        {
-            return relativePath(diffImageFile, outputDir);
-        }
-    }
-
     public boolean hasDifferences()
     {
         return getDifferences().size() > 0;
@@ -185,6 +74,14 @@ public class ScreenshotDiff
             imageOutputDir = imageOutputDir + imageSubDir + "/";
         }
         return imageOutputDir;
+    }
+
+    public static String relativePath(final File file, final String relativeRoot)
+    {
+        final String fullPath = file.getAbsolutePath();
+        String relativePath = fullPath.substring(fullPath.indexOf(relativeRoot)+relativeRoot.length());
+        if (relativePath.startsWith("/")) relativePath = "." + relativePath;
+        return relativePath;
     }
 
     public void writeDiffReport(String outputDir, String imageSubDir) throws Exception
@@ -278,11 +175,4 @@ public class ScreenshotDiff
         return outputFile;
     }
 
-    private static String relativePath(final File file, final String relativeRoot)
-    {
-        final String fullPath = file.getAbsolutePath();
-        String relativePath = fullPath.substring(fullPath.indexOf(relativeRoot)+relativeRoot.length());
-        if (relativePath.startsWith("/")) relativePath = "." + relativePath;
-        return relativePath;
-    }
 }
