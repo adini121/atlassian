@@ -164,7 +164,7 @@ public final class Conditions
      * @param <T> type of the result
      * @return new matching condition
      */
-    public static <T> TimedCondition forMatcher(TimedQuery<T> query, Matcher<T> matcher)
+    public static <T> TimedCondition forMatcher(TimedQuery<T> query, Matcher<? super T> matcher)
     {
         return new MatchingCondition<T>(query, matcher);
     }
@@ -490,11 +490,11 @@ public final class Conditions
     static final class MatchingCondition<T> extends AbstractTimedCondition
     {
         final TimedQuery<T> query;
-        final Matcher<T> matcher;
+        final Matcher<? super T> matcher;
 
         T lastValue;
 
-        public MatchingCondition(final TimedQuery<T> query, final Matcher<T> matcher)
+        public MatchingCondition(final TimedQuery<T> query, final Matcher<? super T> matcher)
         {
             super(query);
             this.query = checkNotNull(query);

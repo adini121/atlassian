@@ -107,7 +107,7 @@ public final class Poller
      * @see org.hamcrest.Matchers
      * @return last value from the query, satisfying the matcher
      */
-    public static <T> T waitUntil(TimedQuery<T> query, Matcher<T> matcher)
+    public static <T> T waitUntil(TimedQuery<T> query, Matcher<? super T> matcher)
     {
         return waitUntil(null, query, matcher, byDefaultTimeout());
     }
@@ -127,7 +127,7 @@ public final class Poller
      * @see org.hamcrest.Matchers
      * @return last value from the query, satisfying the matcher
      */
-    public static <T> T waitUntil(String message, TimedQuery<T> query, Matcher<T> matcher)
+    public static <T> T waitUntil(String message, TimedQuery<T> query, Matcher<? super T> matcher)
     {
         return waitUntil(message, query, matcher, byDefaultTimeout());
     }
@@ -155,7 +155,7 @@ public final class Poller
      * @see #byDefaultTimeout()
      * @return last value from the query, satisfying the matcher
      */
-    public static <T> T waitUntil(TimedQuery<T> query, Matcher<T> matcher, WaitTimeout timeout)
+    public static <T> T waitUntil(TimedQuery<T> query, Matcher<? super T> matcher, WaitTimeout timeout)
     {
         return waitUntil(null, query, matcher, timeout);
     }
@@ -185,7 +185,7 @@ public final class Poller
      * @see #byDefaultTimeout()
      * @return last value from the query, satisfying the matcher
      */
-    public static <T> T waitUntil(String message, TimedQuery<T> query, Matcher<T> matcher, WaitTimeout timeout)
+    public static <T> T waitUntil(String message, TimedQuery<T> query, Matcher<? super T> matcher, WaitTimeout timeout)
     {
         checkNotNull(timeout);
         final Conditions.MatchingCondition<T> assertion = new Conditions.MatchingCondition<T>(query, matcher);
@@ -197,7 +197,7 @@ public final class Poller
     }
 
     private static <T> String buildMessage(String message, Conditions.MatchingCondition<T> assertion,
-                                           Matcher<T> matcher, WaitTimeout timeout)
+                                           Matcher<? super T> matcher, WaitTimeout timeout)
     {
         final Description answer = new StringDescription();
         if (StringUtils.isNotEmpty(message))
