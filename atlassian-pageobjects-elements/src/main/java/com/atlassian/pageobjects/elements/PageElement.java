@@ -34,7 +34,9 @@ public interface PageElement extends PageElementFinder
     boolean isEnabled();
 
     /**
-     * Whether this element is selected on the page
+     * Whether this element is selected on the page.  Useful on checkboxes and radio buttons.
+     * For checkboxes, returns true if the checkbox is checked.
+     * For radio buttons, returns true if the radio button this class represents is selected.
      *
      * @return True if this element is selected, false otheriwse.
      */
