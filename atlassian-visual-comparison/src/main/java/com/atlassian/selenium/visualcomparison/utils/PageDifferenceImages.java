@@ -2,7 +2,7 @@ package com.atlassian.selenium.visualcomparison.utils;
 
 import java.io.File;
 
-class PageDifferenceImages
+public class PageDifferenceImages
 {
     private File oldImageFile;
     private File newImageFile;

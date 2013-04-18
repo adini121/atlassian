@@ -1,6 +1,8 @@
 package com.atlassian.selenium.visualcomparison;
 
 import com.atlassian.selenium.visualcomparison.utils.BoundingBox;
+import com.atlassian.selenium.visualcomparison.utils.PageDifference;
+import com.atlassian.selenium.visualcomparison.utils.PageElementInfo;
 import com.atlassian.selenium.visualcomparison.utils.ScreenResolution;
 import com.atlassian.selenium.visualcomparison.utils.Screenshot;
 import com.atlassian.selenium.visualcomparison.utils.ScreenshotDiff;
@@ -229,13 +231,13 @@ public class VisualComparer
         {
             ScreenshotDiff diff = getScreenshotDiff(oldScreenshots.get(i), newScreenshots.get(i));
 
-            for (ScreenshotDiff.PageDifference difference : diff.getDifferences())
+            for (PageDifference difference : diff.getDifferences())
             {
                 BoundingBox box = difference.getBoundingBox();
                 int x = new Double(Math.floor(box.getLeft() + box.getWidth() / 2)).intValue();
                 int y = new Double(Math.floor(box.getTop() + box.getHeight() / 2)).intValue();
                 ScreenElement thing = client.getElementAtPoint(x, y);
-                ScreenshotDiff.PageElementInfo info = new ScreenshotDiff.PageElementInfo();
+                PageElementInfo info = new PageElementInfo();
                 info.htmlContent = thing.getHtml();
                 info.position = new Point(x,y);
                 difference.addPageElement(info);

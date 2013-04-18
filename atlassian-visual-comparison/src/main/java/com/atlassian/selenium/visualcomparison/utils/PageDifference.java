@@ -3,7 +3,7 @@ package com.atlassian.selenium.visualcomparison.utils;
 import java.util.ArrayList;
 import java.util.List;
 
-class PageDifference
+public class PageDifference
 {
     private final BoundingBox box;
     private PageDifferenceImages images;

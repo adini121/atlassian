@@ -4,7 +4,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 
 import java.awt.*;
 
-class PageElementInfo
+public class PageElementInfo
 {
     public String htmlContent;
     public Dimension size;
