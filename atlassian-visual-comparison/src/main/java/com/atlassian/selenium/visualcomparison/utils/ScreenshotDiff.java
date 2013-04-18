@@ -1,9 +1,12 @@
 package com.atlassian.selenium.visualcomparison.utils;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.velocity.VelocityContext;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -19,8 +22,8 @@ public class ScreenshotDiff
     private String id;
     private ScreenResolution resolution;
     private BufferedImage diffImage;
-    private ArrayList<BoundingBox> boxes;
     private List<BoundingBox> ignoreAreas;
+    private Collection<PageDifference> differences;
 
     public ScreenshotDiff(Screenshot oldScreenshot, Screenshot newScreenshot,
             String id, ScreenResolution resolution,
@@ -31,47 +34,36 @@ public class ScreenshotDiff
         this.id = id;
         this.resolution = resolution;
         this.diffImage = diffImage;
-        this.boxes = boxes;
         this.ignoreAreas = ignoreAreas;
+        this.differences = new ArrayList<PageDifference>();
+        for(BoundingBox box : boxes)
+        {
+            differences.add(new PageDifference(box));
+        }
     }
     
-    public List<BoundingBox> getDiffAreas()
+    public Collection<PageDifference> getDifferences()
     {
-    	return this.boxes;
+        return differences;
     }
 
-    public static class ReportDiffInfo
+    /**
+     * For tests.
+     * @return a list of {@link BoundingBox} elements.
+     */
+    List<BoundingBox> getDiffAreas()
     {
-        private String oldImageFile;
-        private String newImageFile;
-        private String diffImageFile;
-
-        public ReportDiffInfo(String oldImageFile, String newImageFile, String diffImageFile)
+        List<BoundingBox> boxes = new ArrayList<BoundingBox>();
+        for (PageDifference difference : getDifferences())
         {
-            this.oldImageFile = oldImageFile;
-            this.newImageFile = newImageFile;
-            this.diffImageFile = diffImageFile;
+            boxes.add(difference.getBoundingBox());
         }
-
-        public String getOldImageFile()
-        {
-            return oldImageFile;
-        }
-
-        public String getNewImageFile()
-        {
-            return newImageFile;
-        }
-
-        public String getDiffImageFile()
-        {
-            return diffImageFile;
-        }
+        return boxes;
     }
 
     public boolean hasDifferences()
     {
-        return boxes.size() > 0;
+        return getDifferences().size() > 0;
     }
 
     public static String getImageOutputDir(String outputDir, String imageSubDir)
@@ -84,6 +76,14 @@ public class ScreenshotDiff
         return imageOutputDir;
     }
 
+    public static String relativePath(final File file, final String relativeRoot)
+    {
+        final String fullPath = file.getAbsolutePath();
+        String relativePath = fullPath.substring(fullPath.indexOf(relativeRoot)+relativeRoot.length());
+        if (relativePath.startsWith("/")) relativePath = "." + relativePath;
+        return relativePath;
+    }
+
     public void writeDiffReport(String outputDir, String imageSubDir) throws Exception
     {
         if (!hasDifferences())
@@ -93,20 +93,20 @@ public class ScreenshotDiff
 
         String imageOutputDir = getImageOutputDir(outputDir, imageSubDir);
 
-        ArrayList<ReportDiffInfo> reportDiffs = new ArrayList<ReportDiffInfo>();
         int i = 0;
-        for (BoundingBox box : boxes)
+        for (PageDifference difference : getDifferences())
         {
+            final BoundingBox box = difference.getBoundingBox();
             Graphics2D graphics = diffImage.createGraphics();
 
-            String oldImageFile = "boxold" + i + "-" + id + "." + resolution + ".png";
-            String newImageFile = "boxnew" + i + "-" + id + "." + resolution + ".png";
-            String diffImageFile = "boxdiff" + i + "-" + id + "." + resolution + ".png";
-            i++;
+            String oldImagePath = imageOutputDir + "boxold" + i + "-" + id + "." + resolution + ".png";
+            String newImagePath = imageOutputDir + "boxnew" + i + "-" + id + "." + resolution + ".png";
+            String diffImagePath = imageOutputDir + "boxdiff" + i + "-" + id + "." + resolution + ".png";
 
-            writeSubImage(oldScreenshot.getImage(), box, imageOutputDir + oldImageFile);
-            writeSubImage(newScreenshot.getImage(), box, imageOutputDir + newImageFile);
-            writeSubImage(diffImage, box, imageOutputDir + diffImageFile);
+            File oldImageFile = writeSubImage(oldScreenshot.getImage(), box, oldImagePath);
+            File newImageFile = writeSubImage(newScreenshot.getImage(), box, newImagePath);
+            File diffImageFile = writeSubImage(diffImage, box, diffImagePath);
+            i++;
 
             // Once we've written the sub-images, draw a black box around each of the bounding boxes on the diff.
             graphics.setColor(Color.BLACK);
@@ -117,8 +117,12 @@ public class ScreenshotDiff
             graphics.setStroke(stroke);
             graphics.drawRect(box.getMarginLeft(), box.getMarginTop(), box.getMarginWidth(diffImage.getWidth() - 1), box.getMarginHeight(diffImage.getHeight() - 1));
 
-            reportDiffs.add(new ReportDiffInfo(imageSubDir + "/" + oldImageFile, imageSubDir + "/" + newImageFile,
-                    imageSubDir + "/" + diffImageFile));
+            difference.setImages(
+                new PageDifferenceImages(oldImageFile,
+                    newImageFile,
+                    diffImageFile,
+                    outputDir)
+            );
         }
         if (ignoreAreas != null)
         {
@@ -135,26 +139,27 @@ public class ScreenshotDiff
                 graphics.drawRect(ignoreArea.getLeft(), ignoreArea.getTop(), ignoreArea.getWidth(), ignoreArea.getHeight());
             }
         }
+
         // Write the full diff image to the output directory.
-        String diffImageFile = "diff-" + id + "." + resolution + ".png";
-        ImageIO.write(diffImage, "png", new File(imageOutputDir + diffImageFile));
+        File diffImageFile = new File(imageOutputDir + "diff-" + id + "." + resolution + ".png");
+        ImageIO.write(diffImage, "png", diffImageFile);
         diffImage.flush();
 
         // Copy the full baseline image to the output directory.
-        String oldImageFile = "old-" + oldScreenshot.getFileName();
-        ImageIO.write(oldScreenshot.getImage(), "png", new File(imageOutputDir + oldImageFile));
+        File oldImageFile = new File(imageOutputDir + "old-" + oldScreenshot.getFileName());
+        ImageIO.write(oldScreenshot.getImage(), "png", oldImageFile);
 
         // Copy the new image to the output directory.
-        final String newImageFile = newScreenshot.getFileName();
-        ImageIO.write(newScreenshot.getImage(), "png", new File(imageOutputDir + newImageFile));
+        final File newImageFile = new File(imageOutputDir + newScreenshot.getFileName());
+        ImageIO.write(newScreenshot.getImage(), "png", newImageFile);
 
         VelocityContext context = ReportRenderer.createContext();
         context.put("id", id);
         context.put("resolution", resolution);
-        context.put("diffs", reportDiffs);
-        context.put("oldImageFile", imageSubDir + "/" + oldImageFile);
-        context.put("newImageFile", imageSubDir + "/" + newImageFile);
-        context.put("diffImageFile", imageSubDir + "/" + diffImageFile);
+        context.put("differences", differences);
+        context.put("oldImageFile", relativePath(oldImageFile, outputDir));
+        context.put("newImageFile", relativePath(newImageFile, outputDir));
+        context.put("diffImageFile", relativePath(diffImageFile, outputDir));
         String report = ReportRenderer.render(context, "visual-regression-report-single.vm");
 
         OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(new File(outputDir + "/report-" + id + "-" + resolution + ".html")));
@@ -162,9 +167,12 @@ public class ScreenshotDiff
         writer.close();
     }
 
-    private void writeSubImage(BufferedImage image, BoundingBox box, String outputPath) throws IOException
+    private File writeSubImage(BufferedImage image, BoundingBox box, String outputPath) throws IOException
     {
         BufferedImage boxImage = image.getSubimage(box.getMarginLeft(), box.getMarginTop(), box.getMarginWidth(image.getWidth() - 1), box.getMarginHeight(image.getHeight() - 1));
-        ImageIO.write(boxImage, "png", new File(outputPath));
+        File outputFile = new File(outputPath);
+        ImageIO.write(boxImage, "png", outputFile);
+        return outputFile;
     }
+
 }

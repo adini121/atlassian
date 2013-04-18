@@ -4,6 +4,8 @@ package com.atlassian.selenium;
 
 import com.atlassian.selenium.keyboard.KeyEvent;
 import com.atlassian.selenium.keyboard.KeyEventSequence;
+import com.atlassian.selenium.visualcomparison.ScreenElement;
+import com.atlassian.selenium.visualcomparison.utils.ScreenResolution;
 import com.atlassian.webtest.ui.keys.KeyEventType;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -605,14 +607,32 @@ public class SingleBrowserSeleniumClient extends DefaultSelenium implements Sele
 
     public void evaluate (String command)
     {
+        execute(command);
+    }
+
+    /**
+     * Execute a script on the client.
+     * @param command a string of javascript to send to the client.
+     * @param arguments Selenium does not accept additional arguments. These will be ignored.
+     * @return The evaluated result of the script
+     */
+    public Object execute(String command, Object... arguments)
+    {
         // For compatibility with VisualComparableClient
-        this.getEval(command);
+        return this.getEval(command);
     }
 
     public void captureEntirePageScreenshot (String filePath)
     {
         // For compatibility with VisualComparableClient
         this.captureEntirePageScreenshot(filePath, "");
+    }
+
+    public boolean resizeScreen(ScreenResolution resolution, boolean refreshAfterResize)
+    {
+        final String result = this.getEval("selenium.browserbot.getCurrentWindow().resizeTo(" + resolution.width + ", " + resolution.height + ");");
+        if (refreshAfterResize) refreshAndWait();
+        return true;
     }
 
     public void refreshAndWait ()
@@ -622,18 +642,28 @@ public class SingleBrowserSeleniumClient extends DefaultSelenium implements Sele
         this.waitForPageToLoad();
     }
 
+    /**
+     * Wait for jQuery AJAX calls to return.
+     * @param waitTimeMillis the time to wait for everything to finish.
+     * @return
+     */
     public boolean waitForJQuery (long waitTimeMillis)
     {
-        // For compatibility with VisualComparableClient
-        this.waitForCondition("selenium.browserbot.getCurrentWindow().jQuery.active == 0;", Long.toString(400));
         try
         {
-            Thread.sleep(waitTimeMillis);
+            this.waitForCondition("selenium.browserbot.getCurrentWindow().jQuery.active == 0;", Long.toString(waitTimeMillis));
+            Thread.sleep(400);
         }
         catch (InterruptedException e)
         {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public ScreenElement getElementAtPoint(int x, int y)
+    {
+        throw new UnsupportedOperationException("Not implemented");
     }
 }

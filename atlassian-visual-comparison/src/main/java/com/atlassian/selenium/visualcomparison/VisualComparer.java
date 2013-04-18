@@ -1,12 +1,15 @@
 package com.atlassian.selenium.visualcomparison;
 
 import com.atlassian.selenium.visualcomparison.utils.BoundingBox;
+import com.atlassian.selenium.visualcomparison.utils.PageDifference;
+import com.atlassian.selenium.visualcomparison.utils.PageElementInfo;
 import com.atlassian.selenium.visualcomparison.utils.ScreenResolution;
 import com.atlassian.selenium.visualcomparison.utils.Screenshot;
 import com.atlassian.selenium.visualcomparison.utils.ScreenshotDiff;
 import junit.framework.Assert;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
@@ -147,7 +150,7 @@ public class VisualComparer
         ArrayList<Screenshot> screenshots = new ArrayList<Screenshot>();
         for (ScreenResolution res : resolutions)
         {
-            res.resize(client, refreshAfterResize);
+            client.resizeScreen(res, refreshAfterResize);
             if (waitforJQueryTimeout > 0)
             {
                 if (!client.waitForJQuery (waitforJQueryTimeout))
@@ -190,7 +193,10 @@ public class VisualComparer
 
     protected void replaceUIHtml(String id, String newContent)
     {
-        client.evaluate("var content, el = window.document.getElementById('" + id + "'); if (el) { content = el.innerHTML; el.innerHTML = \"" + newContent + "\"; } content;");
+        final String script = "var content, el = window.document.getElementById('" + id + "');" +
+                "if (el) { content = el.innerHTML; el.innerHTML = \"" + newContent + "\"; } content;";
+        final Object result = client.execute(script);
+        final String value = String.valueOf(result);
     }
 
     public boolean compareScreenshots(ArrayList<Screenshot> oldScreenshots, ArrayList<Screenshot> newScreenshots)
@@ -224,6 +230,19 @@ public class VisualComparer
         for (int i = 0; i < oldScreenshots.size(); i++)
         {
             ScreenshotDiff diff = getScreenshotDiff(oldScreenshots.get(i), newScreenshots.get(i));
+
+            for (PageDifference difference : diff.getDifferences())
+            {
+                BoundingBox box = difference.getBoundingBox();
+                int x = new Double(Math.floor(box.getLeft() + box.getWidth() / 2)).intValue();
+                int y = new Double(Math.floor(box.getTop() + box.getHeight() / 2)).intValue();
+                ScreenElement thing = client.getElementAtPoint(x, y);
+                PageElementInfo info = new PageElementInfo();
+                info.htmlContent = thing.getHtml();
+                info.position = new Point(x,y);
+                difference.addPageElement(info);
+            }
+
             if (reportingEnabled)
             {
                 diff.writeDiffReport(reportOutputPath, imageSubDirName);
