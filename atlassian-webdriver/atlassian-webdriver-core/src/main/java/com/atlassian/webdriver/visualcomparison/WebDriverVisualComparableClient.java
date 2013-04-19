@@ -46,17 +46,22 @@ public class WebDriverVisualComparableClient implements VisualComparableClient
 
     public ScreenElement getElementAtPoint(int x, int y)
     {
-        int delta = documentSize.height - viewportSize.height;
-        int scrollY = Math.min(delta, y);
+        int deltaY = documentSize.height - viewportSize.height;
+        int scrollY = Math.min(deltaY, y);
         int relY = y - scrollY; // number between 0 and viewportSize.height
-        execute(String.format("window.scrollTo(%d,%d)",x,scrollY));
-        WebElement el = driver.findElement(atPointInDom(x,relY));
+
+        int deltaX = documentSize.width - viewportSize.width;
+        int scrollX = Math.min(deltaX, x);
+        int relX = x - scrollX; // number between 0 and viewportSize.width
+
+        execute(String.format("window.scrollTo(%d,%d)",scrollX,scrollY));
+        WebElement el = driver.findElement(atPointInDom(relX,relY));
         return new WebDriverScreenElement(el);
     }
 
-    private By atPointInDom(int x, int relY)
+    private By atPointInDom(int relX, int relY)
     {
-        final String domSel = String.format("return document.elementFromPoint(%d,%d);",x,relY);
+        final String domSel = String.format("return document.elementFromPoint(%d,%d);",relX,relY);
         final Object o = driver.executeScript(domSel);
 
         if (o instanceof WebElement) {
