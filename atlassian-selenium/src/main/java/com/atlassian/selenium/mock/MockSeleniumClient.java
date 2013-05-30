@@ -2,6 +2,8 @@ package com.atlassian.selenium.mock;
 
 import com.atlassian.selenium.Browser;
 import com.atlassian.selenium.SeleniumClient;
+import com.atlassian.selenium.visualcomparison.ScreenElement;
+import com.atlassian.selenium.visualcomparison.utils.ScreenResolution;
 import com.atlassian.webtest.ui.keys.KeyEventType;
 
 import java.util.ArrayList;
@@ -918,8 +920,18 @@ public class MockSeleniumClient implements SeleniumClient
     {
     }
 
+    public Object execute (String command, Object... arguments)
+    {
+        return null;
+    }
+
     public void captureEntirePageScreenshot (String filePath)
     {
+    }
+
+    public boolean resizeScreen(ScreenResolution resolution, boolean refreshAfterResize)
+    {
+        return false;
     }
 
     public void refreshAndWait ()
@@ -929,5 +941,11 @@ public class MockSeleniumClient implements SeleniumClient
     public boolean waitForJQuery (long waitTimeMillis)
     {
         return false;
+    }
+
+    @Override
+    public ScreenElement getElementAtPoint(int x, int y)
+    {
+        throw new UnsupportedOperationException("Not implemented");
     }
 }
