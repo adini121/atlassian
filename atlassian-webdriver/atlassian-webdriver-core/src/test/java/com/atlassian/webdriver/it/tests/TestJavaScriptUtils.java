@@ -7,6 +7,7 @@ import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.it.AbstractFileBasedServerTest;
 import com.atlassian.webdriver.it.pageobjects.page.JavaScriptUtilsPage;
 import com.atlassian.webdriver.utils.MouseEvents;
+import com.atlassian.webdriver.utils.element.ElementIsVisible;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -25,8 +26,10 @@ import static org.junit.Assert.fail;
 public class TestJavaScriptUtils extends AbstractFileBasedServerTest
 {
 
-    JavaScriptUtilsPage javascriptUtilsPage;
-    AtlassianWebDriver driver;
+    public static final int TIMEOUT = 5;
+
+    private JavaScriptUtilsPage javascriptUtilsPage;
+    private AtlassianWebDriver driver;
 
     @Before
     public void init()
@@ -93,7 +96,7 @@ public class TestJavaScriptUtils extends AbstractFileBasedServerTest
 
         try
         {
-            driver.waitUntilElementIsVisible(By.id("child-element-one"));
+            driver.waitUntil(new ElementIsVisible(By.id("child-element-one")), TIMEOUT);
             fail("htmlunit css hovers are working now");
         }
         catch (TimeoutException expected) {}
@@ -109,12 +112,11 @@ public class TestJavaScriptUtils extends AbstractFileBasedServerTest
         assertFalse(driver.elementIsVisible(By.id("child-element-two")));
         assertFalse(driver.elementIsVisible(By.id("child-element-three")));
         // now hover over div to show the children
-
         MouseEvents.hover(hoveringDiv, driver);
 
         try
         {
-            driver.waitUntilElementIsVisible(By.id("child-element-one"));
+            driver.waitUntil(new ElementIsVisible(By.id("child-element-one")), TIMEOUT);
             fail("firefox css hovers are working now");
         }
         catch (TimeoutException expected) {}
@@ -137,7 +139,7 @@ public class TestJavaScriptUtils extends AbstractFileBasedServerTest
         MouseEvents.hover(hoveringDiv, driver);
         try
         {
-            driver.waitUntilElementIsVisible(By.id("child-jquery-element-one"));
+            driver.waitUntil(new ElementIsVisible(By.id("child-jquery-element-one")), TIMEOUT);
             fail("ie jquery hovers are working now");
         }
         catch (TimeoutException expected) {}

@@ -8,7 +8,6 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>atlassian-webdriver-core</artifactId>
-
     <name>${project.artifactId}</name>
 
     <repositories>
@@ -62,13 +61,6 @@
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
-            <version>${selenium.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.testng</groupId>
-                    <artifactId>testng</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>

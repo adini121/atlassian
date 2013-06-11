@@ -27,8 +27,8 @@
     <properties>
         <jdkLevel>1.6</jdkLevel>
         <selenium-browsers-version>1.1-beta13</selenium-browsers-version>
-        <webdriver-browsers-version>2.3.1</webdriver-browsers-version>
-        <selenium.version>2.27.0</selenium.version>
+        <webdriver-browsers-version>2.4-SNAPSHOT</webdriver-browsers-version>
+        <selenium.version>2.33.0</selenium.version>
         <mockito.version>1.8.5</mockito.version>
         <junit.version>4.10</junit.version>
         <hamcrest.version>1.1</hamcrest.version>
@@ -66,10 +66,28 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-            <version>2.5</version>
-        </dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-java</artifactId>
+                <version>${selenium.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.testng</groupId>
+                        <artifactId>testng</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>commons-lang</groupId>
+                <artifactId>commons-lang</artifactId>
+                <version>2.5</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>14.0.1</version>
+                <scope>provided</scope>
+            </dependency>
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit-dep</artifactId>
@@ -91,9 +109,9 @@
                 <version>${hamcrest.version}</version>
             </dependency>
             <dependency>
-              <groupId>com.atlassian.bundles</groupId>
-              <artifactId>jsr305</artifactId>
-              <version>1.1</version>
+                <groupId>com.atlassian.bundles</groupId>
+                <artifactId>jsr305</artifactId>
+                <version>1.1</version>
             </dependency>
             <!-- Test Dependencies -->
             <dependency>
@@ -144,11 +162,11 @@
                                     <bannedDependencies>
                                         <searchTransitive>true</searchTransitive>
                                         <message>make sure junit, hamcrest-all and mockito-all are not accidentally included as transitive dependency. Use junit-dep, hamcrest-core, hamcrest-library or mockito-core instead</message>
-                                        <excludes>
-                                            <exclude>junit:junit</exclude>
-                                            <exclude>org.mockito:mockito-all</exclude>
-                                            <exclude>org.hamcrest:hamcrest-all</exclude>
-                                        </excludes>
+                                        gua                                <excludes>
+                                        <exclude>junit:junit</exclude>
+                                        <exclude>org.mockito:mockito-all</exclude>
+                                        <exclude>org.hamcrest:hamcrest-all</exclude>
+                                    </excludes>
                                     </bannedDependencies>
                                 </rules>
                                 <fail>true</fail>
