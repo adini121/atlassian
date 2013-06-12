@@ -1,16 +1,15 @@
 package com.atlassian.webdriver.utils;
 
 import org.apache.commons.lang.StringUtils;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.SearchContext;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 
 import java.util.List;
 
 
 /**
  * Utilities for doing simple checks on a page.
+ *
+ * @since 2.0
  */
 public final class Check
 {
@@ -25,7 +24,6 @@ public final class Check
      */
     public static boolean elementExists(By by, SearchContext el)
     {
-
         try
         {
             el.findElement(by);
@@ -34,7 +32,6 @@ public final class Check
         {
             return false;
         }
-
         return true;
     }
 
@@ -43,7 +40,7 @@ public final class Check
         try
         {
             WebElement lookFor = context.findElement(by);
-            return lookFor.isDisplayed();
+            return isVisible(lookFor);
         }
         catch (NoSuchElementException e)
         {
@@ -59,7 +56,7 @@ public final class Check
         {
             for (WebElement lookFor : elements)
             {
-                if (!lookFor.isDisplayed())
+                if (!isVisible(lookFor))
                 {
                     return false;
                 }
@@ -69,6 +66,19 @@ public final class Check
         }
 
         return false;
+    }
+
+    private static boolean isVisible(WebElement webElement)
+    {
+        try
+        {
+            return webElement.isDisplayed();
+        }
+        catch (StaleElementReferenceException e)
+        {
+            // element got stale since it's been retrieve, just return false naively
+            return false;
+        }
     }
 
     /**
