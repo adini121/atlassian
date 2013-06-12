@@ -163,6 +163,17 @@ public class TestInjectPageBinder
     }
 
     @Test
+    public void shouldAllowConfiguringNewSingletonInstanceThatIsSubclassOfInterfaceType()
+    {
+        final PageBinder binder = createBinder();
+        ConfigurableInjectionContext.class.cast(binder)
+                .configure()
+                .addSingleton(StringField.class, new StringFieldImpl())
+                .finish();
+        assertEquals("Bob", binder.bind(OneFieldPage.class).name.getValue());
+    }
+
+    @Test
     public void shouldAllowConfiguringNewImplementationInstance()
     {
         final PageBinder binder = createBinder(StringField.class, StringFieldImpl.class);
@@ -180,6 +191,7 @@ public class TestInjectPageBinder
                 .finish();
         assertEquals("Boom!", binder.bind(OneFieldPage.class).name.getValue());
     }
+
 
     static class AbstractPage implements Page
     {
@@ -327,6 +339,5 @@ public class TestInjectPageBinder
     static class OneFieldWithSuperClassInitPage extends OneFieldWithPrivateInitPage
     {
     }
-
 
 }
