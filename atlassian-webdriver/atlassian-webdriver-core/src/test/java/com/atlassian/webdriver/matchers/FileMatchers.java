@@ -75,4 +75,22 @@ public final class FileMatchers
             }
         };
     }
+
+    public static Matcher<File> isFile()
+    {
+        return new TypeSafeMatcher<File>()
+        {
+            @Override
+            public boolean matchesSafely(File item)
+            {
+                return item.isFile();
+            }
+
+            @Override
+            public void describeTo(Description description)
+            {
+                description.appendText("An existing file");
+            }
+        };
+    }
 }

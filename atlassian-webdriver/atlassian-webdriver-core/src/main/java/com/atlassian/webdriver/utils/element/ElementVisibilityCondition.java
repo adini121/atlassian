@@ -10,6 +10,7 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 /**
  * Condition to wait for an element's visibility.
  *
+ * @since 2.0
  */
 abstract class ElementVisibilityCondition implements ExpectedCondition<Boolean>
 {
@@ -17,7 +18,7 @@ abstract class ElementVisibilityCondition implements ExpectedCondition<Boolean>
     enum Visibility
     {
         VISIBLE,
-        NOTVISIBLE;
+        NOTVISIBLE
     }
 
     private final By by;

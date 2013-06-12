@@ -3,20 +3,24 @@ package com.atlassian.webdriver.it.tests;
 import com.atlassian.pageobjects.browser.Browser;
 import com.atlassian.pageobjects.browser.IgnoreBrowser;
 import com.atlassian.pageobjects.browser.RequireBrowser;
-import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.it.AbstractFileBasedServerTest;
 import com.atlassian.webdriver.it.pageobjects.page.JavaScriptUtilsPage;
 import com.atlassian.webdriver.utils.MouseEvents;
+import com.atlassian.webdriver.utils.element.WebDriverPoller;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import javax.inject.Inject;
+import java.util.concurrent.TimeUnit;
+
+import static com.atlassian.webdriver.utils.Check.elementIsVisible;
+import static com.atlassian.webdriver.utils.element.ElementConditions.isNotVisible;
+import static com.atlassian.webdriver.utils.element.ElementConditions.isVisible;
+import static org.junit.Assert.*;
 
 /**
  * Test for checking ByJquery functionality in Atlassian WebDriver.
@@ -25,14 +29,13 @@ import static org.junit.Assert.fail;
 public class TestJavaScriptUtils extends AbstractFileBasedServerTest
 {
 
-    JavaScriptUtilsPage javascriptUtilsPage;
-    AtlassianWebDriver driver;
+    @Inject private WebDriverPoller poller;
+    @Inject private WebDriver driver;
 
     @Before
     public void init()
     {
-        javascriptUtilsPage = product.visit(JavaScriptUtilsPage.class);
-        driver = product.getTester().getDriver();
+        product.visit(JavaScriptUtilsPage.class);
     }
 
     /**
@@ -44,17 +47,17 @@ public class TestJavaScriptUtils extends AbstractFileBasedServerTest
     {
         WebElement hoveringDiv = driver.findElement(By.id("hovering-element"));
         assertTrue(hoveringDiv.isDisplayed());
-        assertFalse(driver.elementIsVisible(By.id("child-element-one")));
-        assertFalse(driver.elementIsVisible(By.id("child-element-two")));
-        assertFalse(driver.elementIsVisible(By.id("child-element-three")));
-        // now hover over div to show the children
+        assertFalse(elementIsVisible(By.id("child-element-one"), driver));
+        assertFalse(elementIsVisible(By.id("child-element-two"), driver));
+        assertFalse(elementIsVisible(By.id("child-element-three"), driver));
 
+        // now hover over div to show the children
         MouseEvents.hover(hoveringDiv, driver);
 
-        driver.waitUntilElementIsVisible(By.id("child-element-one"));
-        assertTrue(driver.elementIsVisible(By.id("child-element-one")));
-        assertTrue(driver.elementIsVisible(By.id("child-element-two")));
-        assertTrue(driver.elementIsVisible(By.id("child-element-three")));
+        poller.waitUntil(isVisible(By.id("child-element-one")));
+        assertTrue(elementIsVisible(By.id("child-element-one"), driver));
+        assertTrue(elementIsVisible(By.id("child-element-two"), driver));
+        assertTrue(elementIsVisible(By.id("child-element-three"), driver));
     }
 
     @Test
@@ -64,88 +67,75 @@ public class TestJavaScriptUtils extends AbstractFileBasedServerTest
         WebElement hoveringDiv = driver.findElement(By.id("hovering-jquery-element"));
         assertTrue(hoveringDiv.isDisplayed());
 
-        driver.waitUntilElementIsNotVisible(By.id("child-jquery-element-one"));
-        assertFalse(driver.elementIsVisible(By.id("child-jquery-element-one")));
-        assertFalse(driver.elementIsVisible(By.id("child-jquery-element-two")));
-        assertFalse(driver.elementIsVisible(By.id("child-jquery-element-three")));
+        poller.waitUntil(isNotVisible(By.id("child-jquery-element-one")));
+        assertFalse(elementIsVisible(By.id("child-jquery-element-one"), driver));
+        assertFalse(elementIsVisible(By.id("child-jquery-element-two"), driver));
+        assertFalse(elementIsVisible(By.id("child-jquery-element-three"), driver));
 
         // now hover over div to show the children
         MouseEvents.hover(hoveringDiv, driver);
 
-        driver.waitUntilElementIsVisible(By.id("child-jquery-element-one"));
-        assertTrue(driver.elementIsVisible(By.id("child-jquery-element-one")));
-        assertTrue(driver.elementIsVisible(By.id("child-jquery-element-two")));
-        assertTrue(driver.elementIsVisible(By.id("child-jquery-element-three")));
+        poller.waitUntil(isVisible(By.id("child-jquery-element-one")));
+        assertTrue(elementIsVisible(By.id("child-jquery-element-one"), driver));
+        assertTrue(elementIsVisible(By.id("child-jquery-element-two"), driver));
+        assertTrue(elementIsVisible(By.id("child-jquery-element-three"), driver));
     }
 
-    @Test
+    @Test(expected = TimeoutException.class)
     @RequireBrowser(Browser.HTMLUNIT)
     public void testCssHoverBreaksForHtmlUnit()
     {
         WebElement hoveringDiv = driver.findElement(By.id("hovering-element"));
         assertTrue(hoveringDiv.isDisplayed());
-        assertFalse(driver.elementIsVisible(By.id("child-element-one")));
-        assertFalse(driver.elementIsVisible(By.id("child-element-two")));
-        assertFalse(driver.elementIsVisible(By.id("child-element-three")));
+        assertFalse(elementIsVisible(By.id("child-element-one"), driver));
+        assertFalse(elementIsVisible(By.id("child-element-two"), driver));
+        assertFalse(elementIsVisible(By.id("child-element-three"), driver));
+
         // now hover over div to show the children
-
         MouseEvents.hover(hoveringDiv, driver);
-
-        try
-        {
-            driver.waitUntilElementIsVisible(By.id("child-element-one"));
-            fail("htmlunit css hovers are working now");
-        }
-        catch (TimeoutException expected) {}
+        poller.waitUntil(isVisible(By.id("child-element-one")), 5, TimeUnit.SECONDS);
+        fail("HtmlUnit CSS hovers are working now");
     }
 
-    @Test
+    @Test(expected = TimeoutException.class)
     @RequireBrowser(Browser.FIREFOX)
     public void testCssHoverBreaksForFirefox()
     {
         WebElement hoveringDiv = driver.findElement(By.id("hovering-element"));
         assertTrue(hoveringDiv.isDisplayed());
-        assertFalse(driver.elementIsVisible(By.id("child-element-one")));
-        assertFalse(driver.elementIsVisible(By.id("child-element-two")));
-        assertFalse(driver.elementIsVisible(By.id("child-element-three")));
+        assertFalse(elementIsVisible(By.id("child-element-one"), driver));
+        assertFalse(elementIsVisible(By.id("child-element-two"), driver));
+        assertFalse(elementIsVisible(By.id("child-element-three"), driver));
+
         // now hover over div to show the children
-
         MouseEvents.hover(hoveringDiv, driver);
-
-        try
-        {
-            driver.waitUntilElementIsVisible(By.id("child-element-one"));
-            fail("firefox css hovers are working now");
-        }
-        catch (TimeoutException expected) {}
+        poller.waitUntil(isVisible(By.id("child-element-one")), 5, TimeUnit.SECONDS);
+        fail("Firefox CSS hovers are working now");
     }
 
-    // https://studio.atlassian.com/browse/SELENIUM-175
-    @Test
+    // https://ecosystemt.atlassian.net/browse/SELENIUM-175
+    @Test(expected = TimeoutException.class)
     @RequireBrowser(Browser.IE)
     public void testJQueryHoverBreaksForIE()
     {
         WebElement hoveringDiv = driver.findElement(By.id("hovering-jquery-element"));
         assertTrue(hoveringDiv.isDisplayed());
 
-        driver.waitUntilElementIsNotVisible(By.id("child-jquery-element-one"));
-        assertFalse(driver.elementIsVisible(By.id("child-jquery-element-one")));
-        assertFalse(driver.elementIsVisible(By.id("child-jquery-element-two")));
-        assertFalse(driver.elementIsVisible(By.id("child-jquery-element-three")));
+        poller.waitUntil(isNotVisible(By.id("child-jquery-element-one")));
+        assertFalse(elementIsVisible(By.id("child-jquery-element-one"), driver));
+        assertFalse(elementIsVisible(By.id("child-jquery-element-two"), driver));
+        assertFalse(elementIsVisible(By.id("child-jquery-element-three"), driver));
 
         // now hover over div to show the children
         MouseEvents.hover(hoveringDiv, driver);
-        try
-        {
-            driver.waitUntilElementIsVisible(By.id("child-jquery-element-one"));
-            fail("ie jquery hovers are working now");
-        }
-        catch (TimeoutException expected) {}
+        poller.waitUntil(isVisible(By.id("child-jquery-element-one")), 5, TimeUnit.SECONDS);
+        fail("IE jquery hovers are working now");
     }
 
     @Test
     public void testMouseEventMouseOut()
     {
+        fail();
         WebElement mouseoutDiv = driver.findElement(By.id("mouseout-jquery-element"));
         assertTrue(mouseoutDiv.isDisplayed());
 
@@ -154,7 +144,7 @@ public class TestJavaScriptUtils extends AbstractFileBasedServerTest
 
         MouseEvents.mouseout(mouseoutDiv, driver);
         assertEquals("mouseout", mouseoutContainer.getText());
-        
+
     }
 
 }

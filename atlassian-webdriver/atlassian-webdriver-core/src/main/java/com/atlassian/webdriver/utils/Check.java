@@ -12,10 +12,13 @@ import java.util.List;
 /**
  * Utilities for doing simple checks on a page.
  */
-public class Check
+public final class Check
 {
 
-    private Check() {}
+    private Check()
+    {
+        throw new AssertionError(Check.class.getName() + " is not supposed to be instantiated");
+    }
 
     /**
      * Checks that an element that matches the by param exists within another element.
