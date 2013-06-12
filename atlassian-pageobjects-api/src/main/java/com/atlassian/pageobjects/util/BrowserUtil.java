@@ -8,7 +8,7 @@ import com.google.common.base.Supplier;
  * Utilities for manipulating the current browser.
  *
  * @deprecated it is now possible to inject {@link BrowserAware}, or even {@link Browser} directly into your page
- * objects/tests.
+ * objects/tests. Scheduled for removal in 3.0
  */
 public class BrowserUtil
 {
