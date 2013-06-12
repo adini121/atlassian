@@ -7,6 +7,8 @@ import com.google.common.base.Supplier;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
+import javax.annotation.Nonnull;
+
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -55,19 +57,20 @@ public final class ClassInjectionRule<P extends TestedProduct<?>> implements Inj
     }
 
     @Override
-    public <T> T getInstance(Class<T> type)
+    @Nonnull
+    public <T> T getInstance(@Nonnull Class<T> type)
     {
         return injectionContext().getInstance(type);
     }
 
     @Override
-    public void injectStatic(Class<?> targetClass)
+    public void injectStatic(@Nonnull Class<?> targetClass)
     {
         injectionContext().injectStatic(targetClass);
     }
 
     @Override
-    public void injectMembers(Object targetInstance)
+    public void injectMembers(@Nonnull Object targetInstance)
     {
         injectionContext().injectMembers(targetInstance);
     }

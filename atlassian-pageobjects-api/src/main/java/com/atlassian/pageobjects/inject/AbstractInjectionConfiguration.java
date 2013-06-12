@@ -3,6 +3,7 @@ package com.atlassian.pageobjects.inject;
 import com.atlassian.annotations.ExperimentalApi;
 import com.google.common.collect.Lists;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -53,15 +54,21 @@ public abstract class AbstractInjectionConfiguration implements InjectionConfigu
     }
 
     @Override
-    public final <I> InjectionConfiguration addImplementation(Class<I> interfaceType, Class<? extends I> implementationType)
+    @Nonnull
+    public final <I> InjectionConfiguration addImplementation(@Nonnull Class<I> interfaceType, @Nonnull Class<? extends I> implementationType)
     {
+        checkNotNull(interfaceType, "interfaceType");
+        checkNotNull(implementationType, "implementationType");
         interfacesToImpls.add(new InterfaceToImpl(interfaceType, implementationType));
         return this;
     }
 
     @Override
-    public final <C, I extends C> InjectionConfiguration addSingleton(Class<I> type, I instance)
+    @Nonnull
+    public final <C, I extends C> InjectionConfiguration addSingleton(@Nonnull Class<C> type, @Nonnull I instance)
     {
+        checkNotNull(type, "type");
+        checkNotNull(instance, "instance");
         interfacesToInstances.add(new InterfaceToInstance(type, instance));
         return this;
     }

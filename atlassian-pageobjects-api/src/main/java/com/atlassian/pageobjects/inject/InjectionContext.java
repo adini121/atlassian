@@ -2,6 +2,8 @@ package com.atlassian.pageobjects.inject;
 
 import com.atlassian.annotations.ExperimentalApi;
 
+import javax.annotation.Nonnull;
+
 /**
  * Simple interface for framework components capable of injection of components as described by JSR-330.
  *
@@ -20,14 +22,15 @@ public interface InjectionContext
      * given <tt>type</tt>.
      * @throws IllegalArgumentException if instantiating given class according to JSR-330 rules was impossible
      */
-    <T> T getInstance(Class<T> type);
+    @Nonnull
+    <T> T getInstance(@Nonnull Class<T> type);
 
     /**
      * Execute injection of static fields on given <tt>targetClass</tt>.
      *
      * @param targetClass class to inject into
      */
-    public void injectStatic(Class<?> targetClass);
+    public void injectStatic(@Nonnull Class<?> targetClass);
 
 
     /**
@@ -35,5 +38,5 @@ public interface InjectionContext
      *
      * @param targetInstance instance to inject into
      */
-    public void injectMembers(Object targetInstance);
+    public void injectMembers(@Nonnull Object targetInstance);
 }

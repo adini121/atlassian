@@ -12,6 +12,7 @@ import com.atlassian.pageobjects.browser.RequireBrowser;
 import com.atlassian.pageobjects.inject.AbstractInjectionConfiguration;
 import com.atlassian.pageobjects.inject.ConfigurableInjectionContext;
 import com.atlassian.pageobjects.inject.InjectionConfiguration;
+import com.atlassian.pageobjects.inject.InjectionContext;
 import com.atlassian.pageobjects.util.BrowserUtil;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -29,6 +30,7 @@ import org.apache.commons.lang.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 import javax.inject.Inject;
 import java.lang.annotation.Annotation;
@@ -123,6 +125,7 @@ public final class InjectPageBinder implements PageBinder, ConfigurableInjection
      * Injector used by this binder.
      *
      * @return injector used by this binder.
+     * @deprecated take advantage of {@link InjectionContext} API instead. Scheduled for removal in 3.0
      */
     public Injector injector()
     {
@@ -252,8 +255,10 @@ public final class InjectPageBinder implements PageBinder, ConfigurableInjection
     // -----------------------------------------------------------------------------------------------  InjectionContext
 
 
+    @SuppressWarnings("ConstantConditions")
     @Override
-    public <T> T getInstance(Class<T> type)
+    @Nonnull
+    public <T> T getInstance(@Nonnull Class<T> type)
     {
         checkArgument(type != null, "type was null");
         try
@@ -271,7 +276,7 @@ public final class InjectPageBinder implements PageBinder, ConfigurableInjection
     }
 
     @Override
-    public void injectStatic(final Class<?> targetClass)
+    public void injectStatic(@Nonnull final Class<?> targetClass)
     {
         injector.createChildInjector(new AbstractModule()
         {
@@ -284,12 +289,13 @@ public final class InjectPageBinder implements PageBinder, ConfigurableInjection
     }
 
     @Override
-    public void injectMembers(Object targetInstance)
+    public void injectMembers(@Nonnull Object targetInstance)
     {
         injector.injectMembers(targetInstance);
     }
 
     @Override
+    @Nonnull
     public InjectionConfiguration configure()
     {
         return new InjectConfiguration();
@@ -568,6 +574,7 @@ public final class InjectPageBinder implements PageBinder, ConfigurableInjection
     {
 
         @Override
+        @Nonnull
         public ConfigurableInjectionContext finish()
         {
             reconfigure(getModule());
@@ -579,6 +586,7 @@ public final class InjectPageBinder implements PageBinder, ConfigurableInjection
             return new Module()
             {
                 @Override
+                @SuppressWarnings("unchecked")
                 public void configure(Binder binder)
                 {
                     for (InterfaceToImpl intToImpl : interfacesToImpls)

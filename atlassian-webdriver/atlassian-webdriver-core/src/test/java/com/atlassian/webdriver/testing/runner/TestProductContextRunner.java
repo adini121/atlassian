@@ -17,6 +17,8 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.model.InitializationError;
 
+import javax.annotation.Nonnull;
+
 import static com.atlassian.webdriver.matchers.ErrorMatchers.specificError;
 import static com.atlassian.webdriver.matchers.ErrorMatchers.withCause;
 import static com.atlassian.webdriver.matchers.ErrorMatchers.withCauses;
@@ -181,20 +183,22 @@ public class TestProductContextRunner
             return null;
         }
 
+        @SuppressWarnings("ConstantConditions")
         @Override
-        public <T> T getInstance(Class<T> type)
+        @Nonnull
+        public <T> T getInstance(@Nonnull Class<T> type)
         {
             return null;
         }
 
         @Override
-        public void injectStatic(Class<?> targetClass)
+        public void injectStatic(@Nonnull Class<?> targetClass)
         {
             this.injectedClass = targetClass;
         }
 
         @Override
-        public void injectMembers(Object targetInstance)
+        public void injectMembers(@Nonnull Object targetInstance)
         {
             this.injectedInstance = targetInstance;
         }

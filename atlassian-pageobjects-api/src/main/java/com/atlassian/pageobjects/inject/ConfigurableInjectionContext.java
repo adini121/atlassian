@@ -2,6 +2,8 @@ package com.atlassian.pageobjects.inject;
 
 import com.atlassian.annotations.ExperimentalApi;
 
+import javax.annotation.Nonnull;
+
 /**
  * Injection context that can be configured.
  *
@@ -17,5 +19,6 @@ public interface ConfigurableInjectionContext extends InjectionContext
      * @return injection configuration associated with this context
      * @see InjectionConfiguration
      */
+    @Nonnull
     InjectionConfiguration configure();
 }

@@ -2,6 +2,8 @@ package com.atlassian.pageobjects.inject;
 
 import com.atlassian.annotations.ExperimentalApi;
 
+import javax.annotation.Nonnull;
+
 /**
  * <p/>
  * 'Builder'-style API for configuring {@link com.atlassian.pageobjects.inject.ConfigurableInjectionContext}s.
@@ -23,7 +25,8 @@ public interface InjectionConfiguration
      * @param <I> type parameter of the interface
      * @return this configuration module
      */
-    public <I> InjectionConfiguration addImplementation(Class<I> interfaceType, Class<? extends I> implementationType);
+    @Nonnull
+    public <I> InjectionConfiguration addImplementation(@Nonnull Class<I> interfaceType, @Nonnull Class<? extends I> implementationType);
 
 
     /**
@@ -35,7 +38,8 @@ public interface InjectionConfiguration
      * @param <I> type parameter of the implementing instance
      * @return this configuration module
      */
-    public <C,I extends C> InjectionConfiguration addSingleton(Class<I> type, I instance);
+    @Nonnull
+    public <C,I extends C> InjectionConfiguration addSingleton(@Nonnull Class<C> type, @Nonnull I instance);
 
     // we might want to extend it in the future to cover scopes et al.
 
@@ -51,5 +55,6 @@ public interface InjectionConfiguration
      *
      * @return the resulting injection context
      */
+    @Nonnull
     public ConfigurableInjectionContext finish();
 }
