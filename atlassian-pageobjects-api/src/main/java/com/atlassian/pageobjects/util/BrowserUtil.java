@@ -1,10 +1,14 @@
 package com.atlassian.pageobjects.util;
 
 import com.atlassian.pageobjects.browser.Browser;
+import com.atlassian.pageobjects.browser.BrowserAware;
 import com.google.common.base.Supplier;
 
 /**
  * Utilities for manipulating the current browser.
+ *
+ * @deprecated it is now possible to inject {@link BrowserAware}, or even {@link Browser} directly into your page
+ * objects/tests.
  */
 public class BrowserUtil
 {
