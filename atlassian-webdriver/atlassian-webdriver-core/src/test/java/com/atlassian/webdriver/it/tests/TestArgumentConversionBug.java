@@ -2,12 +2,13 @@ package com.atlassian.webdriver.it.tests;
 
 import com.atlassian.pageobjects.browser.Browser;
 import com.atlassian.pageobjects.browser.IgnoreBrowser;
-import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.it.AbstractFileBasedServerTest;
 import com.atlassian.webdriver.it.pageobjects.page.ArgumentConversionBugPage;
+import com.atlassian.webdriver.utils.JavaScriptUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import javax.inject.Inject;
@@ -17,8 +18,10 @@ import java.util.List;
 public class TestArgumentConversionBug extends AbstractFileBasedServerTest
 {
 
-    ArgumentConversionBugPage argConversionBugPage;
-    @Inject AtlassianWebDriver driver;
+    private ArgumentConversionBugPage argConversionBugPage;
+
+    @Inject
+    private  WebDriver driver;
 
     @Before
     public void init()
@@ -33,7 +36,7 @@ public class TestArgumentConversionBug extends AbstractFileBasedServerTest
     {
         List<WebElement> els = driver.findElements(By.tagName("div"));
         Object[] args = new Object[] { els };
-        driver.executeScript("return arguments[0] == null", args);
+        JavaScriptUtils.execute("return arguments[0] == null", driver, args);
     }
 
 }

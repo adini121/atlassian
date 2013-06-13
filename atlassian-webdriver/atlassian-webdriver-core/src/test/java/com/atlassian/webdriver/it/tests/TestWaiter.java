@@ -1,9 +1,9 @@
 package com.atlassian.webdriver.it.tests;
 
 import com.atlassian.pageobjects.browser.Browser;
+import com.atlassian.pageobjects.browser.IgnoreBrowser;
 import com.atlassian.webdriver.it.AbstractFileBasedServerTest;
 import com.atlassian.webdriver.it.pageobjects.page.WaiterTestPage;
-import com.atlassian.webdriver.testing.annotation.IgnoreBrowser;
 import com.atlassian.webdriver.utils.Check;
 import com.atlassian.webdriver.waiter.Waiter;
 import com.atlassian.webdriver.waiter.webdriver.function.ConditionFunction;
@@ -17,15 +17,11 @@ import org.openqa.selenium.WebElement;
 
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  *
- * @since 2.1.0
+ * @since 2.1
  */
 @IgnoreBrowser(Browser.HTMLUNIT_NOJS)
 public class TestWaiter extends AbstractFileBasedServerTest

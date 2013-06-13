@@ -16,7 +16,7 @@ abstract class ElementLocationCondition implements ExpectedCondition<Boolean>
     enum Locatable
     {
         LOCATED,
-        NOTLOCATED;
+        NOTLOCATED
     }
 
     private final By by;

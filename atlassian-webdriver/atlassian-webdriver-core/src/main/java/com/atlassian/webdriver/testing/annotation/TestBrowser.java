@@ -16,7 +16,7 @@ import java.lang.annotation.Target;
  *
  * @since 2.1
  * @see {@link TestBrowserRule}
- * @deprecated use {@link com.atlassian.pageobjects.browser.RequireBrowser} instead
+ * @deprecated use {@link com.atlassian.pageobjects.browser.RequireBrowser} instead. Scheduled for removal in 3.0
  */
 @Retention (RetentionPolicy.RUNTIME)
 @Target ({ElementType.TYPE, ElementType.PACKAGE, ElementType.METHOD})

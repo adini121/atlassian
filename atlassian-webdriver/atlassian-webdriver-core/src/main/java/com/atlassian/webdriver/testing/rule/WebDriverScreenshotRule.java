@@ -1,9 +1,10 @@
 package com.atlassian.webdriver.testing.rule;
 
-import com.atlassian.webdriver.AtlassianWebDriver;
+import com.atlassian.webdriver.debug.WebDriverDebug;
 import com.google.common.base.Supplier;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
+import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +25,7 @@ public class WebDriverScreenshotRule extends TestWatcher
 {
     private static final Logger log = LoggerFactory.getLogger(WebDriverScreenshotRule.class);
 
-    private final WebDriverSupport<AtlassianWebDriver> webDriverSupport;
+    private final WebDriverDebug debug;
     private final File artifactDir;
 
     private static File defaultArtifactDir()
@@ -32,26 +33,36 @@ public class WebDriverScreenshotRule extends TestWatcher
         return new File("target/webdriverTests");
     }
 
-    protected WebDriverScreenshotRule(@Nonnull WebDriverSupport<AtlassianWebDriver> support, @Nonnull File artifactDir)
+    protected WebDriverScreenshotRule(@Nonnull WebDriverDebug webDriverDebug, @Nonnull File artifactDir)
     {
-        this.webDriverSupport = checkNotNull(support, "support");
-        this.artifactDir = artifactDir;
+        this.debug = checkNotNull(webDriverDebug, "webDriverDebug");
+        this.artifactDir = checkNotNull(artifactDir, "artifactDir");
     }
 
-    public WebDriverScreenshotRule(@Nonnull Supplier<? extends AtlassianWebDriver> driverSupplier, @Nonnull File artifactDir)
+    protected WebDriverScreenshotRule(@Nonnull WebDriverSupport<? extends WebDriver> support, @Nonnull File artifactDir)
+    {
+        this(new WebDriverDebug(checkNotNull(support, "support").getDriver()), artifactDir);
+    }
+
+    public WebDriverScreenshotRule(@Nonnull Supplier<? extends WebDriver> driverSupplier, @Nonnull File artifactDir)
     {
         this(WebDriverSupport.forSupplier(driverSupplier), artifactDir);
     }
 
-    public WebDriverScreenshotRule(@Nonnull Supplier<? extends AtlassianWebDriver> driverSupplier)
+    public WebDriverScreenshotRule(@Nonnull Supplier<? extends WebDriver> driverSupplier)
     {
         this(driverSupplier, defaultArtifactDir());
     }
 
-    @Inject
-    public WebDriverScreenshotRule(@Nonnull AtlassianWebDriver webDriver)
+    public WebDriverScreenshotRule(@Nonnull WebDriver webDriver)
     {
         this(WebDriverSupport.forInstance(webDriver), defaultArtifactDir());
+    }
+
+    @Inject
+    public WebDriverScreenshotRule(@Nonnull WebDriverDebug webDriverDebug)
+    {
+        this(webDriverDebug, defaultArtifactDir());
     }
 
     public WebDriverScreenshotRule()
@@ -62,7 +73,7 @@ public class WebDriverScreenshotRule extends TestWatcher
 
 
     @Override
-    protected void starting(final Description description)
+    protected void starting(@Nonnull final Description description)
     {
         File dir = getTargetDir(description);
         if (!dir.exists())
@@ -72,17 +83,16 @@ public class WebDriverScreenshotRule extends TestWatcher
     }
 
     @Override
-    protected void failed(final Throwable e, final Description description)
+    protected void failed(@Nonnull final Throwable e, @Nonnull final Description description)
     {
-        final AtlassianWebDriver driver = webDriverSupport.getDriver();
         final File dumpFile = getTargetFile(description, "html");
         final File screenShotFile = getTargetFile(description, "png");
         log.info("----- {} failed. ", description.getDisplayName());
-        log.info("----- At page: " + driver.getCurrentUrl());
+        log.info("----- At page: " + debug.getCurrentUrl());
         log.info("----- Dumping page source to {} and screenshot to {}", dumpFile.getAbsolutePath(),
                 screenShotFile.getAbsolutePath());
-        driver.dumpSourceTo(dumpFile);
-        driver.takeScreenshotTo(screenShotFile);
+        debug.dumpSourceTo(dumpFile);
+        debug.takeScreenshotTo(screenShotFile);
     }
 
     private File getTargetDir(Description description)

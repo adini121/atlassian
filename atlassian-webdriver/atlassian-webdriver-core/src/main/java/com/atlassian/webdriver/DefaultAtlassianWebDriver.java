@@ -61,11 +61,19 @@ public class DefaultAtlassianWebDriver implements AtlassianWebDriver
         return browser;
     }
 
-    public WebDriver getDriver()
+    @Override
+    public WebDriver getWrappedDriver()
     {
-        return this.driver;
+        return driver;
     }
 
+    @Override
+    public WebDriver getDriver()
+    {
+        return driver;
+    }
+
+    @Override
     public void quit()
     {
         log.debug("Quitting {}", this);
