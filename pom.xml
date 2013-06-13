@@ -10,7 +10,7 @@
 
     <groupId>com.atlassian.selenium</groupId>
     <artifactId>atlassian-selenium-parent</artifactId>
-    <version>2.2-SNAPSHOT</version>
+    <version>2.2-m02</version>
     <packaging>pom</packaging>
     <name>${project.artifactId}</name>
     <description>A suite of tools to help with Selenium test harness, assertions etc.</description>
