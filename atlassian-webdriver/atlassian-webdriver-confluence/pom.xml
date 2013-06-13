@@ -55,4 +55,28 @@
     <properties>
         <webdriver.browser>firefox</webdriver.browser>
     </properties>
+
+    <profiles>
+        <profile>
+            <id>skip-legacy-tests</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.atlassian.maven.plugins</groupId>
+                        <artifactId>maven-confluence-plugin</artifactId>
+                        <configuration>
+                            <skipITs>true</skipITs>
+                            <skipTests>true</skipTests>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <skipTests>true</skipTests>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
