@@ -13,10 +13,7 @@
     <version>2.2-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>${project.artifactId}</name>
-    <description>
-        A suite of tools to help with Selenium test harness, assertions
-        etc.
-    </description>
+    <description>A suite of tools to help with Selenium test harness, assertions etc.</description>
 
     <scm>
         <connection>scm:git:ssh://git@bitbucket.org/atlassian/atlassian-selenium.git</connection>
@@ -32,6 +29,7 @@
         <mockito.version>1.8.5</mockito.version>
         <junit.version>4.10</junit.version>
         <hamcrest.version>1.1</hamcrest.version>
+        <slf4j.version>1.5.8</slf4j.version>
         <amps.version>3.7.2</amps.version>
         <atlassian.annotations.version>0.6</atlassian.annotations.version>
     </properties>
@@ -67,6 +65,11 @@
         <dependencies>
             <dependency>
                 <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-api</artifactId>
+                <version>${selenium.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
                 <artifactId>selenium-java</artifactId>
                 <version>${selenium.version}</version>
                 <exclusions>
@@ -80,7 +83,6 @@
                 <groupId>commons-lang</groupId>
                 <artifactId>commons-lang</artifactId>
                 <version>2.5</version>
-                <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>com.google.guava</groupId>
@@ -113,7 +115,18 @@
                 <artifactId>jsr305</artifactId>
                 <version>1.1</version>
             </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
             <!-- Test Dependencies -->
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version>${slf4j.version}</version>
+                <scope>test</scope>
+            </dependency>
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpcore</artifactId>
