@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.ref.WeakReference;
-import java.net.SocketException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -25,7 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * the registered drivers/browsers via {@link #shutdown()}. When that method is called, the shutdown hooks for those
  * browser will be unregistered.
  *
- * @since 2.1.0
+ * @since 2.1
  */
 public class LifecycleAwareWebDriverGrid
 {
@@ -101,9 +100,10 @@ public class LifecycleAwareWebDriverGrid
     private static void removeHook(Map.Entry<String, AtlassianWebDriver> driver)
     {
         WeakReference<Thread> hookRef = SHUTDOWN_HOOKS.get(driver.getKey());
-        if (hookRef != null && hookRef.get() != null)
+        final Thread hook = hookRef != null ? hookRef.get() : null;
+        if (hook != null)
         {
-            Runtime.getRuntime().removeShutdownHook(hookRef.get());
+            Runtime.getRuntime().removeShutdownHook(hook);
         }
     }
 
@@ -115,12 +115,10 @@ public class LifecycleAwareWebDriverGrid
         }
         catch (WebDriverException e)
         {
-            if (!isKnownQuitException(e))
-            {
-                throw e;
-            }
+            onQuitError(webDriver, e);
         }
     }
+
 
     private static boolean browserIsConfigured(String browserProperty)
     {
@@ -149,10 +147,7 @@ public class LifecycleAwareWebDriverGrid
                 }
                 catch (WebDriverException e)
                 {
-                    if(!isKnownQuitException(e))
-                    {
-                        throw e;
-                    }
+                    onQuitError(driver, e);
                 }
             }
         };
@@ -174,27 +169,13 @@ public class LifecycleAwareWebDriverGrid
         }
     }
 
-    /**
-     * WebDriver's RemoteWebDriver will try to close the browser
-     * when it has already been closed (e.g if xvfb is stopped
-     * and kills the browser), and as a result throws a
-     * WebDriverException.
-     *
-     * This checks if the exception is a known and expected.
-     */
-    private static boolean isKnownQuitException(WebDriverException e) {
-        Throwable cause = e.getCause();
-        String msg = e.getMessage();
 
-        if (cause instanceof SocketException)
-        {
-            return true;
-        }
-        // Chrome does not have a cause, so need to check the message.
-        if (msg != null && msg.contains("Chrome did not respond to 'WaitForAllTabsToStopLoading'"))
-        {
-            return true;
-        }
-        return false;
+    private static void onQuitError(WebDriver webDriver, WebDriverException e)
+    {
+        // there is no sense propagating the exception, and in 9 cases out of 10, the browser is already dead if an
+        // exception happens
+        log.warn("Exception when trying to quit driver {}: {}", webDriver, e.getMessage());
+        log.debug("Exception when trying to quit driver - details", e);
     }
+
 }
