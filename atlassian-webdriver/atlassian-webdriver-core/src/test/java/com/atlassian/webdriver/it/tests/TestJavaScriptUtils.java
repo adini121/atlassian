@@ -132,7 +132,6 @@ public class TestJavaScriptUtils extends AbstractFileBasedServerTest
     @Test
     public void testMouseEventMouseOut()
     {
-        fail();
         WebElement mouseoutDiv = driver.findElement(By.id("mouseout-jquery-element"));
         assertTrue(mouseoutDiv.isDisplayed());
 
