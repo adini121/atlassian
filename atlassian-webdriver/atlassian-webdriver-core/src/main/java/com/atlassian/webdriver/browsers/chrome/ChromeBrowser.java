@@ -1,16 +1,16 @@
 package com.atlassian.webdriver.browsers.chrome;
 
 import com.atlassian.browsers.BrowserConfig;
+import com.google.common.collect.Maps;
 import org.apache.commons.lang.StringUtils;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
-import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,50 +40,46 @@ public class ChromeBrowser
     {
         if (browserConfig != null)
         {
-            ChromeDriverService.Builder chromeServiceBuilder = new ChromeDriverService.Builder();
+            final ChromeOptions options = new ChromeOptions();
+            options.setBinary(browserConfig.getBinaryPath());
+            addCommandLine(options);
 
-            DesiredCapabilities capabilities = DesiredCapabilities.chrome();
-            capabilities.setCapability("chrome.binary", browserConfig.getBinaryPath());
-            addCapabilities(capabilities);
-
-            if (browserConfig.getProfilePath() != null)
-            {
-                File profilePath = new File(browserConfig.getProfilePath());
-                File chromeDriverFile = new File(profilePath, "chromedriver");
-
-                if (chromeDriverFile.exists())
-                {
-                    chromeServiceBuilder.usingDriverExecutable(chromeDriverFile);
-                }
-            }
-
-            chromeServiceBuilder.usingAnyFreePort();
+            final ChromeDriverService.Builder chromeServiceBuilder = new ChromeDriverService.Builder();
+            setChromeServicePath(browserConfig, chromeServiceBuilder);
             setSystemProperties(chromeServiceBuilder);
+            chromeServiceBuilder.usingAnyFreePort();
             ChromeDriverService chromeDriverService = chromeServiceBuilder.build();
-
-            return new ChromeDriver(chromeDriverService, capabilities);
+            return new ChromeDriver(chromeDriverService, options);
         }
 
         // Fall back on default chrome driver
         return getChromeDriver();
     }
 
+    private static void setChromeServicePath(BrowserConfig browserConfig, ChromeDriverService.Builder chromeServiceBuilder)
+    {
+        if (browserConfig.getProfilePath() != null)
+        {
+            File profilePath = new File(browserConfig.getProfilePath());
+            File chromeDriverFile = new File(profilePath, "chromedriver");
+            if (chromeDriverFile.exists())
+            {
+                chromeServiceBuilder.usingDriverExecutable(chromeDriverFile);
+            }
+        }
+    }
+
     /**
-     * Add capabilities as defined in the system properties:
-     *
-     * <dl>
-     *    <dt>webdriver.chrome.switches</dt>
-     *    <dd>command line switches, separated by commas</dd>
-     * </dl>
+     * Add command line options if provided via system property {@literal webdriver.chrome.switches}.
      *
      */
-    private static void addCapabilities(final DesiredCapabilities capabilities)
+    private static void addCommandLine(final ChromeOptions options)
     {
         String[] switches = StringUtils.split(System.getProperty("webdriver.chrome.switches"), ",");
         if(switches != null && switches.length > 0) {
             List<String> switchList = Arrays.asList(switches);
-            log.info("Setting chrome.switches with: " + switchList);
-            capabilities.setCapability("chrome.switches", switchList);
+            log.info("Setting command line arguments for Chrome: " + switchList);
+            options.addArguments(switchList);
         }
     }
 
@@ -96,15 +92,16 @@ public class ChromeBrowser
     {
         if (browserPath != null)
         {
-            DesiredCapabilities capabilities = DesiredCapabilities.chrome();
-            capabilities.setCapability("chrome.binary", browserPath);
-
-            return new ChromeDriver(capabilities);
+            final ChromeOptions options = new ChromeOptions();
+            options.setBinary(browserPath);
+            return new ChromeDriver(options);
         }
-
-        // Fall back on default chrome driver
-        log.info("Browser path was null, falling back to default chrome driver.");
-        return getChromeDriver();
+        else
+        {
+            // Fall back on default chrome driver
+            log.info("Browser path was null, falling back to default chrome driver.");
+            return getChromeDriver();
+        }
     }
 
     /**
@@ -113,13 +110,11 @@ public class ChromeBrowser
      */
     private static void setSystemProperties(ChromeDriverService.Builder chromeDriverServiceBuilder)
     {
-        Map<String, String> env = new HashMap<String, String>();
-
+        Map<String, String> env = Maps.newHashMap();
         if (System.getProperty("DISPLAY") != null)
         {
             env.put("DISPLAY", System.getProperty("DISPLAY"));
         }
-
         chromeDriverServiceBuilder.withEnvironment(env);
     }
 
