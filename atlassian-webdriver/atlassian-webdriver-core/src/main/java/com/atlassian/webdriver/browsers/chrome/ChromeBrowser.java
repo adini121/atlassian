@@ -53,7 +53,7 @@ public class ChromeBrowser
 
                 if (chromeDriverFile.exists())
                 {
-                    chromeServiceBuilder.usingChromeDriverExecutable(chromeDriverFile);
+                    chromeServiceBuilder.usingDriverExecutable(chromeDriverFile);
                 }
             }
 

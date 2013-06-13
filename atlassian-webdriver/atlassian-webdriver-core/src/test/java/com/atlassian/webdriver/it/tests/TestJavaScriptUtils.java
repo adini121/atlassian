@@ -6,7 +6,11 @@ import com.atlassian.pageobjects.browser.RequireBrowser;
 import com.atlassian.webdriver.it.AbstractFileBasedServerTest;
 import com.atlassian.webdriver.it.pageobjects.page.JavaScriptUtilsPage;
 import com.atlassian.webdriver.utils.MouseEvents;
+<<<<<<< HEAD
 import com.atlassian.webdriver.utils.element.WebDriverPoller;
+=======
+import com.atlassian.webdriver.utils.element.ElementIsVisible;
+>>>>>>> issue/SELENIUM-210-browser-update
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -144,7 +148,6 @@ public class TestJavaScriptUtils extends AbstractFileBasedServerTest
 
         MouseEvents.mouseout(mouseoutDiv, driver);
         assertEquals("mouseout", mouseoutContainer.getText());
-
     }
 
 }
