@@ -61,6 +61,13 @@ public class IgnoreBrowserRule implements TestRule
         this.currentBrowserSupplier = checkNotNull(currentBrowserSupplier, "currentBrowserSupplier");
     }
 
+    /**
+     *
+     * @deprecated use explicit browser/supplier, or get an instance of this rule using the page binder framework. Scheduled
+     * for removal in 3.0
+     * @see com.atlassian.webdriver.testing.runner.ProductContextRunner
+     */
+    @Deprecated
     public IgnoreBrowserRule()
     {
         this(BrowserUtil.currentBrowserSupplier());
@@ -110,7 +117,7 @@ public class IgnoreBrowserRule implements TestRule
             {
                 if (requireBrowser != null)
                 {
-                    return ImmutableList.of(requireBrowser.value());
+                    return ImmutableList.copyOf(requireBrowser.value());
                 }
                 else
                 {
@@ -149,7 +156,7 @@ public class IgnoreBrowserRule implements TestRule
             }
             else
             {
-                return new IgnoredBrowsers(ImmutableList.of(legacy.value()), legacy.reason());
+                return new IgnoredBrowsers(ImmutableList.copyOf(legacy.value()), legacy.reason());
             }
         }
 
@@ -161,7 +168,7 @@ public class IgnoreBrowserRule implements TestRule
             }
             else
             {
-                return new IgnoredBrowsers(ImmutableList.of(ignoreBrowser.value()), ignoreBrowser.reason());
+                return new IgnoredBrowsers(ImmutableList.copyOf(ignoreBrowser.value()), ignoreBrowser.reason());
             }
         }
 
