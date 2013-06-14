@@ -46,7 +46,7 @@ public class ChromeBrowser
 
             final ChromeDriverService.Builder chromeServiceBuilder = new ChromeDriverService.Builder();
             setChromeServicePath(browserConfig, chromeServiceBuilder);
-            setSystemProperties(chromeServiceBuilder);
+            setEnvironment(chromeServiceBuilder);
             chromeServiceBuilder.usingAnyFreePort();
             ChromeDriverService chromeDriverService = chromeServiceBuilder.build();
             return new ChromeDriver(chromeDriverService, options);
@@ -108,7 +108,7 @@ public class ChromeBrowser
      * Sets up system properties on the chrome driver service.
      * @param chromeDriverServiceBuilder the chrome driver service to set environment map on.
      */
-    private static void setSystemProperties(ChromeDriverService.Builder chromeDriverServiceBuilder)
+    private static void setEnvironment(ChromeDriverService.Builder chromeDriverServiceBuilder)
     {
         Map<String, String> env = Maps.newHashMap();
         if (System.getProperty("DISPLAY") != null)
