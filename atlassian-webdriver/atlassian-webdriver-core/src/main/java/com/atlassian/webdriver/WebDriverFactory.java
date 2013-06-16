@@ -124,7 +124,7 @@ public class WebDriverFactory
                 break;
             
             case IE:
-                driver = IeBrowser.createIeDriver(browserConfig);
+                driver = IeBrowser.createIeDriver(browserPath, browserConfig);
                 break;
 
             case HTMLUNIT_NOJS:
