@@ -32,6 +32,7 @@ public class TestJavaScriptUtils extends AbstractFileBasedServerTest
     @Before
     public void init()
     {
+        poller = poller.withDefaultTimeout(5, TimeUnit.SECONDS);
         product.visit(JavaScriptUtilsPage.class);
         driver = product.getTester().getDriver();
         // move away from any other tested element
