@@ -42,7 +42,7 @@ public class TestJavaScriptUtils extends AbstractFileBasedServerTest
      * This test is testing that css psuedo class :hover will display an element
      */
     @Test
-    @IgnoreBrowser(value = {Browser.FIREFOX, Browser.HTMLUNIT, Browser.IE}, reason = "CSS hovering on elements does not work.")
+    @IgnoreBrowser(value = {Browser.FIREFOX, Browser.HTMLUNIT}, reason = "CSS hovering on elements does not work.")
     public void testCssHoverRespondsToMouseover()
     {
         WebElement hoveringDiv = driver.findElement(By.id("hovering-element"));
@@ -50,8 +50,8 @@ public class TestJavaScriptUtils extends AbstractFileBasedServerTest
         assertFalse(driver.elementIsVisible(By.id("child-element-one")));
         assertFalse(driver.elementIsVisible(By.id("child-element-two")));
         assertFalse(driver.elementIsVisible(By.id("child-element-three")));
-        // now hover over div to show the children
 
+        // now hover over div to show the children
         MouseEvents.hover(hoveringDiv, driver);
 
         driver.waitUntilElementIsVisible(By.id("child-element-one"));
@@ -61,7 +61,6 @@ public class TestJavaScriptUtils extends AbstractFileBasedServerTest
     }
 
     @Test
-    @IgnoreBrowser(value = {Browser.IE}, reason = "jQuery hovering on elements does not work.")
     public void testJQueryHoverRespondsToMouseover()
     {
         WebElement hoveringDiv = driver.findElement(By.id("hovering-jquery-element"));
