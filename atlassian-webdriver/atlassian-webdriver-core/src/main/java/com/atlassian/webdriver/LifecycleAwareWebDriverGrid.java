@@ -2,6 +2,7 @@ package com.atlassian.webdriver;
 
 import com.atlassian.browsers.BrowserConfig;
 import com.atlassian.webdriver.browsers.AutoInstallConfiguration;
+import com.atlassian.webdriver.utils.WebDriverUtil;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Supplier;
 import org.openqa.selenium.WebDriver;
@@ -13,6 +14,8 @@ import org.slf4j.LoggerFactory;
 import java.lang.ref.WeakReference;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static com.atlassian.webdriver.utils.WebDriverUtil.getUnderlyingDriver;
 
 /**
  * <p/>
@@ -139,11 +142,9 @@ public class LifecycleAwareWebDriverGrid
                     {
                         currentDriver = null;
                     }
-                    // quitting InternetExplorerDriver in a shutdown hook crashes the JVM with a segfault
-                    if (!isIeDriver(driver))
-                    {
-                        driver.quit();
-                    }
+                    log.info("Quitting {}", getUnderlyingDriver(driver));
+                    driver.quit();
+                    log.debug("Finished shutdown hook {}", this);
                 }
                 catch (WebDriverException e)
                 {
@@ -155,24 +156,10 @@ public class LifecycleAwareWebDriverGrid
         Runtime.getRuntime().addShutdownHook(quitter);
     }
 
-    private static boolean isIeDriver(WebDriver driver)
-    {
-        if (driver instanceof AtlassianWebDriver)
-        {
-            AtlassianWebDriver wrapperDriver = (AtlassianWebDriver) driver;
-            final WebDriver webDriver = wrapperDriver.getDriver();
-            return webDriver instanceof InternetExplorerDriver;
-        }
-        else
-        {
-            return driver instanceof InternetExplorerDriver;
-        }
-    }
-
 
     private static void onQuitError(WebDriver webDriver, WebDriverException e)
     {
-        // there is no sense propagating the exception, and in 9 cases out of 10, the browser is already dead if an
+        // there is no sense propagating the exception, and in 99 cases out of 100, the browser is already dead if an
         // exception happens
         log.warn("Exception when trying to quit driver {}: {}", webDriver, e.getMessage());
         log.debug("Exception when trying to quit driver - details", e);

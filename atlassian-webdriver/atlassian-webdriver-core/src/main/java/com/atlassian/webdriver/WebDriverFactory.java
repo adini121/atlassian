@@ -5,12 +5,12 @@ import com.atlassian.pageobjects.browser.Browser;
 import com.atlassian.pageobjects.util.BrowserUtil;
 import com.atlassian.webdriver.browsers.chrome.ChromeBrowser;
 import com.atlassian.webdriver.browsers.firefox.FirefoxBrowser;
+import com.atlassian.webdriver.browsers.ie.IeBrowser;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.android.AndroidDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
-import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.iphone.IPhoneSimulatorBinary;
 import org.openqa.selenium.iphone.IPhoneSimulatorDriver;
 import org.slf4j.Logger;
@@ -124,7 +124,7 @@ public class WebDriverFactory
                 break;
             
             case IE:
-                driver = new InternetExplorerDriver();
+                driver = IeBrowser.createIeDriver(browserPath, browserConfig);
                 break;
 
             case HTMLUNIT_NOJS:
