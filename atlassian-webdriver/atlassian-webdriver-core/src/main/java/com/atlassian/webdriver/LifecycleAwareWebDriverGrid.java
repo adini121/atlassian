@@ -137,21 +137,12 @@ public class LifecycleAwareWebDriverGrid
                 try
                 {
                     drivers.remove(browserProperty);
-                    log.debug("Removed driver {}", browserProperty);
                     if (driver.equals(currentDriver))
                     {
                         currentDriver = null;
                     }
-                    // quitting InternetExplorerDriver in a shutdown hook crashes the JVM with a segfault
-//                    if (!isIeDriver(driver))
-//                    {
-                        log.debug("Quitting {}: {}", driver, getRealDriver(driver));
-                        driver.quit();
-//                    }
-//                    else
-//                    {
-//                        log.debug("Not trying to quit IE Driver");
-//                    }
+                    log.info("Quitting {}", getRealDriver(driver));
+                    driver.quit();
                     log.debug("Finished shutdown hook {}", this);
                 }
                 catch (WebDriverException e)
