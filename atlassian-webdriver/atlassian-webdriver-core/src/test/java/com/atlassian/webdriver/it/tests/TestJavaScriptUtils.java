@@ -36,6 +36,8 @@ public class TestJavaScriptUtils extends AbstractFileBasedServerTest
     {
         javascriptUtilsPage = product.visit(JavaScriptUtilsPage.class);
         driver = product.getTester().getDriver();
+        // move away from any other tested element
+        MouseEvents.hover(By.id("hover-sink"), driver);
     }
 
     /**
@@ -89,10 +91,9 @@ public class TestJavaScriptUtils extends AbstractFileBasedServerTest
         assertFalse(driver.elementIsVisible(By.id("child-element-one")));
         assertFalse(driver.elementIsVisible(By.id("child-element-two")));
         assertFalse(driver.elementIsVisible(By.id("child-element-three")));
+
         // now hover over div to show the children
-
         MouseEvents.hover(hoveringDiv, driver);
-
         try
         {
             driver.waitUntil(new ElementIsVisible(By.id("child-element-one")), TIMEOUT);
