@@ -54,7 +54,7 @@ public class TestJavaScriptUtils extends AbstractFileBasedServerTest
         // now hover over div to show the children
         MouseEvents.hover(hoveringDiv, driver);
 
-        driver.waitUntilElementIsVisible(By.id("child-element-one"));
+        driver.waitUntil(new ElementIsVisible(By.id("child-element-one")), TIMEOUT);
         assertTrue(driver.elementIsVisible(By.id("child-element-one")));
         assertTrue(driver.elementIsVisible(By.id("child-element-two")));
         assertTrue(driver.elementIsVisible(By.id("child-element-three")));
@@ -74,7 +74,7 @@ public class TestJavaScriptUtils extends AbstractFileBasedServerTest
         // now hover over div to show the children
         MouseEvents.hover(hoveringDiv, driver);
 
-        driver.waitUntilElementIsVisible(By.id("child-jquery-element-one"));
+        driver.waitUntil(new ElementIsVisible(By.id("child-jquery-element-one")), TIMEOUT);
         assertTrue(driver.elementIsVisible(By.id("child-jquery-element-one")));
         assertTrue(driver.elementIsVisible(By.id("child-jquery-element-two")));
         assertTrue(driver.elementIsVisible(By.id("child-jquery-element-three")));
