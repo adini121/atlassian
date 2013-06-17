@@ -137,6 +137,7 @@ public class LifecycleAwareWebDriverGrid
                 try
                 {
                     drivers.remove(browserProperty);
+                    log.debug("Removed driver {}", browserProperty);
                     if (driver.equals(currentDriver))
                     {
                         currentDriver = null;
@@ -147,11 +148,18 @@ public class LifecycleAwareWebDriverGrid
                         log.debug("Quitting {}: {}", driver, getRealDriver(driver));
                         driver.quit();
                     }
+                    else
+                    {
+                        log.debug("Not trying to quit IE Driver");
+                    }
+                    log.debug("Finished shutdown hook {}", this);
                 }
                 catch (WebDriverException e)
                 {
+                    log.debug("Exception caught", e);
                     if(!isKnownQuitException(e))
                     {
+                        log.debug("Rethrowing {}", new Object[] {e});
                         throw e;
                     }
                 }
