@@ -6,9 +6,11 @@ import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import javax.annotation.Nonnull;
 import javax.inject.Inject;
 import java.util.concurrent.TimeUnit;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -58,16 +60,32 @@ public final class WebDriverPoller
     public static final TimeUnit DEFAULT_TIMEOUT_UNIT = TimeUnit.SECONDS;
 
     private final WebDriver webDriver;
+    private final TimeUnit timeUnit;
+    private final long timeout;
 
     @Inject
-    public WebDriverPoller(WebDriver webDriver)
+    public WebDriverPoller(@Nonnull WebDriver webDriver)
     {
+        this(webDriver, DEFAULT_TIMEOUT, DEFAULT_TIMEOUT_UNIT);
+    }
+
+    public WebDriverPoller(@Nonnull WebDriver webDriver, long timeout, @Nonnull TimeUnit timeUnit)
+    {
+        checkArgument(timeout > 0, "Timeout must be >0");
         this.webDriver = checkNotNull(webDriver, "webDriver");
+        this.timeout = timeout;
+        this.timeUnit = checkNotNull(timeUnit, "timeUnit");
+    }
+
+    public WebDriverPoller withDefaultTimeout(long timeout, TimeUnit timeUnit)
+    {
+        return new WebDriverPoller(webDriver, timeout, timeUnit);
     }
 
 
     /**
-     * Wait until {@literal condition} is {@literal true} up to the default timeout.
+     * Wait until {@literal condition} is {@literal true} up to the default timeout. The default timeout depends
+     * on the arguments supplied while creating an instance of this {@code WebDriverPoller}.
      *
      * @param condition condition that must evaluate to {@literal true}
      * @throws TimeoutException if the condition does not come true before the timeout expires
@@ -76,7 +94,7 @@ public final class WebDriverPoller
      */
     public void waitUntil(Function<WebDriver,Boolean> condition)
     {
-        waitUntil(condition, DEFAULT_TIMEOUT, DEFAULT_TIMEOUT_UNIT);
+        waitUntil(condition, timeout, timeUnit);
     }
 
     /**
