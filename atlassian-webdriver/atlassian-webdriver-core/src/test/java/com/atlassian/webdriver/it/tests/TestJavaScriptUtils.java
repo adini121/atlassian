@@ -112,25 +112,6 @@ public class TestJavaScriptUtils extends AbstractFileBasedServerTest
         catch (TimeoutException expected) {}
     }
 
-    // https://studio.atlassian.com/browse/SELENIUM-175
-    @Test
-    @RequireBrowser(Browser.IE)
-    public void testJQueryHoverBreaksForIE()
-    {
-        WebElement hoveringDiv = driver.findElement(By.id("hovering-jquery-element"));
-        assertTrue(hoveringDiv.isDisplayed());
-        assertJQueryChildrenNotVisible();
-
-        // now hover over div to show the children
-        MouseEvents.hover(hoveringDiv, driver);
-        try
-        {
-            driver.waitUntil(new ElementIsVisible(By.id("child-jquery-element-one")), TIMEOUT);
-            fail("ie jquery hovers are working now");
-        }
-        catch (TimeoutException expected) {}
-    }
-
     @Test
     public void testMouseEventMouseOut()
     {
