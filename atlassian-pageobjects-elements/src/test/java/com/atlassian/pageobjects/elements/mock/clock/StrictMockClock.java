@@ -2,7 +2,8 @@ package com.atlassian.pageobjects.elements.mock.clock;
 
 import com.atlassian.pageobjects.elements.query.util.Clock;
 import com.google.common.collect.ImmutableList;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.List;
  */
 public class StrictMockClock implements Clock
 {
-    private static final Logger log = Logger.getLogger(StrictMockClock.class);
+    private static final Logger log = LoggerFactory.getLogger(StrictMockClock.class);
 
     private final List<Long> times;
     private int current = 0;
