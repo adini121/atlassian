@@ -12,7 +12,7 @@ import static junit.framework.Assert.assertTrue;
 public class TestAutoBrowserInstaller extends AbstractFileBasedServerTest
 {
     private static final String HTML_UNIT_USER_AGENT =
-        "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.2.8) Gecko/20100722 Firefox/3.6.8";
+        "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.2.28) Gecko/20120306 Firefox/3.6.28";
 
     UserAgentPage userAgentPage;
 
