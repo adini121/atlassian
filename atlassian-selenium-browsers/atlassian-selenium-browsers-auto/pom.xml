@@ -41,21 +41,31 @@
         </profile>
     </profiles>
     <build>
-      <pluginManagement>
         <plugins>
+            <!-- we don't need to enforce anything here, it's a legacy module that will go in 3.0 -->
             <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
                 <configuration>
-                    <systemProperties>
-                        <property>
-                            <name>xvfb.enable</name>
-                            <value>${xvfb.enable}</value>
-                        </property>
-                    </systemProperties>
+                    <skip>true</skip>
                 </configuration>
             </plugin>
         </plugins>
-      </pluginManagement>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <configuration>
+                        <systemProperties>
+                            <property>
+                                <name>xvfb.enable</name>
+                                <value>${xvfb.enable}</value>
+                            </property>
+                        </systemProperties>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
     <dependencies>
         <dependency>
@@ -74,5 +84,6 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
 
 </project>
