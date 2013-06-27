@@ -55,7 +55,7 @@
         <webdriver-browsers-version>2.5</webdriver-browsers-version>
         <selenium.version>2.33.0</selenium.version>
         <mockito.version>1.8.5</mockito.version>
-        <junit.version>4.11</junit.version>
+        <junit.version>4.10</junit.version>
         <hamcrest.version>1.1</hamcrest.version>
         <slf4j.version>1.5.8</slf4j.version>
         <amps.version>3.7.2</amps.version>
@@ -196,12 +196,15 @@
                                             <exclude>org.mockito:mockito-all</exclude>
                                             <exclude>org.hamcrest:hamcrest-all</exclude>
                                         </excludes>
-                                        <includes>
-                                            <!--Starting with 4.11 JUnit is good boy -->
-                                            <include>junit:junit:4.11</include>
-                                        </includes>
+                                        <!-- uncomment this once we upgrade to JUnit 4.11 -->
+                                        <!--<includes>-->
+                                            <!--&lt;!&ndash;Starting with 4.11 JUnit is good boy &ndash;&gt;-->
+                                            <!--<include>junit:junit:4.11</include>-->
+                                        <!--</includes>-->
                                     </bannedDependencies>
-                                    <bannedDependencies>
+
+                                    <!-- uncomment this once we upgrade to JUnit 4.11 -->
+                                    <!--bannedDependencies>
                                         <searchTransitive>true</searchTransitive>
                                         <message>
                                             Make sure no junit-dep is on the classpath, we only accept junit:junit 4.11+
@@ -209,7 +212,7 @@
                                         <excludes>
                                             <exclude>junit:junit-dep</exclude>
                                         </excludes>
-                                    </bannedDependencies>
+                                    </bannedDependencies -->
                                 </rules>
                                 <fail>true</fail>
                             </configuration>
