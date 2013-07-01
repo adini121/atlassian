@@ -41,7 +41,7 @@ public class TestProductContextRunner
     @Test
     public void doesNotSupportTestClassesNotAnnotatedWithTestedProductClass() throws InitializationError
     {
-        expectedException.expect(specificError(InitializationError.class, withCauses(hasItem(withMessage(
+        expectedException.expect(specificError(InitializationError.class, withCauses(Matchers.<Throwable>hasItem(withMessage(
                 NotAnnotated.class.getName(),
                 "is missing the",
                 TestedProductClass.class.getName(),
