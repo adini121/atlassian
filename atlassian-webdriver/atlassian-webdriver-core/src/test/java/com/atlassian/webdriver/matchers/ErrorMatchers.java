@@ -88,7 +88,7 @@ public final class ErrorMatchers
         };
     }
 
-    public static Matcher<InitializationError> withCauses(final Matcher<Iterable<Throwable>> causesMatcher)
+    public static Matcher<InitializationError> withCauses(final Matcher<? super Iterable<Throwable>> causesMatcher)
     {
         return new TypeSafeMatcher<InitializationError>()
         {
