@@ -1,11 +1,11 @@
 package com.atlassian.pageobjects.elements.test;
 
 import com.atlassian.pageobjects.browser.Browser;
+import com.atlassian.pageobjects.browser.IgnoreBrowser;
 import com.atlassian.pageobjects.elements.GlobalElementFinder;
 import com.atlassian.pageobjects.elements.PageElement;
 import com.atlassian.pageobjects.elements.PageElementFinder;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.EventsPage;
-import com.atlassian.webdriver.testing.annotation.IgnoreBrowser;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
