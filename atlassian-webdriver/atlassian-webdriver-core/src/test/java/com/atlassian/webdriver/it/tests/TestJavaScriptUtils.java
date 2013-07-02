@@ -44,7 +44,7 @@ public class TestJavaScriptUtils extends AbstractFileBasedServerTest
      * This test is testing that css psuedo class :hover will display an element
      */
     @Test
-    @IgnoreBrowser(value = {Browser.FIREFOX, Browser.HTMLUNIT}, reason = "CSS hovering on elements does not work.")
+    @IgnoreBrowser(value = {Browser.FIREFOX, Browser.HTMLUNIT, Browser.IE}, reason = "CSS hovering on elements does not work.")
     public void testCssHoverRespondsToMouseover()
     {
         WebElement hoveringDiv = driver.findElement(By.id("hovering-element"));

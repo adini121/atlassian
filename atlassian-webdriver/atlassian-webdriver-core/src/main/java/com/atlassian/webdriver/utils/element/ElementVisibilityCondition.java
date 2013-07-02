@@ -50,4 +50,9 @@ abstract class ElementVisibilityCondition implements ExpectedCondition<Boolean>
             return !Check.elementIsVisible(by, at == null ? webDriver : at);
         }
     }
+
+    @Override
+    public String toString() {
+        return String.format("Condition: [state=%s,what=%s,where=%s]", visibility, by, at);
+    }
 }
