@@ -57,6 +57,7 @@ public class TestJavaScriptUtils extends AbstractFileBasedServerTest
     }
 
     @Test
+    @IgnoreBrowser(Browser.IE)
     public void testJQueryHoverRespondsToMouseover()
     {
         WebElement hoveringDiv = driver.findElement(By.id("hovering-jquery-element"));
