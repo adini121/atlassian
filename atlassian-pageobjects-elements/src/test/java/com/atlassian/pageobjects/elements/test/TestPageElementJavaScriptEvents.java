@@ -53,7 +53,8 @@ public class TestPageElementJavaScriptEvents extends AbstractFileBasedServerTest
     }
 
     @Test
-    @IgnoreBrowser(value = {Browser.HTMLUNIT}, reason = "SELENIUM-167 :focus selector not supported")
+    @IgnoreBrowser(value = {Browser.HTMLUNIT, Browser.IE},
+            reason = "SELENIUM-167 :focus selector not supported in HTML Unit, IE doesn't work on elastic agents (works locally)")
     public void testFormEvents()
     {
         final PageElement formEventListener = elementFinder.find(By.id("form-event-listener"));

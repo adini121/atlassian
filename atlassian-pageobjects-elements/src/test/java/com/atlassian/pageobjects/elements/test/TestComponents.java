@@ -1,18 +1,16 @@
 package com.atlassian.pageobjects.elements.test;
 
 import com.atlassian.pageobjects.browser.Browser;
+import com.atlassian.pageobjects.browser.IgnoreBrowser;
 import com.atlassian.pageobjects.elements.query.Poller;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.AuiPage;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.ElementsPage;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.JQueryPage;
-import com.atlassian.webdriver.testing.annotation.IgnoreBrowser;
 import org.junit.Test;
 
 import java.util.List;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.*;
 
 @IgnoreBrowser(Browser.HTMLUNIT_NOJS)
 public class TestComponents extends AbstractFileBasedServerTest
@@ -56,6 +54,7 @@ public class TestComponents extends AbstractFileBasedServerTest
     }
 
     @Test
+    @IgnoreBrowser(value = Browser.IE, reason = "isVisible for inline dialog does not work in IE")
     public void testsInlineDialog()
     {
         AuiPage auipage = product.visit(AuiPage.class);
