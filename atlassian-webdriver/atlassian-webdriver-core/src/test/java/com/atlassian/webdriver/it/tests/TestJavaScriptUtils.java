@@ -70,8 +70,8 @@ public class TestJavaScriptUtils extends AbstractFileBasedServerTest
     }
 
     @Test(expected = TimeoutException.class)
-    @RequireBrowser(Browser.HTMLUNIT)
-    public void testCssHoverBreaksForHtmlUnit()
+    @RequireBrowser({Browser.HTMLUNIT, Browser.FIREFOX, Browser.IE})
+    public void testCssHoverBreaksForSomeBrowsers()
     {
         WebElement hoveringDiv = driver.findElement(By.id("hovering-element"));
         assertTrue(hoveringDiv.isDisplayed());
@@ -79,22 +79,22 @@ public class TestJavaScriptUtils extends AbstractFileBasedServerTest
 
         // now hover over div to show the children
         MouseEvents.hover(hoveringDiv, driver);
-        poller.waitUntil(isVisible(By.id("child-element-one")), 5, TimeUnit.SECONDS);
-        fail("HtmlUnit CSS hovers are working now");
+        assertCssChidrenVisible();
+        fail("HtmlUnit/Firefox/IE CSS hovers are working now - check the browser used for this test");
     }
 
     @Test(expected = TimeoutException.class)
-    @RequireBrowser(Browser.FIREFOX)
-    public void testCssHoverBreaksForFirefox()
+    @RequireBrowser({Browser.IE})
+    public void testJQueryHoverBreaksForSomeBrowsers()
     {
         WebElement hoveringDiv = driver.findElement(By.id("hovering-element"));
         assertTrue(hoveringDiv.isDisplayed());
-        assertCssChidrenNotVisible();
+        assertJQueryChildrenNotVisible();
 
         // now hover over div to show the children
         MouseEvents.hover(hoveringDiv, driver);
-        poller.waitUntil(isVisible(By.id("child-element-one")), 5, TimeUnit.SECONDS);
-        fail("Firefox CSS hovers are working now");
+        assertJQueryChildrenVisible();
+        fail("IE JQuery hover is working now");
     }
 
     @Test
