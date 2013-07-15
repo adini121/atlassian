@@ -2,6 +2,7 @@ package com.atlassian.pageobjects.elements.test;
 
 import com.atlassian.pageobjects.browser.Browser;
 import com.atlassian.pageobjects.browser.IgnoreBrowser;
+import com.atlassian.pageobjects.browser.RequireBrowser;
 import com.atlassian.pageobjects.elements.GlobalElementFinder;
 import com.atlassian.pageobjects.elements.PageElement;
 import com.atlassian.pageobjects.elements.PageElementFinder;
@@ -9,9 +10,11 @@ import com.atlassian.pageobjects.elements.test.pageobjects.page.EventsPage;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriverException;
 
 import static com.atlassian.pageobjects.elements.DataAttributeFinder.query;
 import static com.atlassian.pageobjects.elements.query.Poller.waitUntilTrue;
+import static org.junit.Assert.fail;
 
 /**
  * Test {@link com.atlassian.pageobjects.elements.PageElementJavascript} events API.
@@ -68,6 +71,15 @@ public class TestPageElementJavaScriptEvents extends AbstractFileBasedServerTest
         waitUntilTrue(query(formEventListener).timed().hasDataAttribute("event", "change"));
         formEventListener.javascript().form().submit();
         waitUntilTrue(query(formEventListener).timed().hasDataAttribute("event", "submit"));
+    }
+
+    @Test(expected = WebDriverException.class)
+    @RequireBrowser(Browser.IE)
+    public void testFormEventsNotWorkingInIe()
+    {
+        final PageElement formEventListener = elementFinder.find(By.id("form-event-listener"));
+        formEventListener.javascript().form().select();
+        fail("JS select form event now works in IE");
     }
 
 }
