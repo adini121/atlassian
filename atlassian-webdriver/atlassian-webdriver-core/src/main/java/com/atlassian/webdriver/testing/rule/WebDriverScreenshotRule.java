@@ -49,12 +49,14 @@ public class WebDriverScreenshotRule extends TestWatcher
         this(WebDriverSupport.forSupplier(driverSupplier), artifactDir);
     }
 
-    public WebDriverScreenshotRule(@Nonnull Supplier<? extends WebDriver> driverSupplier)
+    @SuppressWarnings("UnusedDeclaration")
+	public WebDriverScreenshotRule(@Nonnull Supplier<? extends WebDriver> driverSupplier)
     {
         this(driverSupplier, defaultArtifactDir());
     }
 
-    public WebDriverScreenshotRule(@Nonnull WebDriver webDriver)
+	@SuppressWarnings("UnusedDeclaration")
+	public WebDriverScreenshotRule(@Nonnull WebDriver webDriver)
     {
         this(WebDriverSupport.forInstance(webDriver), defaultArtifactDir());
     }
@@ -102,7 +104,12 @@ public class WebDriverScreenshotRule extends TestWatcher
 
     private File getTargetFile(Description description, String extension)
     {
-        return new File(getTargetDir(description), description.getMethodName() + "." + extension);
+		File file = new File(getTargetDir(description), description.getMethodName() + "." + extension);
+		int fileNum = 1;
+		while (file.exists()) {
+			file = new File(getTargetDir(description), description.getMethodName() + "-" + (fileNum++) + "." + extension);
+		}
+		return file;
     }
 
 }
