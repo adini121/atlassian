@@ -17,6 +17,7 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 
 import java.io.File;
+import java.io.IOException;
 
 import static com.atlassian.webdriver.matchers.FileMatchers.*;
 import static org.apache.commons.io.FileUtils.readFileToString;
@@ -48,25 +49,65 @@ public class TestWebDriverScreenshotRule
     @Test
     public void shouldTakeScreenshotAndPageDump() throws Throwable
     {
-        final File fakeScreenshot = temporaryFolder.newFile("fake.png");
-        FileUtils.writeStringToFile(fakeScreenshot, "FAKE SCREENSHOT!");
-        when(webDriver.getCurrentUrl()).thenReturn("something");
-        when(webDriver.getPageSource()).thenReturn("<html>some source</html>");
-        when(asTakingScreenshot().getScreenshotAs(OutputType.FILE)).thenReturn(fakeScreenshot);
+		final String fakeScreenshotContent = "FAKE SCREENSHOT!";
+		when(asTakingScreenshot().getScreenshotAs(OutputType.FILE)).thenReturn(prepareFakeScreenshot("fake.png", fakeScreenshotContent));
+		when(webDriver.getCurrentUrl()).thenReturn("something");
+		final String pageSource = "<html>some source</html>";
+		when(webDriver.getPageSource()).thenReturn(pageSource);
         doThrow(new RuntimeException("failed")).when(mockTest).evaluate();
         final WebDriverScreenshotRule rule = new WebDriverScreenshotRule(Suppliers.ofInstance(webDriver),
                 temporaryFolder.getRoot());
         final Description description = Description.createTestDescription(TestWebDriverScreenshotRule.class, "someTest");
         new SafeStatementInvoker(rule.apply(mockTest, description)).invokeSafely();
         assertThat(expectedTargetDir(), isDirectory());
-        assertThat(expectedTargetFile("someTest.html"), isFile());
-        assertEquals("<html>some source</html>", readFileToString(expectedTargetFile("someTest.html")));
-        assertThat(expectedTargetFile("someTest.png"), isFile());
-        assertEquals("FAKE SCREENSHOT!", readFileToString(expectedTargetFile("someTest.png")));
-
+		assertFilesGeneratedProperly(fakeScreenshotContent, pageSource, "someTest.html", "someTest.png");
     }
 
-    @Test
+	private File prepareFakeScreenshot(final String fileName, final String data) throws IOException {
+		final File fakeScreenshot = temporaryFolder.newFile(fileName);
+		FileUtils.writeStringToFile(fakeScreenshot, data);
+		return fakeScreenshot;
+	}
+
+	@Test
+	public void shouldNotOverrideScreenshotAndPageDump() throws Throwable {
+		final String[] screenshotContents = {"Fake Screenshot 1", "Fake Screenshot 2", "Fake Screenshot 3"};
+		when(asTakingScreenshot().getScreenshotAs(OutputType.FILE))
+				.thenReturn(prepareFakeScreenshot("fake-1.png", screenshotContents[0]))
+				.thenReturn(prepareFakeScreenshot("fake-2.png", screenshotContents[1]))
+				.thenReturn(prepareFakeScreenshot("fake-3.png", screenshotContents[2]));
+
+		when(webDriver.getCurrentUrl()).thenReturn("something");
+		final String[] sourceConents = {"<html>source 1</html>", "<html>source 2</html>", "<html>source 3</html>"};
+		when(webDriver.getPageSource()).thenReturn(sourceConents[0]).thenReturn(sourceConents[1]).thenReturn(sourceConents[2]);
+
+		doThrow(new RuntimeException("failed")).when(mockTest).evaluate();
+		final WebDriverScreenshotRule rule = new WebDriverScreenshotRule(Suppliers.ofInstance(webDriver),
+				temporaryFolder.getRoot());
+		final Description description = Description.createTestDescription(TestWebDriverScreenshotRule.class, "someTest");
+
+		// test three failures in row
+		final String[] expectedFileNames = {"someTest", "someTest-1", "someTest-2"};
+		for (int i = 0; i < screenshotContents.length; i++) {
+			new SafeStatementInvoker(rule.apply(mockTest, description)).invokeSafely();
+			assertThat(expectedTargetDir(), isDirectory());
+			final String fn = expectedFileNames[i];
+			assertFilesGeneratedProperly(screenshotContents[i], sourceConents[i], fn + ".html", fn + ".png");
+		}
+	}
+
+	private void assertFilesGeneratedProperly(String firstFakeScreenshotContent, String sourceForFirstTest, String htmlFileName,
+			String screenshotFileName) throws IOException {
+		final File firstExpectedHtmlFile = expectedTargetFile(htmlFileName);
+		final File firstExpectedScreenshotfile = expectedTargetFile(screenshotFileName);
+
+		assertThat(firstExpectedHtmlFile, isFile());
+		assertEquals(sourceForFirstTest, readFileToString(firstExpectedHtmlFile));
+		assertThat(firstExpectedScreenshotfile, isFile());
+		assertEquals(firstFakeScreenshotContent, readFileToString(firstExpectedScreenshotfile));
+	}
+
+	@Test
     public void shouldNotTakeScreenshotIfNotFailed() throws Throwable
     {
         when(webDriver.getCurrentUrl()).thenReturn("something");
