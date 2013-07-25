@@ -8,9 +8,9 @@ An open-source (BSD) project aims at facilitating development of functional test
 
 Important information:
 
-* [source on Bitbucket](https://bitbucket.org/atlassian/atlassian-selenium)
-* [documentation](https://ecosystem.atlassian.net/wiki/display/SELENIUM/Home)
-* [issues](https://ecosystem.atlassian.net/browse/SELENIUM)
+* [Source on Bitbucket](https://bitbucket.org/atlassian/atlassian-selenium)
+* [Documentation](https://ecosystem.atlassian.net/wiki/display/SELENIUM/Home)
+* [Issues](https://ecosystem.atlassian.net/browse/SELENIUM)
 * [Maven artifacts](https://maven.atlassian.com/index.html#nexus-search;quick~atlassian-selenium)
 
 Contributions
