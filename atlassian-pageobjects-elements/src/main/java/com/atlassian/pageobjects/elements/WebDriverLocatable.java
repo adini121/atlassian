@@ -1,9 +1,16 @@
 package com.atlassian.pageobjects.elements;
 
-import com.atlassian.webdriver.AtlassianWebDriver;
+import com.atlassian.annotations.Internal;
+import com.atlassian.pageobjects.elements.timeout.DefaultTimeouts;
+import com.atlassian.util.concurrent.Nullable;
+import com.google.common.base.Preconditions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.SearchContext;
+import org.openqa.selenium.WebDriver;
+
+import javax.annotation.Nonnull;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p/>
@@ -17,6 +24,7 @@ import org.openqa.selenium.SearchContext;
  *
  * @since 2.0
  */
+@Internal
 public interface WebDriverLocatable
 {
     /**
@@ -24,6 +32,7 @@ public interface WebDriverLocatable
      *
      * @return Locator, null if root.
      */
+    @Nullable
     By getLocator();
 
     /**
@@ -31,6 +40,7 @@ public interface WebDriverLocatable
      *
      * @return The locatable for the parent, null if root.
      */
+    @Nullable
     WebDriverLocatable getParent();
 
     /**
@@ -40,8 +50,12 @@ public interface WebDriverLocatable
      * @param timeoutInSeconds Timeout to wait until located, may be 0.
      * @return SearchContext
      * @throws NoSuchElementException if context could not be located before timeout expired
+     * @deprecated use {@link #waitUntilLocated(WebDriver, WebDriverLocatable.LocateTimeout)} instead. Scheduled for
+     * removal in 3.0
      */
-    SearchContext waitUntilLocated(AtlassianWebDriver driver, int timeoutInSeconds) throws NoSuchElementException;
+    @Deprecated
+    @Nonnull
+    SearchContext waitUntilLocated(@Nonnull WebDriver driver, int timeoutInSeconds) throws NoSuchElementException;
 
     /**
      * Whether this SearchContext is present by given <tt>timeout</tt>.
@@ -49,6 +63,101 @@ public interface WebDriverLocatable
      * @param driver the AtlassianWebDriver instance
      * @param timeoutForParentInSeconds Timout to wait until parent is located
      * @return <code>true</code> if SearchContext is located before the timeout expires, <code>false</code> otherwise.
+     * @deprecated use {@link #isPresent(WebDriver, WebDriverLocatable.LocateTimeout)} instead. Scheduled for removal
+     * in 3.0
      */
-    boolean isPresent(AtlassianWebDriver driver, int timeoutForParentInSeconds);
+    @Deprecated
+    boolean isPresent(@Nonnull WebDriver driver, int timeoutForParentInSeconds);
+
+    /**
+     * Wait until the {@link SearchContext} represented by this locatable is located.
+     *
+     * @param driver the {@link WebDriver} instance
+     * @param timeout LocateTimeout instance specifying the time to wait until located, may be 0.
+     * @return SearchContext
+     * @throws NoSuchElementException if context could not be located before timeout expired
+     * @see LocateTimeout
+     * @see SearchContext
+     */
+    @Nonnull
+    SearchContext waitUntilLocated(@Nonnull WebDriver driver, @Nonnull LocateTimeout timeout) throws NoSuchElementException;
+
+    /**
+     * Whether this {@link SearchContext} is present, given its parent is located by {@code parentTimeout}.
+     *
+     * @param driver the {@link WebDriver} instance
+     * @param parentTimeout LocateTimeout instance specifying the time to wait until the parent is located, may
+     *                           be 0.
+     * @return {@literal true} if the {@link SearchContext} is located before the timeout expires, {@literal false}
+     * otherwise
+     * @see LocateTimeout
+     */
+    boolean isPresent(@Nonnull WebDriver driver, @Nonnull LocateTimeout parentTimeout);
+
+
+    /**
+     * Provides information about timeout and poll interval to use while performing locatable operations.
+     *
+     */
+    public static final class LocateTimeout
+    {
+        public static LocateTimeout zero(long pollIntervalInMillis) {
+            return new LocateTimeout(0, pollIntervalInMillis);
+        }
+
+        private final long timeout;
+        private final long pollInterval;
+
+        private LocateTimeout(long timeout, long pollInterval)
+        {
+            Preconditions.checkArgument(timeout >= 0, "timeout >= 0");
+            Preconditions.checkArgument(pollInterval > 0, "pollInterval > 0");
+            this.timeout = timeout;
+            this.pollInterval = pollInterval;
+        }
+
+        public long timeout()
+        {
+            return timeout;
+        }
+
+        public long pollInterval()
+        {
+            return pollInterval;
+        }
+
+        public static final class Builder
+        {
+            private long timeout;
+            private long pollInterval = DefaultTimeouts.DEFAULT_INTERVAL;
+
+
+            public Builder timeout(long millis)
+            {
+                this.timeout = millis;
+                return this;
+            }
+
+            public Builder timeout(long amount, TimeUnit unit)
+            {
+                return timeout(unit.toMillis(amount));
+            }
+
+            public Builder pollInterval(long millis)
+            {
+                this.pollInterval = millis;
+                return this;
+            }
+
+            public Builder pollInterval(long amount, TimeUnit unit)
+            {
+                return pollInterval(unit.toMillis(amount));
+            }
+
+            public LocateTimeout build()
+            {
+                return new LocateTimeout(timeout, pollInterval);
+            }
+        }
+    }
 }

@@ -13,9 +13,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * <p/>
- * {@link com.atlassian.pageobjects.elements.WebDriverLocatable} based timed query that retrieves
- * {@link org.openqa.selenium.WebElement} using provided {@link com.atlassian.pageobjects.elements.WebDriverLocatable}
- * and applies provided function from that element to the target value.
+ * {@link WebDriverLocatable} based timed query that retrieves {@link WebElement} using provided
+ * {@link WebDriverLocatable} and applies provided function from that element to the target value.
  *
  * <p/>
  * If given element is not found, the 'invalid value' semantics of the timed query are applied. 

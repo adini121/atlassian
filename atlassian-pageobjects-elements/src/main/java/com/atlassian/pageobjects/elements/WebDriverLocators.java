@@ -1,37 +1,30 @@
 package com.atlassian.pageobjects.elements;
 
-import com.atlassian.pageobjects.elements.query.AbstractTimedQuery;
-import com.atlassian.pageobjects.elements.query.ExpirationHandler;
-import com.atlassian.pageobjects.elements.query.Poller;
-import com.atlassian.pageobjects.elements.query.PollingQuery;
-import com.atlassian.pageobjects.elements.query.TimedQuery;
+import com.atlassian.pageobjects.elements.query.*;
 import com.atlassian.pageobjects.elements.timeout.DefaultTimeouts;
-import com.atlassian.webdriver.AtlassianWebDriver;
+import com.atlassian.webdriver.utils.Check;
 import org.hamcrest.StringDescription;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.SearchContext;
-import org.openqa.selenium.StaleElementReferenceException;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static com.atlassian.pageobjects.elements.query.Poller.by;
-import static com.atlassian.pageobjects.elements.query.Poller.now;
-import static com.atlassian.pageobjects.elements.query.Poller.waitUntil;
+import static com.atlassian.pageobjects.elements.query.Poller.*;
 import static com.atlassian.pageobjects.elements.util.StringConcat.asString;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.hamcrest.Matchers.notNullValue;
 
 /**
- * Creates WebDriveLocatables for different search strategies
+ * Creates WebDriveLocatables for different search strategies.
+ *
  */
 public class WebDriverLocators
 {
     /**
-     * Creates the root of a WebDriverLocatable list, usually the instance of WebDriver
+     * Creates the root of a WebDriverLocatable list, usually the instance of WebDriver.
+     *
      * @return WebDriverLocatable
      */
     public static WebDriverLocatable root()
@@ -99,10 +92,31 @@ public class WebDriverLocators
         }
     }
 
-    private static Poller.WaitTimeout withinTimeout(int timeoutInSeconds)
+    private static Poller.WaitTimeout withinTimeout(WebDriverLocatable.LocateTimeout timeout)
     {
-        checkArgument(timeoutInSeconds >= 0, "timeoutInSeconds must be >= 0");
-        return timeoutInSeconds > 0 ? by(timeoutInSeconds, TimeUnit.SECONDS) : now();
+        return timeout.timeout() > 0 ? by(timeout.timeout()) : now();
+    }
+
+    private static long getTimeout(WebDriverLocatable.LocateTimeout timeout) {
+        return timeout.timeout() > 0 ? timeout.timeout() : DefaultTimeouts.DEFAULT;
+    }
+
+    private static abstract class DeprecatedApiBridge implements WebDriverLocatable
+    {
+        @Override
+        @Nonnull
+        public final SearchContext waitUntilLocated(@Nonnull WebDriver driver, int timeoutInSeconds) throws NoSuchElementException {
+            return waitUntilLocated(driver, new LocateTimeout.Builder()
+                    .timeout(timeoutInSeconds, TimeUnit.SECONDS)
+                    .build());
+        }
+
+        @Override
+        public final boolean isPresent(@Nonnull WebDriver driver, int timeoutForParentInSeconds) {
+            return isPresent(driver, new LocateTimeout.Builder()
+                    .timeout(timeoutForParentInSeconds, TimeUnit.SECONDS)
+                    .build());
+        }
     }
 
 
@@ -110,7 +124,7 @@ public class WebDriverLocators
      * A static locator that will blow if the associated WebElement is stale. Not recommended unless no other option.
      *
      */
-    private static class WebDriverStaticLocator implements WebDriverLocatable
+    private static class WebDriverStaticLocator extends DeprecatedApiBridge implements WebDriverLocatable
     {
         private final WebElement element;
 
@@ -143,8 +157,11 @@ public class WebDriverLocators
         }
 
         @Override
-        public SearchContext waitUntilLocated(AtlassianWebDriver driver, int timeoutInSeconds) throws NoSuchElementException
+        @Nonnull
+        public SearchContext waitUntilLocated(@Nonnull WebDriver driver, @Nonnull LocateTimeout timeout) throws NoSuchElementException
         {
+            checkNotNull(driver, "driver");
+            checkNotNull(timeout, "timeout");
             if (isStale(element))
             {
                 throw new NoSuchElementException("WebElement got stale");
@@ -153,13 +170,15 @@ public class WebDriverLocators
         }
 
         @Override
-        public boolean isPresent(AtlassianWebDriver driver, int timeoutForParentInSeconds)
+        public boolean isPresent(@Nonnull WebDriver driver, @Nonnull LocateTimeout parentTimeout)
         {
+            checkNotNull(driver, "driver");
+            checkNotNull(parentTimeout, "parentTimeout");
             return !isStale(element);
         }
     }
 
-    private static class WebDriverRootLocator implements WebDriverLocatable
+    private static class WebDriverRootLocator extends DeprecatedApiBridge implements WebDriverLocatable
     {
         public By getLocator()
         {
@@ -171,18 +190,25 @@ public class WebDriverLocators
             return null;
         }
 
-        public SearchContext waitUntilLocated(AtlassianWebDriver driver, int timeoutInSeconds)
+        @Override
+        @Nonnull
+        public SearchContext waitUntilLocated(@Nonnull WebDriver driver, @Nonnull LocateTimeout timeout)
         {
+            checkNotNull(driver, "driver");
+            checkNotNull(timeout, "timeout");
             return driver;
         }
 
-        public boolean isPresent(AtlassianWebDriver driver, int timeoutForParentInSeconds)
+        @Override
+        public boolean isPresent(@Nonnull WebDriver driver, @Nonnull LocateTimeout parentTimeout)
         {
+            checkNotNull(driver, "driver");
+            checkNotNull(parentTimeout, "parentTimeout");
             return true;
         }
     }
 
-    private static class WebDriverSingleLocator implements  WebDriverLocatable
+    private static class WebDriverSingleLocator extends DeprecatedApiBridge implements  WebDriverLocatable
     {
         private WebElement webElement = null;
         private boolean webElementLocated = false;
@@ -206,21 +232,25 @@ public class WebDriverLocators
             return parent;
         }
 
-        public SearchContext waitUntilLocated(AtlassianWebDriver driver, int timeoutInSeconds)
+        @Override
+        @Nonnull
+        public SearchContext waitUntilLocated(@Nonnull WebDriver driver, @Nonnull LocateTimeout timeout)
         {
+            checkNotNull(driver, "driver");
+            checkNotNull(timeout, "timeout");
             if(!webElementLocated || WebDriverLocators.isStale(webElement))
             {
                 try
                 {
-                    webElement = waitUntil(queryForSingleElement(driver), notNullValue(WebElement.class),
-                            withinTimeout(timeoutInSeconds));
+                    webElement = waitUntil(queryForSingleElement(driver, timeout), notNullValue(WebElement.class),
+                            withinTimeout(timeout));
                 }
                 catch(AssertionError notFound)
                 {
                     throw new NoSuchElementException(new StringDescription()
                             .appendText("Unable to locate element by timeout.")
                             .appendText("\nLocator: ").appendValue(locator)
-                            .appendText("\nTimeout: ").appendValue(timeoutInSeconds).appendText(" seconds.")
+                            .appendText("\nTimeout: ").appendValue(timeout.timeout()).appendText("ms.")
                             .toString());
                 }
                 webElementLocated = true;
@@ -228,9 +258,31 @@ public class WebDriverLocators
             return webElement;
         }
 
-        private TimedQuery<WebElement> queryForSingleElement(final AtlassianWebDriver driver)
+        @Override
+        public boolean isPresent(@Nonnull WebDriver driver, @Nonnull LocateTimeout parentTimeout)
         {
-            return new AbstractTimedQuery<WebElement>(DefaultTimeouts.DEFAULT, PollingQuery.DEFAULT_INTERVAL, ExpirationHandler.RETURN_NULL)
+            checkNotNull(driver, "driver");
+            checkNotNull(parentTimeout, "parentTimeout");
+            try
+            {
+                return Check.elementExists(this.locator, parent.waitUntilLocated(driver, parentTimeout));
+            }
+            catch (NoSuchElementException e)
+            {
+                // parent cannot be located
+                return false;
+            }
+        }
+
+        @Override
+        public String toString()
+        {
+            return asString("WebDriverSingleLocator[locator=", locator, "]");
+        }
+
+        private TimedQuery<WebElement> queryForSingleElement(final WebDriver driver, LocateTimeout timeout)
+        {
+            return new AbstractTimedQuery<WebElement>(getTimeout(timeout), timeout.pollInterval(), ExpirationHandler.RETURN_NULL)
             {
                 @Override
                 protected boolean shouldReturn(WebElement currentEval) {
@@ -260,28 +312,9 @@ public class WebDriverLocators
             };
         }
 
-        public boolean isPresent(AtlassianWebDriver driver, int timeoutForParentInSeconds)
-        {
-            try
-            {
-                return driver.elementExistsAt(this.locator, parent.waitUntilLocated(driver, timeoutForParentInSeconds));
-            }
-            catch (NoSuchElementException e)
-            {
-                // parent cannot be located
-                return false;
-            }
-        }
-
-        @Override
-        public String toString()
-        {
-            return asString("WebDriverSingleLocator[locator=", locator, "]");
-        }
-
     }
 
-    private static class WebDriverListLocator implements  WebDriverLocatable
+    private static class WebDriverListLocator extends DeprecatedApiBridge implements  WebDriverLocatable
     {
         private WebElement webElement = null;
 
@@ -308,14 +341,18 @@ public class WebDriverLocators
             return parent;
         }
 
-        public SearchContext waitUntilLocated(final AtlassianWebDriver driver, int timeoutInSeconds)
+        @Override
+        @Nonnull
+        public SearchContext waitUntilLocated(@Nonnull WebDriver driver, @Nonnull LocateTimeout timeout)
         {
+            checkNotNull(driver, "driver");
+            checkNotNull(timeout, "timeout");
             if(WebDriverLocators.isStale(webElement))
             {
                 try
                 {
-                    webElement = waitUntil(queryForElementInList(driver), notNullValue(WebElement.class),
-                            withinTimeout(timeoutInSeconds));
+                    webElement = waitUntil(queryForElementInList(driver, timeout), notNullValue(WebElement.class),
+                            withinTimeout(timeout));
                 }
                 catch (AssertionError notLocated)
                 {
@@ -329,9 +366,25 @@ public class WebDriverLocators
             return webElement;
         }
 
-        private TimedQuery<WebElement> queryForElementInList(final AtlassianWebDriver driver)
+        @Override
+        public boolean isPresent(@Nonnull WebDriver driver, @Nonnull LocateTimeout parentTimeout)
         {
-            return new AbstractTimedQuery<WebElement>(DefaultTimeouts.DEFAULT, PollingQuery.DEFAULT_INTERVAL, ExpirationHandler.RETURN_NULL)
+            checkNotNull(driver, "driver");
+            checkNotNull(parentTimeout, "parentTimeout");
+            SearchContext searchContext = parent.waitUntilLocated(driver, parentTimeout);
+            List<WebElement> webElements = searchContext.findElements(this.locator);
+            return locatorIndex <= webElements.size() - 1;
+        }
+
+        @Override
+        public String toString()
+        {
+            return asString("WebDriverListLocator[locator=", locator, ",index=", locatorIndex, "]");
+        }
+
+        private TimedQuery<WebElement> queryForElementInList(final WebDriver driver, LocateTimeout timeout)
+        {
+            return new AbstractTimedQuery<WebElement>(getTimeout(timeout), timeout.pollInterval(), ExpirationHandler.RETURN_NULL)
             {
                 @Override
                 protected boolean shouldReturn(WebElement currentEval) {
@@ -348,20 +401,6 @@ public class WebDriverLocators
                     return null;
                 }
             };
-        }
-
-        public boolean isPresent(AtlassianWebDriver driver, int timeoutForParentInSeconds)
-        {
-            SearchContext searchContext = parent.waitUntilLocated(driver, timeoutForParentInSeconds);
-
-            List<WebElement> webElements = searchContext.findElements(this.locator);
-            return locatorIndex <= webElements.size() - 1;
-        }
-
-        @Override
-        public String toString()
-        {
-            return asString("WebDriverListLocator[locator=", locator, ",index=", locatorIndex, "]");
         }
     }
 }
