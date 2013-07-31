@@ -8,7 +8,6 @@ import com.atlassian.pageobjects.elements.PageElement;
 import com.atlassian.pageobjects.elements.PageElementFinder;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.EventsPage;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriverException;
@@ -75,12 +74,10 @@ public class TestPageElementJavaScriptEvents extends AbstractFileBasedServerTest
     }
 
     @Test(expected = WebDriverException.class)
-    @Ignore("SELENIUM-224 this works intermittently")
     @RequireBrowser(Browser.IE)
     public void testFormEventsNotWorkingInIe()
     {
-        final PageElement formEventListener = elementFinder.find(By.id("form-event-listener"));
-        formEventListener.javascript().form().select();
+        testFormEvents();
         fail("JS select form event now works in IE");
     }
 
