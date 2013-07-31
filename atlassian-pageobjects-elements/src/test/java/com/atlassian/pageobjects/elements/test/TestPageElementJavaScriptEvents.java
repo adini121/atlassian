@@ -8,6 +8,7 @@ import com.atlassian.pageobjects.elements.PageElement;
 import com.atlassian.pageobjects.elements.PageElementFinder;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.EventsPage;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriverException;
@@ -56,8 +57,7 @@ public class TestPageElementJavaScriptEvents extends AbstractFileBasedServerTest
     }
 
     @Test
-    @IgnoreBrowser(value = {Browser.HTMLUNIT, Browser.IE},
-            reason = "SELENIUM-167 :focus selector not supported in HTML Unit, IE doesn't work on elastic agents (works locally)")
+    @IgnoreBrowser(value = {Browser.HTMLUNIT}, reason = "SELENIUM-167 :focus selector not supported in HTML Unit")
     public void testFormEvents()
     {
         final PageElement formEventListener = elementFinder.find(By.id("form-event-listener"));
@@ -74,6 +74,7 @@ public class TestPageElementJavaScriptEvents extends AbstractFileBasedServerTest
     }
 
     @Test(expected = WebDriverException.class)
+    @Ignore("This seems to be working in IE")
     @RequireBrowser(Browser.IE)
     public void testFormEventsNotWorkingInIe()
     {
