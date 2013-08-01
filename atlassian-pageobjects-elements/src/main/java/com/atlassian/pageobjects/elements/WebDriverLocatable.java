@@ -97,6 +97,7 @@ public interface WebDriverLocatable
     /**
      * Provides information about timeout and poll interval to use while performing locatable operations.
      *
+     * @since 2.2
      */
     public static final class LocateTimeout
     {
