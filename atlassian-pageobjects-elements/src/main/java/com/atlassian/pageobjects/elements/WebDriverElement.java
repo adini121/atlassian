@@ -13,7 +13,6 @@ import org.openqa.selenium.WebElement;
 
 import javax.inject.Inject;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -85,7 +84,7 @@ public class WebDriverElement implements PageElement
      */
     public WebDriverElement(By locator, WebDriverLocatable parent, TimeoutType timeoutType)
     {
-        this(WebDriverLocators.nested(locator, parent),timeoutType);
+        this(WebDriverLocators.nested(locator, parent), timeoutType);
     }
 
     /**
@@ -105,20 +104,22 @@ public class WebDriverElement implements PageElement
         return timeouts.timeoutFor(defaultTimeout);
     }
 
-    protected int timeoutInSeconds()
+    protected WebDriverLocatable.LocateTimeout createTimout()
     {
-        // sucks sucks sucks sucks sucks....
-        return (int) TimeUnit.MILLISECONDS.toSeconds(timeout());
+        return new WebDriverLocatable.LocateTimeout.Builder()
+                .timeout(timeout())
+                .pollInterval(timeouts.timeoutFor(TimeoutType.EVALUATION_INTERVAL))
+                .build();
     }
 
     protected WebElement waitForWebElement()
     {
-        return (WebElement) locatable.waitUntilLocated(driver, timeoutInSeconds());
+        return (WebElement) locatable.waitUntilLocated(driver, createTimout());
     }
     
     public boolean isPresent()
     {
-        return locatable.isPresent(driver, timeoutInSeconds());
+        return locatable.isPresent(driver, createTimout());
     }
 
     public boolean isVisible()

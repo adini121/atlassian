@@ -1,5 +1,6 @@
 package com.atlassian.pageobjects.elements;
 
+import com.atlassian.annotations.PublicApi;
 import com.atlassian.pageobjects.elements.timeout.TimeoutType;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
@@ -9,7 +10,10 @@ import java.util.List;
 
 /**
  * Represents an HTML element that is expected on a DOM of a page.
+ *
+ * @since 2.0
  */
+@PublicApi
 public interface PageElement extends PageElementFinder
 {
     /**
