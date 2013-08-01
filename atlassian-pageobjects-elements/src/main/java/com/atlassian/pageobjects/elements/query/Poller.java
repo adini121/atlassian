@@ -1,5 +1,6 @@
 package com.atlassian.pageobjects.elements.query;
 
+import com.atlassian.annotations.PublicApi;
 import org.apache.commons.lang.StringUtils;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -18,6 +19,7 @@ import static org.hamcrest.Matchers.is;
  * @see TimedQuery
  * @see TimedCondition
  */
+@PublicApi
 public final class Poller
 {
     private Poller() {
