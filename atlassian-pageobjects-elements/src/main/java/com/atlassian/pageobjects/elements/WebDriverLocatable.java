@@ -14,8 +14,8 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * <p/>
- * A SearchContext that can be located by WebDriver, capable of re-locating. A locatable consists of locator used to
- * locate itself, and the parent locatable that forms a search context, in which we locate this locatable.
+ * A {@code SearchContext} that can be located by WebDriver, capable of re-locating. A locatable consists of locator
+ * used to locate itself, and the parent locatable that forms a search context, in which we locate this locatable.
  *
  * <p/>
  * Locatables form a list representing the parent-child relationship of SearchContexts. The root locatable
@@ -46,8 +46,8 @@ public interface WebDriverLocatable
     /**
      * Wait until this SearchContext represented by this locatable is located.
      *
-     * @param driver AtlassianWebDriver
-     * @param timeoutInSeconds Timeout to wait until located, may be 0.
+     * @param driver           the {@link WebDriver} instance.
+     * @param timeoutInSeconds Timeout to wait until located, must be >= 0.
      * @return SearchContext
      * @throws NoSuchElementException if context could not be located before timeout expired
      * @deprecated use {@link #waitUntilLocated(WebDriver, WebDriverLocatable.LocateTimeout)} instead. Scheduled for
@@ -60,20 +60,20 @@ public interface WebDriverLocatable
     /**
      * Whether this SearchContext is present by given <tt>timeout</tt>.
      *
-     * @param driver the AtlassianWebDriver instance
-     * @param timeoutForParentInSeconds Timout to wait until parent is located
+     * @param driver           the {@link WebDriver} instance.
+     * @param timeoutInSeconds timout to wait until parent is located, must be >= 0
      * @return <code>true</code> if SearchContext is located before the timeout expires, <code>false</code> otherwise.
      * @deprecated use {@link #isPresent(WebDriver, WebDriverLocatable.LocateTimeout)} instead. Scheduled for removal
      * in 3.0
      */
     @Deprecated
-    boolean isPresent(@Nonnull WebDriver driver, int timeoutForParentInSeconds);
+    boolean isPresent(@Nonnull WebDriver driver, int timeoutInSeconds);
 
     /**
      * Wait until the {@link SearchContext} represented by this locatable is located.
      *
-     * @param driver the {@link WebDriver} instance
-     * @param timeout LocateTimeout instance specifying the time to wait until located, may be 0.
+     * @param driver  the {@link WebDriver} instance.
+     * @param timeout LocateTimeout instance specifying the time to wait until located, must be >= 0.
      * @return SearchContext
      * @throws NoSuchElementException if context could not be located before timeout expired
      * @see LocateTimeout
@@ -85,14 +85,13 @@ public interface WebDriverLocatable
     /**
      * Whether this {@link SearchContext} is present, given its parent is located by {@code parentTimeout}.
      *
-     * @param driver the {@link WebDriver} instance
-     * @param parentTimeout LocateTimeout instance specifying the time to wait until the parent is located, may
-     *                           be 0.
+     * @param driver  the {@link WebDriver} instance.
+     * @param timeout LocateTimeout instance specifying the time to wait until the parent is located, must be >= 0.
      * @return {@literal true} if the {@link SearchContext} is located before the timeout expires, {@literal false}
      * otherwise
      * @see LocateTimeout
      */
-    boolean isPresent(@Nonnull WebDriver driver, @Nonnull LocateTimeout parentTimeout);
+    boolean isPresent(@Nonnull WebDriver driver, @Nonnull LocateTimeout timeout);
 
 
     /**
