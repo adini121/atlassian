@@ -70,7 +70,7 @@ public class TestJavaScriptUtils extends AbstractFileBasedServerTest
     }
 
     @Test(expected = TimeoutException.class)
-    @RequireBrowser({Browser.HTMLUNIT, Browser.FIREFOX, Browser.IE})
+    @RequireBrowser({Browser.HTMLUNIT, Browser.IE})
     public void testCssHoverBreaksForSomeBrowsers()
     {
         WebElement hoveringDiv = driver.findElement(By.id("hovering-element"));
