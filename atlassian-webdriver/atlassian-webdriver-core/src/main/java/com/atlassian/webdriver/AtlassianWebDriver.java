@@ -5,10 +5,10 @@ import com.atlassian.webdriver.debug.WebDriverDebug;
 import com.atlassian.webdriver.utils.Check;
 import com.google.common.base.Function;
 import org.openqa.selenium.By;
-import org.openqa.selenium.HasInputDevices;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.interactions.HasInputDevices;
 import org.openqa.selenium.internal.WrapsDriver;
 
 import java.io.File;
