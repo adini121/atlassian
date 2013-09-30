@@ -15,7 +15,7 @@ public interface VisualComparableClient
      * @deprecated You should use {@link VisualComparableClient#execute(String, Object...)} instead.
      */
     @Deprecated
-    public void evaluate (String command);
+    public void evaluate(String command);
 
     /**
      * Execute a script in the client and return the evaluated result.
@@ -23,16 +23,16 @@ public interface VisualComparableClient
      * @param arguments additional arguments to provide to the script.
      * @return the evaluated result of the javascript.
      */
-    public Object execute (String command, Object... arguments);
+    public Object execute(String command, Object... arguments);
 
-    public boolean resizeScreen (ScreenResolution resolution, boolean refreshAfterResize);
+    public boolean resizeScreen(ScreenResolution resolution, boolean refreshAfterResize);
 
-    public void refreshAndWait ();
+    public void refreshAndWait();
 
     /**
      * Wait until all active jQuery AJAX queries have returned -- i.e., no AJAX queries are active.
      * @param waitTimeMillis the time to wait for everything to finish.
      * @return true if no AJAX query is active, false otherwise.
      */
-    public boolean waitForJQuery (long waitTimeMillis);
+    public boolean waitForJQuery(long waitTimeMillis);
 }
