@@ -3,7 +3,7 @@
 function killVnc {
     VNC_PID_FILE=`echo $HOME/.vnc/*:20.pid`
     if [ -n "$VNC_PID_FILE" -a -f "$VNC_PID_FILE" ]; then
-        vncserver -kill :20 >/dev/null 2>&1
+        vncserver -kill :20 2>&1
         if [ -f  "$VNC_PID_FILE" ]; then
             VNC_PID=`cat $VNC_PID_FILE`
             echo "Killing VNC pid ($VNC_PID) directly..."
