@@ -12,6 +12,7 @@ import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.Nonnull;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -136,9 +137,10 @@ public class WebDriverVisualComparableClient implements VisualComparableClient
         }
 
         @Override
+        @Nonnull
         public String getHtml()
         {
-            return (String)execute("var d = document.createElement('div'); d.appendChild(arguments[0].cloneNode(true)); return d.innerHTML;", element);
+            return (String) execute("var d = document.createElement('div'); d.appendChild(arguments[0].cloneNode(true)); return d.innerHTML;", element);
         }
     }
 

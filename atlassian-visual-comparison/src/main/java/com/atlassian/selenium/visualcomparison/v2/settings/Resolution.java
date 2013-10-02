@@ -1,6 +1,9 @@
-package com.atlassian.selenium.visualcomparison.v2.screen;
+package com.atlassian.selenium.visualcomparison.v2.settings;
+
+import com.atlassian.annotations.ExperimentalApi;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.Immutable;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -8,12 +11,21 @@ import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
 
 /**
- * TODO
+ * Represents screen resolution (in pixels) that can be used for visual comparisons.
+ *
+ * <p/>
+ * Valid string representations of resolutions are in form {@code <width>x<height>}. {@link #toString()} and
+ * {@link #parse(String)} methods can be used to serialize/deserialize valid resolutions to/from strings, and are
+ * compatible with each other.
  *
  * @since 2.3
  */
+@ExperimentalApi
+@Immutable
 public final class Resolution implements Comparable<Resolution>
 {
+    public static final Resolution R1024_768 = new Resolution(1024, 768);
+
     private static final String SEPARATOR = "x";
 
     private final int width;
@@ -28,7 +40,7 @@ public final class Resolution implements Comparable<Resolution>
     }
 
     /**
-     * TODO
+     * Parse
      *
      * @param resolutionString
      * @return

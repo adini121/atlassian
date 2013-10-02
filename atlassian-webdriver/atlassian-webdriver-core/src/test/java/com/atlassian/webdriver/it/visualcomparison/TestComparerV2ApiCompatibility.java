@@ -6,7 +6,7 @@ import com.atlassian.selenium.visualcomparison.utils.ScreenResolution;
 import com.atlassian.selenium.visualcomparison.v2.Comparer;
 import com.atlassian.selenium.visualcomparison.v2.DefaultComparer;
 import com.atlassian.selenium.visualcomparison.v2.VisualComparisonFailedException;
-import com.atlassian.selenium.visualcomparison.v2.screen.Resolutions;
+import com.atlassian.selenium.visualcomparison.v2.settings.Resolution;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.it.AbstractFileBasedServerTest;
 import com.atlassian.webdriver.it.pageobjects.page.VisualComparisonPage;
@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.atlassian.selenium.visualcomparison.v2.ComparisonSettings.emptySettings;
+import static com.atlassian.selenium.visualcomparison.v2.settings.Resolution.R1024_768;
 import static org.apache.commons.io.FileUtils.readFileToString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -41,7 +42,7 @@ import static org.junit.Assert.fail;
 
 public class TestComparerV2ApiCompatibility extends AbstractFileBasedServerTest
 {
-    private static final String RESOLUTION_STRING = Resolutions.R1024_768.toString();
+    private static final String RESOLUTION_STRING = R1024_768.toString();
 
     private static final String TEST_1_ID = "test-1";
     private static final String BASELINE_1_NAME = TEST_1_ID + "." + RESOLUTION_STRING + ".png";
@@ -110,7 +111,7 @@ public class TestComparerV2ApiCompatibility extends AbstractFileBasedServerTest
         legacyComparer.assertUIMatches(TEST_1_ID, baselineDir.getAbsolutePath());
 
         Comparer newComparer = new DefaultComparer(new WebDriverBrowserEngine(webDriver), emptySettings()
-                .withResolution(Resolutions.R1024_768)
+                .withResolution(Resolution.R1024_768)
                 .withBaselineDirectory(baselineDir)
                 .withReportingEnabled(v2reportDir)
                 .ignoringSingleLineDifferences(true));
@@ -138,7 +139,7 @@ public class TestComparerV2ApiCompatibility extends AbstractFileBasedServerTest
         }
 
         Comparer newComparer = new DefaultComparer(new WebDriverBrowserEngine(webDriver), emptySettings()
-                .withResolution(Resolutions.R1024_768)
+                .withResolution(Resolution.R1024_768)
                 .withBaselineDirectory(baselineDir)
                 .withReportingEnabled(v2reportDir)
                 .ignoringSingleLineDifferences(true));
@@ -160,7 +161,7 @@ public class TestComparerV2ApiCompatibility extends AbstractFileBasedServerTest
     public void testBaselineMissing()
     {
         Comparer comparer = new DefaultComparer(new WebDriverBrowserEngine(webDriver), emptySettings()
-                .withResolution(Resolutions.R1024_768)
+                .withResolution(Resolution.R1024_768)
                 .withBaselineDirectory(baselineDir)
                 .withReportingEnabled(v2reportDir)
                 .ignoringSingleLineDifferences(true));

@@ -1,4 +1,4 @@
-package com.atlassian.selenium.visualcomparison.v2.screen;
+package com.atlassian.selenium.visualcomparison.v2.settings;
 
 import com.atlassian.annotations.ExperimentalApi;
 
@@ -8,7 +8,10 @@ import javax.annotation.concurrent.Immutable;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * TODO
+ * Replacement for part of the compared page with some alternative {@code html}.
+ *
+ * <p/>
+ * Currently the only way to identify the replaced part is by element ID, but this is subject to change in the future.
  *
  * @since 2.3
  */

@@ -1,13 +1,15 @@
 package com.atlassian.selenium.visualcomparison.v2;
 
-import com.atlassian.selenium.visualcomparison.v2.screen.PagePart;
-import com.atlassian.selenium.visualcomparison.v2.screen.Replacement;
-import com.atlassian.selenium.visualcomparison.v2.screen.Resolution;
+import com.atlassian.annotations.ExperimentalApi;
+import com.atlassian.selenium.visualcomparison.v2.settings.PagePart;
+import com.atlassian.selenium.visualcomparison.v2.settings.Replacement;
+import com.atlassian.selenium.visualcomparison.v2.settings.Resolution;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedSet;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
 import java.io.File;
 import java.util.Set;
 
@@ -15,11 +17,25 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.Arrays.asList;
 
 /**
- * TODO
+ * Represents settings used for visual comparison. This is in essence an immutable bean that holds various settings.
  *
- * @since 2.8
+ * <p/>
+ * A single instance of code {@code ComparisonSettings} can be {@link #merge(ComparisonSettings) merged} with another
+ * instance, which will result in the other instance 'single' fields overriding this instance's corresponding fields,
+ * unless they were not set on the other instance at all. Collection fields are merged by combining collections from
+ * both merged instances.
+ *
+ * <p/>
+ * A family of short-hand methods is also available on this class (many of them starting with a {@code with} prefix) to
+ * facilitate creating a new instance of settings overriding, or adding just one specific field from the original
+ * instance. Those work in essence as if this instance was {@link #merge(ComparisonSettings) merged} with another
+ * instance of settings that had just that one particular field set.
+ *
+ * @since 2.3
  */
-public class ComparisonSettings
+@Immutable
+@ExperimentalApi
+public final class ComparisonSettings
 {
     private final Set<Resolution> resolutions;
 
@@ -33,10 +49,7 @@ public class ComparisonSettings
     private final Iterable<PagePart> ignoredParts;
     private final Iterable<Replacement> replacements;
 
-    /**
-     * TODO
-     */
-    public ComparisonSettings()
+    private ComparisonSettings()
     {
         this(new Builder());
     }
@@ -56,6 +69,13 @@ public class ComparisonSettings
         replacements = builder.replacements.build();
     }
 
+    /**
+     * Creates a new empty instance of settings. All simple fields are {@code null} (not set) and the collection
+     * fields are empty collections.
+     *
+     * @return new empty instance of {@code ComparisonSettings}.
+     */
+    @Nonnull
     public static ComparisonSettings emptySettings()
     {
         return new ComparisonSettings();

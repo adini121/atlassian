@@ -1,11 +1,13 @@
-package com.atlassian.selenium.visualcomparison.v2.screen;
+package com.atlassian.selenium.visualcomparison.v2.settings;
 
 import com.atlassian.annotations.ExperimentalApi;
 
 import javax.annotation.concurrent.Immutable;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 /**
- * TODO
+ * Simple implementation of {@link PagePart} that stores all the coordinates internally.
  *
  * @since 2.3
  */
@@ -20,7 +22,10 @@ public final class SimplePagePart implements PagePart
 
     public SimplePagePart(int left, int top, int right, int bottom)
     {
-        // TODO check arguments
+        checkArgument(left >= 0, "left must be >= 0");
+        checkArgument(top >= 0, "top must be >= 0");
+        checkArgument(right >= 0, "right must be >= 0");
+        checkArgument(bottom >= 0, "bottom must be >= 0");
         this.left = left;
         this.top = top;
         this.right = right;

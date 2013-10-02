@@ -2,7 +2,7 @@ package com.atlassian.webdriver.visualcomparison;
 
 import com.atlassian.selenium.visualcomparison.ScreenElement;
 import com.atlassian.selenium.visualcomparison.v2.BrowserEngine;
-import com.atlassian.selenium.visualcomparison.v2.screen.Resolution;
+import com.atlassian.selenium.visualcomparison.v2.settings.Resolution;
 import com.atlassian.webdriver.debug.WebDriverDebug;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
@@ -74,9 +74,9 @@ public final class WebDriverBrowserEngine implements BrowserEngine
 
     @Nonnull
     @Override
-    public BrowserEngine captureScreenshotTo(@Nonnull File path)
+    public BrowserEngine captureScreenshotTo(@Nonnull File file)
     {
-        new WebDriverDebug(webDriver).takeScreenshotTo(path);
+        new WebDriverDebug(webDriver).takeScreenshotTo(file);
         return this;
     }
 
@@ -208,6 +208,7 @@ public final class WebDriverBrowserEngine implements BrowserEngine
         }
 
         @Override
+        @Nonnull
         public String getHtml()
         {
             return html;

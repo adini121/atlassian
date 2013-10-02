@@ -1,9 +1,9 @@
-package com.atlassian.selenium.visualcomparison.v2.screen;
+package com.atlassian.selenium.visualcomparison.v2.settings;
 
 import com.atlassian.annotations.ExperimentalApi;
 
 /**
- * TODO
+ * Represents a part of the page identified by a top-left and bottom-right corner coordinates.
  *
  * @since 2.3
  */

@@ -1,7 +1,7 @@
 package com.atlassian.webdriver.visualcomparison;
 
 import com.atlassian.annotations.ExperimentalApi;
-import com.atlassian.selenium.visualcomparison.v2.screen.PagePart;
+import com.atlassian.selenium.visualcomparison.v2.settings.PagePart;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;

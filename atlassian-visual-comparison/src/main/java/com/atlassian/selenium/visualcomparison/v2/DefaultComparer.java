@@ -1,19 +1,21 @@
 package com.atlassian.selenium.visualcomparison.v2;
 
+import com.atlassian.annotations.ExperimentalApi;
 import com.atlassian.selenium.visualcomparison.ScreenElement;
 import com.atlassian.selenium.visualcomparison.VisualComparableClient;
 import com.atlassian.selenium.visualcomparison.VisualComparer;
 import com.atlassian.selenium.visualcomparison.utils.BoundingBox;
 import com.atlassian.selenium.visualcomparison.utils.ScreenResolution;
-import com.atlassian.selenium.visualcomparison.v2.screen.PagePart;
-import com.atlassian.selenium.visualcomparison.v2.screen.Replacement;
-import com.atlassian.selenium.visualcomparison.v2.screen.Resolution;
+import com.atlassian.selenium.visualcomparison.v2.settings.PagePart;
+import com.atlassian.selenium.visualcomparison.v2.settings.Replacement;
+import com.atlassian.selenium.visualcomparison.v2.settings.Resolution;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
@@ -25,10 +27,24 @@ import static com.google.common.collect.Iterables.toArray;
 import static com.google.common.collect.Iterables.transform;
 
 /**
- * TODO
+ * Current default implementation of {@link Comparer}. This implementation delegates the visual comparison requests to
+ * the {@link com.atlassian.selenium.visualcomparison.VisualComparer old visual comparison library}, transforming the
+ * request, the settings and the results in the process.
+ *
+ * <p/>
+ * {@link BrowserEngine} is used as the underlying SPI for the browser automation framework and
+ * {@link ComparisonSettings} as the vehicle for configuring the visual comparison, both at the
+ * {@link #DefaultComparer(BrowserEngine, ComparisonSettings) instance} and at the
+ * {@link #compare(String, ComparisonSettings) single comparison} level.
+ *
+ * <p/>
+ * NOTE: this implementation is likely to change in the future to migrate away from the old library. Depending on
+ * implementation details of this class is highly discouraged.
  *
  * @since 2.3
  */
+@ExperimentalApi
+@Immutable
 public final class DefaultComparer implements Comparer
 {
     private final BrowserEngine engine;
@@ -57,13 +73,19 @@ public final class DefaultComparer implements Comparer
         {
             if (!comparer.uiMatches(id, effectiveSettings.getBaselineDirectory().getAbsolutePath()))
             {
-                // TODO message
-                throw new VisualComparisonFailedException();
+                String message = "Screenshots did not match the baseline in "
+                        + effectiveSettings.getBaselineDirectory().getAbsolutePath() + ".";
+                if (effectiveSettings.isReportingEnabled())
+                {
+                    message += " Check reports in " + effectiveSettings.getReportingDirectory().getAbsolutePath()
+                            + " for more details.";
+                }
+                throw new VisualComparisonFailedException(id, message);
             }
         }
         catch (Exception e)
         {
-            throw new VisualComparisonFailedException(e);
+            throw new VisualComparisonFailedException(id, "Error when performing comparison", e);
         }
     }
 
