@@ -5,7 +5,6 @@ import com.atlassian.selenium.visualcomparison.VisualComparer;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.LifecycleAwareWebDriverGrid;
 import com.atlassian.webdriver.visualcomparison.WebDriverVisualComparableClient;
-import org.junit.rules.ExternalResource;
 
 /**
  * @since 2.1
@@ -24,6 +23,6 @@ public class VisualComparerRule extends FailsafeExternalResource
 
     public VisualComparer getComparer()
     {
-        return this.comparer;
+        return comparer;
     }
 }
