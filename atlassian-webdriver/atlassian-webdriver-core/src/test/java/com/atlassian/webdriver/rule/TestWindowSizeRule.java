@@ -10,8 +10,10 @@ import org.junit.runners.model.Statement;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
 
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
@@ -68,7 +70,8 @@ public class TestWindowSizeRule
         when(mockWindowSize.height()).thenReturn(768);
         final Description description = Description.createTestDescription(TestWindowSizeRule.class, "testMethod", mockWindowSize);
         new SafeStatementInvoker(createRule().apply(mockTest, description)).invokeSafely();
-        verify(wedDriverWindow).setSize(new Dimension(1024,768));
+        verify(wedDriverWindow).setPosition(new Point(0, 0));
+        verify(wedDriverWindow, times(2)).setSize(new Dimension(1024, 768));
         verifyNoMoreInteractions(wedDriverWindow);
     }
 
@@ -77,7 +80,8 @@ public class TestWindowSizeRule
     {
         final Description description = Description.createTestDescription(ClassAnnotatedWithWindowSize.class, "testMethod");
         new SafeStatementInvoker(createRule().apply(mockTest, description)).invokeSafely();
-        verify(wedDriverWindow).setSize(new Dimension(1024,768));
+        verify(wedDriverWindow).setPosition(new Point(0, 0));
+        verify(wedDriverWindow , times(2)).setSize(new Dimension(1024, 768));
         verifyNoMoreInteractions(wedDriverWindow);
     }
 
