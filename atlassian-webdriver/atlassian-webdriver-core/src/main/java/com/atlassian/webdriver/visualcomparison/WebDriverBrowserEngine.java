@@ -95,36 +95,6 @@ public final class WebDriverBrowserEngine implements BrowserEngine
         return execute(returnType, script, webDriver, args);
     }
 
-    @SuppressWarnings("ConstantConditions")
-    private int findRelativeX(int originalX)
-    {
-        final long viewportWidth = executeScript(Long.class, "return jQuery(window).width();");
-        if (originalX < viewportWidth)
-        {
-            return originalX;
-        }
-        else
-        {
-            return (int) viewportWidth;
-        }
-    }
-
-    @SuppressWarnings("ConstantConditions")
-    private int findRelativeY(int originalY)
-    {
-        final long viewportHeight = executeScript(Long.class, "return jQuery(window).height();");
-        if (originalY < viewportHeight)
-        {
-            return originalY;
-        }
-        else
-        {
-            return (int) viewportHeight;
-        }
-    }
-
-
-
     private By byPoint(final Point coordinates)
     {
         return new By()

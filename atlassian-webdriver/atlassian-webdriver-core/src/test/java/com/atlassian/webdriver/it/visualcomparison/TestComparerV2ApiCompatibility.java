@@ -8,9 +8,11 @@ import com.atlassian.selenium.visualcomparison.v2.DefaultComparer;
 import com.atlassian.selenium.visualcomparison.v2.VisualComparisonFailedException;
 import com.atlassian.selenium.visualcomparison.v2.settings.Resolution;
 import com.atlassian.webdriver.AtlassianWebDriver;
+import com.atlassian.webdriver.debug.WebDriverDebug;
 import com.atlassian.webdriver.it.AbstractFileBasedServerTest;
 import com.atlassian.webdriver.it.pageobjects.page.VisualComparisonPage;
 import com.atlassian.webdriver.rule.test.TemporaryFolderPreservingOnFailure;
+import com.atlassian.webdriver.testing.annotation.WindowSize;
 import com.atlassian.webdriver.visualcomparison.VisualComparisonSupport;
 import com.atlassian.webdriver.visualcomparison.WebDriverBrowserEngine;
 import com.atlassian.webdriver.visualcomparison.WebDriverVisualComparableClient;
@@ -40,6 +42,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
 
+@WindowSize(width = 1024, height = 768)
 public class TestComparerV2ApiCompatibility extends AbstractFileBasedServerTest
 {
     private static final String RESOLUTION_STRING = R1024_768.toString();
@@ -52,13 +55,16 @@ public class TestComparerV2ApiCompatibility extends AbstractFileBasedServerTest
     private static final String BASELINE_2_NAME = TEST_2_ID + "." + RESOLUTION_STRING + ".png";
     private static final String REPORT_2_FILE_NAME = "report-" + TEST_2_ID + "-" + RESOLUTION_STRING + ".html";
 
-    private static final String[] BASELINES = { BASELINE_1_NAME, BASELINE_2_NAME };
+    private static final String[] BASELINES = { BASELINE_2_NAME };
 
     @Inject
     private AtlassianWebDriver webDriver;
 
     @Inject
     private VisualComparisonSupport comparisonSupport;
+
+    @Inject
+    private WebDriverDebug webDriverDebug;
 
     @Rule
     public final TemporaryFolderPreservingOnFailure testFolder =
@@ -105,9 +111,11 @@ public class TestComparerV2ApiCompatibility extends AbstractFileBasedServerTest
     @Test
     public void testCompatibilitySuccessfulCompare() throws IOException
     {
-        VisualComparer legacyComparer = getLegacyComparer();
+
         product.visit(VisualComparisonPage.class, 1);
+        VisualComparer legacyComparer = getLegacyComparer();
         addIgnoredElementOldStyle(legacyComparer, By.className("aui-header-logo-device"));
+        webDriverDebug.takeScreenshotTo(new File(baselineDir, BASELINE_1_NAME));
 
         legacyComparer.assertUIMatches(TEST_1_ID, baselineDir.getAbsolutePath());
 

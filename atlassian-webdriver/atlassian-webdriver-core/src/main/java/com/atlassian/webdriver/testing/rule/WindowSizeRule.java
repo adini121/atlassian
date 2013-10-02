@@ -5,6 +5,7 @@ import com.google.common.base.Supplier;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.slf4j.Logger;
@@ -144,6 +145,9 @@ public class WindowSizeRule extends TestWatcher
 
     private void setSize(Dimension dimension)
     {
+        support.getDriver().manage().window().setPosition(new Point(0,0));
+        support.getDriver().manage().window().setSize(dimension);
+        // _not_ a mistake... don't ask
         support.getDriver().manage().window().setSize(dimension);
     }
 
