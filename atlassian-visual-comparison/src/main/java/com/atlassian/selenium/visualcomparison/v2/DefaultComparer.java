@@ -85,7 +85,14 @@ public final class DefaultComparer implements Comparer
         }
         catch (Exception e)
         {
-            throw new VisualComparisonFailedException(id, "Error when performing comparison", e);
+            if (e instanceof VisualComparisonFailedException)
+            {
+                throw (VisualComparisonFailedException) e;
+            }
+            else
+            {
+                throw new VisualComparisonFailedException(id, "Error when performing comparison", e);
+            }
         }
     }
 

@@ -10,6 +10,7 @@ import com.atlassian.selenium.visualcomparison.v2.settings.Resolution;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.it.AbstractFileBasedServerTest;
 import com.atlassian.webdriver.it.pageobjects.page.VisualComparisonPage;
+import com.atlassian.webdriver.rule.test.TemporaryFolderPreservingOnFailure;
 import com.atlassian.webdriver.visualcomparison.VisualComparisonSupport;
 import com.atlassian.webdriver.visualcomparison.WebDriverBrowserEngine;
 import com.atlassian.webdriver.visualcomparison.WebDriverVisualComparableClient;
@@ -18,7 +19,6 @@ import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;
@@ -61,7 +61,8 @@ public class TestComparerV2ApiCompatibility extends AbstractFileBasedServerTest
     private VisualComparisonSupport comparisonSupport;
 
     @Rule
-    public final TemporaryFolder testFolder = new TemporaryFolder();
+    public final TemporaryFolderPreservingOnFailure testFolder =
+            new TemporaryFolderPreservingOnFailure(new File("target/visualcomparisontests"));
 
     private File baselineDir;
     private File v1reportDir;
@@ -70,9 +71,9 @@ public class TestComparerV2ApiCompatibility extends AbstractFileBasedServerTest
     @Before
     public void setUpDirs() throws IOException
     {
-        baselineDir = testFolder.newFolder("baseline");
-        v1reportDir = testFolder.newFolder("reports-v1");
-        v2reportDir = testFolder.newFolder("reports-v2");
+        baselineDir = testFolder.getFolder().newFolder("baseline");
+        v1reportDir = testFolder.getFolder().newFolder("reports-v1");
+        v2reportDir = testFolder.getFolder().newFolder("reports-v2");
         copyBaselines();
     }
 
