@@ -1,7 +1,13 @@
 package com.atlassian.selenium.visualcomparison;
 
+import com.atlassian.annotations.Internal;
 import com.atlassian.selenium.visualcomparison.utils.ScreenResolution;
 
+/**
+ * @see VisualComparer
+ * @see com.atlassian.selenium.visualcomparison.v2.BrowserEngine
+ */
+@Internal
 public interface VisualComparableClient
 {
 

@@ -1,7 +1,10 @@
 package com.atlassian.selenium.visualcomparison.utils;
 
+import com.atlassian.annotations.Internal;
+
 import java.io.File;
 
+@Internal
 public class PageDifferenceImages
 {
     private File oldImageFile;

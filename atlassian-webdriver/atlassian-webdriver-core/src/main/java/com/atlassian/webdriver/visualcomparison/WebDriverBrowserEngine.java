@@ -68,7 +68,9 @@ public final class WebDriverBrowserEngine implements BrowserEngine
     @Override
     public BrowserEngine resizeTo(@Nonnull Resolution resolution)
     {
-        webDriver.manage().window().setSize(new Dimension(resolution.getWidth(), resolution.getHeight()));
+        setSize(resolution);
+        // NOT a mistake... WebDriver sometimes needs an extra kick in butt
+        setSize(resolution);
         return this;
     }
 
@@ -122,6 +124,11 @@ public final class WebDriverBrowserEngine implements BrowserEngine
         long x = executeScript(Long.class, "return jQuery(" + selector + ").width();");
         long y = executeScript(Long.class, "return jQuery(" + selector + ").height();");
         return new Dimension((int) x, (int) y);
+    }
+
+    private void setSize(Resolution resolution)
+    {
+        webDriver.manage().window().setSize(new Dimension(resolution.getWidth(), resolution.getHeight()));
     }
 
     private final class ElementByPoint

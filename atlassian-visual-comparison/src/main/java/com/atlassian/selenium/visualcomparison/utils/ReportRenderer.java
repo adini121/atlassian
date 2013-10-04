@@ -1,5 +1,6 @@
 package com.atlassian.selenium.visualcomparison.utils;
 
+import com.atlassian.annotations.Internal;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
@@ -7,6 +8,7 @@ import org.apache.velocity.app.Velocity;
 import java.io.StringWriter;
 import java.util.Properties;
 
+@Internal
 public class ReportRenderer
 {
     private static boolean initialised = false;

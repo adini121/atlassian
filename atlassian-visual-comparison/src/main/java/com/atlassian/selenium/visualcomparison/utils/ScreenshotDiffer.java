@@ -1,10 +1,13 @@
 package com.atlassian.selenium.visualcomparison.utils;
 
+import com.atlassian.annotations.Internal;
+
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Internal
 public class ScreenshotDiffer
 {
     public ScreenshotDiff diff(Screenshot oldScreen, Screenshot newScreen,

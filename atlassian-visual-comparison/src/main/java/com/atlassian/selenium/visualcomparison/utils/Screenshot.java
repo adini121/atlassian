@@ -1,14 +1,15 @@
 package com.atlassian.selenium.visualcomparison.utils;
 
+import com.atlassian.annotations.Internal;
 import com.atlassian.selenium.visualcomparison.VisualComparableClient;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
+@Internal
 public class Screenshot implements Comparable<Screenshot>
 {
     private ScreenResolution resolution;

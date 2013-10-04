@@ -1,5 +1,6 @@
 package com.atlassian.selenium.visualcomparison.utils;
 
+import com.atlassian.annotations.Internal;
 import org.apache.velocity.VelocityContext;
 
 import javax.imageio.ImageIO;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+@Internal
 public class ScreenshotDiff
 {
     private Screenshot oldScreenshot;

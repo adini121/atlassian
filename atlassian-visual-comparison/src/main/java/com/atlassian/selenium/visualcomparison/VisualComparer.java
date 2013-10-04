@@ -1,5 +1,6 @@
 package com.atlassian.selenium.visualcomparison;
 
+import com.atlassian.annotations.Internal;
 import com.atlassian.selenium.visualcomparison.utils.BoundingBox;
 import com.atlassian.selenium.visualcomparison.utils.PageDifference;
 import com.atlassian.selenium.visualcomparison.utils.PageElementInfo;
@@ -18,6 +19,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Implements the visual comparison functionality.
+ *
+ * <p/>
+ * NOTE: this class is considered internal as of 2.3 and may be subject to API changes and removal as of 3.0. Please
+ * use {@link com.atlassian.selenium.visualcomparison.v2.Comparer} and the associated family of classes making up the
+ * Visual Comparison V2 API instead of this class directly.
+ */
+@Internal
 public class VisualComparer
 {
     private ScreenResolution[] resolutions = new ScreenResolution[]

@@ -1,9 +1,11 @@
 package com.atlassian.selenium.visualcomparison.utils;
 
+import com.atlassian.annotations.Internal;
 import org.apache.commons.lang.StringEscapeUtils;
 
 import java.awt.*;
 
+@Internal
 public class PageElementInfo
 {
     public String htmlContent;

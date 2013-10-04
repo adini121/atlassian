@@ -1,7 +1,10 @@
 package com.atlassian.selenium.visualcomparison.utils;
 
+import com.atlassian.annotations.Internal;
+
 import java.awt.*;
 
+@Internal
 public class ScreenResolution extends Dimension implements Comparable<ScreenResolution>
 {
     public ScreenResolution(int width, int height)
