@@ -152,37 +152,6 @@
             <properties>
                 <xvfb.enable>false</xvfb.enable>
             </properties>
-            <!--<build>-->
-                <!--<plugins>-->
-                    <!--<plugin>-->
-                        <!--<groupId>org.codehaus.mojo</groupId>-->
-                        <!--<artifactId>exec-maven-plugin</artifactId>-->
-                        <!--<version>1.2.1</version>-->
-                        <!--<executions>-->
-                            <!--<execution>-->
-                                <!--<id>start-vnc</id>-->
-                                <!--<phase>test-compile</phase>-->
-                                <!--<goals>-->
-                                    <!--<goal>exec</goal>-->
-                                <!--</goals>-->
-                                <!--<configuration>-->
-                                    <!--<executable>bin/vnc-setup.sh</executable>-->
-                                <!--</configuration>-->
-                            <!--</execution>-->
-                            <!--<execution>-->
-                                <!--<id>stop-vnc</id>-->
-                                <!--<phase>package</phase>-->
-                                <!--<goals>-->
-                                    <!--<goal>exec</goal>-->
-                                <!--</goals>-->
-                                <!--<configuration>-->
-                                    <!--<executable>bin/vnc-teardown.sh</executable>-->
-                                <!--</configuration>-->
-                            <!--</execution>-->
-                        <!--</executions>-->
-                    <!--</plugin>-->
-                <!--</plugins>-->
-            <!--</build>-->
         </profile>
     </profiles>
 
