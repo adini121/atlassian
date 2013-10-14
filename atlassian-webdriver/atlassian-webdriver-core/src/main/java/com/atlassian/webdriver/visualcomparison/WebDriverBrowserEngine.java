@@ -4,12 +4,7 @@ import com.atlassian.selenium.visualcomparison.ScreenElement;
 import com.atlassian.selenium.visualcomparison.v2.BrowserEngine;
 import com.atlassian.selenium.visualcomparison.v2.settings.Resolution;
 import com.atlassian.webdriver.debug.WebDriverDebug;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.Point;
-import org.openqa.selenium.SearchContext;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,8 +20,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static java.lang.String.format;
 
 /**
- * TODO
- *
  * @since 2.3
  */
 public final class WebDriverBrowserEngine implements BrowserEngine

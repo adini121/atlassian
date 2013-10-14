@@ -20,6 +20,8 @@ public final class VisualComparisonSupport
     @Inject
     private WebDriver webDriver;
 
+
+
     @Nonnull
     public PagePart asPagePart(@Nonnull By locator)
     {
