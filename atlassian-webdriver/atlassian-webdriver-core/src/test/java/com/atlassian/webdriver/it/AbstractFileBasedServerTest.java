@@ -17,5 +17,4 @@ public abstract class AbstractFileBasedServerTest
 
     @Inject @ClassRule public static DefaultProductContextRules.ForClass classRules;
     @Inject @Rule public DefaultProductContextRules.ForMethod methodRules;
-
 }

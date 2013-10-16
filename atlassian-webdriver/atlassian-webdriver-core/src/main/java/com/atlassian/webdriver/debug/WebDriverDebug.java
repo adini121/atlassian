@@ -115,10 +115,12 @@ public final class WebDriverDebug
 
     /**
      * Saves screen shot of the browser to the specified file.
+     *
      * @param destFile File to save screen shot.
      */
     public boolean takeScreenshotTo(@Nonnull File destFile)
     {
+        checkNotNull(destFile, "destFile");
         if (isInstance(webDriver, TakesScreenshot.class))
         {
             TakesScreenshot shotter = as(webDriver, TakesScreenshot.class);

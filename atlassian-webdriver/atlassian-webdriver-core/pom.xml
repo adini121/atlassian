@@ -72,7 +72,6 @@
         <dependency>
             <groupId>com.atlassian.annotations</groupId>
             <artifactId>atlassian-annotations</artifactId>
-            <version>${atlassian.annotations.version}</version>
         </dependency>
         <dependency>
             <groupId>com.atlassian.util.concurrent</groupId>
@@ -141,6 +140,18 @@
                     <version>${webdriver-browsers-version}</version>
                 </dependency>
             </dependencies>
+        </profile>
+        <profile>
+            <id>vnc</id>
+            <activation>
+                <property>
+                    <name>vnc.enable</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <properties>
+                <xvfb.enable>false</xvfb.enable>
+            </properties>
         </profile>
     </profiles>
 

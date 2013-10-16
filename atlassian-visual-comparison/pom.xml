@@ -19,7 +19,18 @@
           <groupId>org.apache.velocity</groupId>
           <artifactId>velocity</artifactId>
           <version>1.6.2</version>
-          <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.atlassian.bundles</groupId>
+            <artifactId>jsr305</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.atlassian.annotations</groupId>
+            <artifactId>atlassian-annotations</artifactId>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

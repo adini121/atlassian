@@ -1,8 +1,11 @@
 package com.atlassian.selenium.visualcomparison.utils;
 
+import com.atlassian.annotations.Internal;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@Internal
 public class PageDifference
 {
     private final BoundingBox box;

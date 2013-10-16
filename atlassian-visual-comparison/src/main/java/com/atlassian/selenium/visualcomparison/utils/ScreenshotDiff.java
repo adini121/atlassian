@@ -1,20 +1,20 @@
 package com.atlassian.selenium.visualcomparison.utils;
 
-import org.apache.commons.lang.StringEscapeUtils;
+import com.atlassian.annotations.Internal;
 import org.apache.velocity.VelocityContext;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
+@Internal
 public class ScreenshotDiff
 {
     private Screenshot oldScreenshot;

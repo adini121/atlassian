@@ -130,6 +130,12 @@ public class JavaScriptUtils
     public static <T> T execute(Class<T> expectedReturn, String js, WebDriver driver, Object... arguments)
     {
         JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
-        return expectedReturn.cast(jsExecutor.executeScript(js, arguments));
+        final Object result = jsExecutor.executeScript(js, arguments);
+        if (result != null && !expectedReturn.isInstance(result))
+        {
+            throw new ClassCastException("Expected result type " + expectedReturn.getName() + " but was: "
+                    + result.getClass().getName());
+        }
+        return expectedReturn.cast(result);
     }
 }
