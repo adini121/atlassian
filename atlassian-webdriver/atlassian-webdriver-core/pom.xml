@@ -171,6 +171,7 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-surefire-plugin</artifactId>
                         <configuration>
+                            <skip>false</skip> <!-- always run the tests -->
                             <systemPropertyVariables>
                                 <xvfb.enable>${xvfb.enable}</xvfb.enable>
                                 <xvfb.display>${xvfb.display}</xvfb.display>
