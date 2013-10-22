@@ -108,6 +108,10 @@
                         <xvfb.display>${xvfb.display}</xvfb.display>
                         <webdriver.browser>${webdriver.browser}</webdriver.browser>
                     </systemPropertyVariables>
+                    <excludes>
+                        <exclude>com/atlassian/webdriver/it/visualcomparison/**/*.java</exclude>
+                        <exclude>**/*$*</exclude> <!-- keep excluding inner classes, as in atlassian-base-pom -->
+                    </excludes>
                 </configuration>
             </plugin>
         </plugins>
@@ -152,6 +156,36 @@
             <properties>
                 <xvfb.enable>false</xvfb.enable>
             </properties>
+        </profile>
+        <profile>
+            <id>visual-comparison</id>
+            <activation>
+                <property>
+                    <name>visualComparison</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <systemPropertyVariables>
+                                <xvfb.enable>${xvfb.enable}</xvfb.enable>
+                                <xvfb.display>${xvfb.display}</xvfb.display>
+                                <webdriver.browser>${webdriver.browser}</webdriver.browser>
+                            </systemPropertyVariables>
+                            <includes>
+                                <include>com/atlassian/webdriver/it/visualcomparison/**/*.java</include>
+                            </includes>
+                            <excludes>
+                                <exclude>**/*$*</exclude> <!-- keep excluding inner classes, as in atlassian-base-pom -->
+                            </excludes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 
