@@ -1,13 +1,17 @@
 package com.atlassian.pageobjects.elements.query.webdriver;
 
+import com.atlassian.annotations.Internal;
 import com.atlassian.pageobjects.elements.WebDriverLocatable;
-import com.atlassian.webdriver.AtlassianWebDriver;
 import com.google.common.base.Function;
 import com.google.common.base.Supplier;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.Nonnull;
+
+import static com.atlassian.pageobjects.elements.WebDriverLocatable.LocateTimeout.zero;
 import static com.atlassian.pageobjects.elements.util.StringConcat.asString;
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -20,29 +24,32 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * If given element is not found, the 'invalid value' semantics of the timed query are applied. 
  *
  */
+@Internal
 public class WebDriverLocatableBasedTimedQuery<T> extends GenericWebDriverTimedQuery<T>
 {
     private final WebDriverLocatable locatable;
 
-    public WebDriverLocatableBasedTimedQuery(WebDriverLocatable locatable, AtlassianWebDriver driver,
+    public WebDriverLocatableBasedTimedQuery(WebDriverLocatable locatable, WebDriver driver,
                                              Function<WebElement, T> valueProvider, long timeout)
     {
         super(new LocatableBasedSupplier<T>(driver, locatable, valueProvider), timeout);
         this.locatable = locatable;
     }
 
-    public WebDriverLocatableBasedTimedQuery(WebDriverLocatable locatable, AtlassianWebDriver driver,
+    public WebDriverLocatableBasedTimedQuery(WebDriverLocatable locatable, WebDriver driver,
                                              Function<WebElement, T> valueProvider, long timeout, long interval)
     {
-        super(new LocatableBasedSupplier<T>(driver, locatable, valueProvider), timeout, interval);
+        super(new LocatableBasedSupplier<T>(driver, locatable, valueProvider),
+                timeout, interval);
         this.locatable = locatable;
     }
 
-    public WebDriverLocatableBasedTimedQuery(WebDriverLocatable locatable, AtlassianWebDriver driver,
+    public WebDriverLocatableBasedTimedQuery(WebDriverLocatable locatable, WebDriver driver,
                                              Function<WebElement, T> valueProvider, long timeout, long interval,
                                              T invalidValue)
     {
-        super(new LocatableBasedSupplier<T>(driver, locatable, valueProvider, invalidValue), timeout, interval);
+        super(new LocatableBasedSupplier<T>(driver, locatable, valueProvider, invalidValue),
+                timeout, interval);
         this.locatable = locatable;
     }
 
@@ -63,6 +70,7 @@ public class WebDriverLocatableBasedTimedQuery<T> extends GenericWebDriverTimedQ
     }
 
     @Override
+    @Nonnull
     public String toString()
     {
         return asString(super.toString(), "[locatable=", locatable, ",valueProvider=", valueProvider(), "]");
@@ -70,12 +78,12 @@ public class WebDriverLocatableBasedTimedQuery<T> extends GenericWebDriverTimedQ
 
     private static class LocatableBasedSupplier<S> implements Supplier<S>
     {
-        private final AtlassianWebDriver webDriver;
+        private final WebDriver webDriver;
         private final WebDriverLocatable locatable;
         private final Function<WebElement, S> valueProvider;
         private final S invalidValue;
 
-         public LocatableBasedSupplier(AtlassianWebDriver webDriver ,WebDriverLocatable locatable,
+         public LocatableBasedSupplier(WebDriver webDriver, WebDriverLocatable locatable,
                                        Function<WebElement, S> valueProvider, S invalid)
         {
             this.valueProvider = valueProvider;
@@ -84,7 +92,8 @@ public class WebDriverLocatableBasedTimedQuery<T> extends GenericWebDriverTimedQ
             this.invalidValue = invalid;
         }
 
-        public LocatableBasedSupplier(AtlassianWebDriver webDriver, WebDriverLocatable locatable, Function<WebElement, S> valueProvider)
+        public LocatableBasedSupplier(WebDriver webDriver, WebDriverLocatable locatable,
+                                      Function<WebElement, S> valueProvider)
         {
             this(webDriver, locatable, valueProvider, null);
         }
@@ -93,7 +102,7 @@ public class WebDriverLocatableBasedTimedQuery<T> extends GenericWebDriverTimedQ
         {
             try
             {
-                return valueProvider.apply((WebElement) locatable.waitUntilLocated(webDriver, 0));
+                return valueProvider.apply((WebElement) locatable.waitUntilLocated(webDriver, zero()));
             }
             catch(StaleElementReferenceException e)
             {
