@@ -504,8 +504,16 @@ public final class Conditions
         @Override
         protected Boolean currentValue()
         {
-            lastValue = query.now();
-            return matcher.matches(lastValue);
+            try
+            {
+                lastValue = query.now();
+                return matcher.matches(lastValue);
+            }
+            catch (Exception e)
+            {
+                log.debug(String.format("TimedQuery.now() threw an exception. Not a match for %s", matcher), e);
+                return false;
+            }
         }
 
         @Override
