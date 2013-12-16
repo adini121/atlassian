@@ -511,7 +511,7 @@ public final class Conditions
             }
             catch (Exception e)
             {
-                log.debug("Matcher throws. No match for you!", e);
+                log.debug(String.format("TimedQuery.now() threw an exception. Not a match for %s", matcher), e);
                 return false;
             }
         }
