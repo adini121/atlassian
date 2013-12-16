@@ -7,6 +7,7 @@ import com.atlassian.pageobjects.elements.query.Poller;
 import com.atlassian.pageobjects.elements.query.StaticQuery;
 import com.atlassian.pageobjects.elements.query.TimedQuery;
 import org.junit.Test;
+import org.openqa.selenium.StaleElementReferenceException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,8 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Test case for {@link com.atlassian.pageobjects.elements.query.Poller} with various timed queries.
@@ -213,6 +216,22 @@ public class TestPollerQueryWaits
         }
     }
 
+    @Test
+    @SuppressWarnings ("unchecked")
+    public void exceptionsWithinTimeoutShouldBeIgnored() throws Exception
+    {
+        String expectedQueryReturn = "all good now";
+
+        // this mock first throws an exception, then returns the expected value
+        TimedQuery<String> timedQuery = mock(TimedQuery.class);
+        when(timedQuery.defaultTimeout()).thenReturn(5000L);
+        when(timedQuery.interval()).thenReturn(10L);
+        when(timedQuery.now())
+                .thenThrow(new StaleElementReferenceException("big problem! try again?!"))
+                .thenReturn(expectedQueryReturn);
+
+        Poller.waitUntil(timedQuery, equalTo(expectedQueryReturn), by(200));
+    }
 
     private TimedQuery<String> queryFor(String value)
     {
