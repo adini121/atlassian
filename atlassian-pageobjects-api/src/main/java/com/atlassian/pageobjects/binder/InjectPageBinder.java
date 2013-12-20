@@ -29,8 +29,6 @@ import org.apache.commons.lang.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.concurrent.NotThreadSafe;
-import javax.inject.Inject;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -40,6 +38,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.concurrent.NotThreadSafe;
+import javax.inject.Inject;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -159,7 +159,10 @@ public final class InjectPageBinder implements PageBinder, ConfigurableInjection
         checkNotNull(p);
         String pageUrl = p.getUrl();
         String baseUrl = productInstance.getBaseUrl();
-        tester.gotoUrl(baseUrl + pageUrl);
+        boolean pathStartsWithDoubleSlash = baseUrl.endsWith("/") && pageUrl.startsWith("/");
+
+        // paths aren't allowed to start with a double-slash
+        tester.gotoUrl(baseUrl + (pathStartsWithDoubleSlash ? pageUrl.substring(1) : pageUrl));
     }
 
     public <P> void override(Class<P> oldClass, Class<? extends P> newClass)
