@@ -193,12 +193,23 @@ public class TestInjectPageBinder
     }
 
     @Test
-    public void visitUrlShouldFixPathsThatStartWithDoubleSlash() throws Exception
+    public void visitUrlShouldRemoveExtraSlashAfterHostname() throws Exception
     {
         when(productInstance.getBaseUrl()).thenReturn("http://localhost/");
 
         final PageBinder binder = createBinder(StringField.class, StringFieldImpl.class);
         binder.navigateToAndBind(OneFieldPage.class);
+
+        verify(tester).gotoUrl("http://localhost/path");
+    }
+
+    @Test
+    public void visitUrlShouldAddMissingSlashAfterHostname() throws Exception
+    {
+        when(productInstance.getBaseUrl()).thenReturn("http://localhost");
+
+        final PageBinder binder = createBinder(StringField.class, StringFieldImpl.class);
+        binder.navigateToAndBind(PageWithNoLeadingSlash.class);
 
         verify(tester).gotoUrl("http://localhost/path");
     }
@@ -215,6 +226,15 @@ public class TestInjectPageBinder
     {
         @Inject
         private StringField name;
+    }
+
+    static class PageWithNoLeadingSlash extends AbstractPage
+    {
+        @Override
+        public String getUrl()
+        {
+            return "path";
+        }
     }
 
     static class ConstructorArgumentPrimitive
