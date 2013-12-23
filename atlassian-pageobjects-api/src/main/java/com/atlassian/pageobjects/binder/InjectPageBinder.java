@@ -160,9 +160,8 @@ public final class InjectPageBinder implements PageBinder, ConfigurableInjection
     protected void visitUrl(Page p)
     {
         checkNotNull(p);
-        String pageUrl = p.getUrl();
-        String baseUrl = productInstance.getBaseUrl();
-        tester.gotoUrl(baseUrl + pageUrl);
+
+        tester.gotoUrl(normalisedBaseUrl() + normalisedPath(p));
     }
 
     public <P> void override(Class<P> oldClass, Class<? extends P> newClass)
@@ -306,6 +305,35 @@ public final class InjectPageBinder implements PageBinder, ConfigurableInjection
         this.module = Modules.override(this.module).with(module);
         this.injector = Guice.createInjector(this.module);
         initPostInjectionProcessors();
+    }
+
+    /**
+     * @return the base URL for the application with no trailing slash
+     */
+    private String normalisedBaseUrl()
+    {
+        final String baseUrl = productInstance.getBaseUrl();
+        if (baseUrl.endsWith("/"))
+        {
+            return baseUrl.substring(0, baseUrl.length() - 1);
+        }
+
+        return baseUrl;
+    }
+
+    /**
+     * @param p a Page
+     * @return the path segment for a page with a leading slash
+     */
+    private String normalisedPath(Page p)
+    {
+        final String path = p.getUrl();
+        if (!path.startsWith("/"))
+        {
+            return "/" + path;
+        }
+
+        return path;
     }
 
     // ---------------------------------------------------------------------------------------------------------- Phases

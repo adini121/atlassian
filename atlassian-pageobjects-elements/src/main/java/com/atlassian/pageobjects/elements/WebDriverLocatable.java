@@ -47,7 +47,7 @@ public interface WebDriverLocatable
      * Wait until this SearchContext represented by this locatable is located.
      *
      * @param driver           the {@link WebDriver} instance.
-     * @param timeoutInSeconds Timeout to wait until located, must be >= 0.
+     * @param timeoutInSeconds timeout to wait until located, must be >= 0.
      * @return SearchContext
      * @throws NoSuchElementException if context could not be located before timeout expired
      * @deprecated use {@link #waitUntilLocated(WebDriver, WebDriverLocatable.LocateTimeout)} instead. Scheduled for
@@ -61,7 +61,7 @@ public interface WebDriverLocatable
      * Whether this SearchContext is present by given <tt>timeout</tt>.
      *
      * @param driver           the {@link WebDriver} instance.
-     * @param timeoutInSeconds timout to wait until parent is located, must be >= 0
+     * @param timeoutInSeconds timeout to wait until parent is located, must be >= 0
      * @return <code>true</code> if SearchContext is located before the timeout expires, <code>false</code> otherwise.
      * @deprecated use {@link #isPresent(WebDriver, WebDriverLocatable.LocateTimeout)} instead. Scheduled for removal
      * in 3.0
@@ -80,10 +80,11 @@ public interface WebDriverLocatable
      * @see SearchContext
      */
     @Nonnull
-    SearchContext waitUntilLocated(@Nonnull WebDriver driver, @Nonnull LocateTimeout timeout) throws NoSuchElementException;
+    SearchContext waitUntilLocated(@Nonnull WebDriver driver, @Nonnull LocateTimeout timeout)
+            throws NoSuchElementException;
 
     /**
-     * Whether this {@link SearchContext} is present, given its parent is located by {@code parentTimeout}.
+     * Whether this {@link SearchContext} is present, given its parent is located by {@code timeout}.
      *
      * @param driver  the {@link WebDriver} instance.
      * @param timeout LocateTimeout instance specifying the time to wait until the parent is located, must be >= 0.
@@ -101,8 +102,12 @@ public interface WebDriverLocatable
      */
     public static final class LocateTimeout
     {
-        public static LocateTimeout zero(long pollIntervalInMillis) {
-            return new LocateTimeout(0, pollIntervalInMillis);
+        public static Builder builder() {
+            return new Builder();
+        }
+
+        public static LocateTimeout zero() {
+            return new LocateTimeout(0, 1); // if timeout is 0, no poll should happen anyway
         }
 
         private final long timeout;

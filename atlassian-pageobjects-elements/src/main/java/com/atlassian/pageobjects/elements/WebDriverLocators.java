@@ -1,5 +1,6 @@
 package com.atlassian.pageobjects.elements;
 
+import com.atlassian.annotations.Internal;
 import com.atlassian.pageobjects.elements.query.AbstractTimedQuery;
 import com.atlassian.pageobjects.elements.query.ExpirationHandler;
 import com.atlassian.pageobjects.elements.query.Poller;
@@ -13,6 +14,7 @@ import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static com.atlassian.pageobjects.elements.WebDriverLocatable.LocateTimeout.zero;
 import static com.atlassian.pageobjects.elements.query.Poller.*;
 import static com.atlassian.pageobjects.elements.util.StringConcat.asString;
 import static com.google.common.base.Preconditions.checkArgument;
@@ -23,6 +25,7 @@ import static org.hamcrest.Matchers.notNullValue;
  * Creates WebDriveLocatables for different search strategies.
  *
  */
+@Internal
 public class WebDriverLocators
 {
     /**
@@ -30,6 +33,7 @@ public class WebDriverLocators
      *
      * @return WebDriverLocatable
      */
+    @Nonnull
     public static WebDriverLocatable root()
     {
         return new WebDriverRootLocator();
@@ -41,6 +45,7 @@ public class WebDriverLocators
      * @param locator The locator strategy within the parent. It will be applied in the global search context
      * @return WebDriverLocatable
      */
+    @Nonnull
     public static WebDriverLocatable single(By locator)
     {
         return new WebDriverSingleLocator(locator, root());
@@ -53,6 +58,7 @@ public class WebDriverLocators
      * @param parent The parent locatable
      * @return WebDriverLocatable for a single nested element
      */
+    @Nonnull
     public static WebDriverLocatable nested(By locator, WebDriverLocatable parent)
     {
         return new WebDriverSingleLocator(locator, parent);
@@ -67,20 +73,23 @@ public class WebDriverLocators
      * @param parent The locatable for the parent
      * @return WebDriverLocatable
      */
+    @Nonnull
     public static WebDriverLocatable list(WebElement element, By locator, int locatorIndex, WebDriverLocatable parent)
     {
-        return new WebDriverListLocator(element,locator, locatorIndex, parent);
+        return new WebDriverListLocator(element, locator, locatorIndex, parent);
     }
 
+    @Nonnull
     public static WebDriverLocatable staticElement(WebElement element)
     {
         return new WebDriverStaticLocator(element);
     }
 
     /**
-     * Whether the given WebElement is stale (needs to be relocated)
-     * @param webElement WebElement
-     * @return True if element reference is stale, false otherwise
+     * Whether the given {@code WebElement} is stale and needs to be relocated.
+     *
+     * @param webElement web element to examine
+     * @return {@code true} if element reference is stale, {@code false} otherwise
      */
     public static boolean isStale(final WebElement webElement)
     {
@@ -134,7 +143,7 @@ public class WebDriverLocators
     {
         private final WebElement element;
 
-        public WebDriverStaticLocator(WebElement element)
+        WebDriverStaticLocator(WebElement element)
         {
             this.element = element;
         }
@@ -157,6 +166,7 @@ public class WebDriverLocators
         }
 
         @Override
+        @Nonnull
         public WebDriverLocatable getParent()
         {
             return root();
@@ -199,7 +209,7 @@ public class WebDriverLocators
 
         @Override
         @Nonnull
-        public SearchContext waitUntilLocated(@Nonnull WebDriver driver, @Nonnull LocateTimeout timeout)
+        public final SearchContext waitUntilLocated(@Nonnull WebDriver driver, @Nonnull LocateTimeout timeout)
         {
             checkNotNull(driver, "driver");
             checkNotNull(timeout, "timeout");
@@ -207,7 +217,7 @@ public class WebDriverLocators
         }
 
         @Override
-        public boolean isPresent(@Nonnull WebDriver driver, @Nonnull LocateTimeout timeout)
+        public final boolean isPresent(@Nonnull WebDriver driver, @Nonnull LocateTimeout timeout)
         {
             checkNotNull(driver, "driver");
             checkNotNull(timeout, "timeout");
@@ -229,11 +239,13 @@ public class WebDriverLocators
             this.parent = checkNotNull(parent, "parent");
         }
 
+        @Nonnull
         public By getLocator()
         {
             return locator;
         }
 
+        @Nonnull
         public WebDriverLocatable getParent()
         {
             return parent;
@@ -282,6 +294,7 @@ public class WebDriverLocators
         }
 
         @Override
+        @Nonnull
         public String toString()
         {
             return asString("WebDriverSingleLocator[locator=", locator, "]");
@@ -300,12 +313,11 @@ public class WebDriverLocators
                 @Override
                 protected WebElement currentValue() {
                     // we want the parent to be located and find the element within it
-                    if (parent.isPresent(driver, LocateTimeout.zero(timeout.pollInterval())))
+                    if (parent.isPresent(driver, zero()))
                     {
                         try
                         {
-                            return parent.waitUntilLocated(driver, LocateTimeout.zero(timeout.pollInterval()))
-                                    .findElement(locator);
+                            return parent.waitUntilLocated(driver, zero()).findElement(locator);
                         }
                         catch (NoSuchElementException e)
                         {
@@ -392,7 +404,7 @@ public class WebDriverLocators
             return asString("WebDriverListLocator[locator=", locator, ",index=", locatorIndex, "]");
         }
 
-        private TimedQuery<WebElement> queryForElementInList(final WebDriver driver, LocateTimeout timeout)
+        private TimedQuery<WebElement> queryForElementInList(final WebDriver driver, final LocateTimeout timeout)
         {
             return new AbstractTimedQuery<WebElement>(getTimeout(timeout), timeout.pollInterval(), ExpirationHandler.RETURN_NULL)
             {
@@ -404,8 +416,8 @@ public class WebDriverLocators
                 @Override
                 protected WebElement currentValue() {
                     // we want the parent to be located and then the child list to be long enough to contain our index!
-                    if (parent.isPresent(driver, 0)) {
-                        List<WebElement> webElements = parent.waitUntilLocated(driver, 0).findElements(locator);
+                    if (parent.isPresent(driver, zero())) {
+                        List<WebElement> webElements = parent.waitUntilLocated(driver, zero()).findElements(locator);
                         return locatorIndex < webElements.size() ? webElements.get(locatorIndex) : null;
                     }
                     return null;
