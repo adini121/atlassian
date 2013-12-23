@@ -29,8 +29,6 @@ import org.apache.commons.lang.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.concurrent.NotThreadSafe;
-import javax.inject.Inject;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -40,6 +38,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.concurrent.NotThreadSafe;
+import javax.inject.Inject;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -157,9 +157,8 @@ public final class InjectPageBinder implements PageBinder, ConfigurableInjection
     protected void visitUrl(Page p)
     {
         checkNotNull(p);
-        String pageUrl = p.getUrl();
-        String baseUrl = productInstance.getBaseUrl();
-        tester.gotoUrl(baseUrl + pageUrl);
+
+        tester.gotoUrl(normalisedBaseUrl() + normalisedPath(p));
     }
 
     public <P> void override(Class<P> oldClass, Class<? extends P> newClass)
@@ -300,6 +299,35 @@ public final class InjectPageBinder implements PageBinder, ConfigurableInjection
         this.module = Modules.override(this.module).with(module);
         this.injector = Guice.createInjector(this.module);
         initPostInjectionProcessors();
+    }
+
+    /**
+     * @return the base URL for the application with no trailing slash
+     */
+    private String normalisedBaseUrl()
+    {
+        final String baseUrl = productInstance.getBaseUrl();
+        if (baseUrl.endsWith("/"))
+        {
+            return baseUrl.substring(0, baseUrl.length() - 1);
+        }
+
+        return baseUrl;
+    }
+
+    /**
+     * @param p a Page
+     * @return the path segment for a page with a leading slash
+     */
+    private String normalisedPath(Page p)
+    {
+        final String path = p.getUrl();
+        if (!path.startsWith("/"))
+        {
+            return "/" + path;
+        }
+
+        return path;
     }
 
     // ---------------------------------------------------------------------------------------------------------- Phases

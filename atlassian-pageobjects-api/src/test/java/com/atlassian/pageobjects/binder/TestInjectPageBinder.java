@@ -11,6 +11,9 @@ import com.google.inject.Module;
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import javax.inject.Inject;
 
@@ -18,15 +21,23 @@ import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  *
  */
 @SuppressWarnings("unchecked")
+@RunWith(MockitoJUnitRunner.class)
 public class TestInjectPageBinder
 {
     private MyTestedProduct product;
+
+    @Mock
+    private ProductInstance productInstance;
+
+    @Mock
+    private Tester tester;
 
     @Before
     public void setUp() throws Exception
@@ -40,7 +51,7 @@ public class TestInjectPageBinder
     }
     private InjectPageBinder createBinder(final Class<?> key, final Class impl)
     {
-        return new InjectPageBinder(mock(ProductInstance.class), mock(Tester.class), new StandardModule(product),
+        return new InjectPageBinder(productInstance, tester, new StandardModule(product),
                 new Module()
                 {
                     public void configure(Binder binder)
@@ -181,11 +192,33 @@ public class TestInjectPageBinder
         assertEquals("Boom!", binder.bind(OneFieldPage.class).name.getValue());
     }
 
+    @Test
+    public void visitUrlShouldRemoveExtraSlashAfterHostname() throws Exception
+    {
+        when(productInstance.getBaseUrl()).thenReturn("http://localhost/");
+
+        final PageBinder binder = createBinder(StringField.class, StringFieldImpl.class);
+        binder.navigateToAndBind(OneFieldPage.class);
+
+        verify(tester).gotoUrl("http://localhost/path");
+    }
+
+    @Test
+    public void visitUrlShouldAddMissingSlashAfterHostname() throws Exception
+    {
+        when(productInstance.getBaseUrl()).thenReturn("http://localhost");
+
+        final PageBinder binder = createBinder(StringField.class, StringFieldImpl.class);
+        binder.navigateToAndBind(PageWithNoLeadingSlash.class);
+
+        verify(tester).gotoUrl("http://localhost/path");
+    }
+
     static class AbstractPage implements Page
     {
         public String getUrl()
         {
-            return null;
+            return "/path";
         }
     }
 
@@ -193,6 +226,15 @@ public class TestInjectPageBinder
     {
         @Inject
         private StringField name;
+    }
+
+    static class PageWithNoLeadingSlash extends AbstractPage
+    {
+        @Override
+        public String getUrl()
+        {
+            return "path";
+        }
     }
 
     static class ConstructorArgumentPrimitive
