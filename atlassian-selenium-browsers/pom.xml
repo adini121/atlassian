@@ -12,7 +12,7 @@
     <name>${project.artifactId}</name>
     <description>A set of autoinstallable browsers</description>
     <packaging>pom</packaging>
-    
+
     <modules>
         <module>atlassian-selenium-browsers-auto</module>
     </modules>
