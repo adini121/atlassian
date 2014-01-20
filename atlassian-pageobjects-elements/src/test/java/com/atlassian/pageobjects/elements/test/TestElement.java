@@ -1,7 +1,7 @@
 package com.atlassian.pageobjects.elements.test;
 
 import com.atlassian.pageobjects.browser.Browser;
-import com.atlassian.pageobjects.elements.GlobalElementFinder;
+import com.atlassian.pageobjects.browser.IgnoreBrowser;
 import com.atlassian.pageobjects.elements.Options;
 import com.atlassian.pageobjects.elements.PageElement;
 import com.atlassian.pageobjects.elements.PageElementFinder;
@@ -11,11 +11,11 @@ import com.atlassian.pageobjects.elements.query.Poller;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.DynamicPage;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.ElementsPage;
 import com.atlassian.pageobjects.elements.timeout.TimeoutType;
-import com.atlassian.webdriver.testing.annotation.IgnoreBrowser;
 import com.atlassian.webdriver.utils.by.ByJquery;
-import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
+
+import javax.inject.Inject;
 
 import static com.atlassian.pageobjects.elements.query.Poller.waitUntilEquals;
 import static com.atlassian.pageobjects.elements.query.Poller.waitUntilFalse;
@@ -26,15 +26,10 @@ import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
 
 @IgnoreBrowser(Browser.HTMLUNIT_NOJS)
-public class TestElement extends AbstractFileBasedServerTest
+public class TestElement extends AbstractPageElementBrowserTest
 {
+    @Inject
     private PageElementFinder elementFinder;
-
-    @Before
-    public void initFinder()
-    {
-        elementFinder = product.getPageBinder().bind(GlobalElementFinder.class);
-    }
 
     @Test
     public void testFieldInjection()
@@ -47,7 +42,6 @@ public class TestElement extends AbstractFileBasedServerTest
         // verify delayed element that was injected via @ElementBy waits
         Poller.waitUntilTrue(elementsPage.test1_delayedSpan().timed().isPresent());
     }
-
 
     @Test
     public void testIsPresent()
@@ -106,7 +100,6 @@ public class TestElement extends AbstractFileBasedServerTest
         assertFalse(testInput.isVisible());
     }
 
-
     @Test
     public void testGetText()
     {
@@ -144,7 +137,7 @@ public class TestElement extends AbstractFileBasedServerTest
         waitUntilTrue(leafList.find(By.linkText("Item 4")).timed().isPresent());
 
         //wait for text on an element within another
-        driver.get(rootUrl + "/html/elements.html");
+        product.visit(ElementsPage.class);
 
         product.find(By.id("test4_addElementsButton")).click();
         assertEquals("Item 5", product.find(By.className("listitem-active")).getText());

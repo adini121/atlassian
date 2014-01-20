@@ -1,12 +1,12 @@
 package com.atlassian.pageobjects.elements.test;
 
 import com.atlassian.pageobjects.browser.Browser;
+import com.atlassian.pageobjects.browser.IgnoreBrowser;
 import com.atlassian.pageobjects.elements.PageElement;
 import com.atlassian.pageobjects.elements.TimedElement;
 import com.atlassian.pageobjects.elements.query.Poller;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.ElementsPage;
 import com.atlassian.pageobjects.elements.timeout.TimeoutType;
-import com.atlassian.webdriver.testing.annotation.IgnoreBrowser;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
@@ -14,7 +14,7 @@ import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.Matchers.equalToIgnoringCase;
 
 @IgnoreBrowser(Browser.HTMLUNIT_NOJS)
-public class TestTimedElement extends AbstractFileBasedServerTest
+public class TestTimedElement extends AbstractPageElementBrowserTest
 {
     @Test
     public void testIsPresent()

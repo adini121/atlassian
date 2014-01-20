@@ -10,10 +10,12 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static junit.framework.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 @IgnoreBrowser(Browser.HTMLUNIT_NOJS)
-public class TestComponents extends AbstractFileBasedServerTest
+public class TestComponents extends AbstractPageElementBrowserTest
 {
     @Test
     public void testAuiMenu()

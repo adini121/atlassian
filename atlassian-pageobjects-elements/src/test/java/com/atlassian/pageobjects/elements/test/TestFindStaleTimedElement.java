@@ -16,7 +16,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 @IgnoreBrowser(Browser.HTMLUNIT_NOJS)
-public class TestFindStaleTimedElement extends AbstractFileBasedServerTest
+public class TestFindStaleTimedElement extends AbstractPageElementBrowserTest
 {
     private PageElementFinder elementFinder;
 

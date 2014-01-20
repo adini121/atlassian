@@ -2,7 +2,7 @@ package com.atlassian.webdriver.it.tests;
 
 import com.atlassian.pageobjects.browser.Browser;
 import com.atlassian.pageobjects.browser.IgnoreBrowser;
-import com.atlassian.webdriver.it.AbstractFileBasedServerTest;
+import com.atlassian.webdriver.it.AbstractSimpleServerTest;
 import com.atlassian.webdriver.it.pageobjects.page.contenteditable.ContentEditablePage;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,7 +13,7 @@ import org.openqa.selenium.WebElement;
 import static org.junit.Assert.assertTrue;
 
 @IgnoreBrowser(value = {Browser.HTMLUNIT, Browser.HTMLUNIT_NOJS}, reason = "SELENIUM-165 HtmlUnit does not support contenteditable")
-public class TestContentEditableBug extends AbstractFileBasedServerTest
+public class TestContentEditableBug extends AbstractSimpleServerTest
 {
 
     ContentEditablePage contentEditablePage;

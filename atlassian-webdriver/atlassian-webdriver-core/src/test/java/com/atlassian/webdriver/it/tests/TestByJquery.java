@@ -3,7 +3,7 @@ package com.atlassian.webdriver.it.tests;
 import com.atlassian.pageobjects.browser.Browser;
 import com.atlassian.pageobjects.browser.IgnoreBrowser;
 import com.atlassian.pageobjects.browser.RequireBrowser;
-import com.atlassian.webdriver.it.AbstractFileBasedServerTest;
+import com.atlassian.webdriver.it.AbstractSimpleServerTest;
 import com.atlassian.webdriver.it.pageobjects.page.ByJqueryPage;
 import com.atlassian.webdriver.utils.by.ByJquery;
 import org.junit.Before;
@@ -22,7 +22,7 @@ import static org.junit.Assert.assertTrue;
  * Test for checking ByJquery functionality in Atlassian WebDriver.
  */
 @IgnoreBrowser(Browser.HTMLUNIT_NOJS)
-public class TestByJquery extends AbstractFileBasedServerTest
+public class TestByJquery extends AbstractSimpleServerTest
 {
 
     ByJqueryPage byJqueryPage;

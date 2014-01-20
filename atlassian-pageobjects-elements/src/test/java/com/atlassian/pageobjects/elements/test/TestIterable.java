@@ -1,12 +1,12 @@
 package com.atlassian.pageobjects.elements.test;
 
 import com.atlassian.pageobjects.browser.Browser;
+import com.atlassian.pageobjects.browser.IgnoreBrowser;
 import com.atlassian.pageobjects.elements.CheckboxElement;
 import com.atlassian.pageobjects.elements.MultiSelectElement;
 import com.atlassian.pageobjects.elements.PageElement;
 import com.atlassian.pageobjects.elements.SelectElement;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.PageElementIterablePage;
-import com.atlassian.webdriver.testing.annotation.IgnoreBrowser;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,7 +20,7 @@ import static junit.framework.Assert.assertTrue;
  * Tests that {@code @ElementBy} works on {@code Iterable<PageElement>}
  * @since 2.1
  */
-public class TestIterable extends AbstractFileBasedServerTest
+public class TestIterable extends AbstractPageElementBrowserTest
 {
     private PageElementIterablePage elementsPage;
 
@@ -123,6 +123,4 @@ public class TestIterable extends AbstractFileBasedServerTest
         assertTrue(elements.hasNext());
         assertEquals("forest", elements.next().getSelected().get(0).value());
     }
-    
-    
 }

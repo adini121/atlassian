@@ -3,7 +3,7 @@ package com.atlassian.webdriver.it.tests;
 import com.atlassian.pageobjects.browser.Browser;
 import com.atlassian.pageobjects.browser.IgnoreBrowser;
 import com.atlassian.pageobjects.browser.RequireBrowser;
-import com.atlassian.webdriver.it.AbstractFileBasedServerTest;
+import com.atlassian.webdriver.it.AbstractSimpleServerTest;
 import com.atlassian.webdriver.it.pageobjects.page.JavaScriptUtilsPage;
 import com.atlassian.webdriver.utils.JavaScriptUtils;
 import com.atlassian.webdriver.utils.MouseEvents;
@@ -20,10 +20,12 @@ import java.util.concurrent.TimeUnit;
 
 import static com.atlassian.webdriver.utils.element.ElementConditions.isNotVisible;
 import static com.atlassian.webdriver.utils.element.ElementConditions.isVisible;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 @IgnoreBrowser(Browser.HTMLUNIT_NOJS)
-public class TestJavaScriptUtils extends AbstractFileBasedServerTest
+public class TestJavaScriptUtils extends AbstractSimpleServerTest
 {
 
     @Inject private WebDriverPoller poller;
@@ -138,5 +140,4 @@ public class TestJavaScriptUtils extends AbstractFileBasedServerTest
         poller.waitUntil(isVisible(By.id("child-jquery-element-two")));
         poller.waitUntil(isVisible(By.id("child-jquery-element-three")));
     }
-
 }

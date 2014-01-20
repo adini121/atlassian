@@ -13,7 +13,6 @@ import com.atlassian.pageobjects.binder.StandardModule;
 import com.atlassian.webdriver.AtlassianWebDriverModule;
 import com.atlassian.webdriver.pageobjects.DefaultWebDriverTester;
 import com.atlassian.webdriver.pageobjects.WebDriverTester;
-import org.slf4j.LoggerFactory;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -29,9 +28,11 @@ public class SimpleTestedProduct implements TestedProduct<WebDriverTester>
         this.productInstance = checkNotNull(productInstance);
 
         this.webDriverTester =  new DefaultWebDriverTester();
-        this.pageBinder = new InjectPageBinder(productInstance, webDriverTester, new StandardModule(this),
-                new AtlassianWebDriverModule(this), new BrowserModule(),
-                new LoggerModule(LoggerFactory.getLogger(SimpleTestedProduct.class)));
+        this.pageBinder = new InjectPageBinder(productInstance, webDriverTester,
+                new StandardModule(this),
+                new AtlassianWebDriverModule(this),
+                new BrowserModule(),
+                new LoggerModule(SimpleTestedProduct.class));
     }
 
     public <P extends Page> P visit(Class<P> pageClass, Object... args)
