@@ -2,14 +2,14 @@ package com.atlassian.webdriver.browsers;
 
 import com.atlassian.pageobjects.browser.Browser;
 import com.atlassian.pageobjects.browser.RequireBrowser;
-import com.atlassian.webdriver.it.AbstractFileBasedServerTest;
+import com.atlassian.webdriver.it.AbstractSimpleServerTest;
 import com.atlassian.webdriver.it.pageobjects.page.UserAgentPage;
 import org.junit.Before;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertTrue;
 
-public class TestAutoBrowserInstaller extends AbstractFileBasedServerTest
+public class TestAutoBrowserInstaller extends AbstractSimpleServerTest
 {
     private static final String HTML_UNIT_USER_AGENT =
         "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.2.28) Gecko/20120306 Firefox/3.6.28";

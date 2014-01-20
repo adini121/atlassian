@@ -1,4 +1,4 @@
-package com.atlassian.webdriver.it;
+package com.atlassian.webdriver.testing.simpleserver;
 
 import com.atlassian.pageobjects.DefaultProductInstance;
 import com.atlassian.pageobjects.ProductInstance;
@@ -10,15 +10,15 @@ import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.Statement;
 
 /**
- * Product context runner extension that starts an embedded server before instantiating
- * the product.
+ * Product context runner extension that starts an embedded server before instantiating the product.
  *
  * @since 2.1
+ * @see SimpleServer
  */
-public class FileBasedServerRunner extends ProductContextRunner
+public class SimpleServerRunner extends ProductContextRunner
 {
 
-    private final FileBasedServer server = new FileBasedServer();
+    private final SimpleServer server = new SimpleServer();
 
     /**
      * Constructor compatible with the underlying default JUnit4 runner.
@@ -26,7 +26,7 @@ public class FileBasedServerRunner extends ProductContextRunner
      * @throws org.junit.runners.model.InitializationError
      *          if the test class is malformed.
      */
-    public FileBasedServerRunner(Class<?> klass) throws InitializationError
+    public SimpleServerRunner(Class<?> klass) throws InitializationError
     {
         super(klass);
     }

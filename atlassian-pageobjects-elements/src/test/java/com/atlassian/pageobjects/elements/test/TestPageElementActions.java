@@ -1,12 +1,12 @@
 package com.atlassian.pageobjects.elements.test;
 
 import com.atlassian.pageobjects.browser.Browser;
+import com.atlassian.pageobjects.browser.IgnoreBrowser;
 import com.atlassian.pageobjects.elements.GlobalElementFinder;
 import com.atlassian.pageobjects.elements.PageElement;
 import com.atlassian.pageobjects.elements.PageElementActions;
 import com.atlassian.pageobjects.elements.PageElementFinder;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.ElementsPage;
-import com.atlassian.webdriver.testing.annotation.IgnoreBrowser;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -17,7 +17,7 @@ import javax.inject.Inject;
 import static junit.framework.Assert.assertNotNull;
 
 @IgnoreBrowser({ Browser.HTMLUNIT_NOJS, Browser.HTMLUNIT })
-public class TestPageElementActions extends AbstractFileBasedServerTest
+public class TestPageElementActions extends AbstractPageElementBrowserTest
 {
     private PageElementFinder elementFinder;
 

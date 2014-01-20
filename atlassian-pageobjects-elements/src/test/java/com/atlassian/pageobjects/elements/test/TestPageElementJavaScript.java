@@ -1,6 +1,7 @@
 package com.atlassian.pageobjects.elements.test;
 
 import com.atlassian.pageobjects.browser.Browser;
+import com.atlassian.pageobjects.browser.IgnoreBrowser;
 import com.atlassian.pageobjects.elements.GlobalElementFinder;
 import com.atlassian.pageobjects.elements.Options;
 import com.atlassian.pageobjects.elements.PageElement;
@@ -9,7 +10,6 @@ import com.atlassian.pageobjects.elements.SelectElement;
 import com.atlassian.pageobjects.elements.query.Poller;
 import com.atlassian.pageobjects.elements.query.TimedQuery;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.ElementsPage;
-import com.atlassian.webdriver.testing.annotation.IgnoreBrowser;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,7 +28,7 @@ import static org.junit.Assert.assertTrue;
  * @since 2.1
  */
 @IgnoreBrowser(Browser.HTMLUNIT_NOJS)
-public class TestPageElementJavaScript extends AbstractFileBasedServerTest
+public class TestPageElementJavaScript extends AbstractPageElementBrowserTest
 {
 
     private PageElementFinder elementFinder;

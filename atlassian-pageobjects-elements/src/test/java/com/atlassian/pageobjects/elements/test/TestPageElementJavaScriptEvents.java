@@ -22,7 +22,7 @@ import static org.junit.Assert.fail;
  * @since 2.1
  */
 @IgnoreBrowser(Browser.HTMLUNIT_NOJS)
-public class TestPageElementJavaScriptEvents extends AbstractFileBasedServerTest
+public class TestPageElementJavaScriptEvents extends AbstractPageElementBrowserTest
 {
 
     private PageElementFinder elementFinder;

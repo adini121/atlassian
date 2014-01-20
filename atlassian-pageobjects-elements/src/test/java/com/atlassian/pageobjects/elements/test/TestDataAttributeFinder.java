@@ -23,7 +23,7 @@ import static org.junit.Assert.assertTrue;
  *
  * @since 2.1
  */
-public class TestDataAttributeFinder extends AbstractFileBasedServerTest
+public class TestDataAttributeFinder extends AbstractPageElementBrowserTest
 {
 
     private PageElementFinder elementFinder;

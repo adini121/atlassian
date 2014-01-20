@@ -2,7 +2,7 @@ package com.atlassian.webdriver.it.tests;
 
 import com.atlassian.pageobjects.browser.Browser;
 import com.atlassian.pageobjects.browser.IgnoreBrowser;
-import com.atlassian.webdriver.it.AbstractFileBasedServerTest;
+import com.atlassian.webdriver.it.AbstractSimpleServerTest;
 import com.atlassian.webdriver.it.pageobjects.page.ArgumentConversionBugPage;
 import com.atlassian.webdriver.utils.JavaScriptUtils;
 import org.junit.Before;
@@ -15,24 +15,21 @@ import javax.inject.Inject;
 import java.util.List;
 
 @IgnoreBrowser(Browser.HTMLUNIT_NOJS)
-public class TestArgumentConversionBug extends AbstractFileBasedServerTest
+public class TestArgumentConversionBug extends AbstractSimpleServerTest
 {
-
-    private ArgumentConversionBugPage argConversionBugPage;
-
     @Inject
     private  WebDriver driver;
 
     @Before
-    public void init()
+    public void goToPage()
     {
-        argConversionBugPage = product.visit(ArgumentConversionBugPage.class);
+        product.visit(ArgumentConversionBugPage.class);
     }
 
     // This test is checking that the arg processing bug has been fixed.
     // http://code.google.com/p/selenium/issues/detail?id=1280
     @Test
-    public void TestDriverDoesNotFailToProcessArgs()
+    public void testDriverDoesNotFailToProcessArgs()
     {
         List<WebElement> els = driver.findElements(By.tagName("div"));
         Object[] args = new Object[] { els };

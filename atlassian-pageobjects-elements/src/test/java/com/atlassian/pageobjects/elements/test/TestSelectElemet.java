@@ -1,8 +1,8 @@
 package com.atlassian.pageobjects.elements.test;
 
+import com.atlassian.pageobjects.elements.MultiSelectElement;
 import com.atlassian.pageobjects.elements.Option;
 import com.atlassian.pageobjects.elements.Options;
-import com.atlassian.pageobjects.elements.MultiSelectElement;
 import com.atlassian.pageobjects.elements.SelectElement;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.SelectElementPage;
 import org.junit.Test;
@@ -13,7 +13,7 @@ import java.util.List;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 
-public class TestSelectElemet extends AbstractFileBasedServerTest
+public class TestSelectElemet extends AbstractPageElementBrowserTest
 {
     @Test
     public void testUseAnnotationToLocateSelectElements()
@@ -187,6 +187,5 @@ public class TestSelectElemet extends AbstractFileBasedServerTest
         select = page.findMultiSelect(By.id("test6_Select"));
         select.unselect(Options.id("test6_Option1")).unselect(Options.id("test6_Option3"));
         assertEquals(3, select.getSelected().size());
-
     }
 }

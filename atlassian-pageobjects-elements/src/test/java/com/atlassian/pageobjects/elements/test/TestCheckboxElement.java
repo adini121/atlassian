@@ -10,7 +10,7 @@ import org.openqa.selenium.By;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 
-public class TestCheckboxElement extends AbstractFileBasedServerTest
+public class TestCheckboxElement extends AbstractPageElementBrowserTest
 {
     @Test
     public void testCheck()

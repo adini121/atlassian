@@ -12,7 +12,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class TestElementByInjection extends AbstractFileBasedServerTest
+public class TestElementByInjection extends AbstractPageElementBrowserTest
 {
     @Test
     public void testParentInjection()

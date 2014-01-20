@@ -1,7 +1,7 @@
 package com.atlassian.webdriver.it.tests;
 
 import com.atlassian.pageobjects.browser.Browser;
-import com.atlassian.webdriver.it.AbstractFileBasedServerTest;
+import com.atlassian.webdriver.it.AbstractSimpleServerTest;
 import com.atlassian.webdriver.it.pageobjects.page.ByDataAttributePage;
 import com.atlassian.webdriver.testing.annotation.IgnoreBrowser;
 import com.atlassian.webdriver.utils.by.ByDataAttribute;
@@ -22,7 +22,7 @@ import static org.junit.Assert.assertThat;
  *
  * @since 2.1
  */
-public class TestByDataAttribute extends AbstractFileBasedServerTest
+public class TestByDataAttribute extends AbstractSimpleServerTest
 {
 
     ByDataAttributePage byDataAttributePage;
