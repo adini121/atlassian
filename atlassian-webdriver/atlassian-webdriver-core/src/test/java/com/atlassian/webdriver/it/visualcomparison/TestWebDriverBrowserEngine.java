@@ -2,7 +2,7 @@ package com.atlassian.webdriver.it.visualcomparison;
 
 import com.atlassian.selenium.visualcomparison.ScreenElement;
 import com.atlassian.webdriver.debug.WebDriverDebug;
-import com.atlassian.webdriver.it.AbstractFileBasedServerTest;
+import com.atlassian.webdriver.it.AbstractSimpleServerTest;
 import com.atlassian.webdriver.it.pageobjects.page.VisualComparisonPage;
 import com.atlassian.webdriver.testing.annotation.WindowSize;
 import com.atlassian.webdriver.visualcomparison.WebDriverBrowserEngine;
@@ -12,7 +12,7 @@ import javax.inject.Inject;
 
 import static org.junit.Assert.assertEquals;
 
-public class TestWebDriverBrowserEngine extends AbstractFileBasedServerTest
+public class TestWebDriverBrowserEngine extends AbstractSimpleServerTest
 {
     @Inject
     WebDriverBrowserEngine engine;

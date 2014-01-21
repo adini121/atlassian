@@ -9,7 +9,7 @@ import com.atlassian.selenium.visualcomparison.v2.VisualComparisonFailedExceptio
 import com.atlassian.selenium.visualcomparison.v2.settings.Resolution;
 import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.debug.WebDriverDebug;
-import com.atlassian.webdriver.it.AbstractFileBasedServerTest;
+import com.atlassian.webdriver.it.AbstractSimpleServerTest;
 import com.atlassian.webdriver.it.pageobjects.page.VisualComparisonPage;
 import com.atlassian.webdriver.rule.test.TemporaryFolderPreservingOnFailure;
 import com.atlassian.webdriver.testing.annotation.WindowSize;
@@ -27,23 +27,17 @@ import org.openqa.selenium.Point;
 import org.openqa.selenium.WebElement;
 
 import javax.inject.Inject;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.atlassian.selenium.visualcomparison.v2.ComparisonSettings.emptySettings;
 import static com.atlassian.selenium.visualcomparison.v2.settings.Resolution.R1024_768;
 import static org.apache.commons.io.FileUtils.readFileToString;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 @WindowSize(width = 1024, height = 768)
-public class TestComparerV2ApiCompatibility extends AbstractFileBasedServerTest
+public class TestComparerV2ApiCompatibility extends AbstractSimpleServerTest
 {
     private static final String RESOLUTION_STRING = R1024_768.toString();
 
