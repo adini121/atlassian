@@ -35,7 +35,7 @@ public final class FirefoxBrowser
     {
         FirefoxBinary firefox = new FirefoxBinary();
         setSystemProperties(firefox);
-        return new FirefoxDriver(firefox, null);
+        return constructFirefoxDriver(firefox, null);
     }
 
     /**
@@ -63,7 +63,7 @@ public final class FirefoxBrowser
             }
 
             setSystemProperties(firefox);
-            return new FirefoxDriver(firefox, profile);
+            return constructFirefoxDriver(firefox, profile);
         }
 
         // Fall back on default firefox driver
@@ -137,12 +137,22 @@ public final class FirefoxBrowser
         {
             firefox = new FirefoxBinary(new File(browserPath));
             setSystemProperties(firefox);
-            return new FirefoxDriver(firefox, null);
+            return constructFirefoxDriver(firefox, null);
         }
 
         // Fall back on default firefox driver
         log.info("Browser path was null, falling back to default firefox driver.");
         return getFirefoxDriver();
+    }
+
+    private static FirefoxDriver constructFirefoxDriver(final FirefoxBinary binary, FirefoxProfile profile)
+    {
+        if (profile == null)
+        {
+            profile = new FirefoxProfile();
+        }
+
+        return new FirefoxDriver(binary, profile);
     }
 
     /**
