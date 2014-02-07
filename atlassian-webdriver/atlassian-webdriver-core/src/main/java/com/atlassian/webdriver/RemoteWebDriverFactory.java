@@ -3,8 +3,8 @@ package com.atlassian.webdriver;
 import com.atlassian.browsers.BrowserConfig;
 import com.atlassian.pageobjects.browser.Browser;
 import com.atlassian.pageobjects.util.BrowserUtil;
+import com.atlassian.webdriver.browsers.firefox.FirefoxBrowser;
 import org.openqa.selenium.Capabilities;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
@@ -52,7 +52,7 @@ class RemoteWebDriverFactory
         {
             // this shouldn't happen anyway.
             log.warn("Cannot find a url to connect to with a RemoteWebDriver. Falling back to using a local FirefoxDriver instead");
-            return new DefaultAtlassianWebDriver(new FirefoxDriver(), Browser.FIREFOX);
+            return new DefaultAtlassianWebDriver(FirefoxBrowser.getFirefoxDriver(), Browser.FIREFOX);
         }
 
         Browser browserType = Browser.typeOf(matcher.group(1));
