@@ -2,6 +2,7 @@ package com.atlassian.webdriver.browsers.firefox;
 
 import com.atlassian.browsers.BrowserConfig;
 import com.atlassian.webdriver.browsers.profile.ProfilePreferences;
+import net.jsourcerer.webdriver.jserrorcollector.JavaScriptError;
 import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
@@ -150,6 +151,15 @@ public final class FirefoxBrowser
         if (profile == null)
         {
             profile = new FirefoxProfile();
+        }
+
+        try
+        {
+            JavaScriptError.addExtension(profile);
+        }
+        catch (IOException e)
+        {
+            log.error("Failed to add JavaScriptError extension to profile", e);
         }
 
         return new FirefoxDriver(binary, profile);
