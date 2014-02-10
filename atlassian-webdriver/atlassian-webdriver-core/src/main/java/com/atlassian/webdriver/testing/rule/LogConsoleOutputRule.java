@@ -8,6 +8,7 @@ import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.internal.WrapsDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -80,6 +81,10 @@ public class LogConsoleOutputRule extends TestWatcher
 
     private boolean supportsConsoleOutput(final WebDriver driver)
     {
+        if (driver instanceof WrapsDriver)
+        {
+            return supportsConsoleOutput(((WrapsDriver) driver).getWrappedDriver());
+        }
         return driver instanceof FirefoxDriver;
     }
 }
