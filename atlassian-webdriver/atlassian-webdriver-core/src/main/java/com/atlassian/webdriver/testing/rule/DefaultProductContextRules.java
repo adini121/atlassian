@@ -42,14 +42,18 @@ public final class DefaultProductContextRules
         private final RuleChain chain;
 
         @Inject
-        public ForMethod(IgnoreBrowserRule ignoreBrowserRule, LogPageSourceRule logPageSourceRule,
-                         SessionCleanupRule sessionCleanupRule, WebDriverScreenshotRule webDriverScreenshotRule,
+        public ForMethod(IgnoreBrowserRule ignoreBrowserRule,
+                         LogConsoleOutputRule logConsoleOutputRule,
+                         LogPageSourceRule logPageSourceRule,
+                         SessionCleanupRule sessionCleanupRule,
+                         WebDriverScreenshotRule webDriverScreenshotRule,
                          WindowSizeRule windowSizeRule)
         {
             this.chain = RuleChain.outerRule(ignoreBrowserRule)
                     .around(sessionCleanupRule)
                     .around(windowSizeRule)
                     .around(webDriverScreenshotRule)
+                    .around(logConsoleOutputRule)
                     .around(logPageSourceRule);
         }
 
