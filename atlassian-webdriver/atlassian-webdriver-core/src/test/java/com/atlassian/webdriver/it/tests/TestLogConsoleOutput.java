@@ -45,7 +45,7 @@ public class TestLogConsoleOutput extends AbstractSimpleServerTest
     {
         product.visit(NoErrorsPage.class);
         final String consoleOutput = rule.getConsoleOutput();
-        assertThat(consoleOutput, equalTo("[]"));
+        assertThat(consoleOutput, equalTo(""));
     }
 
     @Test
@@ -69,6 +69,19 @@ public class TestLogConsoleOutput extends AbstractSimpleServerTest
 
         assertThat(consoleOutput, containsString("Error: throw Error('bail')"));
         assertThat(consoleOutput, containsString(page.throwErrorObjectScriptUrl()));
+    }
+
+    @Test
+    @RequireBrowser(Browser.FIREFOX)
+    public void testEachJSErrorIsOnANewLine()
+    {
+        final IncludedScriptErrorPage page = product.visit(IncludedScriptErrorPage.class);
+        final String consoleOutput = rule.getConsoleOutput();
+        final String[] errors = consoleOutput.split("\n");
+
+        assertThat(errors.length, equalTo(2));
+        assertThat(errors[0], containsString(page.objectIsNotFunctionScriptUrl()));
+        assertThat(errors[1], containsString(page.throwErrorObjectScriptUrl()));
     }
 
     @Ignore("The JSErrorCollector plugin currently cannot capture untyped errors")

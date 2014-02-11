@@ -72,8 +72,15 @@ public class LogConsoleOutputRule extends TestWatcher
         }
         else
         {
+            final StringBuilder sb = new StringBuilder();
             List<JavaScriptError> errors = JavaScriptError.readErrors(driver);
-            return errors.toString();
+            for (int i=0; i < errors.size(); i++)
+            {
+                JavaScriptError error = errors.get(i);
+                if (i!=0) sb.append("\n");
+                sb.append(error.toString());
+            }
+            return sb.toString();
         }
     }
 
