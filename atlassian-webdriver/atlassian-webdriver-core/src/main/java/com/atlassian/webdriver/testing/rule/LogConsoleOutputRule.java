@@ -1,6 +1,7 @@
 package com.atlassian.webdriver.testing.rule;
 
 import com.atlassian.webdriver.browsers.WebDriverBrowserAutoInstall;
+import com.atlassian.webdriver.utils.WebDriverUtil;
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
 import net.jsourcerer.webdriver.jserrorcollector.JavaScriptError;
@@ -8,16 +9,19 @@ import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.internal.WrapsDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+/**
+ * Rule to log javascript console error messages.
+ *
+ * @since 2.3
+ */
 public class LogConsoleOutputRule extends TestWatcher
 {
     private static final Logger DEFAULT_LOGGER = LoggerFactory.getLogger(LogConsoleOutputRule.class);
@@ -46,10 +50,11 @@ public class LogConsoleOutputRule extends TestWatcher
     {
         this(DEFAULT_LOGGER);
     }
+
     @Override
     public void failed(final Throwable e, final Description description)
     {
-        if (!logConsoleOutputEnabled())
+        if (!isLogConsoleOutputEnabled())
         {
             return;
         }
@@ -58,33 +63,27 @@ public class LogConsoleOutputRule extends TestWatcher
         logger.info("----- END CONSOLE OUTPUT DUMP");
     }
 
-    private boolean logConsoleOutputEnabled()
-    {
-        return true;
-    }
-
     public String getConsoleOutput()
     {
         final WebDriver driver = webDriver.get();
-        final StringBuilder sb = new StringBuilder();
         if (!supportsConsoleOutput(driver))
         {
-            sb.append("<Console output only supported in Firefox right now, sorry!>");
+            return "<Console output only supported in Firefox right now, sorry!>";
         }
         else
         {
             List<JavaScriptError> errors = JavaScriptError.readErrors(driver);
-            sb.append(errors.toString());
+            return errors.toString();
         }
-        return sb.toString();
     }
 
     private boolean supportsConsoleOutput(final WebDriver driver)
     {
-        if (driver instanceof WrapsDriver)
-        {
-            return supportsConsoleOutput(((WrapsDriver) driver).getWrappedDriver());
-        }
-        return driver instanceof FirefoxDriver;
+        return WebDriverUtil.isInstance(driver, FirefoxDriver.class);
+    }
+
+    private boolean isLogConsoleOutputEnabled()
+    {
+        return true;
     }
 }
