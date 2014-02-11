@@ -6,10 +6,12 @@ import com.atlassian.pageobjects.browser.RequireBrowser;
 import com.atlassian.webdriver.it.AbstractSimpleServerTest;
 import com.atlassian.webdriver.it.pageobjects.page.jsconsolelogging.IncludedScriptErrorPage;
 import com.atlassian.webdriver.it.pageobjects.page.jsconsolelogging.NoErrorsPage;
+import com.atlassian.webdriver.it.pageobjects.page.jsconsolelogging.UntypedErrorPage;
 import com.atlassian.webdriver.it.pageobjects.page.jsconsolelogging.WindowErrorPage;
 import com.atlassian.webdriver.testing.rule.LogConsoleOutputRule;
 import com.atlassian.webdriver.utils.element.WebDriverPoller;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
@@ -67,5 +69,19 @@ public class TestLogConsoleOutput extends AbstractSimpleServerTest
 
         assertThat(consoleOutput, containsString("Error: throw Error('bail')"));
         assertThat(consoleOutput, containsString(page.throwErrorObjectScriptUrl()));
+    }
+
+    @Ignore("The JSErrorCollector plugin currently cannot capture untyped errors")
+    @Test
+    @RequireBrowser(Browser.FIREFOX)
+    public void testCanCaptureUntypedErrors()
+    {
+        final UntypedErrorPage page = product.visit(UntypedErrorPage.class);
+        final String consoleOutput = rule.getConsoleOutput();
+        assertThat(consoleOutput, containsString("Error: throw string"));
+        assertThat(consoleOutput, containsString(page.throwStringScriptUrl()));
+
+        assertThat(consoleOutput, containsString("console.error"));
+        assertThat(consoleOutput, containsString(page.consoleErrorScriptUrl()));
     }
 }
