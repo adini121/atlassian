@@ -1,8 +1,5 @@
 package com.atlassian.selenium;
 
-import com.thoughtworks.selenium.SeleniumCommandTimedOutException;
-import com.thoughtworks.selenium.SeleniumException;
-
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
