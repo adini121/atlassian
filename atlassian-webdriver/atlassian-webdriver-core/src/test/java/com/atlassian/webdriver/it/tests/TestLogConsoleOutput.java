@@ -9,38 +9,30 @@ import com.atlassian.webdriver.it.pageobjects.page.jsconsolelogging.NoErrorsPage
 import com.atlassian.webdriver.it.pageobjects.page.jsconsolelogging.UntypedErrorPage;
 import com.atlassian.webdriver.it.pageobjects.page.jsconsolelogging.WindowErrorPage;
 import com.atlassian.webdriver.testing.rule.LogConsoleOutputRule;
-import com.atlassian.webdriver.utils.element.WebDriverPoller;
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
-import org.slf4j.Logger;
 
 import javax.inject.Inject;
-import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
 
+/**
+ * Test the rule for logging client-side console output.
+ *
+ * At the time of writing, the logging only captures exceptions.
+ * The tests only work in Firefox, since the rule uses a Firefox extension to get the output.
+ */
+@RequireBrowser(Browser.FIREFOX)
 public class TestLogConsoleOutput extends AbstractSimpleServerTest
 {
-    private WebDriver driver;
-    private LogConsoleOutputRule rule;
-    @Inject private WebDriverPoller poller;
-    @Inject private Logger logger;
-
-    @Before
-    public void setup()
-    {
-        poller = poller.withDefaultTimeout(5, TimeUnit.SECONDS);
-        driver = product.getTester().getDriver();
-        rule = new LogConsoleOutputRule(driver, logger);
-    }
+    @Inject private WebDriver driver;
+    @Inject private LogConsoleOutputRule rule;
 
     @Test
-    @RequireBrowser(Browser.FIREFOX)
     public void testPageWithNoErrors()
     {
         product.visit(NoErrorsPage.class);
@@ -49,7 +41,6 @@ public class TestLogConsoleOutput extends AbstractSimpleServerTest
     }
 
     @Test
-    @RequireBrowser(Browser.FIREFOX)
     public void testSingleErrorInWindowScope()
     {
         final Page page = product.visit(WindowErrorPage.class);
@@ -59,7 +50,6 @@ public class TestLogConsoleOutput extends AbstractSimpleServerTest
     }
 
     @Test
-    @RequireBrowser(Browser.FIREFOX)
     public void testMultipleErrorsInIncludedScripts()
     {
         final IncludedScriptErrorPage page = product.visit(IncludedScriptErrorPage.class);
@@ -72,7 +62,6 @@ public class TestLogConsoleOutput extends AbstractSimpleServerTest
     }
 
     @Test
-    @RequireBrowser(Browser.FIREFOX)
     public void testEachJSErrorIsOnANewLine()
     {
         final IncludedScriptErrorPage page = product.visit(IncludedScriptErrorPage.class);
@@ -85,7 +74,6 @@ public class TestLogConsoleOutput extends AbstractSimpleServerTest
     }
 
     @Test
-    @RequireBrowser(Browser.FIREFOX)
     public void testCanCaptureUntypedErrors()
     {
         final UntypedErrorPage page = product.visit(UntypedErrorPage.class);
@@ -96,7 +84,6 @@ public class TestLogConsoleOutput extends AbstractSimpleServerTest
 
     @Ignore("The JSErrorCollector plugin currently cannot capture console errors")
     @Test
-    @RequireBrowser(Browser.FIREFOX)
     public void testCanCaptureConsoleErrors()
     {
         final UntypedErrorPage page = product.visit(UntypedErrorPage.class);
@@ -106,7 +93,6 @@ public class TestLogConsoleOutput extends AbstractSimpleServerTest
     }
 
     @Test
-    @RequireBrowser(Browser.FIREFOX)
     public void testCurrentlyCannotCaptureConsoleErrors()
     {
         final UntypedErrorPage page = product.visit(UntypedErrorPage.class);

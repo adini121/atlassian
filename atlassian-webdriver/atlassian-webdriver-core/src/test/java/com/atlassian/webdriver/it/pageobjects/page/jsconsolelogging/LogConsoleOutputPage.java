@@ -5,7 +5,7 @@ import org.apache.commons.lang.StringUtils;
 
 public abstract class LogConsoleOutputPage implements Page
 {
-    protected String pathTo(String fileName)
+    protected final String pathTo(String fileName)
     {
         return "/html/jsconsolelogging/" + fileName;
     }

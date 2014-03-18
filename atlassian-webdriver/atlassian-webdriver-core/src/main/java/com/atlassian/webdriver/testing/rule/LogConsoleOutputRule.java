@@ -20,6 +20,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * Rule to log javascript console error messages.
  *
+ * At present, the logging only works in Firefox, since we use
+ * a Firefox extension to collect the console output.
+ *
  * @since 2.3
  */
 public class LogConsoleOutputRule extends TestWatcher
@@ -63,6 +66,11 @@ public class LogConsoleOutputRule extends TestWatcher
         logger.info("----- END CONSOLE OUTPUT DUMP");
     }
 
+    /**
+     * Get the console output from the browser.
+     * The method is public for the purpose of testing.
+     * @return The result of invoking {@link JavaScriptError#toString} via a List.
+     */
     public String getConsoleOutput()
     {
         final WebDriver driver = webDriver.get();
