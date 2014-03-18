@@ -5,7 +5,7 @@ public class UntypedErrorPage extends LogConsoleOutputPage
     @Override
     public String getUrl()
     {
-        return pathTo("untyped-errors.html");
+        return pathTo("untyped-script-errors.html");
     }
 
     public String throwStringScriptUrl()

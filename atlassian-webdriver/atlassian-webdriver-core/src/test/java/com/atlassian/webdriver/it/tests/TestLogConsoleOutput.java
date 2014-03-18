@@ -84,17 +84,34 @@ public class TestLogConsoleOutput extends AbstractSimpleServerTest
         assertThat(errors[1], containsString(page.throwErrorObjectScriptUrl()));
     }
 
-    @Ignore("The JSErrorCollector plugin currently cannot capture untyped errors")
     @Test
     @RequireBrowser(Browser.FIREFOX)
     public void testCanCaptureUntypedErrors()
     {
         final UntypedErrorPage page = product.visit(UntypedErrorPage.class);
         final String consoleOutput = rule.getConsoleOutput();
-        assertThat(consoleOutput, containsString("Error: throw string"));
-        assertThat(consoleOutput, containsString(page.throwStringScriptUrl()));
+        assertThat(consoleOutput, containsString("uncaught exception: throw string"));
+    }
 
+
+    @Ignore("The JSErrorCollector plugin currently cannot capture console errors")
+    @Test
+    @RequireBrowser(Browser.FIREFOX)
+    public void testCanCaptureConsoleErrors()
+    {
+        final UntypedErrorPage page = product.visit(UntypedErrorPage.class);
+        final String consoleOutput = rule.getConsoleOutput();
         assertThat(consoleOutput, containsString("console.error"));
         assertThat(consoleOutput, containsString(page.consoleErrorScriptUrl()));
+    }
+
+    @Test
+    @RequireBrowser(Browser.FIREFOX)
+    public void testCurrentlyCannotCaptureConsoleErrors()
+    {
+        final UntypedErrorPage page = product.visit(UntypedErrorPage.class);
+        final String consoleOutput = rule.getConsoleOutput();
+        assertThat(consoleOutput, not(containsString("console.error")));
+        assertThat(consoleOutput, not(containsString(page.consoleErrorScriptUrl())));
     }
 }
