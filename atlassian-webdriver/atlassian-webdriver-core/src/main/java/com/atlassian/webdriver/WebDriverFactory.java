@@ -177,7 +177,7 @@ public class WebDriverFactory
             default:
                 log.error("Unknown browser: {}, defaulting to firefox.", BROWSER);
                 browserType = Browser.FIREFOX;
-                driver = new FirefoxDriver();
+                driver = FirefoxBrowser.getFirefoxDriver();
         }
 
         BrowserUtil.setCurrentBrowser(browserType);
