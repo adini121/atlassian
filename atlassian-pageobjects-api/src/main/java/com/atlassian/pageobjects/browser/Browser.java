@@ -22,6 +22,7 @@ public enum Browser
     IPHONE,
     /** Uses a real live iPad. */
     IPAD,
+    PHANTOMJS,
     /** Android emulator - runs on your desktop. */
     ANDROID_EMULATOR,
     /** Uses a real live Android phone, tablet or other android device. */

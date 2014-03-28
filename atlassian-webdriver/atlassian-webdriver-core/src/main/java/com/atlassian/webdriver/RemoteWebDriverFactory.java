@@ -112,10 +112,12 @@ class RemoteWebDriverFactory
                 // android must have android-server.apk installed and running
                 capabilities = DesiredCapabilities.android();
                 break;
+            case PHANTOMJS:
+                DesiredCapabilities phantomjs = DesiredCapabilities.phantomjs();
+                capabilities = phantomjs;
+                break;
             case SAFARI:
                 throw new UnsupportedOperationException("Safari is not a supported Browser Type");
-            case OPERA:
-                throw new UnsupportedOperationException("Opera is not a supported Browser Type");
             default:
                 log.error("Unknown browser: {}, defaulting to firefox.", browserType);
                 capabilities = DesiredCapabilities.firefox();

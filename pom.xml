@@ -53,7 +53,7 @@
         <jdkLevel>1.6</jdkLevel>
         <selenium-browsers-version>1.1-beta13</selenium-browsers-version>
         <webdriver-browsers-version>2.6-m3</webdriver-browsers-version>
-        <selenium.version>2.35.0</selenium.version>
+        <selenium.version>2.34.0</selenium.version>
         <mockito.version>1.9.5</mockito.version>
         <junit.version>4.11</junit.version>
         <hamcrest.version>1.3</hamcrest.version>

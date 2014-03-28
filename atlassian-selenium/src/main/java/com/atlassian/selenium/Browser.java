@@ -2,7 +2,7 @@ package com.atlassian.selenium;
 
 
 public enum Browser {
-    FIREFOX("firefox"), OPERA("opera"), SAFARI("safari"), UNKNOWN("unkown"), IE("ie"), CHROME("chrome");
+    FIREFOX("firefox"), OPERA("opera"), SAFARI("safari"), UNKNOWN("unkown"), IE("ie"), CHROME("chrome"), PHANTOM_JS("phantomjs");
 
     private final String name;
 

@@ -1,14 +1,14 @@
 package com.atlassian.selenium;
 
-import com.thoughtworks.selenium.SeleniumCommandTimedOutException;
-import com.thoughtworks.selenium.SeleniumException;
-
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 public class MultiBrowserSeleniumClientInvocationHandler implements InvocationHandler {
     private List<SeleniumClient> clients;
@@ -19,12 +19,10 @@ public class MultiBrowserSeleniumClientInvocationHandler implements InvocationHa
     private ExecutorService executorService;
 
     public MultiBrowserSeleniumClientInvocationHandler(List<SeleniumConfiguration> configs, long maxWait,
-                                                       boolean verifyReturnValues, boolean parallel)
-    {
+                                                       boolean verifyReturnValues, boolean parallel) {
         clients = new LinkedList<SeleniumClient>();
 
-        for (SeleniumConfiguration config : configs)
-        {
+        for (SeleniumConfiguration config : configs) {
             SeleniumClient client = new SingleBrowserSeleniumClient(config);
             client.start();
             clients.add(client);
@@ -32,13 +30,10 @@ public class MultiBrowserSeleniumClientInvocationHandler implements InvocationHa
         this.VERIFY_RETURN_VALUES = verifyReturnValues;
         this.PARALLEL = parallel;
 
-        if(PARALLEL)
-        {
+        if (PARALLEL) {
             executorService = Executors.newFixedThreadPool(clients.size());
             this.MAX_WAIT = maxWait;
-        }
-        else
-        {
+        } else {
             // i.e. sequential execution
             executorService = Executors.newSingleThreadExecutor();
             this.MAX_WAIT = maxWait * clients.size();
@@ -51,38 +46,28 @@ public class MultiBrowserSeleniumClientInvocationHandler implements InvocationHa
 
         List<Future<Object>> futures = new ArrayList<Future<Object>>(clients.size());
 
-        for (final SeleniumClient client : clients)
-        {
+        for (final SeleniumClient client : clients) {
             futures.add(executorService.submit(new MethodHandlerCallable(method, client, args)));
         }
         executorService.awaitTermination(MAX_WAIT, TimeUnit.MILLISECONDS);
-        if(VERIFY_RETURN_VALUES)
-        {
+        if (VERIFY_RETURN_VALUES) {
             verifyReturnValues(futures);
         }
 
         return futures.get(0).get();
     }
 
-    public void verifyReturnValues(List <Future<Object>> futures) throws Throwable
-    {
-        if (futures.size() > 0)
-        {
+    public void verifyReturnValues(List<Future<Object>> futures) throws Throwable {
+        if (futures.size() > 0) {
             Object first = futures.get(0).get();
-            for(int i = 0; i < clients.size(); i++)
-            {
+            for (int i = 0; i < clients.size(); i++) {
                 Object value = futures.get(i).get();
-                if (first == null)
-                {
-                    if (value != null)
-                    {
+                if (first == null) {
+                    if (value != null) {
                         throw createValueMismatchException(clients.get(0), first, clients.get(i), value);
                     }
-                }
-                else
-                {
-                    if (!first.equals(value))
-                    {
+                } else {
+                    if (!first.equals(value)) {
                         throw createValueMismatchException(clients.get(0), first, clients.get(i), value);
                     }
                 }
