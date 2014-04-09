@@ -15,4 +15,10 @@ import java.lang.annotation.Target;
 public @interface RequireBrowser
 {
     Browser[] value() default {Browser.ALL};
+
+    /**
+     * @return reason for requiring the specified browser
+     * @since 2.3
+     */
+    String reason() default ("No reason provided");
 }
