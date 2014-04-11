@@ -11,8 +11,9 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.WebElement;
 
-import javax.inject.Inject;
 import java.util.List;
+import javax.annotation.Nonnull;
+import javax.inject.Inject;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -138,8 +139,9 @@ public class WebDriverElement implements PageElement
         return waitForWebElement().isSelected();
     }
 
-    public boolean hasClass(final String className)
+    public boolean hasClass(@Nonnull final String className)
     {
+        checkNotNull(className, "className");
         return Check.hasClass(className, waitForWebElement());
     }
 

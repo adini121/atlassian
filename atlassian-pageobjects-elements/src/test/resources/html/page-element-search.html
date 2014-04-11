@@ -1,0 +1,69 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <title>Test page for page element search</title>
+    <script src="../js/jquery-1.4.2.min.js"></script>
+    <script>
+        // TODO dynamic list
+    </script>
+</head>
+<body>
+<h2>Single element by ID</h2>
+<div id="single-element" />
+
+<h2>Table List with headers</h2>
+<div id="table-list">
+    <table id="the-table">
+        <thead>
+        <tr class="header-row">
+            <th>One</th>
+            <th>Two</th>
+        </tr>
+        </thead>
+        <tr class="uneven-row" data-name="Uneven Row 1">
+            <td>11</td>
+            <td>12</td>
+        </tr>
+        <tr class="even-row" data-name="Even Row 1">
+            <td>21</td>
+            <td>22</td>
+        </tr>
+        <tr class="uneven-row" data-name="Uneven Row 2">
+            <td>31</td>
+            <td>32</td>
+        </tr>
+        <tr class="even-row" data-name="Even Row 2">
+            <td>41</td>
+            <td>42</td>
+        </tr>
+        <tr class="even-row" data-name="Uneven Row 3">
+            <td>51</td>
+            <td>52</td>
+        </tr>
+        <tr class="even-row" data-name="Even Row 3">
+            <td>61</td>
+            <td>62</td>
+        </tr>
+    </table>
+</div>
+
+<h2>Nested search</h2>
+<div id="parent-1">
+    <div class="parent-2-class">
+        <ul>
+            <li>WRONG!</li>
+        </ul>
+    </div>
+
+    <div class="parent-2-class" data-find-me="true">
+        <ul>
+            <li>No</li>
+            <li data-pick-me="true">Yes-1</li>
+            <li>No</li>
+            <li data-pick-me="true">Yes-2</li>
+        </ul>
+    </div>
+</div>
+
+</body>
+</html>
