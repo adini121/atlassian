@@ -9,10 +9,10 @@ import com.atlassian.webdriver.browsers.ie.IeBrowser;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.android.AndroidDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.iphone.IPhoneSimulatorBinary;
 import org.openqa.selenium.iphone.IPhoneSimulatorDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -122,6 +122,10 @@ public class WebDriverFactory
                     driver = ChromeBrowser.getChromeDriver();
                 }
                 break;
+
+            case PHANTOMJS:
+                driver = new PhantomJSDriver();
+                break;
             
             case IE:
                 driver = IeBrowser.createIeDriver(browserPath, browserConfig);
@@ -175,6 +179,7 @@ public class WebDriverFactory
             case OPERA:
                 throw new UnsupportedOperationException("Opera is not a supported Browser Type");
             default:
+                log.error("***** DEBUG BROWSER" + browserType + "******");
                 log.error("Unknown browser: {}, defaulting to firefox.", BROWSER);
                 browserType = Browser.FIREFOX;
                 driver = FirefoxBrowser.getFirefoxDriver();

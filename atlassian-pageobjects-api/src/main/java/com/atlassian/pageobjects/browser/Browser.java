@@ -25,7 +25,9 @@ public enum Browser
     /** Android emulator - runs on your desktop. */
     ANDROID_EMULATOR,
     /** Uses a real live Android phone, tablet or other android device. */
-    ANDROID;
+    ANDROID,
+    /** Uses phantomjs for headless testing. */
+    PHANTOMJS;
 
     /**
      * @return a lowercase version of the name
