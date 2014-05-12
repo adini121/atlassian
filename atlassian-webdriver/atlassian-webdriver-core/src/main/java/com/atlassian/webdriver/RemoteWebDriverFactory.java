@@ -4,7 +4,7 @@ import com.atlassian.browsers.BrowserConfig;
 import com.atlassian.pageobjects.browser.Browser;
 import com.atlassian.pageobjects.util.BrowserUtil;
 import com.atlassian.webdriver.browsers.firefox.FirefoxBrowser;
-import org.openqa.selenium.Capabilities;
+import com.atlassian.webdriver.utils.WebDriverUtil;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
@@ -85,7 +85,7 @@ class RemoteWebDriverFactory
             }
         }
 
-        final Capabilities capabilities;
+        final DesiredCapabilities capabilities;
         switch (browserType)
         {
             case FIREFOX:
@@ -120,6 +120,9 @@ class RemoteWebDriverFactory
                 log.error("Unknown browser: {}, defaulting to firefox.", browserType);
                 capabilities = DesiredCapabilities.firefox();
         }
+
+        DesiredCapabilities customCapabilities = WebDriverUtil.createCapabilitiesFromString(System.getProperty("webdriver.capabilities"));
+        capabilities.merge(customCapabilities);
 
         BrowserUtil.setCurrentBrowser(browserType);
 
