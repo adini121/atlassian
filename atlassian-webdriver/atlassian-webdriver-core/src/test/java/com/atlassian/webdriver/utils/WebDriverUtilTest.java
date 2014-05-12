@@ -1,16 +1,18 @@
 package com.atlassian.webdriver.utils;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import static org.junit.Assert.*;
 
-public class WebDriverUtilTest extends TestCase
+public class WebDriverUtilTest
 {
-
+    @Test
     public void testCreateCapabilitiesFromStringOneItem() throws Exception
     {
         assertEquals("osx", WebDriverUtil.createCapabilitiesFromString("so=osx").getCapability("so"));
     }
 
+    @Test
     public void testCreateCapabilitiesFromStringMoreThanOneItem() throws Exception
     {
         DesiredCapabilities capabilities = WebDriverUtil.createCapabilitiesFromString("so=osx;browser=safari");
@@ -18,6 +20,7 @@ public class WebDriverUtilTest extends TestCase
         assertEquals("safari", capabilities.getCapability("browser"));
     }
 
+    @Test
     public void testCreateCapabilitiesFromStringDuplicatedItems() throws Exception
     {
         DesiredCapabilities capabilities = WebDriverUtil.createCapabilitiesFromString("so=osx;browser=safari;browser=firefox");
@@ -25,12 +28,14 @@ public class WebDriverUtilTest extends TestCase
         assertEquals("firefox", capabilities.getCapability("browser")); // it will pick up the latest
     }
 
+    @Test
     public void testCreateCapabilitiesFromNullString() throws Exception
     {
         DesiredCapabilities capabilities = WebDriverUtil.createCapabilitiesFromString(null);
         assertEquals(0, capabilities.asMap().size());
     }
 
+    @Test
     public void testCreateCapabilitiesFromEmptyString() throws Exception
     {
         DesiredCapabilities capabilities = WebDriverUtil.createCapabilitiesFromString("");
