@@ -10,6 +10,7 @@ import org.openqa.selenium.internal.WrapsDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -95,7 +96,7 @@ public final class WebDriverUtil
      * Parses capabilities from input string
      * @since 2.3
      */
-    public static DesiredCapabilities createCapabilitiesFromString(String capabilitiesList) {
+    public static DesiredCapabilities createCapabilitiesFromString(@Nullable String capabilitiesList) {
         DesiredCapabilities capabilities = new DesiredCapabilities();
         if (!StringUtils.isEmpty(capabilitiesList)){
             for (String cap : capabilitiesList.split(";"))
