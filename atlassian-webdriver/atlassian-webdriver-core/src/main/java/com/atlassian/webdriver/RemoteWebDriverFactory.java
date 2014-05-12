@@ -4,6 +4,7 @@ import com.atlassian.browsers.BrowserConfig;
 import com.atlassian.pageobjects.browser.Browser;
 import com.atlassian.pageobjects.util.BrowserUtil;
 import com.atlassian.webdriver.browsers.firefox.FirefoxBrowser;
+import com.atlassian.webdriver.utils.WebDriverUtil;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
@@ -120,21 +121,13 @@ class RemoteWebDriverFactory
                 capabilities = DesiredCapabilities.firefox();
         }
 
-        setAdditionalCustomCapabilities(capabilities);
+        DesiredCapabilities customCapabilities = WebDriverUtil.createCapabilitiesFromString(System.getProperty("webdriver.capabilities"));
+        capabilities.merge(customCapabilities);
 
         BrowserUtil.setCurrentBrowser(browserType);
 
         RemoteWebDriver driver = new RemoteWebDriver(serverUrl, capabilities);
 
         return new DefaultAtlassianWebDriver(driver, browserType);
-    }
-
-    private static void setAdditionalCustomCapabilities(DesiredCapabilities capabilities) {
-        String caps = System.getProperty("webdriver.capabilities");
-        for (String cap : caps.split(";"))
-        {
-            String[] nameVal = cap.split("=");
-            capabilities.setCapability(nameVal[0], nameVal[1]);
-        }
     }
 }

@@ -1,11 +1,13 @@
 package com.atlassian.webdriver.utils;
 
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.internal.WrapsDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 import javax.annotation.Nonnull;
 
@@ -87,5 +89,21 @@ public final class WebDriverUtil
     public static <T> T as(@Nonnull WebDriver driver, @Nonnull Class<T> type)
     {
         return type.cast(getUnderlyingDriver(driver));
+    }
+
+    /**
+     * Parses capabilities from input string
+     * @since 2.3
+     */
+    public static DesiredCapabilities createCapabilitiesFromString(String capabilitiesList) {
+        DesiredCapabilities capabilities = new DesiredCapabilities();
+        if (!StringUtils.isEmpty(capabilitiesList)){
+            for (String cap : capabilitiesList.split(";"))
+            {
+                String[] nameVal = cap.split("=");
+                capabilities.setCapability(nameVal[0], nameVal[1]);
+            }
+        }
+        return capabilities;
     }
 }
