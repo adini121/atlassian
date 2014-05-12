@@ -96,6 +96,7 @@ public final class WebDriverUtil
      * Parses capabilities from input string
      * @since 2.3
      */
+    @Nonnull
     public static DesiredCapabilities createCapabilitiesFromString(@Nullable String capabilitiesList) {
         DesiredCapabilities capabilities = new DesiredCapabilities();
         if (!StringUtils.isEmpty(capabilitiesList)){
