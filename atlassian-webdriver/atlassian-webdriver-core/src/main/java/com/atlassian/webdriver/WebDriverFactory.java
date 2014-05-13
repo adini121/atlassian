@@ -75,7 +75,7 @@ public class WebDriverFactory
 
         if (RemoteWebDriverFactory.matches(BROWSER))
         {
-            return RemoteWebDriverFactory.getDriver(BROWSER, browserConfig);
+            return RemoteWebDriverFactory.getDriver(BROWSER);
         }
 
         Matcher matcher = browserPathPattern.matcher(BROWSER);

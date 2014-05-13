@@ -56,8 +56,16 @@ public class LifecycleAwareWebDriverGrid
             return driver;
         }
 
-        BrowserConfig browserConfig = AutoInstallConfiguration.setupBrowser();
-        AtlassianWebDriver driver = WebDriverFactory.getDriver(browserConfig);
+        AtlassianWebDriver driver = null;
+        if (RemoteWebDriverFactory.matches(browserProperty))
+        {
+            driver = RemoteWebDriverFactory.getDriver(browserProperty);
+        }
+        else
+        {
+            BrowserConfig browserConfig = AutoInstallConfiguration.setupBrowser();
+            driver = WebDriverFactory.getDriver(browserConfig);
+        }
         drivers.put(browserProperty, driver);
         currentDriver = driver;
 

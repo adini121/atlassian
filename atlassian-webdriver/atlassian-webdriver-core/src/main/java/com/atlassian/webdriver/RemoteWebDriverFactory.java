@@ -44,6 +44,11 @@ class RemoteWebDriverFactory
         return browserType;
     }
 
+    public static AtlassianWebDriver getDriver(String browserProperty)
+    {
+        return getDriver(browserProperty, null);
+    }
+
     public static AtlassianWebDriver getDriver(String browserProperty, BrowserConfig browserConfig)
     {
         Matcher matcher = remoteBrowserPathPattern.matcher(browserProperty);
