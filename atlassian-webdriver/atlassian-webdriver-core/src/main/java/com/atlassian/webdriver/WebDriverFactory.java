@@ -75,6 +75,7 @@ public class WebDriverFactory
 
         if (RemoteWebDriverFactory.matches(BROWSER))
         {
+            log.info("Loading RemoteWebDriverFactory driver " + BROWSER);
             return RemoteWebDriverFactory.getDriver(BROWSER);
         }
 

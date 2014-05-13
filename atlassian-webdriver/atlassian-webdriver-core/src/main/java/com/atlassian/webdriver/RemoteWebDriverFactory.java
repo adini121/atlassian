@@ -126,7 +126,9 @@ class RemoteWebDriverFactory
                 capabilities = DesiredCapabilities.firefox();
         }
 
-        DesiredCapabilities customCapabilities = WebDriverUtil.createCapabilitiesFromString(System.getProperty("webdriver.capabilities"));
+        final String capabilitiesStr = System.getProperty("webdriver.capabilities");
+        log.info("Loading custom capabilities " + capabilitiesStr);
+        DesiredCapabilities customCapabilities = WebDriverUtil.createCapabilitiesFromString(capabilitiesStr);
         capabilities.merge(customCapabilities);
 
         BrowserUtil.setCurrentBrowser(browserType);
