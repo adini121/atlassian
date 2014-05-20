@@ -44,6 +44,11 @@ class RemoteWebDriverFactory
         return browserType;
     }
 
+    public static AtlassianWebDriver getDriver(String browserProperty)
+    {
+        return getDriver(browserProperty, null);
+    }
+
     public static AtlassianWebDriver getDriver(String browserProperty, BrowserConfig browserConfig)
     {
         Matcher matcher = remoteBrowserPathPattern.matcher(browserProperty);
@@ -121,7 +126,9 @@ class RemoteWebDriverFactory
                 capabilities = DesiredCapabilities.firefox();
         }
 
-        DesiredCapabilities customCapabilities = WebDriverUtil.createCapabilitiesFromString(System.getProperty("webdriver.capabilities"));
+        final String capabilitiesStr = System.getProperty("webdriver.capabilities");
+        log.info("Loading custom capabilities " + capabilitiesStr);
+        DesiredCapabilities customCapabilities = WebDriverUtil.createCapabilitiesFromString(capabilitiesStr);
         capabilities.merge(customCapabilities);
 
         BrowserUtil.setCurrentBrowser(browserType);
