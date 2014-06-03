@@ -1,6 +1,7 @@
 package com.atlassian.pageobjects.elements;
 
 import com.atlassian.pageobjects.PageBinder;
+import com.atlassian.pageobjects.elements.query.Poller;
 import com.atlassian.pageobjects.elements.timeout.TimeoutType;
 import com.atlassian.pageobjects.elements.timeout.Timeouts;
 import com.atlassian.webdriver.AtlassianWebDriver;
@@ -119,7 +120,7 @@ public class WebDriverElement implements PageElement
 
     protected WebElement waitForWebElementVisibility()
     {
-        this.timed().isVisible();
+        Poller.waitUntilTrue(this.timed().isVisible());
         return getWebElement(this);
     }
 
