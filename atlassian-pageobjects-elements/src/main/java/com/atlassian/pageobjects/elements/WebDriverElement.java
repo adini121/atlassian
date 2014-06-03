@@ -116,7 +116,13 @@ public class WebDriverElement implements PageElement
     {
         return (WebElement) locatable.waitUntilLocated(driver, createTimout());
     }
-    
+
+    protected WebElement waitForWebElementVisibility()
+    {
+        this.timed().isVisible();
+        return getWebElement(this);
+    }
+
     public boolean isPresent()
     {
         return locatable.isPresent(driver, createTimout());
@@ -182,7 +188,7 @@ public class WebDriverElement implements PageElement
 
     public PageElement click()
     {
-        waitForWebElement().click();
+        waitForWebElementVisibility().click();
         return this;
     }
 
@@ -194,7 +200,7 @@ public class WebDriverElement implements PageElement
 
     public PageElement select()
     {
-        WebElement el = waitForWebElement();
+        WebElement el = waitForWebElementVisibility();
         if (!el.isSelected()) {
             el.click();
         }
@@ -203,14 +209,14 @@ public class WebDriverElement implements PageElement
 
     public PageElement toggle()
     {
-        WebElement el = waitForWebElement();
+        WebElement el = waitForWebElementVisibility();
         el.click();
         return this;
     }
 
     public PageElement clear()
     {
-        waitForWebElement().clear();
+        waitForWebElementVisibility().clear();
         return this;
     }
 
