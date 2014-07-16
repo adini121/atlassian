@@ -21,6 +21,7 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.io.TemporaryFilesystem;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
@@ -79,7 +80,22 @@ public class DefaultAtlassianWebDriver implements AtlassianWebDriver
                 return;
             }
         }
-        driver.quit();
+        try {
+            driver.quit();
+        } catch (NullPointerException e) {
+            // https://ecosystem.atlassian.net/browse/SELENIUM-247
+            boolean ignoreException = false;
+            StackTraceElement[] stackTraceElements = e.getStackTrace();
+            for (StackTraceElement stackTraceElement : stackTraceElements) {
+                if (stackTraceElement.getClassName().equals(TemporaryFilesystem.class.getName()) &&
+                        stackTraceElement.getMethodName().equals("deleteTempDir")) {
+                    log.warn("Webdriver couldn't delete temporary directory, ignored {}", this);
+                    ignoreException = true;
+                }
+            }
+            if (!ignoreException)
+                throw e;
+        }
         log.debug("Quit complete {}", this);
     }
 
