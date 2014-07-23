@@ -60,7 +60,8 @@
         <jetty.version>6.1.24</jetty.version>
         <slf4j.version>1.7.5</slf4j.version>
         <!-- HTTP components are required by selenium but we explicitly exclude them such that selenium doesn't impose it as its transitive dependency -->
-        <!-- this version below is used _for testing only_, client projects will have to provide their own version of HTTP components -->
+        <!-- This version below is used _for testing only_ and needs to be kept in sync with what selenium requires -->
+        <!-- Client projects will have to provide their own version of HTTP components -->
         <http.components.version>4.3.2</http.components.version>
         <amps.version>3.7.2</amps.version>
         <atlassian.annotations.version>0.6</atlassian.annotations.version>
@@ -276,20 +277,43 @@
                     <name>custom.chrome.version</name>
                 </property>
             </activation>
-            <properties>
-
-            </properties>
             <dependencyManagement>
                 <dependencies>
                     <dependency>
                         <groupId>com.atlassian.browsers</groupId>
                         <artifactId>chrome</artifactId>
                         <version>${custom.chrome.version}</version>
+                        <classifier>osx</classifier>
                     </dependency>
                     <dependency>
                         <groupId>com.atlassian.browsers</groupId>
                         <artifactId>chrome-profile</artifactId>
                         <version>${custom.chrome.profile.version}</version>
+                        <classifier>osx</classifier>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.atlassian.browsers</groupId>
+                        <artifactId>chrome</artifactId>
+                        <version>${custom.chrome.version}</version>
+                        <classifier>linux</classifier>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.atlassian.browsers</groupId>
+                        <artifactId>chrome-profile</artifactId>
+                        <version>${custom.chrome.profile.version}</version>
+                        <classifier>linux</classifier>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.atlassian.browsers</groupId>
+                        <artifactId>chrome</artifactId>
+                        <version>${custom.chrome.version}</version>
+                        <classifier>linux64</classifier>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.atlassian.browsers</groupId>
+                        <artifactId>chrome-profile</artifactId>
+                        <version>${custom.chrome.profile.version}</version>
+                        <classifier>linux64</classifier>
                     </dependency>
                 </dependencies>
             </dependencyManagement>
