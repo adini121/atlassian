@@ -59,9 +59,14 @@
         <hamcrest.version>1.3</hamcrest.version>
         <jetty.version>6.1.24</jetty.version>
         <slf4j.version>1.7.5</slf4j.version>
+        <!-- HTTP components are required by selenium but we explicitly exclude them such that selenium doesn't impose it as its transitive dependency -->
+        <!-- this version below is used _for testing only_, client projects will have to provide their own version of HTTP components -->
+        <http.components.version>4.3.2</http.components.version>
         <amps.version>3.7.2</amps.version>
         <atlassian.annotations.version>0.6</atlassian.annotations.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <maven.enforcer.version>1.3.1</maven.enforcer.version>
     </properties>
 
     <dependencyManagement>
@@ -79,6 +84,14 @@
                     <exclusion>
                         <groupId>org.testng</groupId>
                         <artifactId>testng</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.httpcomponents</groupId>
+                        <artifactId>httpclient</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.httpcomponents</groupId>
+                        <artifactId>httpcore</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
@@ -132,8 +145,14 @@
             </dependency>
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>${http.components.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpcore</artifactId>
-                <version>4.2.3</version>
+                <version>${http.components.version}</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>
@@ -165,7 +184,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-enforcer-plugin</artifactId>
-                    <version>1.0.1</version>
+                    <version>${maven.enforcer.version}</version>
                     <executions>
                         <execution>
                             <id>ban-conflicting-dependencies</id>
@@ -247,4 +266,67 @@
             </plugins>
         </pluginManagement>
     </build>
+
+    <profiles>
+        <!-- TODO description -->
+        <profile>
+            <id>custom-chrome</id>
+            <activation>
+                <property>
+                    <name>custom.chrome.version</name>
+                </property>
+            </activation>
+            <properties>
+
+            </properties>
+            <dependencyManagement>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.atlassian.browsers</groupId>
+                        <artifactId>chrome</artifactId>
+                        <version>${custom.chrome.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.atlassian.browsers</groupId>
+                        <artifactId>chrome-profile</artifactId>
+                        <version>${custom.chrome.profile.version}</version>
+                    </dependency>
+                </dependencies>
+            </dependencyManagement>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-enforcer-plugin</artifactId>
+                        <version>${maven.enforcer.version}</version>
+                        <executions>
+                            <execution>
+                                <id>enforce-chrome-version-properties</id>
+                                <goals>
+                                    <goal>enforce</goal>
+                                </goals>
+                                <phase>validate</phase>
+                                <configuration>
+                                    <rules>
+                                        <requireProperty>
+                                            <property>custom.chrome.version</property>
+                                            <regex>.*\d.*</regex>
+                                            <regexMessage>The custom.chrome.version property must contain at least one digit</regexMessage>
+                                        </requireProperty>
+                                        <requireProperty>
+                                            <property>custom.chrome.profile.version</property>
+                                            <message>You must set the custom.chrome.profile.version property alongside custom.chrome.version</message>
+                                            <regex>.*\d.*</regex>
+                                            <regexMessage>The custom.chrome.profile.version property must contain at least one digit</regexMessage>
+                                        </requireProperty>
+                                    </rules>
+                                    <fail>true</fail>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
