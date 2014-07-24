@@ -269,7 +269,8 @@
     </build>
 
     <profiles>
-        <!-- TODO description -->
+        <!-- The below custom-* profiles can be used to customize browser/profile versions without upgrading atlassian-browsees -->
+        <!-- This should _only_ be used for testing that the upcoming atlassian-browsers release will be compatible -->
         <profile>
             <id>custom-chrome</id>
             <activation>
@@ -342,6 +343,78 @@
                                             <message>You must set the custom.chrome.profile.version property alongside custom.chrome.version</message>
                                             <regex>.*\d.*</regex>
                                             <regexMessage>The custom.chrome.profile.version property must contain at least one digit</regexMessage>
+                                        </requireProperty>
+                                    </rules>
+                                    <fail>true</fail>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>custom-firefox</id>
+            <activation>
+                <property>
+                    <name>custom.firefox.version</name>
+                </property>
+            </activation>
+            <dependencyManagement>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.atlassian.browsers</groupId>
+                        <artifactId>firefox</artifactId>
+                        <version>${custom.firefox.version}</version>
+                        <classifier>osx</classifier>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.atlassian.browsers</groupId>
+                        <artifactId>firefox</artifactId>
+                        <version>${custom.firefox.version}</version>
+                        <classifier>linux</classifier>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.atlassian.browsers</groupId>
+                        <artifactId>firefox</artifactId>
+                        <version>${custom.firefox.version}</version>
+                        <classifier>linux64</classifier>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.atlassian.browsers</groupId>
+                        <artifactId>firefox</artifactId>
+                        <version>${custom.firefox.version}</version>
+                        <classifier>windows</classifier>
+                    </dependency>
+
+                    <!-- Firefox profile is same for all OSes -->
+                    <dependency>
+                        <groupId>com.atlassian.browsers</groupId>
+                        <artifactId>firefox-profile</artifactId>
+                        <version>${custom.firefox.version}</version>
+                    </dependency>
+                </dependencies>
+            </dependencyManagement>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-enforcer-plugin</artifactId>
+                        <version>${maven.enforcer.version}</version>
+                        <executions>
+                            <execution>
+                                <id>enforce-firefox-version-properties</id>
+                                <goals>
+                                    <goal>enforce</goal>
+                                </goals>
+                                <phase>validate</phase>
+                                <configuration>
+                                    <rules>
+                                        <requireProperty>
+                                            <property>custom.firefox.version</property>
+                                            <regex>.*\d.*</regex>
+                                            <regexMessage>The custom.firefox.version property must contain at least one digit</regexMessage>
                                         </requireProperty>
                                     </rules>
                                     <fail>true</fail>
