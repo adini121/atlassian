@@ -87,7 +87,19 @@
 
     <profiles>
         <profile>
+            <id>release</id>
+            <properties>
+                <skip.legacy.tests>true</skip.legacy.tests>
+            </properties>
+        </profile>
+        <profile>
             <id>skip-legacy-tests</id>
+            <activation>
+                <property>
+                    <name>skip.legacy.tests</name>
+                    <value>true</value>
+                </property>
+            </activation>
             <build>
                 <plugins>
                     <plugin>
