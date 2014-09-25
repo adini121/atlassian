@@ -2,6 +2,7 @@ package com.atlassian.webdriver.testing.rule;
 
 import com.atlassian.webdriver.browsers.WebDriverBrowserAutoInstall;
 import com.atlassian.webdriver.utils.WebDriverUtil;
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
 import net.jsourcerer.webdriver.jserrorcollector.JavaScriptError;
@@ -55,22 +56,23 @@ public class LogConsoleOutputRule extends TestWatcher
     }
 
     @Override
-    public void failed(final Throwable e, final Description description)
+    @VisibleForTesting
+    public void finished(final Description description)
     {
         if (!isLogConsoleOutputEnabled())
         {
             return;
         }
-        logger.info("----- Test '{}' Failed. ", description.getMethodName());
+        logger.info("----- Test '{}' finished. ", description.getMethodName());
         logger.info("----- START CONSOLE OUTPUT DUMP\n\n\n{}\n\n\n", getConsoleOutput());
         logger.info("----- END CONSOLE OUTPUT DUMP");
     }
 
     /**
      * Get the console output from the browser.
-     * The method is public for the purpose of testing.
      * @return The result of invoking {@link JavaScriptError#toString} via a List.
      */
+    @VisibleForTesting
     public String getConsoleOutput()
     {
         final WebDriver driver = webDriver.get();

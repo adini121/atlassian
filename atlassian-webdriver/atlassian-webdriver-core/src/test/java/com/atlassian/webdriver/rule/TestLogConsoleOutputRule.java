@@ -29,8 +29,8 @@ public class TestLogConsoleOutputRule
         final WebDriver driver = mock(WebDriver.class);
         final LogConsoleOutputRule rule = createRule(driver);
 
-        rule.failed(new RuntimeException(), Description.createTestDescription(TestLogConsoleOutputRule.class, "testMethod"));
-        verify(mockLogger).info("----- Test '{}' Failed. ", "testMethod");
+        rule.finished(Description.createTestDescription(TestLogConsoleOutputRule.class, "testMethod"));
+        verify(mockLogger).info("----- Test '{}' finished. ", "testMethod");
         verify(mockLogger).info("----- START CONSOLE OUTPUT DUMP\n\n\n{}\n\n\n", "<Console output only supported in Firefox right now, sorry!>");
         verify(mockLogger).info("----- END CONSOLE OUTPUT DUMP");
         verifyNoMoreInteractions(mockLogger);
