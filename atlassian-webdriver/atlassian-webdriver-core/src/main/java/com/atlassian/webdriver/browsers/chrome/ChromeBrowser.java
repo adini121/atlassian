@@ -42,6 +42,7 @@ public class ChromeBrowser
         {
             final ChromeOptions options = new ChromeOptions();
             options.setBinary(browserConfig.getBinaryPath());
+            setDefaultArgs(options);
             addCommandLine(options);
 
             final ChromeDriverService.Builder chromeServiceBuilder = new ChromeDriverService.Builder();
@@ -54,6 +55,32 @@ public class ChromeBrowser
 
         // Fall back on default chrome driver
         return getChromeDriver();
+    }
+
+    /**
+     * Gets a chrome driver based on the browser path based in
+     * @param browserPath the path to the chrome binary to use for the chrome driver.
+     * @return A ChromeDriver that is using the binary at the browserPath
+     */
+    public static ChromeDriver getChromeDriver(String browserPath)
+    {
+        if (browserPath != null)
+        {
+            final ChromeOptions options = new ChromeOptions();
+            options.setBinary(browserPath);
+            return new ChromeDriver(options);
+        }
+        else
+        {
+            // Fall back on default chrome driver
+            log.info("Browser path was null, falling back to default chrome driver.");
+            return getChromeDriver();
+        }
+    }
+
+    private static void setDefaultArgs(ChromeOptions options) {
+        // as of Chrome 30+ setuid based sandbox doesn't work on Linux due to permission issues
+        options.addArguments("--disable-setuid-sandbox");
     }
 
     private static void setChromeServicePath(BrowserConfig browserConfig, ChromeDriverService.Builder chromeServiceBuilder)
@@ -80,27 +107,6 @@ public class ChromeBrowser
             List<String> switchList = Arrays.asList(switches);
             log.info("Setting command line arguments for Chrome: " + switchList);
             options.addArguments(switchList);
-        }
-    }
-
-    /**
-     * Gets a chrome driver based on the browser path based in
-     * @param browserPath the path to the chrome binary to use for the chrome driver.
-     * @return A ChromeDriver that is using the binary at the browserPath
-     */
-    public static ChromeDriver getChromeDriver(String browserPath)
-    {
-        if (browserPath != null)
-        {
-            final ChromeOptions options = new ChromeOptions();
-            options.setBinary(browserPath);
-            return new ChromeDriver(options);
-        }
-        else
-        {
-            // Fall back on default chrome driver
-            log.info("Browser path was null, falling back to default chrome driver.");
-            return getChromeDriver();
         }
     }
 
