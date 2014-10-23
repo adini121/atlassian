@@ -8,15 +8,11 @@ import com.atlassian.webdriver.browsers.firefox.FirefoxBrowser;
 import com.atlassian.webdriver.browsers.ie.IeBrowser;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.android.AndroidDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
-import org.openqa.selenium.iphone.IPhoneSimulatorBinary;
-import org.openqa.selenium.iphone.IPhoneSimulatorDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -62,8 +58,7 @@ public class WebDriverFactory
             browserProperty = matcher.group(1);
         }
 
-        Browser browserType = Browser.typeOf(browserProperty);
-        return browserType;
+        return Browser.typeOf(browserProperty);
     }
 
     public static AtlassianWebDriver getDriver(BrowserConfig browserConfig)
@@ -75,7 +70,8 @@ public class WebDriverFactory
 
         if (RemoteWebDriverFactory.matches(BROWSER))
         {
-            return RemoteWebDriverFactory.getDriver(BROWSER, browserConfig);
+            log.info("Loading RemoteWebDriverFactory driver " + BROWSER);
+            return RemoteWebDriverFactory.getDriver(BROWSER);
         }
 
         Matcher matcher = browserPathPattern.matcher(BROWSER);
@@ -128,52 +124,41 @@ public class WebDriverFactory
                 break;
 
             case HTMLUNIT_NOJS:
-                driver = new HtmlUnitDriver(BrowserVersion.FIREFOX_3_6);
+                driver = new HtmlUnitDriver(BrowserVersion.FIREFOX_24);
                 ((HtmlUnitDriver) driver).setJavascriptEnabled(false);
                 break;
 
             case HTMLUNIT:
-                driver = new HtmlUnitDriver(BrowserVersion.FIREFOX_3_6);
+                driver = new HtmlUnitDriver(BrowserVersion.FIREFOX_24);
                 ((HtmlUnitDriver) driver).setJavascriptEnabled(true);
                 break;
 
             case IPHONE_SIMULATOR:
-                if (browserPath == null)
-                {
-                    throw new RuntimeException("iPhone simulator driver must be configured with a path parameter");
-                }
-                try
-                {
-                    IPhoneSimulatorBinary binary = new IPhoneSimulatorBinary(new File(browserPath));
-                    driver = new IPhoneSimulatorDriver(binary);
-                }
-                catch (Exception e)
-                {
-                    throw new RuntimeException("Unable to configure iPhone simulator driver", e);
-                }
-                break;
+                throw new UnsupportedOperationException("iPhone simulator is no longer a supported Browser Type. " +
+                        "Use remote iPhone driver instead");
 
             case IPHONE:
                 // iPhones can only be driven via a RemoteWebDriver
                 throw new RuntimeException("iPhone driver must be configured with a url parameter");
+
             case IPAD:
                 // iPads can only be driven via a RemoteWebDriver
                 throw new RuntimeException("iPad driver must be configured with a url parameter");
 
             case ANDROID_EMULATOR:
-                // android emulator must have android-server.apk installed and running
-                driver = new AndroidDriver();
-                break;
+                throw new UnsupportedOperationException("Android emulator is no longer a supported Browser Type. " +
+                        "Use remote Android driver instead");
 
             case ANDROID:
-                // android must have android-server.apk installed and running
-                driver = new AndroidDriver();
-                break;
+                // Android can only be driven via a RemoteWebDriver
+                throw new RuntimeException("Android driver must be configured with a url parameter");
 
             case SAFARI:
                 throw new UnsupportedOperationException("Safari is not a supported Browser Type");
+
             case OPERA:
                 throw new UnsupportedOperationException("Opera is not a supported Browser Type");
+
             default:
                 log.error("Unknown browser: {}, defaulting to firefox.", BROWSER);
                 browserType = Browser.FIREFOX;

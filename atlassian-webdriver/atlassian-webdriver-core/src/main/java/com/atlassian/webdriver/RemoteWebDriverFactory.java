@@ -4,7 +4,7 @@ import com.atlassian.browsers.BrowserConfig;
 import com.atlassian.pageobjects.browser.Browser;
 import com.atlassian.pageobjects.util.BrowserUtil;
 import com.atlassian.webdriver.browsers.firefox.FirefoxBrowser;
-import org.openqa.selenium.Capabilities;
+import com.atlassian.webdriver.utils.WebDriverUtil;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
@@ -42,6 +42,11 @@ class RemoteWebDriverFactory
         }
         Browser browserType = Browser.typeOf(matcher.group(1));
         return browserType;
+    }
+
+    public static AtlassianWebDriver getDriver(String browserProperty)
+    {
+        return getDriver(browserProperty, null);
     }
 
     public static AtlassianWebDriver getDriver(String browserProperty, BrowserConfig browserConfig)
@@ -85,7 +90,7 @@ class RemoteWebDriverFactory
             }
         }
 
-        final Capabilities capabilities;
+        final DesiredCapabilities capabilities;
         switch (browserType)
         {
             case FIREFOX:
@@ -120,6 +125,11 @@ class RemoteWebDriverFactory
                 log.error("Unknown browser: {}, defaulting to firefox.", browserType);
                 capabilities = DesiredCapabilities.firefox();
         }
+
+        final String capabilitiesStr = System.getProperty("webdriver.capabilities");
+        log.info("Loading custom capabilities " + capabilitiesStr);
+        DesiredCapabilities customCapabilities = WebDriverUtil.createCapabilitiesFromString(capabilitiesStr);
+        capabilities.merge(customCapabilities);
 
         BrowserUtil.setCurrentBrowser(browserType);
 
