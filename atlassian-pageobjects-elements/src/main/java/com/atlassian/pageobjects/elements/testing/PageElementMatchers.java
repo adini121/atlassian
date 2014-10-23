@@ -7,10 +7,12 @@ import org.hamcrest.Matcher;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Set;
 
 import static com.atlassian.pageobjects.elements.PageElements.DATA_PREFIX;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.lang.String.format;
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
 
 /**
@@ -27,14 +29,14 @@ public final class PageElementMatchers
     }
 
     @Nonnull
-    public static Matcher<? super PageElement> withAttribute(@Nonnull final String name, @Nullable String expectedValue)
+    public static Matcher<PageElement> withAttribute(@Nonnull final String name, @Nullable String expectedValue)
     {
         return withAttributeThat(name, is(expectedValue));
     }
 
     @Nonnull
-    public static Matcher<? super PageElement> withAttributeThat(@Nonnull final String name,
-                                                                 @Nonnull Matcher<String> valueMatcher)
+    public static Matcher<PageElement> withAttributeThat(@Nonnull final String name,
+                                                         @Nonnull Matcher<String> valueMatcher)
     {
         checkNotNull(name, "name");
         checkNotNull(valueMatcher, "valueMatcher");
@@ -51,15 +53,35 @@ public final class PageElementMatchers
     }
 
     @Nonnull
-    public static Matcher<? super PageElement> withDataAttribute(@Nonnull final String name, @Nullable String expectedValue)
+    public static Matcher<PageElement> withClass(@Nonnull String expectedClass)
+    {
+        return withClassThat(is(expectedClass));
+    }
+
+    @Nonnull
+    public static Matcher<PageElement> withClassThat(@Nonnull Matcher<String> classMatcher)
+    {
+        checkNotNull(classMatcher, "classMatcher");
+
+        return new FeatureMatcher<PageElement, Set<String>>(hasItem(classMatcher), "CSS class", "CSS class")
+        {
+            @Override
+            protected Set<String> featureValueOf(PageElement actual)
+            {
+                return actual.getCssClasses();
+            }
+        };
+    }
+
+    @Nonnull
+    public static Matcher<PageElement> withDataAttribute(@Nonnull final String name, @Nullable String expectedValue)
     {
         return withDataAttributeThat(name, is(expectedValue));
     }
 
-
     @Nonnull
-    public static Matcher<? super PageElement> withDataAttributeThat(@Nonnull final String name,
-                                                                     @Nonnull Matcher<String> valueMatcher)
+    public static Matcher<PageElement> withDataAttributeThat(@Nonnull final String name,
+                                                             @Nonnull Matcher<String> valueMatcher)
     {
         checkNotNull(name, "name");
 

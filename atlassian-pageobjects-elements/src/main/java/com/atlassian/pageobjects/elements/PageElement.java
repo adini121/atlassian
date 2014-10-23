@@ -6,9 +6,10 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;
 
-import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Represents an HTML element that is expected on a DOM of a page.
@@ -47,6 +48,14 @@ public interface PageElement extends PageElementFinder
      * @return True if this element is selected, false otheriwse.
      */
     boolean isSelected();
+
+    /**
+     * Get a set of CSS classes associated with this element.
+     *
+     * @return CSS classes of this element, or an empty set
+     */
+    @Nonnull
+    Set<String> getCssClasses();
 
     /**
      * Whether this element has the given class set

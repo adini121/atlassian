@@ -5,6 +5,9 @@ import com.atlassian.pageobjects.elements.query.TimedQuery;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;
 
+import javax.annotation.Nonnull;
+import java.util.Set;
+
 /**
  * Represents an HTML element that is expected in the DOM of a page, all queries return TimedQueries.
  *
@@ -42,6 +45,17 @@ public interface TimedElement
      * timeout expires.
      */
     TimedCondition isSelected();
+
+    /**
+     * Query for a set of CSS classes associated with this element.
+     *
+     * @return CSS classes of this element, or an empty set
+     * @return TimedQuery for CSS classes of this element - returns a set of CSS classes, or an empty set otherwise,
+     * incl. if the element does not exist
+     * @see PageElement#getCssClasses()
+     */
+    @Nonnull
+    TimedQuery<Set<String>> getCssClasses();
 
     /**
      * Query representing whether this element has the given classname set.

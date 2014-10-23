@@ -171,6 +171,4 @@ public interface PageElementJavascript
      * @see #executeAsync(String, Object...) (String, Object...)
      */
     public <T> T executeAsync(Class<T> resultType, String script, Object... arguments);
-
-
 }

@@ -35,35 +35,40 @@ public interface SearchQuery<P extends PageElement>
     SearchQuery<P> filter(@Nonnull Matcher<? super P> filter);
 
     @Nonnull
-    Result<P> find();
+    PageElementResult<P> find();
 
-    interface Result<PP>
+    interface Result<E, R extends Result<E, R>>
     {
         @Nonnull
-        PP first();
+        E first();
 
         @Nonnull
-        Iterable<PP> all();
+        Iterable<E> all();
 
         @Nonnull
-        TimedQuery<Iterable<PP>> timed();
+        TimedQuery<Iterable<E>> timed();
 
         @Nonnull
-        Supplier<Iterable<PP>> supplier();
+        Supplier<Iterable<E>> supplier();
 
         @Nonnull
-        <PT> Result<PP> bind(@Nonnull Class<PT> pageObjectClass, @Nonnull Object... extraArgs);
+        R filter(@Nonnull Predicate<? super E> filter);
 
         @Nonnull
-        Result<PP> filter(@Nonnull Predicate<? super PP> filter);
+        R filter(@Nonnull Matcher<? super E> filter);
 
         @Nonnull
-        Result<PP> filter(@Nonnull Matcher<? super PP> filter);
+        <F> AnyResult<F> transform(@Nonnull Function<E, F> transformer);
 
         @Nonnull
-        <PT> Result<PT> transform(@Nonnull Function<PP, PT> transformer);
+        <PO> AnyResult<PO> bindTo(@Nonnull Class<PO> pageObjectClass, @Nonnull Object... extraArgs);
+    }
 
+    interface AnyResult<E> extends Result<E, AnyResult<E>> {}
+
+    interface PageElementResult<PE extends PageElement> extends Result<PE, PageElementResult<PE>>
+    {
         @Nonnull
-        Result<PP> withTimeout(@Nonnull TimeoutType timeoutType);
+        PageElementResult<PE> withTimeout(@Nonnull TimeoutType timeoutType);
     }
 }

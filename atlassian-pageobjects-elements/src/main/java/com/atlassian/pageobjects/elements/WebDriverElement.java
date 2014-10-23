@@ -1,9 +1,11 @@
 package com.atlassian.pageobjects.elements;
 
+import com.atlassian.annotations.Internal;
 import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.elements.timeout.TimeoutType;
 import com.atlassian.pageobjects.elements.timeout.Timeouts;
 import com.atlassian.webdriver.AtlassianWebDriver;
+import com.atlassian.webdriver.Elements;
 import com.atlassian.webdriver.utils.Check;
 import com.google.common.collect.Lists;
 import org.openqa.selenium.By;
@@ -11,10 +13,12 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.WebElement;
 
-import java.util.List;
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
+import java.util.List;
+import java.util.Set;
 
+import static com.atlassian.webdriver.Elements.CLASS_ATTRIBUTE;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -22,6 +26,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * present before executing each actions.
  * 
  */
+@Internal
 public class WebDriverElement implements PageElement
 {
     @Inject
@@ -139,18 +144,25 @@ public class WebDriverElement implements PageElement
         return waitForWebElement().isSelected();
     }
 
+    @Nonnull
+    @Override
+    public Set<String> getCssClasses()
+    {
+        return Elements.getCssClasses(getAttribute(CLASS_ATTRIBUTE));
+    }
+
     public boolean hasClass(@Nonnull final String className)
     {
         checkNotNull(className, "className");
         return Check.hasClass(className, waitForWebElement());
     }
 
-    public String getAttribute(final String name)
+    public String getAttribute(@Nonnull final String name)
     {
         return waitForWebElement().getAttribute(name);
     }
 
-    public boolean hasAttribute(final String name, final String value)
+    public boolean hasAttribute(@Nonnull final String name, final String value)
     {
         return value.equals(getAttribute(name));
     }
@@ -160,6 +172,7 @@ public class WebDriverElement implements PageElement
         return waitForWebElement().getText();
     }
 
+    @Nonnull
     public String getTagName()
     {
         return waitForWebElement().getTagName();
@@ -170,30 +183,35 @@ public class WebDriverElement implements PageElement
         return waitForWebElement().getAttribute("value");
     }
 
+    @Nonnull
     @Override
     public Point getLocation()
     {
         return waitForWebElement().getLocation();
     }
 
+    @Nonnull
     @Override
     public Dimension getSize()
     {
         return waitForWebElement().getSize();
     }
 
+    @Nonnull
     public PageElement click()
     {
         waitForWebElement().click();
         return this;
     }
 
+    @Nonnull
     public PageElement type(final CharSequence... keysToSend)
     {
         waitForWebElement().sendKeys(keysToSend);
         return this;
     }
 
+    @Nonnull
     public PageElement select()
     {
         WebElement el = waitForWebElement();
@@ -203,6 +221,7 @@ public class WebDriverElement implements PageElement
         return this;
     }
 
+    @Nonnull
     public PageElement toggle()
     {
         WebElement el = waitForWebElement();
@@ -210,58 +229,70 @@ public class WebDriverElement implements PageElement
         return this;
     }
 
+    @Nonnull
     public PageElement clear()
     {
         waitForWebElement().clear();
         return this;
     }
 
+    @Nonnull
     public TimedElement timed()
     {
        return pageBinder.bind(WebDriverTimedElement.class, locatable, defaultTimeout);
     }
 
+    @Nonnull
     public PageElementJavascript javascript()
     {
         return new WebDriverElementJavascript(this);
     }
 
-    public PageElement find(By locator)
+    @Nonnull
+    public PageElement find(@Nonnull By locator)
     {
         return pageBinder.bind(WebDriverElement.class, locator, locatable);
     }
 
-    public PageElement find(By locator, TimeoutType timeoutType)
+    @Nonnull
+    public PageElement find(@Nonnull By locator, @Nonnull TimeoutType timeoutType)
     {
         return pageBinder.bind(WebDriverElement.class, locator, locatable, timeoutType);
     }
 
-    public <T extends PageElement> T find(By locator, Class<T> elementClass)
+    @Nonnull
+    public <T extends PageElement> T find(@Nonnull By locator, @Nonnull Class<T> elementClass)
     {
         return pageBinder.bind(WebDriverElementMappings.findMapping(elementClass), locator, locatable);
     }
 
-    public <T extends PageElement> T find(By locator, Class<T> elementClass, TimeoutType timeoutType)
+    @Nonnull
+    public <T extends PageElement> T find(@Nonnull By locator, @Nonnull Class<T> elementClass, @Nonnull TimeoutType timeoutType)
     {
         return pageBinder.bind(WebDriverElementMappings.findMapping(elementClass), locator, locatable, timeoutType);
     }
 
-    public List<PageElement> findAll(final By locator)
+    @Nonnull
+    public List<PageElement> findAll(@Nonnull final By locator)
     {
         return findAll(locator, defaultTimeout);
     }
 
-    public List<PageElement> findAll(By locator, TimeoutType timeoutType)
+    @Nonnull
+    public List<PageElement> findAll(@Nonnull By locator, @Nonnull TimeoutType timeoutType)
     {
         return findAll(locator, PageElement.class, timeoutType);
     }
 
-    public <T extends PageElement> List<T> findAll(By locator, Class<T> elementClass)
+    @Nonnull
+    public <T extends PageElement> List<T> findAll(@Nonnull By locator, @Nonnull Class<T> elementClass)
     {
         return findAll(locator, elementClass, defaultTimeout);
     }
 
-    public <T extends PageElement> List<T> findAll(By locator, Class<T> elementClass, TimeoutType timeoutType)
+    @Nonnull
+    public <T extends PageElement> List<T> findAll(@Nonnull By locator, @Nonnull Class<T> elementClass,
+                                                   @Nonnull TimeoutType timeoutType)
     {
         List<T> elements = Lists.newLinkedList();
         List<WebElement> webElements = waitForWebElement().findElements(locator);
@@ -274,23 +305,32 @@ public class WebDriverElement implements PageElement
         return elements;
     }
 
-    /**
-     * This allows retrieving the webelement from the page element.
-     *
-     * @return the web element that represents the page element.
-     */
-    public WebElement asWebElement()
-    {
-        return waitForWebElement();
-    }
-
-    public PageElement withTimeout(TimeoutType timeoutType)
+    @Nonnull
+    @Override
+    public PageElement withTimeout(@Nonnull TimeoutType timeoutType)
     {
         if (this.defaultTimeout == timeoutType)
         {
             return this;
         }
         return pageBinder.bind(WebDriverElement.class, locatable, checkNotNull(timeoutType));
+    }
+
+    /**
+     * This allows retrieving the webelement from the page element.
+     *
+     * @return the web element that represents the page element.
+     */
+    @Nonnull
+    public WebElement asWebElement()
+    {
+        return waitForWebElement();
+    }
+
+    @Nonnull
+    public TimeoutType getDefaultTimeout()
+    {
+        return defaultTimeout;
     }
 
     @Override

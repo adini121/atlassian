@@ -1,31 +1,35 @@
 package com.atlassian.pageobjects.elements.test.search;
 
 import com.atlassian.pageobjects.elements.PageElement;
+import com.atlassian.pageobjects.elements.WebDriverElement;
 import com.atlassian.pageobjects.elements.search.PageElementSearch;
 import com.atlassian.pageobjects.elements.search.SearchQuery;
 import com.atlassian.pageobjects.elements.test.AbstractPageElementBrowserTest;
+import com.atlassian.pageobjects.elements.test.pageobjects.page.PageElementSearchPage;
+import com.atlassian.pageobjects.elements.timeout.TimeoutType;
+import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
 import org.junit.Test;
 
 import javax.inject.Inject;
 
-import static com.atlassian.pageobjects.elements.PageElements.hasClass;
-import static com.atlassian.pageobjects.elements.PageElements.hasDataAttribute;
+import static com.atlassian.pageobjects.elements.PageElements.*;
 import static com.atlassian.pageobjects.elements.query.Poller.waitUntil;
-import static com.atlassian.pageobjects.elements.testing.PageElementMatchers.withAttribute;
-import static com.atlassian.pageobjects.elements.testing.PageElementMatchers.withDataAttribute;
-import static org.hamcrest.Matchers.contains;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.openqa.selenium.By.className;
-import static org.openqa.selenium.By.id;
-import static org.openqa.selenium.By.tagName;
+import static com.atlassian.pageobjects.elements.testing.PageElementMatchers.*;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
+import static org.openqa.selenium.By.*;
 
+@SuppressWarnings("unchecked")
 public class TestPageElementSearch extends AbstractPageElementBrowserTest
 {
     @Inject
     private PageElementSearch page;
+
+    public void goToElementSearchPage()
+    {
+        product.visit(PageElementSearchPage.class);
+    }
 
     @Test
     public void shouldFindSinglePageElementById()
@@ -47,7 +51,7 @@ public class TestPageElementSearch extends AbstractPageElementBrowserTest
     @Test
     public void shouldFindRowsWithFilter()
     {
-        SearchQuery.Result<PageElement> result = page.search()
+        SearchQuery.PageElementResult<PageElement> result = page.search()
                 .by(id("table-list"))
                 .by(id("the-table"))
                 .by(tagName("tr"), hasClass("even-row"))
@@ -58,6 +62,52 @@ public class TestPageElementSearch extends AbstractPageElementBrowserTest
                 withDataAttribute("name", "Even Row 2"),
                 withDataAttribute("name", "Even Row 3")
         ));
+    }
+
+    @Test
+    public void shouldFindRowsWithFilterAndTransformOnResult()
+    {
+        SearchQuery.AnyResult<String> result = page.search()
+                .by(id("table-list"))
+                .by(id("the-table"))
+                .by(tagName("tr"))
+                .find()
+                .filter(hasClass("uneven-row"))
+                .transform(getDataAttribute("name"));
+
+        assertResult(result, contains("Uneven Row 1", "Uneven Row 2", "Uneven Row 3"));
+    }
+
+
+    @Test
+    public void shouldFindRowsWithFilterOnResultUsingMatcher()
+    {
+        SearchQuery.AnyResult<String> result = page.search()
+                .by(id("table-list"))
+                .by(id("the-table"))
+                .by(tagName("tr"))
+                .find()
+                .filter(withClass("uneven-row"))
+                .transform(getDataAttribute("name"));
+
+        assertResult(result, contains("Uneven Row 1", "Uneven Row 2", "Uneven Row 3"));
+    }
+
+    @Test
+    public void shouldFindRowsWithFilterAndBindOnResult()
+    {
+        SearchQuery.AnyResult<RowWrapper> result = page.search()
+                .by(id("table-list"))
+                .by(id("the-table"))
+                .by(tagName("tr"))
+                .find()
+                .filter(hasClass("even-row"))
+                .bindTo(RowWrapper.class);
+
+        assertResult(result, contains(
+                rowWithName("Even Row 1"),
+                rowWithName("Eeven Row 2"),
+                rowWithName("Eeven Row 3")));
     }
 
     @Test
@@ -74,10 +124,71 @@ public class TestPageElementSearch extends AbstractPageElementBrowserTest
         assertEquals("Yes-1", result.getText());
     }
 
-    private <R> void assertResult(SearchQuery.Result<R> result, Matcher<Iterable<? extends R>> matcher)
+    // TODO more nested tests (incl. dynamic)
+
+    @Test
+    public void shouldAssignCustomTimeoutType()
+    {
+        SearchQuery.PageElementResult<PageElement> result = page.search()
+                .by(id("table-list"))
+                .by(id("the-table"))
+                .by(tagName("tr"), hasClass("even-row"))
+                .find()
+                .withTimeout(TimeoutType.PAGE_LOAD);
+
+        assertResultStrict(result, everyItem(hasTimeoutType(TimeoutType.PAGE_LOAD)));
+    }
+
+    private static <R> void assertResult(SearchQuery.Result<R, ?> result, Matcher<Iterable<? extends R>> matcher)
     {
         assertThat(result.all(), matcher);
         assertThat(result.supplier().get(), matcher);
         waitUntil(result.timed(), matcher);
+    }
+
+    private static <R> void assertResultStrict(SearchQuery.Result<R, ?> result, Matcher<Iterable<R>> matcher)
+    {
+        assertThat(result.all(), matcher);
+        assertThat(result.supplier().get(), matcher);
+        waitUntil(result.timed(), matcher);
+    }
+
+    private static Matcher<PageElement> hasTimeoutType(TimeoutType expectedTimeout)
+    {
+        return new FeatureMatcher<PageElement, TimeoutType>(is(expectedTimeout), "timeout type", "timeoutType")
+        {
+            @Override
+            protected TimeoutType featureValueOf(PageElement pageElement)
+            {
+                return WebDriverElement.class.cast(pageElement).getDefaultTimeout();
+            }
+        };
+    }
+
+    private static Matcher<RowWrapper> rowWithName(final String name)
+    {
+        return new FeatureMatcher<RowWrapper, String>(equalTo(name), "row name", "name")
+        {
+            @Override
+            protected String featureValueOf(RowWrapper rowWrapper)
+            {
+                return rowWrapper.getName();
+            }
+        };
+    }
+
+    public static class RowWrapper
+    {
+        private final PageElement row;
+
+        public RowWrapper(PageElement element)
+        {
+            this.row = element;
+        }
+
+        String getName()
+        {
+            return getDataAttribute("name").apply(row);
+        }
     }
 }

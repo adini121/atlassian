@@ -1,16 +1,20 @@
 package com.atlassian.webdriver.utils;
 
-import org.apache.commons.lang.StringUtils;
+import com.atlassian.annotations.PublicApi;
+import com.atlassian.webdriver.Elements;
 import org.openqa.selenium.*;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Utilities for doing simple checks on a page.
  *
  * @since 2.0
  */
+@PublicApi
 public final class Check
 {
 
@@ -87,28 +91,14 @@ public final class Check
      * @param className CSS class name to check for
      * @param element element to check
      * @return <code>true</code>, if <tt>element</tt> has CSS class with given <tt>className</tt>
+     *
+     * @see Elements#getCssClasses(String)
+     * @see Elements#hasCssClass(String, String)
      */
-    public static boolean hasClass(String className, WebElement element)
+    public static boolean hasClass(@Nonnull String className, @Nonnull WebElement element)
     {
-        final String classNameLowerCase = className.toLowerCase();
-        String classValue = element.getAttribute("class");
-        if (StringUtils.isEmpty(classValue))
-        {
-            return false;
-        }
-        classValue = classValue.toLowerCase();
-        if (!classValue.contains(classNameLowerCase))
-        {
-            return false;
-        }
-        for (String singleClass : classValue.split("\\s+"))
-        {
-            if (classNameLowerCase.equals(singleClass))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
+        checkNotNull(element, "element");
 
+        return Elements.hasCssClass(className, element.getAttribute(Elements.CLASS_ATTRIBUTE));
+    }
 }
