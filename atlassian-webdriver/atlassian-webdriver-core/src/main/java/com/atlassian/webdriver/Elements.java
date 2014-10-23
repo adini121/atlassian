@@ -29,6 +29,7 @@ public final class Elements
     public static final String TD_TAG = "td";
 
     public static final String CLASS_ATTRIBUTE = "class";
+    public static final String ID_ATTRIBUTE = "id";
 
     private Elements()
     {

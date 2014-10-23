@@ -1,5 +1,6 @@
 package com.atlassian.pageobjects.elements.test.search;
 
+import com.atlassian.pageobjects.elements.CheckboxElement;
 import com.atlassian.pageobjects.elements.PageElement;
 import com.atlassian.pageobjects.elements.WebDriverElement;
 import com.atlassian.pageobjects.elements.search.PageElementSearch;
@@ -137,6 +138,23 @@ public class TestPageElementSearch extends AbstractPageElementBrowserTest
                 .withTimeout(TimeoutType.PAGE_LOAD);
 
         assertResultStrict(result, everyItem(hasTimeoutType(TimeoutType.PAGE_LOAD)));
+    }
+
+    @Test
+    public void shouldReturnResultAsCheckboxes()
+    {
+        SearchQuery.PageElementResult<CheckboxElement> result = page.search()
+                .by(id("checkbox-parent"))
+                .by(tagName("input"))
+                .find()
+                .as(CheckboxElement.class)
+                .filter(not(isChecked()));
+
+        // only unchecked checkboxes should be returned
+        assertResult(result, contains(
+                asMatcherOf(CheckboxElement.class, withId("checkbox-2")),
+                asMatcherOf(CheckboxElement.class, withId("checkbox-3"))
+        ));
     }
 
     private static <R> void assertResult(SearchQuery.Result<R, ?> result, Matcher<Iterable<? extends R>> matcher)

@@ -13,6 +13,7 @@ import javax.annotation.Nonnull;
 import javax.inject.Inject;
 import java.util.Set;
 
+import static com.atlassian.webdriver.Elements.ID_ATTRIBUTE;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -63,6 +64,13 @@ public class WebDriverTimedElement implements TimedElement
     public TimedCondition isSelected()
     {
         return queryFactory.isSelected(defaultTimeout);
+    }
+
+    @Nonnull
+    @Override
+    public TimedQuery<String> getId()
+    {
+        return queryFactory.getAttribute(ID_ATTRIBUTE);
     }
 
     @Nonnull

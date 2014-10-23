@@ -15,9 +15,8 @@ import javax.annotation.Nonnull;
 /**
  * Represents a hierarchical query to find one or more DOM elements on the tested page.
  *
- * TODO needs more documentation and examples.
- *
  * @since 2.3
+ * @see PageElementSearch
  */
 @PublicApi
 public interface SearchQuery<P extends PageElement>
@@ -70,5 +69,8 @@ public interface SearchQuery<P extends PageElement>
     {
         @Nonnull
         PageElementResult<PE> withTimeout(@Nonnull TimeoutType timeoutType);
+
+        @Nonnull
+        <PEE extends PE> PageElementResult<PEE> as(@Nonnull Class<PEE> pageElementClass);
     }
 }

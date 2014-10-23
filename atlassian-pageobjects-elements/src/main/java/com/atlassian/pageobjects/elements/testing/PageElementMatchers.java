@@ -1,7 +1,9 @@
 package com.atlassian.pageobjects.elements.testing;
 
 import com.atlassian.annotations.PublicApi;
+import com.atlassian.pageobjects.elements.CheckboxElement;
 import com.atlassian.pageobjects.elements.PageElement;
+import com.atlassian.webdriver.Elements;
 import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
 
@@ -29,6 +31,30 @@ public final class PageElementMatchers
     }
 
     @Nonnull
+    @SuppressWarnings("unchecked")
+    public static <PE extends PageElement, PEE extends PE> Matcher<PEE> asMatcherOf(@Nonnull Class<PEE> targetType,
+                                                                                    @Nonnull Matcher<PE> original)
+    {
+        checkNotNull(targetType, "targetType");
+        checkNotNull(original, "original");
+
+        return (Matcher) original;
+    }
+
+    @Nonnull
+    public static Matcher<CheckboxElement> isChecked()
+    {
+        return new FeatureMatcher<CheckboxElement, Boolean>(is(true), "is checked", "is checked")
+        {
+            @Override
+            protected Boolean featureValueOf(CheckboxElement checkbox)
+            {
+                return checkbox.isChecked();
+            }
+        };
+    }
+
+    @Nonnull
     public static Matcher<PageElement> withAttribute(@Nonnull final String name, @Nullable String expectedValue)
     {
         return withAttributeThat(name, is(expectedValue));
@@ -40,7 +66,7 @@ public final class PageElementMatchers
     {
         checkNotNull(name, "name");
         checkNotNull(valueMatcher, "valueMatcher");
-        String featureDescription = format("attribute %s", name);
+        String featureDescription = format("attribute '%s'", name);
 
         return new FeatureMatcher<PageElement, String>(valueMatcher, featureDescription, featureDescription)
         {
@@ -86,5 +112,17 @@ public final class PageElementMatchers
         checkNotNull(name, "name");
 
         return withAttributeThat(DATA_PREFIX + name, valueMatcher);
+    }
+
+    @Nonnull
+    public static Matcher<PageElement> withId(@Nullable String expectedId)
+    {
+        return withIdThat(is(expectedId));
+    }
+
+    @Nonnull
+    public static Matcher<PageElement> withIdThat(@Nonnull Matcher<String> idMatcher)
+    {
+        return withAttributeThat(Elements.ID_ATTRIBUTE, idMatcher);
     }
 }

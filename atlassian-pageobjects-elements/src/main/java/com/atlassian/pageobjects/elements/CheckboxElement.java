@@ -7,6 +7,12 @@ public interface CheckboxElement extends PageElement
 {
 
     /**
+     * @return {@code true}, if this checkbox is currently checked
+     * @since 2.3
+     */
+    boolean isChecked();
+
+    /**
      * Checks this Checkbox
      *
      * @return CheckboxElement

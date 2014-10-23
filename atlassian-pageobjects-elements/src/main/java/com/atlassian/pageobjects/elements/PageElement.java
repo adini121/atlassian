@@ -42,17 +42,25 @@ public interface PageElement extends PageElementFinder
 
     /**
      * Whether this element is selected on the page.  Useful on checkboxes and radio buttons.
-     * For checkboxes, returns true if the checkbox is checked.
-     * For radio buttons, returns true if the radio button this class represents is selected.
+     * For checkboxes, returns {@code true} if the checkbox is checked.
+     * For radio buttons, returns {@code true}
+     * if the radio button this class represents is selected.
      *
-     * @return True if this element is selected, false otheriwse.
+     * @return {@code true} if this element is selected, {@code false} otherwise.
      */
     boolean isSelected();
+
+    /**
+     * @return value of the "id" attribute of this element, or {@code null} if the "id" attribute is not defined
+     */
+    @Nullable
+    String getId();
 
     /**
      * Get a set of CSS classes associated with this element.
      *
      * @return CSS classes of this element, or an empty set
+     * @since 2.3
      */
     @Nonnull
     Set<String> getCssClasses();

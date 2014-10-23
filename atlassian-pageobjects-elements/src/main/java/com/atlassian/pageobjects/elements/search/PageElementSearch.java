@@ -5,8 +5,10 @@ import com.atlassian.pageobjects.elements.PageElement;
 import javax.annotation.Nonnull;
 
 /**
- * Access point to advanced search withing the context of the whole page, or a particular
+ * Access point to advanced search within the context of the whole page, or a particular
  * {@link com.atlassian.pageobjects.elements.PageElement DOM element}.
+ *
+ *  TODO needs more documentation and examples.
  *
  * @since 2.3
  *
@@ -16,7 +18,4 @@ public interface PageElementSearch
 {
     @Nonnull
     SearchQuery<PageElement> search();
-
-    @Nonnull
-    <P extends PageElement> SearchQuery<P> searchFor(@Nonnull Class<P> elementClass);
 }

@@ -14,11 +14,13 @@ import org.openqa.selenium.Point;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Set;
 
 import static com.atlassian.webdriver.Elements.CLASS_ATTRIBUTE;
+import static com.atlassian.webdriver.Elements.ID_ATTRIBUTE;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -142,6 +144,13 @@ public class WebDriverElement implements PageElement
     public boolean isSelected()
     {
         return waitForWebElement().isSelected();
+    }
+
+    @Nullable
+    @Override
+    public String getId()
+    {
+        return getAttribute(ID_ATTRIBUTE);
     }
 
     @Nonnull

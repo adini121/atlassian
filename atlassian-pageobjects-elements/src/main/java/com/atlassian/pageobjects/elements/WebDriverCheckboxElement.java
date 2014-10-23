@@ -33,6 +33,12 @@ public class WebDriverCheckboxElement extends WebDriverElement implements  Check
         super(locator, parent, timeoutType);
     }
 
+    @Override
+    public boolean isChecked()
+    {
+        return isSelected();
+    }
+
     public CheckboxElement check()
     {
         select();
