@@ -24,10 +24,16 @@ import static org.hamcrest.Matchers.notNullValue;
 /**
  * Creates WebDriveLocatables for different search strategies.
  *
+ * @since 2.0
  */
 @Internal
 public class WebDriverLocators
 {
+    private WebDriverLocators()
+    {
+        throw new AssertionError("Do not instantiate " + getClass().getSimpleName());
+    }
+
     /**
      * Creates the root of a WebDriverLocatable list, usually the instance of WebDriver.
      *

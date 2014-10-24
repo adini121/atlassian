@@ -19,22 +19,22 @@ import javax.annotation.Nonnull;
  * @see PageElementSearch
  */
 @PublicApi
-public interface SearchQuery<P extends PageElement>
+public interface SearchQuery
 {
     @Nonnull
-    SearchQuery<P> by(@Nonnull By by);
+    SearchQuery by(@Nonnull By by);
 
     @Nonnull
-    SearchQuery<P> by(@Nonnull By by, @Nonnull Predicate<? super P> filter);
+    SearchQuery by(@Nonnull By by, @Nonnull Predicate<? super PageElement> filter);
 
     @Nonnull
-    SearchQuery<P> filter(@Nonnull Predicate<? super P> filter);
+    SearchQuery filter(@Nonnull Predicate<? super PageElement> filter);
 
     @Nonnull
-    SearchQuery<P> filter(@Nonnull Matcher<? super P> filter);
+    SearchQuery filter(@Nonnull Matcher<? super PageElement> filter);
 
     @Nonnull
-    PageElementResult<P> find();
+    PageElementResult<PageElement> find();
 
     interface Result<E, R extends Result<E, R>>
     {

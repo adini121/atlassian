@@ -32,6 +32,8 @@ public class TestPageElementSearch extends AbstractPageElementBrowserTest
         product.visit(PageElementSearchPage.class);
     }
 
+    // TODO test search multiple levels from non-existing element - no wait, no exception
+
     @Test
     public void shouldFindSinglePageElementById()
     {
@@ -125,7 +127,7 @@ public class TestPageElementSearch extends AbstractPageElementBrowserTest
         assertEquals("Yes-1", result.getText());
     }
 
-    // TODO more nested tests (incl. dynamic)
+    // TODO more nested tests (incl. dynamic changing list)
 
     @Test
     public void shouldAssignCustomTimeoutType()

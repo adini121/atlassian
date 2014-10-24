@@ -4,14 +4,11 @@ import com.atlassian.annotations.Internal;
 import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.elements.timeout.TimeoutType;
 import com.atlassian.pageobjects.elements.timeout.Timeouts;
-import com.atlassian.webdriver.AtlassianWebDriver;
 import com.atlassian.webdriver.Elements;
 import com.atlassian.webdriver.utils.Check;
+import com.google.common.base.Function;
 import com.google.common.collect.Lists;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.Point;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -26,13 +23,23 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * Implementation of {@link PageElement} that waits for element to be
  * present before executing each actions.
- * 
+ *
+ * @since 2.0
  */
 @Internal
 public class WebDriverElement implements PageElement
 {
+    public static Function<WebDriverElement, WebDriverLocatable> TO_LOCATABLE = new Function<WebDriverElement, WebDriverLocatable>()
+    {
+        @Override
+        public WebDriverLocatable apply(WebDriverElement element)
+        {
+            return element.locatable;
+        }
+    };
+
     @Inject
-    protected AtlassianWebDriver driver;
+    protected WebDriver driver;
 
     @Inject
     protected PageBinder pageBinder;
@@ -43,6 +50,25 @@ public class WebDriverElement implements PageElement
     protected final WebDriverLocatable locatable;
     protected final TimeoutType defaultTimeout;
 
+    @Nonnull
+    public static <P extends PageElement> Function<WebDriverLocatable, P> bind(@Nonnull final PageBinder pageBinder,
+                                                                               @Nonnull final Class<P> elementType,
+                                                                               @Nonnull final TimeoutType timeoutType)
+    {
+        checkNotNull(pageBinder, "pageBinder");
+        checkNotNull(elementType, "elementType");
+        checkNotNull(timeoutType, "timeoutType");
+
+        return new Function<WebDriverLocatable, P>()
+        {
+            @Override
+            public P apply(WebDriverLocatable locatable)
+            {
+                return pageBinder.bind(WebDriverElementMappings.findMapping(elementType), locatable, timeoutType);
+            }
+        };
+    }
+
     static WebElement getWebElement(PageElement element)
     {
         if (!WebDriverElement.class.isInstance(element))
@@ -51,6 +77,7 @@ public class WebDriverElement implements PageElement
         }
         return WebDriverElement.class.cast(element).asWebElement();
     }
+
 
     /**
      * Creates a WebDriverElement within the driver's search context and default timeout
@@ -120,11 +147,6 @@ public class WebDriverElement implements PageElement
                 .build();
     }
 
-    protected WebElement waitForWebElement()
-    {
-        return (WebElement) locatable.waitUntilLocated(driver, createTimout());
-    }
-    
     public boolean isPresent()
     {
         return locatable.isPresent(driver, createTimout());
@@ -326,7 +348,7 @@ public class WebDriverElement implements PageElement
     }
 
     /**
-     * This allows retrieving the webelement from the page element.
+     * This allows retrieving the web element from the page element.
      *
      * @return the web element that represents the page element.
      */
@@ -346,5 +368,15 @@ public class WebDriverElement implements PageElement
     public String toString()
     {
         return "WebDriverElement[locatable=" + locatable + ",defaultTimeout=" + defaultTimeout + "]";
+    }
+
+    protected WebElement waitForWebElement()
+    {
+        return waitForWebElement(createTimout());
+    }
+
+    protected WebElement waitForWebElement(WebDriverLocatable.LocateTimeout timeout)
+    {
+        return (WebElement) locatable.waitUntilLocated(driver, timeout);
     }
 }

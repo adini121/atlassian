@@ -78,6 +78,7 @@ public interface WebDriverLocatable
      * @throws NoSuchElementException if context could not be located before timeout expired
      * @see LocateTimeout
      * @see SearchContext
+     * @since 2.2
      */
     @Nonnull
     SearchContext waitUntilLocated(@Nonnull WebDriver driver, @Nonnull LocateTimeout timeout)
@@ -91,6 +92,7 @@ public interface WebDriverLocatable
      * @return {@literal true} if the {@link SearchContext} is located before the timeout expires, {@literal false}
      * otherwise
      * @see LocateTimeout
+     * @since 2.2
      */
     boolean isPresent(@Nonnull WebDriver driver, @Nonnull LocateTimeout timeout);
 
