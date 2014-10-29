@@ -15,6 +15,6 @@ import java.lang.annotation.Target;
 @Target({ ElementType.METHOD, ElementType.TYPE, ElementType.PACKAGE })
 public @interface IgnoreBrowser
 {
-    Browser[] value() default {Browser.ALL};
+    Browser[] value() default { Browser.ALL };
     String reason() default ("No reason given");
 }

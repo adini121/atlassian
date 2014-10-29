@@ -14,5 +14,15 @@ import java.lang.annotation.Target;
 @Target({ ElementType.METHOD, ElementType.TYPE, ElementType.PACKAGE })
 public @interface RequireBrowser
 {
-    Browser[] value() default {Browser.ALL};
+    /**
+     * @return list of browsers that the current browser should match
+     */
+    Browser[] value() default { Browser.ALL };
+
+    /**
+     * Since 2.2.1
+     *
+     * @return reason for requiring the browser(s)
+     */
+    String reason() default ("No reason given");
 }
