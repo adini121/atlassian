@@ -1,5 +1,6 @@
 package com.atlassian.pageobjects.browser;
 
+import javax.annotation.Nonnull;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -17,6 +18,7 @@ public @interface RequireBrowser
     /**
      * @return list of browsers that the current browser should match
      */
+    @Nonnull
     Browser[] value() default { Browser.ALL };
 
     /**
@@ -24,5 +26,6 @@ public @interface RequireBrowser
      *
      * @return reason for requiring the browser(s)
      */
+    @Nonnull
     String reason() default ("No reason given");
 }

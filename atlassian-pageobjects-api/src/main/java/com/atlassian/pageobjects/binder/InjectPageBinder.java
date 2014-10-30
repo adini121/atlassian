@@ -1,7 +1,11 @@
 package com.atlassian.pageobjects.binder;
 
 import com.atlassian.annotations.Internal;
-import com.atlassian.pageobjects.*;
+import com.atlassian.pageobjects.DelayedBinder;
+import com.atlassian.pageobjects.Page;
+import com.atlassian.pageobjects.PageBinder;
+import com.atlassian.pageobjects.ProductInstance;
+import com.atlassian.pageobjects.Tester;
 import com.atlassian.pageobjects.browser.Browser;
 import com.atlassian.pageobjects.browser.IgnoreBrowser;
 import com.atlassian.pageobjects.browser.RequireBrowser;
@@ -12,7 +16,15 @@ import com.atlassian.pageobjects.inject.InjectionContext;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import com.google.inject.*;
+import com.google.inject.AbstractModule;
+import com.google.inject.Binder;
+import com.google.inject.Binding;
+import com.google.inject.ConfigurationException;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Key;
+import com.google.inject.Module;
+import com.google.inject.ProvisionException;
 import com.google.inject.util.Modules;
 import org.apache.commons.lang.ClassUtils;
 import org.slf4j.Logger;
@@ -25,7 +37,13 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -88,6 +106,7 @@ public final class InjectPageBinder implements PageBinder, ConfigurableInjection
      * @deprecated take advantage of {@link InjectionContext} API instead. Scheduled for removal in 3.0
      */
     @Deprecated
+    @SuppressWarnings("UnusedDeclaration")
     public Injector injector()
     {
         return injector;

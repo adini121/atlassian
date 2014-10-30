@@ -1,6 +1,10 @@
 package com.atlassian.pageobjects.binder;
 
-import com.atlassian.pageobjects.*;
+import com.atlassian.pageobjects.Page;
+import com.atlassian.pageobjects.PageBinder;
+import com.atlassian.pageobjects.ProductInstance;
+import com.atlassian.pageobjects.TestedProduct;
+import com.atlassian.pageobjects.Tester;
 import com.atlassian.pageobjects.browser.Browser;
 import com.atlassian.pageobjects.browser.IgnoreBrowser;
 import com.atlassian.pageobjects.browser.RequireBrowser;
@@ -16,7 +20,11 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import javax.inject.Inject;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
