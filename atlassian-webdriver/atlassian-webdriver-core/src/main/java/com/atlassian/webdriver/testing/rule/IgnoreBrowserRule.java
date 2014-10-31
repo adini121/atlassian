@@ -134,7 +134,7 @@ public class IgnoreBrowserRule implements TestRule
                 Browser latestBrowser = currentBrowser();
                 if (!Iterables.contains(required, latestBrowser))
                 {
-                    log.info(description.getDisplayName() + " ignored, since it requires on of " + required);
+                    log.info(description.getDisplayName() + " ignored, since it requires one of " + required);
                     assumeThat(required, hasItem(latestBrowser));
                 }
             }

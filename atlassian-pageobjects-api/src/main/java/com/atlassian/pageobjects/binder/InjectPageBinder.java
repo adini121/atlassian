@@ -13,7 +13,7 @@ import com.atlassian.pageobjects.inject.AbstractInjectionConfiguration;
 import com.atlassian.pageobjects.inject.ConfigurableInjectionContext;
 import com.atlassian.pageobjects.inject.InjectionConfiguration;
 import com.atlassian.pageobjects.inject.InjectionContext;
-import com.atlassian.pageobjects.util.BrowserUtil;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
@@ -38,10 +38,12 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -51,24 +53,26 @@ import static java.util.Collections.unmodifiableList;
 /**
  * Page navigator that builds page objects from classes, then injects them with dependencies and calls lifecycle methods.
  * <p/>
- * <p>The construction process is as follows:
+ * The construction process is as follows:
  * <ol>
- * <li>Determine the actual class by checking for an override</li>
- * <li>Instantiate the class using a constructor that matches the passed arguments</li>
- * <li>Changes the tester to the corrent URL (if {@link #navigateToAndBind(Class, Object...)})</li>
- * <li>Inject all fields annotated with {@link Inject}, including private</li>
- * <li>Execute the supplied {@link PostInjectionProcessor}</li>
- * <li>Call all methods annotated with {@link WaitUntil}</li>
- * <li>Call all methods annotated with {@link ValidateState}</li>
- * <li>Call all methods annotated with {@link Init}</li>
+ *  <li>Determine the actual class by checking for an override</li>
+ *  <li>Instantiate the class using a constructor that matches the passed arguments</li>
+ *  <li>Changes the tester to the corrent URL (if {@link #navigateToAndBind(Class, Object...)})</li>
+ *  <li>Inject all fields annotated with {@link Inject}, including private</li>
+ *  <li>Execute the supplied {@link PostInjectionProcessor}</li>
+ *  <li>Call all methods annotated with {@link WaitUntil}</li>
+ *  <li>Call all methods annotated with {@link ValidateState}</li>
+ *  <li>Call all methods annotated with {@link Init}</li>
  * </ol>
  * <p/>
- * <p>When going to a page via the {@link #navigateToAndBind(Class, Object...)} method, the page's URL is retrieved and navigated to
- * via {@link Tester#gotoUrl(String)} after construction and initializing but before {@link WaitUntil} methods are called.
- *
+ * When going to a page via the {@link #navigateToAndBind(Class, Object...)} method, the page's URL is retrieved and
+ * navigated to via {@link Tester#gotoUrl(String)} after construction and initializing but before {@link WaitUntil}
+ * methods are called.
  * <p/>
- * This class also implements a mutable variant of {@link com.atlassian.pageobjects.inject.ConfigurableInjectionContext},
- * where injection configuration changes are applied in-place, by creating a new Guice injector.
+ * This class also implements a mutable variant of {@link ConfigurableInjectionContext}, where injection configuration
+ * changes are applied in-place, by creating a new Guice injector.
+ *
+ * @since 2.0
  */
 @NotThreadSafe
 @Internal
@@ -95,43 +99,22 @@ public final class InjectPageBinder implements PageBinder, ConfigurableInjection
         initPostInjectionProcessors();
     }
 
-    private void initPostInjectionProcessors()
-    {
-        List<Binding<PostInjectionProcessor>> procs = Lists.newArrayList();
-        for (Binding binding : collectBindings().values())
-        {
-            if (PostInjectionProcessor.class.isAssignableFrom(binding.getKey().getTypeLiteral().getRawType()))
-            {
-                procs.add(binding);
-            }
-        }
-        postInjectionProcessors = unmodifiableList(procs);
-    }
-
-    private Map<Key<?>, Binding<?>> collectBindings()
-    {
-        ImmutableMap.Builder<Key<?>, Binding<?>> result = ImmutableMap.builder();
-        Injector current = this.injector;
-        while (current != null)
-        {
-            result.putAll(injector.getAllBindings());
-            current = current.getParent();
-        }
-        return result.build();
-    }
-
-
     /**
      * Injector used by this binder.
      *
      * @return injector used by this binder.
      * @deprecated take advantage of {@link InjectionContext} API instead. Scheduled for removal in 3.0
      */
+    @Deprecated
+    @SuppressWarnings("UnusedDeclaration")
     public Injector injector()
     {
         return injector;
     }
 
+    // ------------------------------------------------------------------------------------------------------ PageBinder
+
+    @Override
     public <P extends Page> P navigateToAndBind(Class<P> pageClass, Object... args)
     {
         checkNotNull(pageClass);
@@ -141,12 +124,15 @@ public final class InjectPageBinder implements PageBinder, ConfigurableInjection
         return binder.bind();
     }
 
+    @Override
     public <P> P bind(Class<P> pageClass, Object... args)
     {
         checkNotNull(pageClass);
         return delayedBind(pageClass, args).bind();
     }
 
+    @Override
+    @SuppressWarnings("unchecked")
     public <P> DelayedBinder<P> delayedBind(Class<P> pageClass, Object... args)
     {
         return new InjectableDelayedBind<P>(asList(
@@ -157,13 +143,7 @@ public final class InjectPageBinder implements PageBinder, ConfigurableInjection
                 new InitializePhase<P>()));
     }
 
-    protected void visitUrl(Page p)
-    {
-        checkNotNull(p);
-
-        tester.gotoUrl(normalisedBaseUrl() + normalisedPath(p));
-    }
-
+    @Override
     public <P> void override(Class<P> oldClass, Class<? extends P> newClass)
     {
         checkNotNull(oldClass);
@@ -171,16 +151,75 @@ public final class InjectPageBinder implements PageBinder, ConfigurableInjection
         overrides.put(oldClass, newClass);
     }
 
+    // -----------------------------------------------------------------------------------------------  InjectionContext
+
+    @Nonnull
+    @Override
+    @SuppressWarnings("ConstantConditions")
+    public <T> T getInstance(@Nonnull Class<T> type)
+    {
+        checkArgument(type != null, "type was null");
+        try
+        {
+            return injector.getInstance(type);
+        }
+        catch (ProvisionException e)
+        {
+            throw new IllegalArgumentException(e);
+        }
+        catch (ConfigurationException e)
+        {
+            throw new IllegalArgumentException(e);
+        }
+    }
+
+
+    @Override
+    public void injectStatic(@Nonnull final Class<?> targetClass)
+    {
+        injector.createChildInjector(new AbstractModule()
+        {
+            @Override
+            protected void configure()
+            {
+                requestStaticInjection(targetClass);
+            }
+        });
+    }
+
+    @Override
+    public void injectMembers(@Nonnull Object targetInstance)
+    {
+        injector.injectMembers(targetInstance);
+    }
+
+    @Nonnull
+    @Override
+    public InjectionConfiguration configure()
+    {
+        return new InjectConfiguration();
+    }
+
+    protected void visitUrl(@Nonnull Page page)
+    {
+        checkNotNull(page, "page");
+        tester.gotoUrl(normalisedBaseUrl() + normalisedPath(page));
+    }
+
+    // ------------------------------------------------------------------------------------------------- Private methods
+
     /**
      * Calls all methods with the given annotation, starting with methods found in the topmost superclass, then calling
      * more specific methods in subclasses. Note that this can mean that this will attempt to call the same method
      * multiple times - once per override in the hierarchy. Will call the methods even if they're private. Skips methods
-     * if they are also annotated with {@link com.atlassian.pageobjects.browser.IgnoreBrowser} (or {@link com.atlassian.pageobjects.browser.RequireBrowser}) if the current {@link Browser}
+     * if they are also annotated with {@link com.atlassian.pageobjects.browser.IgnoreBrowser}
+     * (or {@link com.atlassian.pageobjects.browser.RequireBrowser}) if the current {@link Browser}
      * matches (does not match) any of the browsers listed in that annotation.
      * @param instance the page object to check for the annotation
      * @param annotation the annotation to find
      * @throws InvocationTargetException if any matching method throws any exception.
      */
+    @SuppressWarnings("unchecked")
     private void callLifecycleMethod(Object instance, Class<? extends Annotation> annotation) throws InvocationTargetException
     {
         Class clazz = instance.getClass();
@@ -194,7 +233,7 @@ public final class InjectPageBinder implements PageBinder, ConfigurableInjection
             {
                 if (method.getAnnotation(annotation) != null)
                 {
-                    Browser currentBrowser = BrowserUtil.getCurrentBrowser();
+                    Browser currentBrowser = getBrowser();
                     if (isIgnoredBrowser(method, method.getAnnotation(IgnoreBrowser.class), currentBrowser) ||
                             !isRequiredBrowser(method, method.getAnnotation(RequireBrowser.class), currentBrowser))
                     {
@@ -219,26 +258,73 @@ public final class InjectPageBinder implements PageBinder, ConfigurableInjection
         }
     }
 
-    private boolean isRequiredBrowser(Method method, RequireBrowser requireBrowser, Browser currentBrowser)
+    private Map<Key<?>, Binding<?>> collectBindings()
     {
-        if (requireBrowser == null)
-            return true;
-
-        for (Browser browser : requireBrowser.value())
+        ImmutableMap.Builder<Key<?>, Binding<?>> result = ImmutableMap.builder();
+        Injector current = this.injector;
+        while (current != null)
         {
-            if (browser != currentBrowser)
+            result.putAll(current.getAllBindings());
+            current = current.getParent();
+        }
+        return result.build();
+    }
+
+    private Browser getBrowser()
+    {
+        try
+        {
+            return injector.getInstance(Browser.class);
+        }
+        catch (Exception e)
+        {
+            // no browser in context
+            return null;
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private void initPostInjectionProcessors()
+    {
+        List<Binding<PostInjectionProcessor>> processors = Lists.newArrayList();
+        for (Binding binding : collectBindings().values())
+        {
+            if (PostInjectionProcessor.class.isAssignableFrom(binding.getKey().getTypeLiteral().getRawType()))
             {
-                log.info(method.getName() + " ignored, since it requires <" + browser + ">");
-                return false;
+                processors.add(binding);
             }
         }
-        return true;
+        postInjectionProcessors = unmodifiableList(processors);
+    }
+
+    private boolean isRequiredBrowser(Method method, RequireBrowser requireBrowser, Browser currentBrowser)
+    {
+        if (currentBrowser == null || requireBrowser == null)
+        {
+            return true;
+        }
+        if (requireBrowser.value().length == 0)
+        {
+            return false;
+        }
+
+        Set<Browser> required = EnumSet.copyOf(ImmutableList.copyOf(requireBrowser.value()));
+        boolean result = required.contains(currentBrowser) || required.contains(Browser.ALL);
+        if (!result)
+        {
+            log.info("{} ignored, since one of {} is required (reason: {}), but the current browser is {}",
+                    method.getName(), required, requireBrowser.reason(), currentBrowser);
+        }
+
+        return result;
     }
 
     private boolean isIgnoredBrowser(Method method, IgnoreBrowser ignoreBrowser, Browser currentBrowser)
     {
-        if (ignoreBrowser == null)
+        if (currentBrowser == null || ignoreBrowser == null)
+        {
             return false;
+        }
 
         for (Browser browser : ignoreBrowser.value())
         {
@@ -249,62 +335,6 @@ public final class InjectPageBinder implements PageBinder, ConfigurableInjection
             }
         }
         return false;
-    }
-
-    // -----------------------------------------------------------------------------------------------  InjectionContext
-
-
-    @SuppressWarnings("ConstantConditions")
-    @Override
-    @Nonnull
-    public <T> T getInstance(@Nonnull Class<T> type)
-    {
-        checkArgument(type != null, "type was null");
-        try
-        {
-            return injector.getInstance(type);
-        }
-        catch (ProvisionException e)
-        {
-            throw new IllegalArgumentException(e);
-        }
-        catch (ConfigurationException e)
-        {
-            throw new IllegalArgumentException(e);
-        }
-    }
-
-    @Override
-    public void injectStatic(@Nonnull final Class<?> targetClass)
-    {
-        injector.createChildInjector(new AbstractModule()
-        {
-            @Override
-            protected void configure()
-            {
-                requestStaticInjection(targetClass);
-            }
-        });
-    }
-
-    @Override
-    public void injectMembers(@Nonnull Object targetInstance)
-    {
-        injector.injectMembers(targetInstance);
-    }
-
-    @Override
-    @Nonnull
-    public InjectionConfiguration configure()
-    {
-        return new InjectConfiguration();
-    }
-
-    void reconfigure(Module module)
-    {
-        this.module = Modules.override(this.module).with(module);
-        this.injector = Guice.createInjector(this.module);
-        initPostInjectionProcessors();
     }
 
     /**
@@ -322,18 +352,25 @@ public final class InjectPageBinder implements PageBinder, ConfigurableInjection
     }
 
     /**
-     * @param p a Page
+     * @param page a Page
      * @return the path segment for a page with a leading slash
      */
-    private String normalisedPath(Page p)
+    private String normalisedPath(Page page)
     {
-        final String path = p.getUrl();
+        final String path = page.getUrl();
         if (!path.startsWith("/"))
         {
             return "/" + path;
         }
 
         return path;
+    }
+
+    void reconfigure(Module module)
+    {
+        this.module = Modules.override(this.module).with(module);
+        this.injector = Guice.createInjector(this.module);
+        initPostInjectionProcessors();
     }
 
     // ---------------------------------------------------------------------------------------------------------- Phases
@@ -397,7 +434,7 @@ public final class InjectPageBinder implements PageBinder, ConfigurableInjection
                         boolean match = true;
                         for (int x = 0; x < args.length; x++)
                         {
-                            if (args[x] != null && !ClassUtils.isAssignable(args[x].getClass(), paramTypes[x], true /*autoboxing*/))
+                            if (args[x] != null && !ClassUtils.isAssignable(args[x].getClass(), paramTypes[x], true))
                             {
                                 match = false;
                                 break;
@@ -416,12 +453,13 @@ public final class InjectPageBinder implements PageBinder, ConfigurableInjection
                 {
                     return clazz.newInstance();
                 }
-                catch (InstantiationException ex)
+                catch (InstantiationException e)
                 {
-                    throw new IllegalArgumentException("Error invoking default constructor", ex);
+                    throw new IllegalArgumentException("Error invoking default constructor", e);
                 }
             }
-            throw new IllegalArgumentException("Cannot find constructor on " + clazz + " to match args: " + asList(args));
+            throw new IllegalArgumentException("Cannot find constructor of " + clazz + " to match args: "
+                    + asList(args));
         }
     }
 
@@ -515,6 +553,8 @@ public final class InjectPageBinder implements PageBinder, ConfigurableInjection
         }
     }
 
+    // --------------------------------------------------------------------------------------------------- DelayedBinder
+
     private class InjectableDelayedBind<T> implements DelayedBinder<T>
     {
         private final LinkedList<Phase<T>> phases;
@@ -525,6 +565,7 @@ public final class InjectPageBinder implements PageBinder, ConfigurableInjection
             this.phases = new LinkedList<Phase<T>>(phases);
         }
 
+        @Override
         public boolean canBind()
         {
             try
@@ -536,6 +577,46 @@ public final class InjectPageBinder implements PageBinder, ConfigurableInjection
             {
                 return false;
             }
+        }
+
+        @Override
+        @Nonnull
+        public T get()
+        {
+            advanceTo(InstantiatePhase.class);
+            return pageObject;
+        }
+
+        @Override
+        @Nonnull
+        public DelayedBinder<T> inject()
+        {
+            advanceTo(InjectPhase.class);
+            return this;
+        }
+
+        @Override
+        @Nonnull
+        public DelayedBinder<T> waitUntil()
+        {
+            advanceTo(WaitUntilPhase.class);
+            return this;
+        }
+
+        @Override
+        @Nonnull
+        public DelayedBinder<T> validateState()
+        {
+            advanceTo(ValidateStatePhase.class);
+            return this;
+        }
+
+        @Override
+        @Nonnull
+        public T bind()
+        {
+            advanceTo(InitializePhase.class);
+            return pageObject;
         }
 
         private void advanceTo(Class<? extends Phase> phaseClass)
@@ -565,38 +646,9 @@ public final class InjectPageBinder implements PageBinder, ConfigurableInjection
                 log.debug("Already advanced to state: " + phaseClass.getName());
             }
         }
-
-
-        public T get()
-        {
-            advanceTo(InstantiatePhase.class);
-            return pageObject;
-        }
-
-        public DelayedBinder<T> inject()
-        {
-            advanceTo(InjectPhase.class);
-            return this;
-        }
-
-        public DelayedBinder<T> waitUntil()
-        {
-            advanceTo(WaitUntilPhase.class);
-            return this;
-        }
-
-        public DelayedBinder<T> validateState()
-        {
-            advanceTo(ValidateStatePhase.class);
-            return this;
-        }
-
-        public T bind()
-        {
-            advanceTo(InitializePhase.class);
-            return pageObject;
-        }
     }
+
+    // ------------------------------------------------------------------------------------------ InjectionConfiguration
 
     private final class InjectConfiguration extends AbstractInjectionConfiguration
     {
@@ -630,9 +682,10 @@ public final class InjectPageBinder implements PageBinder, ConfigurableInjection
         }
     }
 
+    // --------------------------------------------------------------------------------------------- Other inner classes
+
     private final class ThisModule extends AbstractModule
     {
-
         @Override
         protected void configure()
         {

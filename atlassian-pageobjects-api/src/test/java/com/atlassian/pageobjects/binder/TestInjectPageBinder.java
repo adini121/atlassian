@@ -5,6 +5,9 @@ import com.atlassian.pageobjects.PageBinder;
 import com.atlassian.pageobjects.ProductInstance;
 import com.atlassian.pageobjects.TestedProduct;
 import com.atlassian.pageobjects.Tester;
+import com.atlassian.pageobjects.browser.Browser;
+import com.atlassian.pageobjects.browser.IgnoreBrowser;
+import com.atlassian.pageobjects.browser.RequireBrowser;
 import com.atlassian.pageobjects.inject.ConfigurableInjectionContext;
 import com.google.inject.Binder;
 import com.google.inject.Module;
@@ -17,16 +20,14 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import javax.inject.Inject;
 
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-/**
- *
- */
 @SuppressWarnings("unchecked")
 @RunWith(MockitoJUnitRunner.class)
 public class TestInjectPageBinder
@@ -43,25 +44,6 @@ public class TestInjectPageBinder
     public void setUp() throws Exception
     {
         product = new MyTestedProduct(new SetTester());
-    }
-
-    private InjectPageBinder createBinder()
-    {
-        return createBinder(null, null);
-    }
-    private InjectPageBinder createBinder(final Class<?> key, final Class impl)
-    {
-        return new InjectPageBinder(productInstance, tester, new StandardModule(product),
-                new Module()
-                {
-                    public void configure(Binder binder)
-                    {
-                        if (key != null)
-                        {
-                            binder.bind(key).to(impl);
-                        }
-                    }
-                });
     }
 
     @Test
@@ -89,8 +71,7 @@ public class TestInjectPageBinder
     public void testInjectMissing()
     {
         PageBinder binder = createBinder();
-        OneFieldPage page = binder.bind(OneFieldPage.class);
-        int x = 0;
+        binder.bind(OneFieldPage.class);
     }
 
     @Test
@@ -187,7 +168,7 @@ public class TestInjectPageBinder
     @Test
     public void shouldAllowConfiguringNewImplementationInstance()
     {
-        final PageBinder binder = createBinder(StringField.class, StringFieldImpl.class);
+        PageBinder binder = createBinder(StringField.class, StringFieldImpl.class);
         assertEquals("Bob", binder.bind(OneFieldPage.class).name.getValue());
         ConfigurableInjectionContext.class.cast(binder)
                 .configure()
@@ -201,6 +182,21 @@ public class TestInjectPageBinder
                 })
                 .finish();
         assertEquals("Boom!", binder.bind(OneFieldPage.class).name.getValue());
+    }
+
+    @Test
+    public void shouldIncludePostInjectionProcessorsAddedViaInjectionContext()
+    {
+        PageBinder binder = createBinder();
+        assertEquals("Default", binder.bind(MutablePage.class).getValue());
+
+        ConfigurableInjectionContext.class.cast(binder)
+                .configure()
+                .addSingleton(MutablePageProcessor.class, new MutablePageProcessor())
+                .finish();
+
+        // post processor should be invoked
+        assertEquals("Post processed", binder.bind(MutablePage.class).getValue());
     }
 
     @Test
@@ -223,6 +219,77 @@ public class TestInjectPageBinder
         binder.navigateToAndBind(PageWithNoLeadingSlash.class);
 
         verify(tester).gotoUrl("http://localhost/path");
+    }
+
+    @Test
+    public void shouldCheckForIgnoreBrowserAndRequireBrowserAnnotation()
+    {
+        // should invoke all init methods
+        PageObjectWithRequiredAndIgnoredBrowsers pageObject = createBinderWithBrowser(Browser.FIREFOX)
+                .bind(PageObjectWithRequiredAndIgnoredBrowsers.class);
+
+        assertTrue(pageObject.initIgnoredInvoked);
+        assertTrue(pageObject.initRequiredInvoked);
+
+        // should _not_ invoke init ignored
+        pageObject = createBinderWithBrowser(Browser.HTMLUNIT).bind(PageObjectWithRequiredAndIgnoredBrowsers.class);
+
+        assertFalse(pageObject.initIgnoredInvoked);
+        assertTrue(pageObject.initRequiredInvoked);
+
+        // should _not_ invoke init required
+        pageObject = createBinderWithBrowser(Browser.SAFARI).bind(PageObjectWithRequiredAndIgnoredBrowsers.class);
+
+        assertTrue(pageObject.initIgnoredInvoked);
+        assertFalse(pageObject.initRequiredInvoked);
+
+        // should _not_ invoke any init
+        pageObject = createBinderWithBrowser(Browser.HTMLUNIT_NOJS).bind(PageObjectWithRequiredAndIgnoredBrowsers.class);
+
+        assertFalse(pageObject.initIgnoredInvoked);
+        assertFalse(pageObject.initRequiredInvoked);
+    }
+
+    @Test
+    public void shouldSupportIgnoreAllAndRequireAll()
+    {
+        for (Browser browser : Browser.values())
+        {
+            PageObjectWithRequiredAndIgnoredBrowsers pageObject = createBinderWithBrowser(browser)
+                    .bind(PageObjectWithRequiredAndIgnoredBrowsers.class);
+
+            assertFalse(pageObject.initIgnoreAllInvoked);
+            assertTrue(pageObject.initRequireAllInvoked);
+        }
+    }
+
+    private InjectPageBinder createBinder()
+    {
+        return createBinder(null, null);
+    }
+
+    private InjectPageBinder createBinder(final Class<?> key, final Class impl)
+    {
+        return new InjectPageBinder(productInstance, tester, new StandardModule(product),
+                new Module()
+                {
+                    public void configure(Binder binder)
+                    {
+                        if (key != null)
+                        {
+                            binder.bind(key).to(impl);
+                        }
+                    }
+                });
+    }
+
+    private InjectPageBinder createBinderWithBrowser(Browser browser)
+    {
+        InjectPageBinder pageBinder = createBinder();
+        ConfigurableInjectionContext.class.cast(pageBinder).configure()
+                .addSingleton(Browser.class, browser).finish();
+
+        return pageBinder;
     }
 
     static class AbstractPage implements Page
@@ -260,18 +327,19 @@ public class TestInjectPageBinder
         }
     }
 
-
     static class ConstructorArgumentPage extends AbstractPage
     {
         private final String name;
         private final Number age;
 
+        @SuppressWarnings("UnusedDeclaration")
         public ConstructorArgumentPage(String name)
         {
             this.name = name;
             this.age = null;
         }
 
+        @SuppressWarnings("UnusedDeclaration")
         public ConstructorArgumentPage(Number age)
         {
             this.age = age;
@@ -352,6 +420,7 @@ public class TestInjectPageBinder
         private String name;
 
         @Init
+        @SuppressWarnings("UnusedDeclaration")
         private void init()
         {
             name = field.getValue() + " Private";
@@ -379,6 +448,71 @@ public class TestInjectPageBinder
 
     static class OneFieldWithSuperClassInitPage extends OneFieldWithPrivateInitPage
     {
+    }
+
+    static class MutablePage
+    {
+        private String value = "Default";
+
+        public String getValue()
+        {
+            return value;
+        }
+
+        public void setValue(String value)
+        {
+            this.value = value;
+        }
+    }
+
+    static class MutablePageProcessor implements PostInjectionProcessor
+    {
+        @Override
+        public <T> T process(T pageObject)
+        {
+            if (pageObject instanceof MutablePage)
+            {
+                MutablePage.class.cast(pageObject).setValue("Post processed");
+            }
+            return pageObject;
+        }
+    }
+
+    static class PageObjectWithRequiredAndIgnoredBrowsers
+    {
+        boolean initIgnoredInvoked;
+        boolean initRequiredInvoked;
+
+        boolean initIgnoreAllInvoked;
+        boolean initRequireAllInvoked;
+
+        @Init
+        @IgnoreBrowser(Browser.ALL)
+        public void initIgnoreAll()
+        {
+            initIgnoreAllInvoked = true;
+        }
+
+        @Init
+        @IgnoreBrowser({ Browser.HTMLUNIT, Browser.HTMLUNIT_NOJS })
+        public void initIgnored()
+        {
+            initIgnoredInvoked = true;
+        }
+
+        @Init
+        @RequireBrowser(Browser.ALL)
+        public void initRequireAll()
+        {
+            initRequireAllInvoked = true;
+        }
+
+        @Init
+        @RequireBrowser({ Browser.CHROME, Browser.FIREFOX, Browser.HTMLUNIT })
+        public void initRequired()
+        {
+            initRequiredInvoked = true;
+        }
     }
 
 }
