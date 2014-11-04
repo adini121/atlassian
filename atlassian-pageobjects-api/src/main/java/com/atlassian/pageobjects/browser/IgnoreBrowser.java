@@ -1,6 +1,5 @@
 package com.atlassian.pageobjects.browser;
 
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -15,6 +14,6 @@ import java.lang.annotation.Target;
 @Target({ ElementType.METHOD, ElementType.TYPE, ElementType.PACKAGE })
 public @interface IgnoreBrowser
 {
-    Browser[] value() default {Browser.ALL};
+    Browser[] value() default { Browser.ALL };
     String reason() default ("No reason given");
 }

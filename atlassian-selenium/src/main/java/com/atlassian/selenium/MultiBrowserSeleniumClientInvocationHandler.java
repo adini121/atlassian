@@ -1,14 +1,14 @@
 package com.atlassian.selenium;
 
-import com.thoughtworks.selenium.SeleniumCommandTimedOutException;
-import com.thoughtworks.selenium.SeleniumException;
-
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 public class MultiBrowserSeleniumClientInvocationHandler implements InvocationHandler {
     private List<SeleniumClient> clients;

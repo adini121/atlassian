@@ -15,13 +15,14 @@ public class StandardModule implements Module
         this.testedProduct = testedProduct;
     }
 
+    @SuppressWarnings("unchecked")
     public void configure(Binder binder)
     {
         binder.bind(TestedProduct.class).toInstance(testedProduct);
-        binder.bind((Class<TestedProduct>)testedProduct.getClass()).toInstance(testedProduct);
+        binder.bind((Class<TestedProduct>) testedProduct.getClass()).toInstance(testedProduct);
 
         binder.bind(Tester.class).toInstance(testedProduct.getTester());
-        binder.bind((Class<Tester>)testedProduct.getTester().getClass()).toInstance(testedProduct.getTester());
+        binder.bind((Class<Tester>) testedProduct.getTester().getClass()).toInstance(testedProduct.getTester());
 
         binder.bind(ProductInstance.class).toInstance(testedProduct.getProductInstance());
     }
