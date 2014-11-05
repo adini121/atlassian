@@ -9,11 +9,9 @@ import com.atlassian.webdriver.it.pageobjects.page.jsconsolelogging.NoErrorsPage
 import com.atlassian.webdriver.it.pageobjects.page.jsconsolelogging.UntypedErrorPage;
 import com.atlassian.webdriver.it.pageobjects.page.jsconsolelogging.WindowErrorPage;
 import com.atlassian.webdriver.testing.rule.LogConsoleOutputRule;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.openqa.selenium.WebDriver;
-
-import javax.inject.Inject;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
@@ -29,8 +27,13 @@ import static org.hamcrest.Matchers.not;
 @RequireBrowser(Browser.FIREFOX)
 public class TestLogConsoleOutput extends AbstractSimpleServerTest
 {
-    @Inject private WebDriver driver;
-    @Inject private LogConsoleOutputRule rule;
+    private LogConsoleOutputRule rule;
+
+    @Before
+    public void setUp()
+    {
+        rule = new LogConsoleOutputRule();
+    }
 
     @Test
     public void testPageWithNoErrors()
