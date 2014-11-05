@@ -5,6 +5,7 @@ import com.atlassian.webdriver.utils.WebDriverUtil;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
+import com.google.common.collect.Lists;
 import net.jsourcerer.webdriver.jserrorcollector.JavaScriptError;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
@@ -33,6 +34,9 @@ public class LogConsoleOutputRule extends TestWatcher
     private final Logger logger;
     private final Supplier<? extends WebDriver> webDriver;
 
+    private boolean haveReadErrors = false;
+    private List<String> errorStrings = Lists.newArrayList();
+
     @Inject
     public LogConsoleOutputRule(WebDriver webDriver, Logger logger)
     {
@@ -56,6 +60,12 @@ public class LogConsoleOutputRule extends TestWatcher
     }
 
     @Override
+    protected void starting(final Description description)
+    {
+        haveReadErrors = false;
+    }
+
+    @Override
     @VisibleForTesting
     public void finished(final Description description)
     {
@@ -63,9 +73,19 @@ public class LogConsoleOutputRule extends TestWatcher
         {
             return;
         }
-        logger.info("----- Test '{}' finished. ", description.getMethodName());
-        logger.info("----- START CONSOLE OUTPUT DUMP\n\n\n{}\n\n\n", getConsoleOutput());
-        logger.info("----- END CONSOLE OUTPUT DUMP");
+        if (supportsConsoleOutput())
+        {
+            logger.info("----- Test '{}' finished with {} JS error(s). ", description.getMethodName(), errors().size());
+            if (errors().size() > 0)
+            {
+                logger.info("----- START CONSOLE OUTPUT DUMP\n\n{}\n", getConsoleOutput());
+                logger.info("----- END CONSOLE OUTPUT DUMP");
+            }
+        }
+        else
+        {
+            logger.info("<Console output only supported in Firefox right now, sorry!>");
+        }
     }
 
     /**
@@ -75,28 +95,36 @@ public class LogConsoleOutputRule extends TestWatcher
     @VisibleForTesting
     public String getConsoleOutput()
     {
-        final WebDriver driver = webDriver.get();
-        if (!supportsConsoleOutput(driver))
+        final StringBuilder sb = new StringBuilder();
+        for (String error : errors())
         {
-            return "<Console output only supported in Firefox right now, sorry!>";
+            sb.append(error);
+            sb.append("\n");
         }
-        else
-        {
-            final StringBuilder sb = new StringBuilder();
-            List<JavaScriptError> errors = JavaScriptError.readErrors(driver);
-            for (int i=0; i < errors.size(); i++)
-            {
-                JavaScriptError error = errors.get(i);
-                if (i!=0) sb.append("\n");
-                sb.append(error.toString());
-            }
-            return sb.toString();
-        }
+        return sb.toString();
     }
 
-    private boolean supportsConsoleOutput(final WebDriver driver)
+    private List<String> errors()
     {
-        return WebDriverUtil.isInstance(driver, FirefoxDriver.class);
+        if (!haveReadErrors)
+        {
+            errorStrings = Lists.newArrayList();
+            if (supportsConsoleOutput())
+            {
+                List<JavaScriptError> errors = JavaScriptError.readErrors(webDriver.get());
+                for (JavaScriptError error : errors)
+                {
+                    errorStrings.add(error.toString());
+                }
+            }
+            haveReadErrors = true;
+        }
+        return errorStrings;
+    }
+
+    private boolean supportsConsoleOutput()
+    {
+        return WebDriverUtil.isInstance(webDriver.get(), FirefoxDriver.class);
     }
 
     private boolean isLogConsoleOutputEnabled()

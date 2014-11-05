@@ -24,15 +24,13 @@ public class TestLogConsoleOutputRule
     @Mock private Logger mockLogger;
 
     @Test
-    public void testOutputsSpecialMessageWhenCannotRetrieveConsoleErrors() throws Exception
+    public void testOutputsSpecialMessageWhenCannotRetrieveConsoleErrorsOnTestFailed() throws Exception
     {
         final WebDriver driver = mock(WebDriver.class);
         final LogConsoleOutputRule rule = createRule(driver);
 
         rule.finished(Description.createTestDescription(TestLogConsoleOutputRule.class, "testMethod"));
-        verify(mockLogger).info("----- Test '{}' finished. ", "testMethod");
-        verify(mockLogger).info("----- START CONSOLE OUTPUT DUMP\n\n\n{}\n\n\n", "<Console output only supported in Firefox right now, sorry!>");
-        verify(mockLogger).info("----- END CONSOLE OUTPUT DUMP");
+        verify(mockLogger).info("<Console output only supported in Firefox right now, sorry!>");
         verifyNoMoreInteractions(mockLogger);
     }
 
