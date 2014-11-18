@@ -81,6 +81,10 @@ public class LogConsoleOutputRule extends TestWatcher
             {
                 logger.info("----- START CONSOLE OUTPUT DUMP\n\n{}\n", getConsoleOutput());
                 logger.info("----- END CONSOLE OUTPUT DUMP");
+                if (shouldFailOnJavaScriptErrors())
+                {
+                    throw new RuntimeException("Test failed due to javascript errors being detected: " + errors());
+                }
             }
         }
         else
@@ -144,6 +148,18 @@ public class LogConsoleOutputRule extends TestWatcher
     protected List<String> errorsToIgnore()
     {
         return EMPTY_LIST;
+    }
+
+    /**
+     * An overridable method which when returning true will cause
+     * the rule to throw an exception, thus causing the test method
+     * to record a failure.
+     *
+     * @return true if the test method being wrapped should fail if a javascript error is found. Returns false by default.
+     */
+    protected boolean shouldFailOnJavaScriptErrors()
+    {
+        return false;
     }
 
     private boolean supportsConsoleOutput()
