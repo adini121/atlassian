@@ -30,6 +30,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class LogConsoleOutputRule extends TestWatcher
 {
     private static final Logger DEFAULT_LOGGER = LoggerFactory.getLogger(LogConsoleOutputRule.class);
+    private static final List<String> EMPTY_LIST = Lists.newArrayList();
 
     private final Logger logger;
     private final Supplier<? extends WebDriver> webDriver;
@@ -88,10 +89,6 @@ public class LogConsoleOutputRule extends TestWatcher
         }
     }
 
-    /**
-     * Get the console output from the browser.
-     * @return The result of invoking {@link JavaScriptError#toString} via a List.
-     */
     @VisibleForTesting
     public String getConsoleOutput()
     {
@@ -104,22 +101,49 @@ public class LogConsoleOutputRule extends TestWatcher
         return sb.toString();
     }
 
-    private List<String> errors()
+    /**
+     * Get the console output from the browser.
+     *
+     * @return The result of invoking {@link JavaScriptError#toString} via a List.
+     */
+    protected List<String> errors()
     {
         if (!haveReadErrors)
         {
             errorStrings = Lists.newArrayList();
             if (supportsConsoleOutput())
             {
-                List<JavaScriptError> errors = JavaScriptError.readErrors(webDriver.get());
+                final List<String> errorsToIgnore = errorsToIgnore();
+                final List<JavaScriptError> errors = JavaScriptError.readErrors(webDriver.get());
                 for (JavaScriptError error : errors)
                 {
-                    errorStrings.add(error.toString());
+                    if (errorsToIgnore.contains(error.getErrorMessage()))
+                    {
+                        if (logger.isDebugEnabled())
+                        {
+                            logger.debug("Ignoring JS error: {0}", error);
+                        }
+                    }
+                    else
+                    {
+                        errorStrings.add(error.toString());
+                    }
                 }
             }
             haveReadErrors = true;
         }
         return errorStrings;
+    }
+
+    /**
+     * An overridable method which provides a list of error messages
+     * that should be ignored when collecting messages from the console.
+     *
+     * @return a list of exact error message strings to be ignored.
+     */
+    protected List<String> errorsToIgnore()
+    {
+        return EMPTY_LIST;
     }
 
     private boolean supportsConsoleOutput()
