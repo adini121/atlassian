@@ -8,7 +8,7 @@ import com.atlassian.webdriver.it.pageobjects.page.jsconsolelogging.IncludedScri
 import com.atlassian.webdriver.it.pageobjects.page.jsconsolelogging.NoErrorsPage;
 import com.atlassian.webdriver.it.pageobjects.page.jsconsolelogging.UntypedErrorPage;
 import com.atlassian.webdriver.it.pageobjects.page.jsconsolelogging.WindowErrorPage;
-import com.atlassian.webdriver.testing.rule.LogConsoleOutputRule;
+import com.atlassian.webdriver.testing.rule.JavaScriptErrorsRule;
 import com.google.common.collect.Lists;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -29,16 +29,16 @@ import static org.hamcrest.Matchers.not;
  * The tests only work in Firefox, since the rule uses a Firefox extension to get the output.
  */
 @RequireBrowser(Browser.FIREFOX)
-public class TestLogConsoleOutput extends AbstractSimpleServerTest
+public class TestCapturingJavaScriptConsoleOutput extends AbstractSimpleServerTest
 {
-    private LogConsoleOutputRule rule;
+    private JavaScriptErrorsRule rule;
     private List<String> errorsToIgnore;
 
     @Before
     public void setUp()
     {
         errorsToIgnore = Lists.newArrayList();
-        rule = new LogConsoleOutputRule()
+        rule = new JavaScriptErrorsRule()
         {
             @Override
             protected List<String> errorsToIgnore()

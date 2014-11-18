@@ -1,6 +1,6 @@
 package com.atlassian.webdriver.rule;
 
-import com.atlassian.webdriver.testing.rule.LogConsoleOutputRule;
+import com.atlassian.webdriver.testing.rule.JavaScriptErrorsRule;
 import com.google.common.collect.Lists;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,12 +22,12 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 /**
- * Test case for {@link com.atlassian.webdriver.testing.rule.LogConsoleOutputRule}.
+ * Test case for {@link com.atlassian.webdriver.testing.rule.JavaScriptErrorsRule}.
  *
  * @since 2.3
  */
 @RunWith(MockitoJUnitRunner.class)
-public class TestLogConsoleOutputRule
+public class TestJavaScriptErrorsRule
 {
     @Mock private Logger mockLogger;
 
@@ -45,9 +45,9 @@ public class TestLogConsoleOutputRule
     public void testOutputsSpecialMessageWhenCannotRetrieveConsoleErrorsOnTestFailed() throws Exception
     {
         final WebDriver driver = mock(WebDriver.class);
-        final LogConsoleOutputRule rule = createRule(driver);
+        final JavaScriptErrorsRule rule = createRule(driver);
 
-        rule.finished(Description.createTestDescription(TestLogConsoleOutputRule.class, "testMethod"));
+        rule.finished(Description.createTestDescription(TestJavaScriptErrorsRule.class, "testMethod"));
         verify(mockLogger).info("<Console output only supported in Firefox right now, sorry!>");
         verifyNoMoreInteractions(mockLogger);
     }
@@ -56,9 +56,9 @@ public class TestLogConsoleOutputRule
     public void testLogsWhenNoErrorsFound()
     {
         final FirefoxDriver driver = mock(FirefoxDriver.class);
-        final LogConsoleOutputRule rule = createRule(driver);
+        final JavaScriptErrorsRule rule = createRule(driver);
 
-        rule.finished(Description.createTestDescription(TestLogConsoleOutputRule.class, "testMethod"));
+        rule.finished(Description.createTestDescription(TestJavaScriptErrorsRule.class, "testMethod"));
         verify(mockLogger).info("----- Test '{}' finished with {} JS error(s). ", "testMethod", 0);
         verifyNoMoreInteractions(mockLogger);
     }
@@ -67,14 +67,14 @@ public class TestLogConsoleOutputRule
     public void testCanBeOverriddenToFailTestWhenErrorsFound()
     {
         final FirefoxDriver driver = mock(FirefoxDriver.class);
-        final LogConsoleOutputRule rule = createRule(driver);
+        final JavaScriptErrorsRule rule = createRule(driver);
 
         errorsFound.add("TypeError: $ is not a function");
         failOnErrorsFound = true;
 
         try
         {
-            rule.finished(Description.createTestDescription(TestLogConsoleOutputRule.class, "testMethod"));
+            rule.finished(Description.createTestDescription(TestJavaScriptErrorsRule.class, "testMethod"));
             assertThat("Expected an exception to be thrown, but wasn't", true, equalTo(false));
         }
         catch (RuntimeException e)
@@ -84,9 +84,9 @@ public class TestLogConsoleOutputRule
         verify(mockLogger).info("----- Test '{}' finished with {} JS error(s). ", "testMethod", 1);
     }
 
-    private LogConsoleOutputRule createRule(final WebDriver driver)
+    private JavaScriptErrorsRule createRule(final WebDriver driver)
     {
-        return new LogConsoleOutputRule(driver, mockLogger)
+        return new JavaScriptErrorsRule(driver, mockLogger)
         {
             @Override
             protected boolean shouldFailOnJavaScriptErrors()

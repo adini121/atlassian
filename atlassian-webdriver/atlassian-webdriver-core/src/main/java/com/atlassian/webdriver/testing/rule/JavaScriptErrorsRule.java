@@ -27,9 +27,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  * @since 2.3
  */
-public class LogConsoleOutputRule extends TestWatcher
+public class JavaScriptErrorsRule extends TestWatcher
 {
-    private static final Logger DEFAULT_LOGGER = LoggerFactory.getLogger(LogConsoleOutputRule.class);
+    private static final Logger DEFAULT_LOGGER = LoggerFactory.getLogger(JavaScriptErrorsRule.class);
     private static final List<String> EMPTY_LIST = Lists.newArrayList();
 
     private final Logger logger;
@@ -39,23 +39,23 @@ public class LogConsoleOutputRule extends TestWatcher
     private List<String> errorStrings = Lists.newArrayList();
 
     @Inject
-    public LogConsoleOutputRule(WebDriver webDriver, Logger logger)
+    public JavaScriptErrorsRule(WebDriver webDriver, Logger logger)
     {
         this(Suppliers.ofInstance(checkNotNull(webDriver, "webDriver")),logger);
     }
 
-    public LogConsoleOutputRule(Supplier<? extends WebDriver> webDriver, Logger logger)
+    public JavaScriptErrorsRule(Supplier<? extends WebDriver> webDriver, Logger logger)
     {
         this.webDriver = checkNotNull(webDriver, "webDriver");
         this.logger = checkNotNull(logger, "logger");
     }
 
-    public LogConsoleOutputRule(Logger logger)
+    public JavaScriptErrorsRule(Logger logger)
     {
         this(WebDriverBrowserAutoInstall.driverSupplier(), logger);
     }
 
-    public LogConsoleOutputRule()
+    public JavaScriptErrorsRule()
     {
         this(DEFAULT_LOGGER);
     }
