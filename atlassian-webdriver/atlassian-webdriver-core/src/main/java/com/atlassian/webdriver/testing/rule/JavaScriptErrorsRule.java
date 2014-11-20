@@ -3,8 +3,10 @@ package com.atlassian.webdriver.testing.rule;
 import com.atlassian.webdriver.browsers.WebDriverBrowserAutoInstall;
 import com.atlassian.webdriver.utils.WebDriverUtil;
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Joiner;
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import net.jsourcerer.webdriver.jserrorcollector.JavaScriptError;
 import org.junit.rules.TestWatcher;
@@ -15,7 +17,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -30,13 +34,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class JavaScriptErrorsRule extends TestWatcher
 {
     private static final Logger DEFAULT_LOGGER = LoggerFactory.getLogger(JavaScriptErrorsRule.class);
-    private static final List<String> EMPTY_LIST = Lists.newArrayList();
+    private static final Set<String> EMPTY_SET = ImmutableSet.of();
 
     private final Logger logger;
     private final Supplier<? extends WebDriver> webDriver;
 
-    private boolean haveReadErrors = false;
-    private List<String> errorStrings = Lists.newArrayList();
+    private List<String> errors = null;
 
     @Inject
     public JavaScriptErrorsRule(WebDriver webDriver, Logger logger)
@@ -63,7 +66,7 @@ public class JavaScriptErrorsRule extends TestWatcher
     @Override
     protected void starting(final Description description)
     {
-        haveReadErrors = false;
+        errors = null;
     }
 
     @Override
@@ -96,13 +99,7 @@ public class JavaScriptErrorsRule extends TestWatcher
     @VisibleForTesting
     public String getConsoleOutput()
     {
-        final StringBuilder sb = new StringBuilder();
-        for (String error : errors())
-        {
-            sb.append(error);
-            sb.append("\n");
-        }
-        return sb.toString();
+        return Joiner.on("\n").join(errors());
     }
 
     /**
@@ -112,13 +109,13 @@ public class JavaScriptErrorsRule extends TestWatcher
      */
     protected List<String> errors()
     {
-        if (!haveReadErrors)
+        if (errors == null)
         {
-            errorStrings = Lists.newArrayList();
+            errors = Lists.newArrayList();
             if (supportsConsoleOutput())
             {
-                final List<String> errorsToIgnore = errorsToIgnore();
-                final List<JavaScriptError> errors = JavaScriptError.readErrors(webDriver.get());
+                final Collection<String> errorsToIgnore = errorsToIgnore();
+                final Collection<JavaScriptError> errors = JavaScriptError.readErrors(webDriver.get());
                 for (JavaScriptError error : errors)
                 {
                     if (errorsToIgnore.contains(error.getErrorMessage()))
@@ -130,13 +127,12 @@ public class JavaScriptErrorsRule extends TestWatcher
                     }
                     else
                     {
-                        errorStrings.add(error.toString());
+                        this.errors.add(error.toString());
                     }
                 }
             }
-            haveReadErrors = true;
         }
-        return errorStrings;
+        return errors;
     }
 
     /**
@@ -145,9 +141,9 @@ public class JavaScriptErrorsRule extends TestWatcher
      *
      * @return a list of exact error message strings to be ignored.
      */
-    protected List<String> errorsToIgnore()
+    protected Set<String> errorsToIgnore()
     {
-        return EMPTY_LIST;
+        return EMPTY_SET;
     }
 
     /**
