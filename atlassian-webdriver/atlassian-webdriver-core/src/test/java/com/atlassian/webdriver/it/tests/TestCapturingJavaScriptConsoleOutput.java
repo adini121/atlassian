@@ -41,7 +41,7 @@ public class TestCapturingJavaScriptConsoleOutput extends AbstractSimpleServerTe
         rule = new JavaScriptErrorsRule()
         {
             @Override
-            protected List<String> errorsToIgnore()
+            protected List<String> getErrorsToIgnore()
             {
                 return errorsToIgnore;
             }

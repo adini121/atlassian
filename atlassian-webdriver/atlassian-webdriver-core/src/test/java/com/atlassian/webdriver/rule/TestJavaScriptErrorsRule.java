@@ -95,7 +95,7 @@ public class TestJavaScriptErrorsRule
             }
 
             @Override
-            protected List<String> errors()
+            protected List<String> getErrors()
             {
                 return errorsFound;
             }

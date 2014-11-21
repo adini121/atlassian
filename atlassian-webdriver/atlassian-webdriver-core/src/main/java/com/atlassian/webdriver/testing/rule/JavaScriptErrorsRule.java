@@ -73,33 +73,29 @@ public class JavaScriptErrorsRule extends TestWatcher
     @VisibleForTesting
     public void finished(final Description description)
     {
-        if (!isLogConsoleOutputEnabled())
-        {
-            return;
-        }
         if (supportsConsoleOutput())
         {
-            logger.info("----- Test '{}' finished with {} JS error(s). ", description.getMethodName(), errors().size());
-            if (errors().size() > 0)
+            logger.info("----- Test '{}' finished with {} JS error(s). ", description.getMethodName(), getErrors().size());
+            if (getErrors().size() > 0)
             {
                 logger.info("----- START CONSOLE OUTPUT DUMP\n\n{}\n", getConsoleOutput());
                 logger.info("----- END CONSOLE OUTPUT DUMP");
                 if (shouldFailOnJavaScriptErrors())
                 {
-                    throw new RuntimeException("Test failed due to javascript errors being detected: " + errors());
+                    throw new RuntimeException("Test failed due to javascript errors being detected: \n" + getConsoleOutput());
                 }
             }
         }
         else
         {
-            logger.info("<Console output only supported in Firefox right now, sorry!>");
+            logger.info("Unable to provide console output. Console output is currently only supported on Firefox.");
         }
     }
 
     @VisibleForTesting
     public String getConsoleOutput()
     {
-        return Joiner.on("\n").join(errors());
+        return Joiner.on("\n").join(getErrors());
     }
 
     /**
@@ -107,23 +103,21 @@ public class JavaScriptErrorsRule extends TestWatcher
      *
      * @return The result of invoking {@link JavaScriptError#toString} via a List.
      */
-    protected List<String> errors()
+    @VisibleForTesting
+    protected List<String> getErrors()
     {
         if (errors == null)
         {
             errors = Lists.newArrayList();
             if (supportsConsoleOutput())
             {
-                final Collection<String> errorsToIgnore = errorsToIgnore();
+                final Collection<String> errorsToIgnore = getErrorsToIgnore();
                 final Collection<JavaScriptError> errors = JavaScriptError.readErrors(webDriver.get());
                 for (JavaScriptError error : errors)
                 {
                     if (errorsToIgnore.contains(error.getErrorMessage()))
                     {
-                        if (logger.isDebugEnabled())
-                        {
-                            logger.debug("Ignoring JS error: {0}", error);
-                        }
+                        logger.debug("Ignoring JS error: {}", error);
                     }
                     else
                     {
@@ -141,7 +135,7 @@ public class JavaScriptErrorsRule extends TestWatcher
      *
      * @return a list of exact error message strings to be ignored.
      */
-    protected Set<String> errorsToIgnore()
+    protected Set<String> getErrorsToIgnore()
     {
         return EMPTY_SET;
     }
@@ -161,10 +155,5 @@ public class JavaScriptErrorsRule extends TestWatcher
     private boolean supportsConsoleOutput()
     {
         return WebDriverUtil.isInstance(webDriver.get(), FirefoxDriver.class);
-    }
-
-    private boolean isLogConsoleOutputEnabled()
-    {
-        return true;
     }
 }
