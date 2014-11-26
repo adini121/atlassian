@@ -10,11 +10,13 @@ import com.atlassian.webdriver.it.pageobjects.page.jsconsolelogging.UntypedError
 import com.atlassian.webdriver.it.pageobjects.page.jsconsolelogging.WindowErrorPage;
 import com.atlassian.webdriver.testing.rule.JavaScriptErrorsRule;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
@@ -32,16 +34,16 @@ import static org.hamcrest.Matchers.not;
 public class TestCapturingJavaScriptConsoleOutput extends AbstractSimpleServerTest
 {
     private JavaScriptErrorsRule rule;
-    private List<String> errorsToIgnore;
+    private Set<String> errorsToIgnore;
 
     @Before
     public void setUp()
     {
-        errorsToIgnore = Lists.newArrayList();
+        errorsToIgnore = Sets.newHashSet();
         rule = new JavaScriptErrorsRule()
         {
             @Override
-            protected List<String> getErrorsToIgnore()
+            protected Set<String> getErrorsToIgnore()
             {
                 return errorsToIgnore;
             }
