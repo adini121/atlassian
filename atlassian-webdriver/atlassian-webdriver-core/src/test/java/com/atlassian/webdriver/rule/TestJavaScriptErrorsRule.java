@@ -48,7 +48,7 @@ public class TestJavaScriptErrorsRule
         final JavaScriptErrorsRule rule = createRule(driver);
 
         rule.finished(Description.createTestDescription(TestJavaScriptErrorsRule.class, "testMethod"));
-        verify(mockLogger).info("<Console output only supported in Firefox right now, sorry!>");
+        verify(mockLogger).info("Unable to provide console output. Console output is currently only supported on Firefox.");
         verifyNoMoreInteractions(mockLogger);
     }
 
