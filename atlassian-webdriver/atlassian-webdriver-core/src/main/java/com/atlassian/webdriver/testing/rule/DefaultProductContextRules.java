@@ -43,7 +43,6 @@ public final class DefaultProductContextRules
 
         @Inject
         public ForMethod(IgnoreBrowserRule ignoreBrowserRule,
-                         LogConsoleOutputRule logConsoleOutputRule,
                          LogPageSourceRule logPageSourceRule,
                          SessionCleanupRule sessionCleanupRule,
                          WebDriverScreenshotRule webDriverScreenshotRule,
@@ -53,7 +52,6 @@ public final class DefaultProductContextRules
                     .around(sessionCleanupRule)
                     .around(windowSizeRule)
                     .around(webDriverScreenshotRule)
-                    .around(logConsoleOutputRule)
                     .around(logPageSourceRule);
         }
 
