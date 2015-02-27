@@ -75,11 +75,18 @@ public class JavaScriptErrorsRule extends TestWatcher
     {
         if (supportsConsoleOutput())
         {
-            logger.info("----- Test '{}' finished with {} JS error(s). ", description.getMethodName(), getErrors().size());
-            if (getErrors().size() > 0)
+            List<String> errors = getErrors();
+            if (errors.isEmpty())
             {
-                logger.info("----- START CONSOLE OUTPUT DUMP\n\n{}\n", getConsoleOutput());
-                logger.info("----- END CONSOLE OUTPUT DUMP");
+                // Use INFO level if there were no errors, so you can filter these lines out if desired in your logger configuration
+                logger.info("----- Test '{}' finished with 0 JS error(s). ", description.getMethodName());
+            }
+            else
+            {
+                // Use WARN level if there were errors
+                logger.warn("----- Test '{}' finished with {} JS error(s). ", description.getMethodName(), getErrors().size());
+                logger.warn("----- START CONSOLE OUTPUT DUMP\n\n{}\n", getConsoleOutput(errors));
+                logger.warn("----- END CONSOLE OUTPUT DUMP");
                 if (shouldFailOnJavaScriptErrors())
                 {
                     throw new RuntimeException("Test failed due to javascript errors being detected: \n" + getConsoleOutput());
@@ -95,7 +102,12 @@ public class JavaScriptErrorsRule extends TestWatcher
     @VisibleForTesting
     public String getConsoleOutput()
     {
-        return Joiner.on("\n").join(getErrors());
+        return getConsoleOutput(getErrors());
+    }
+
+    private String getConsoleOutput(List<String> errors)
+    {
+        return Joiner.on("\n").join(errors);   
     }
 
     /**
