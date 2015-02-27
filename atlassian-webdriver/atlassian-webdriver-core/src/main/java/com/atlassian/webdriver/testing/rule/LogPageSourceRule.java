@@ -50,6 +50,17 @@ public final class LogPageSourceRule extends TestWatcher
         this(DEFAULT_LOGGER);
     }
 
+    /**
+     * Returns a copy of this rule, specifying a different logger than the default.
+     * @param logger  a {@link Logger}
+     * @return  a new LogPageSourceRule based on the current instance
+     * @since 2.3
+     */
+    public LogPageSourceRule artifactDir(Logger logger)
+    {
+        return new LogPageSourceRule(this.webDriver, logger);
+    }
+
     @Override
     public void failed(final Throwable e, final Description description)
     {

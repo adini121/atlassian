@@ -26,7 +26,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.transform;
 
 /**
- * Rule to log javascript console error messages.
+ * Rule to log Javascript console error messages.
  *
  * At present, the logging only works in Firefox, since we use
  * a Firefox extension to collect the console output.
