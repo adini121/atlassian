@@ -6,8 +6,8 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Joiner;
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
 import net.jsourcerer.webdriver.jserrorcollector.JavaScriptError;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
@@ -39,8 +39,6 @@ public class JavaScriptErrorsRule extends TestWatcher
     private final Logger logger;
     private final Supplier<? extends WebDriver> webDriver;
 
-    private List<String> errors = null;
-
     @Inject
     public JavaScriptErrorsRule(WebDriver webDriver, Logger logger)
     {
@@ -61,12 +59,6 @@ public class JavaScriptErrorsRule extends TestWatcher
     public JavaScriptErrorsRule()
     {
         this(DEFAULT_LOGGER);
-    }
-
-    @Override
-    protected void starting(final Description description)
-    {
-        errors = null;
     }
 
     @Override
@@ -133,27 +125,24 @@ public class JavaScriptErrorsRule extends TestWatcher
     @VisibleForTesting
     protected List<String> getErrors()
     {
-        if (errors == null)
+        ImmutableList.Builder<String> ret = ImmutableList.builder();
+        if (supportsConsoleOutput())
         {
-            errors = Lists.newArrayList();
-            if (supportsConsoleOutput())
+            final Collection<String> errorsToIgnore = getErrorsToIgnore();
+            final Collection<JavaScriptError> errors = JavaScriptError.readErrors(webDriver.get());
+            for (JavaScriptError error : errors)
             {
-                final Collection<String> errorsToIgnore = getErrorsToIgnore();
-                final Collection<JavaScriptError> errors = JavaScriptError.readErrors(webDriver.get());
-                for (JavaScriptError error : errors)
+                if (errorsToIgnore.contains(error.getErrorMessage()))
                 {
-                    if (errorsToIgnore.contains(error.getErrorMessage()))
-                    {
-                        logger.debug("Ignoring JS error: {}", error);
-                    }
-                    else
-                    {
-                        this.errors.add(error.toString());
-                    }
+                    logger.debug("Ignoring JS error: {}", error);
+                }
+                else
+                {
+                    ret.add(error.toString());
                 }
             }
         }
-        return errors;
+        return ret.build();
     }
 
     /**
