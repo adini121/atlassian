@@ -59,20 +59,9 @@ public class JavaScriptErrorsRule extends TestWatcher
         this.checkOnlyIfTestFailed = checkOnlyIfTestFailed;
     }
 
-    public JavaScriptErrorsRule(Supplier<? extends WebDriver> webDriver, Logger logger)
-    {
-        this(new DefaultErrorRetriever(webDriver), webDriver, logger, ImmutableSet.<String>of(), false, false);
-    }
-
     public JavaScriptErrorsRule(Supplier<? extends WebDriver> webDriver)
     {
-        this(webDriver, DEFAULT_LOGGER);
-    }
-
-    @Inject
-    public JavaScriptErrorsRule(WebDriver webDriver, Logger logger)
-    {
-        this(Suppliers.ofInstance(checkNotNull(webDriver, "webDriver")), logger);
+        this(new DefaultErrorRetriever(webDriver), webDriver, DEFAULT_LOGGER, ImmutableSet.<String>of(), false, false);
     }
 
     public JavaScriptErrorsRule(WebDriver webDriver)
@@ -85,35 +74,59 @@ public class JavaScriptErrorsRule extends TestWatcher
         this(WebDriverBrowserAutoInstall.driverSupplier());
     }
 
-    public JavaScriptErrorsRule(Logger logger)
-    {
-        this(WebDriverBrowserAutoInstall.driverSupplier(), logger);
-    }
-
+    /**
+     * Returns a copy of this rule with a different underlying {@link ErrorRetriever}.
+     * You may wish to override the ErrorRetriever in order to do custom post-processing of error messages.
+     * @param errorRetriever  an implementation of {@link ErrorRetriever}
+     * @return  a new JavaScriptErrorsRule based on the current instance
+     */
     public JavaScriptErrorsRule errorRetriever(ErrorRetriever errorRetriever)
     {
         return new JavaScriptErrorsRule(errorRetriever, this.webDriver, this.logger, this.errorsToIgnore,
                 this.failOnJavaScriptErrors, this.checkOnlyIfTestFailed);
     }
 
+    /**
+     * Returns a copy of this rule with a specific set of error messages to ignore.  Any error whose
+     * message exactly matches one of the strings in this set will not be logged.
+     * @param errorsToIgnore  a set of error messages to ignore
+     * @return  a new JavaScriptErrorsRule based on the current instance
+     */
     public JavaScriptErrorsRule errorsToIgnore(Set<String> errorsToIgnore)
     {
         return new JavaScriptErrorsRule(this.errorRetriever, this.webDriver, this.logger, errorsToIgnore,
                 this.failOnJavaScriptErrors, this.checkOnlyIfTestFailed);
     }
 
+    /**
+     * Returns a copy of this rule that writes to a different logger.
+     * @param logger  a {@link Logger}
+     * @return  a new JavaScriptErrorsRule based on the current instance
+     */
     public JavaScriptErrorsRule logger(Logger logger)
     {
         return new JavaScriptErrorsRule(this.errorRetriever, this.webDriver, logger, this.errorsToIgnore,
                 this.failOnJavaScriptErrors, this.checkOnlyIfTestFailed);
     }
 
+    /**
+     * Returns a copy of this rule, specifying whether it should force a test failure when Javascript errors are found.
+     * This property is false by default.
+     * @param failOnJavaScriptErrors  true if Javascript errors should always cause a test to fail
+     * @return  a new JavaScriptErrorsRule based on the current instance
+     */
     public JavaScriptErrorsRule failOnJavaScriptErrors(boolean failOnJavaScriptErrors)
     {
         return new JavaScriptErrorsRule(this.errorRetriever, this.webDriver, this.logger, this.errorsToIgnore,
                 failOnJavaScriptErrors, this.checkOnlyIfTestFailed);
     }
 
+    /**
+     * Returns a copy of this rule, specifying whether it should skip checking for Javascript errors on passed tests.
+     * This property is false by default.
+     * @param checkOnlyIfTestFailed  true if the rule should only check for errors on tests that have already failed
+     * @return  a new JavaScriptErrorsRule based on the current instance
+     */
     public JavaScriptErrorsRule checkOnlyIfTestFailed(boolean checkOnlyIfTestFailed)
     {
         return new JavaScriptErrorsRule(this.errorRetriever, this.webDriver, this.logger, this.errorsToIgnore,
