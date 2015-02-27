@@ -71,7 +71,22 @@ public class JavaScriptErrorsRule extends TestWatcher
 
     @Override
     @VisibleForTesting
-    public void finished(final Description description)
+    public void succeeded(Description description)
+    {
+        if (!shouldCheckOnlyIfTestFailed())
+        {
+            checkErrors(description);
+        }
+    }
+
+    @Override
+    @VisibleForTesting
+    public void failed(Throwable e, Description description)
+    {
+        checkErrors(description);
+    }
+    
+    private void checkErrors(final Description description)
     {
         if (supportsConsoleOutput())
         {
@@ -160,6 +175,17 @@ public class JavaScriptErrorsRule extends TestWatcher
      * @return true if the test method being wrapped should fail if a javascript error is found. Returns false by default.
      */
     protected boolean shouldFailOnJavaScriptErrors()
+    {
+        return false;
+    }
+
+    /**
+     * An overridable method which when returning true will skip
+     * checking for Javascript errors after successful tests.
+     *
+     * @return true if the rule should only check JS errors for failed tests. Returns false by default.
+     */
+    protected boolean shouldCheckOnlyIfTestFailed()
     {
         return false;
     }
