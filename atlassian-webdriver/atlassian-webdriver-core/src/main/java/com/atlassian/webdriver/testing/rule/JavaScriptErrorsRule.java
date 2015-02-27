@@ -3,6 +3,7 @@ package com.atlassian.webdriver.testing.rule;
 import com.atlassian.webdriver.browsers.WebDriverBrowserAutoInstall;
 import com.atlassian.webdriver.utils.WebDriverUtil;
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Iterables.transform;
 
 /**
  * Rule to log javascript console error messages.
@@ -34,21 +36,53 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class JavaScriptErrorsRule extends TestWatcher
 {
     private static final Logger DEFAULT_LOGGER = LoggerFactory.getLogger(JavaScriptErrorsRule.class);
-    private static final Set<String> EMPTY_SET = ImmutableSet.of();
 
     private final Logger logger;
     private final Supplier<? extends WebDriver> webDriver;
+    private final ImmutableSet<String> errorsToIgnore;
+    private final boolean failOnJavaScriptErrors;
+    private final boolean checkOnlyIfTestFailed;
+    private final ErrorRetriever errorRetriever;
 
-    @Inject
-    public JavaScriptErrorsRule(WebDriver webDriver, Logger logger)
+    protected JavaScriptErrorsRule(ErrorRetriever errorRetriever,
+            Supplier<? extends WebDriver> webDriver,
+            Logger logger,
+            Set<String> errorsToIgnore,
+            boolean failOnJavaScriptErrors,
+            boolean checkOnlyIfTestFailed)
     {
-        this(Suppliers.ofInstance(checkNotNull(webDriver, "webDriver")),logger);
+        this.errorRetriever = checkNotNull(errorRetriever, "errorRetriever");
+        this.webDriver = checkNotNull(webDriver, "webDriver");
+        this.logger = checkNotNull(logger, "logger");
+        this.errorsToIgnore = ImmutableSet.copyOf(checkNotNull(errorsToIgnore, "errorsToIgnore"));
+        this.failOnJavaScriptErrors = failOnJavaScriptErrors;
+        this.checkOnlyIfTestFailed = checkOnlyIfTestFailed;
     }
 
     public JavaScriptErrorsRule(Supplier<? extends WebDriver> webDriver, Logger logger)
     {
-        this.webDriver = checkNotNull(webDriver, "webDriver");
-        this.logger = checkNotNull(logger, "logger");
+        this(new DefaultErrorRetriever(webDriver), webDriver, logger, ImmutableSet.<String>of(), false, false);
+    }
+
+    public JavaScriptErrorsRule(Supplier<? extends WebDriver> webDriver)
+    {
+        this(webDriver, DEFAULT_LOGGER);
+    }
+
+    @Inject
+    public JavaScriptErrorsRule(WebDriver webDriver, Logger logger)
+    {
+        this(Suppliers.ofInstance(checkNotNull(webDriver, "webDriver")), logger);
+    }
+
+    public JavaScriptErrorsRule(WebDriver webDriver)
+    {
+        this(Suppliers.ofInstance(checkNotNull(webDriver, "webDriver")));
+    }
+
+    public JavaScriptErrorsRule()
+    {
+        this(WebDriverBrowserAutoInstall.driverSupplier());
     }
 
     public JavaScriptErrorsRule(Logger logger)
@@ -56,16 +90,41 @@ public class JavaScriptErrorsRule extends TestWatcher
         this(WebDriverBrowserAutoInstall.driverSupplier(), logger);
     }
 
-    public JavaScriptErrorsRule()
+    public JavaScriptErrorsRule errorRetriever(ErrorRetriever errorRetriever)
     {
-        this(DEFAULT_LOGGER);
+        return new JavaScriptErrorsRule(errorRetriever, this.webDriver, this.logger, this.errorsToIgnore,
+                this.failOnJavaScriptErrors, this.checkOnlyIfTestFailed);
+    }
+
+    public JavaScriptErrorsRule errorsToIgnore(Set<String> errorsToIgnore)
+    {
+        return new JavaScriptErrorsRule(this.errorRetriever, this.webDriver, this.logger, errorsToIgnore,
+                this.failOnJavaScriptErrors, this.checkOnlyIfTestFailed);
+    }
+
+    public JavaScriptErrorsRule logger(Logger logger)
+    {
+        return new JavaScriptErrorsRule(this.errorRetriever, this.webDriver, logger, this.errorsToIgnore,
+                this.failOnJavaScriptErrors, this.checkOnlyIfTestFailed);
+    }
+
+    public JavaScriptErrorsRule failOnJavaScriptErrors(boolean failOnJavaScriptErrors)
+    {
+        return new JavaScriptErrorsRule(this.errorRetriever, this.webDriver, this.logger, this.errorsToIgnore,
+                failOnJavaScriptErrors, this.checkOnlyIfTestFailed);
+    }
+
+    public JavaScriptErrorsRule checkOnlyIfTestFailed(boolean checkOnlyIfTestFailed)
+    {
+        return new JavaScriptErrorsRule(this.errorRetriever, this.webDriver, this.logger, this.errorsToIgnore,
+                this.failOnJavaScriptErrors, checkOnlyIfTestFailed);
     }
 
     @Override
     @VisibleForTesting
     public void succeeded(Description description)
     {
-        if (!shouldCheckOnlyIfTestFailed())
+        if (!checkOnlyIfTestFailed)
         {
             checkErrors(description);
         }
@@ -94,7 +153,7 @@ public class JavaScriptErrorsRule extends TestWatcher
                 logger.warn("----- Test '{}' finished with {} JS error(s). ", description.getMethodName(), getErrors().size());
                 logger.warn("----- START CONSOLE OUTPUT DUMP\n\n{}\n", getConsoleOutput(errors));
                 logger.warn("----- END CONSOLE OUTPUT DUMP");
-                if (shouldFailOnJavaScriptErrors())
+                if (failOnJavaScriptErrors)
                 {
                     throw new RuntimeException("Test failed due to javascript errors being detected: \n" + getConsoleOutput());
                 }
@@ -125,62 +184,86 @@ public class JavaScriptErrorsRule extends TestWatcher
     @VisibleForTesting
     protected List<String> getErrors()
     {
-        ImmutableList.Builder<String> ret = ImmutableList.builder();
+        final ImmutableList.Builder<String> ret = ImmutableList.builder();
         if (supportsConsoleOutput())
         {
-            final Collection<String> errorsToIgnore = getErrorsToIgnore();
-            final Collection<JavaScriptError> errors = JavaScriptError.readErrors(webDriver.get());
-            for (JavaScriptError error : errors)
+            final Iterable<ErrorInfo> errors = errorRetriever.getErrors();
+            for (ErrorInfo error : errors)
             {
-                if (errorsToIgnore.contains(error.getErrorMessage()))
+                if (errorsToIgnore.contains(error.getMessage()))
                 {
                     logger.debug("Ignoring JS error: {}", error);
                 }
                 else
                 {
-                    ret.add(error.toString());
+                    ret.add(error.getDescription());
                 }
             }
         }
         return ret.build();
     }
 
-    /**
-     * An overridable method which provides a list of error messages
-     * that should be ignored when collecting messages from the console.
-     *
-     * @return a list of exact error message strings to be ignored.
-     */
-    protected Set<String> getErrorsToIgnore()
-    {
-        return EMPTY_SET;
-    }
-
-    /**
-     * An overridable method which when returning true will cause
-     * the rule to throw an exception, thus causing the test method
-     * to record a failure.
-     *
-     * @return true if the test method being wrapped should fail if a javascript error is found. Returns false by default.
-     */
-    protected boolean shouldFailOnJavaScriptErrors()
-    {
-        return false;
-    }
-
-    /**
-     * An overridable method which when returning true will skip
-     * checking for Javascript errors after successful tests.
-     *
-     * @return true if the rule should only check JS errors for failed tests. Returns false by default.
-     */
-    protected boolean shouldCheckOnlyIfTestFailed()
-    {
-        return false;
-    }
-
     private boolean supportsConsoleOutput()
     {
         return WebDriverUtil.isInstance(webDriver.get(), FirefoxDriver.class);
+    }
+
+    /**
+     * Abstraction of an error message we have retrieved from the browser.
+     */
+    public interface ErrorInfo
+    {
+        /**
+         * Returns the full error line as it should be displayed.
+         */
+        String getDescription();
+
+        /**
+         * Returns only the message portion of the error (for comparison to errorsToIgnore).
+         */
+        String getMessage();
+    }
+
+    /**
+     * Abstraction of the underlying error retrieval mechanism.  The standard implementation is
+     * DefaultErrorRetriever; this can be overridden for unit testing of this class, or to perform
+     * custom post-processing of the results.
+     */
+    public interface ErrorRetriever
+    {
+        Iterable<ErrorInfo> getErrors();
+    }
+
+    public static class DefaultErrorRetriever implements ErrorRetriever
+    {
+        private final Supplier<? extends WebDriver> webDriver;
+
+        DefaultErrorRetriever(Supplier<? extends WebDriver> webDriver)
+        {
+            this.webDriver = webDriver;
+        }
+
+        @Override
+        public Iterable<ErrorInfo> getErrors()
+        {
+            return transform(JavaScriptError.readErrors(webDriver.get()), new Function<JavaScriptError, ErrorInfo>()
+            {
+                public ErrorInfo apply(final JavaScriptError e)
+                {
+                    return new ErrorInfo()
+                    {
+                        public String getDescription()
+                        {
+                            return e.toString();
+                        }
+
+                        public String getMessage()
+                        {
+                            return e.getErrorMessage();
+                        }
+                    };
+                }
+            });
+        }
     }
 }

@@ -9,8 +9,8 @@ import com.atlassian.webdriver.it.pageobjects.page.jsconsolelogging.NoErrorsPage
 import com.atlassian.webdriver.it.pageobjects.page.jsconsolelogging.UntypedErrorPage;
 import com.atlassian.webdriver.it.pageobjects.page.jsconsolelogging.WindowErrorPage;
 import com.atlassian.webdriver.testing.rule.JavaScriptErrorsRule;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -34,20 +34,11 @@ import static org.hamcrest.Matchers.not;
 public class TestCapturingJavaScriptConsoleOutput extends AbstractSimpleServerTest
 {
     private JavaScriptErrorsRule rule;
-    private Set<String> errorsToIgnore;
 
     @Before
     public void setUp()
     {
-        errorsToIgnore = Sets.newHashSet();
-        rule = new JavaScriptErrorsRule()
-        {
-            @Override
-            protected Set<String> getErrorsToIgnore()
-            {
-                return errorsToIgnore;
-            }
-        };
+        rule = new JavaScriptErrorsRule();
     }
 
     @Test
@@ -102,7 +93,7 @@ public class TestCapturingJavaScriptConsoleOutput extends AbstractSimpleServerTe
     @Test
     public void testCanBeOverriddenToIgnoreSpecificErrors()
     {
-        errorsToIgnore.add("uncaught exception: throw string");
+        rule = rule.errorsToIgnore(ImmutableSet.of("uncaught exception: throw string"));
         final UntypedErrorPage page = product.visit(UntypedErrorPage.class);
         final String consoleOutput = rule.getConsoleOutput();
         assertThat(consoleOutput, isEmptyString());
