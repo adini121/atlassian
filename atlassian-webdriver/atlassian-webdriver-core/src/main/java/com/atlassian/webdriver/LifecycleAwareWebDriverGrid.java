@@ -8,7 +8,6 @@ import com.google.common.base.Supplier;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.ie.InternetExplorerDriver;
-import org.openqa.selenium.remote.UnreachableBrowserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -156,10 +155,6 @@ public class LifecycleAwareWebDriverGrid
                     log.info("Quitting {}", getUnderlyingDriver(driver));
                     driver.quit();
                     log.debug("Finished shutdown hook {}", this);
-                }
-                catch (UnreachableBrowserException e)
-                {
-                    // SELENIUM-246: suppress this error, it only means that the driver has already shut itself down
                 }
                 catch (WebDriverException e)
                 {
