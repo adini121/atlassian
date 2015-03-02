@@ -60,7 +60,7 @@ public class TestJavaScriptErrorsRule
         final JavaScriptErrorsRule rule = createRule(driver);
 
         rule.succeeded(Description.createTestDescription(TestJavaScriptErrorsRule.class, "testMethod"));
-        verify(mockLogger).info("----- Test '{}' finished with 0 JS error(s). ", "testMethod");
+        verify(mockLogger).info("----- Test '{}' finished with 0 JS errors. ", "testMethod");
         verifyNoMoreInteractions(mockLogger);
     }
 

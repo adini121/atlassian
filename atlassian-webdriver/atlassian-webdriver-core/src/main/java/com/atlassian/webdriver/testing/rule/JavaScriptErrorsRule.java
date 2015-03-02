@@ -86,7 +86,7 @@ public class JavaScriptErrorsRule extends TestWatcher
             if (errors.isEmpty())
             {
                 // Use INFO level if there were no errors, so you can filter these lines out if desired in your logger configuration
-                logger.info("----- Test '{}' finished with 0 JS error(s). ", description.getMethodName());
+                logger.info("----- Test '{}' finished with 0 JS errors. ", description.getMethodName());
             }
             else
             {
