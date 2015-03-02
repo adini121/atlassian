@@ -33,7 +33,7 @@ public class TestJavaScriptErrorsRule
 
     private List<String> errorsFound;
     private boolean failOnErrorsFound;
-    private boolean checkOnlyIfTestFailed;
+    private boolean checkOnFailedTestsOnly;
 
     @Before
     public void setUp()
@@ -106,7 +106,7 @@ public class TestJavaScriptErrorsRule
     {
         final FirefoxDriver driver = mock(FirefoxDriver.class);
         final JavaScriptErrorsRule rule = createRule(driver);
-        checkOnlyIfTestFailed = true;
+        checkOnFailedTestsOnly = true;
 
         errorsFound.add("error 1");
 
@@ -115,11 +115,11 @@ public class TestJavaScriptErrorsRule
     }
 
     @Test
-    public void stillChecksErrorsForFailedTestWhenCheckOnlyIfTestFailedIsTrue()
+    public void stillChecksErrorsForFailedTestWhenCheckOnFailedTestsOnlyIsTrue()
     {
         final FirefoxDriver driver = mock(FirefoxDriver.class);
         final JavaScriptErrorsRule rule = createRule(driver);
-        checkOnlyIfTestFailed = true;
+        checkOnFailedTestsOnly = true;
 
         errorsFound.add("error 1");
 
@@ -138,9 +138,9 @@ public class TestJavaScriptErrorsRule
             }
 
             @Override
-            protected boolean shouldCheckOnlyIfTestFailed()
+            protected boolean shouldCheckOnFailedTestsOnly()
             {
-                return checkOnlyIfTestFailed;
+                return checkOnFailedTestsOnly;
             }
 
             @Override

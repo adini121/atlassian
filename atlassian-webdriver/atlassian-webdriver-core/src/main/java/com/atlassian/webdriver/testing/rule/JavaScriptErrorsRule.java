@@ -65,7 +65,7 @@ public class JavaScriptErrorsRule extends TestWatcher
     @VisibleForTesting
     public void succeeded(Description description)
     {
-        if (!shouldCheckOnlyIfTestFailed())
+        if (!shouldCheckOnFailedTestsOnly())
         {
             checkErrors(description);
         }
@@ -174,7 +174,7 @@ public class JavaScriptErrorsRule extends TestWatcher
      *
      * @return true if the rule should only check JS errors for failed tests. Returns false by default.
      */
-    protected boolean shouldCheckOnlyIfTestFailed()
+    protected boolean shouldCheckOnFailedTestsOnly()
     {
         return false;
     }
