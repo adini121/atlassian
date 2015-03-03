@@ -43,6 +43,33 @@ public class JavaScriptErrorsRule extends TestWatcher
     private final boolean failOnJavaScriptErrors;
     private final ErrorRetriever errorRetriever;
 
+    public JavaScriptErrorsRule(Supplier<? extends WebDriver> webDriver)
+    {
+        this(webDriver, DEFAULT_LOGGER);
+    }
+
+    public JavaScriptErrorsRule(Supplier<? extends WebDriver> webDriver, Logger logger)
+    {
+        this(new DefaultErrorRetriever(webDriver), webDriver, logger, ImmutableSet.<String>of(), false);
+    }
+
+    @Inject
+    public JavaScriptErrorsRule(WebDriver webDriver)
+    {
+        this(Suppliers.ofInstance(checkNotNull(webDriver, "webDriver")), DEFAULT_LOGGER);
+    }
+
+    @Inject
+    public JavaScriptErrorsRule(WebDriver webDriver, Logger logger)
+    {
+        this(Suppliers.ofInstance(checkNotNull(webDriver, "webDriver")));
+    }
+
+    public JavaScriptErrorsRule()
+    {
+        this(WebDriverBrowserAutoInstall.driverSupplier());
+    }
+
     protected JavaScriptErrorsRule(ErrorRetriever errorRetriever,
             Supplier<? extends WebDriver> webDriver,
             Logger logger,
@@ -54,21 +81,6 @@ public class JavaScriptErrorsRule extends TestWatcher
         this.logger = checkNotNull(logger, "logger");
         this.errorsToIgnore = ImmutableSet.copyOf(checkNotNull(errorsToIgnore, "errorsToIgnore"));
         this.failOnJavaScriptErrors = failOnJavaScriptErrors;
-    }
-
-    public JavaScriptErrorsRule(Supplier<? extends WebDriver> webDriver)
-    {
-        this(new DefaultErrorRetriever(webDriver), webDriver, DEFAULT_LOGGER, ImmutableSet.<String>of(), false);
-    }
-
-    public JavaScriptErrorsRule(WebDriver webDriver)
-    {
-        this(Suppliers.ofInstance(checkNotNull(webDriver, "webDriver")));
-    }
-
-    public JavaScriptErrorsRule()
-    {
-        this(WebDriverBrowserAutoInstall.driverSupplier());
     }
 
     /**
