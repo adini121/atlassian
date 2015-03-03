@@ -157,9 +157,11 @@ public class LifecycleAwareWebDriverGrid
                     driver.quit();
                     log.debug("Finished shutdown hook {}", this);
                 }
-                catch (UnreachableBrowserException e)
+                catch (NullPointerException e)
                 {
-                    // SELENIUM-246: suppress this error, it only means that the driver has already shut itself down
+                    // SELENIUM-247: suppress this error (but log it) since it's likely to be due to a harmless
+                    // known issue where we're trying to clean up resources that the driver already cleaned up.
+                    onQuitError(driver, e);
                 }
                 catch (WebDriverException e)
                 {
