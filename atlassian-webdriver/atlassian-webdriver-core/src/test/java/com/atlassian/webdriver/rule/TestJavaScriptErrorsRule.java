@@ -47,7 +47,7 @@ public class TestJavaScriptErrorsRule
         final WebDriver driver = mock(WebDriver.class);
         final JavaScriptErrorsRule rule = createRule(driver);
 
-        rule.succeeded(Description.createTestDescription(TestJavaScriptErrorsRule.class, "testMethod"));
+        rule.finished(Description.createTestDescription(TestJavaScriptErrorsRule.class, "testMethod"));
         verify(mockLogger).info("Unable to provide console output. Console output is currently only supported on Firefox.");
         verifyNoMoreInteractions(mockLogger);
     }
@@ -58,8 +58,8 @@ public class TestJavaScriptErrorsRule
         final FirefoxDriver driver = mock(FirefoxDriver.class);
         final JavaScriptErrorsRule rule = createRule(driver);
 
-        rule.succeeded(Description.createTestDescription(TestJavaScriptErrorsRule.class, "testMethod"));
-        verify(mockLogger).info("----- Test '{}' finished with 0 JS error(s). ", "testMethod");
+        rule.finished(Description.createTestDescription(TestJavaScriptErrorsRule.class, "testMethod"));
+        verify(mockLogger).info("----- Test '{}' finished with 0 JS errors. ", "testMethod");
         verifyNoMoreInteractions(mockLogger);
     }
 
@@ -72,7 +72,7 @@ public class TestJavaScriptErrorsRule
         errorsFound.add("first");
         errorsFound.add("second");
 
-        rule.succeeded(Description.createTestDescription(TestJavaScriptErrorsRule.class, "testMethod"));
+        rule.finished(Description.createTestDescription(TestJavaScriptErrorsRule.class, "testMethod"));
         verify(mockLogger).warn("----- Test '{}' finished with {} JS error(s). ", "testMethod", 2);
         verify(mockLogger).warn("----- START CONSOLE OUTPUT DUMP\n\n{}\n", "error: first\nerror: second");
         verify(mockLogger).warn("----- END CONSOLE OUTPUT DUMP");
@@ -90,39 +90,13 @@ public class TestJavaScriptErrorsRule
 
         try
         {
-            rule.succeeded(Description.createTestDescription(TestJavaScriptErrorsRule.class, "testMethod"));
+            rule.finished(Description.createTestDescription(TestJavaScriptErrorsRule.class, "testMethod"));
             assertThat("Expected an exception to be thrown, but wasn't", true, equalTo(false));
         }
         catch (RuntimeException e)
         {
             assertThat(e.getMessage(), containsString("Test failed due to javascript errors being detected"));
         }
-        verify(mockLogger).warn("----- Test '{}' finished with {} JS error(s). ", "testMethod", 1);
-    }
-
-    @Test
-    public void testCanBeOverriddenToSkipCheckingErrorsIfTestPassed()
-    {
-        final FirefoxDriver driver = mock(FirefoxDriver.class);
-        final JavaScriptErrorsRule rule = createRule(driver)
-                .checkOnlyIfTestFailed(true);
-
-        errorsFound.add("error 1");
-
-        rule.succeeded(Description.createTestDescription(TestJavaScriptErrorsRule.class, "testMethod"));
-        verifyNoMoreInteractions(mockLogger);
-    }
-
-    @Test
-    public void stillChecksErrorsForFailedTestWhenCheckOnlyIfTestFailedIsTrue()
-    {
-        final FirefoxDriver driver = mock(FirefoxDriver.class);
-        final JavaScriptErrorsRule rule = createRule(driver)
-                .checkOnlyIfTestFailed(true);
-
-        errorsFound.add("error 1");
-
-        rule.failed(new Exception(), Description.createTestDescription(TestJavaScriptErrorsRule.class, "testMethod"));
         verify(mockLogger).warn("----- Test '{}' finished with {} JS error(s). ", "testMethod", 1);
     }
 

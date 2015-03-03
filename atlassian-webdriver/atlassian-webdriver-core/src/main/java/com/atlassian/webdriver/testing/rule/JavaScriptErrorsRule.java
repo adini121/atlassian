@@ -41,27 +41,24 @@ public class JavaScriptErrorsRule extends TestWatcher
     private final Supplier<? extends WebDriver> webDriver;
     private final ImmutableSet<String> errorsToIgnore;
     private final boolean failOnJavaScriptErrors;
-    private final boolean checkOnlyIfTestFailed;
     private final ErrorRetriever errorRetriever;
 
     protected JavaScriptErrorsRule(ErrorRetriever errorRetriever,
             Supplier<? extends WebDriver> webDriver,
             Logger logger,
             Set<String> errorsToIgnore,
-            boolean failOnJavaScriptErrors,
-            boolean checkOnlyIfTestFailed)
+            boolean failOnJavaScriptErrors)
     {
         this.errorRetriever = checkNotNull(errorRetriever, "errorRetriever");
         this.webDriver = checkNotNull(webDriver, "webDriver");
         this.logger = checkNotNull(logger, "logger");
         this.errorsToIgnore = ImmutableSet.copyOf(checkNotNull(errorsToIgnore, "errorsToIgnore"));
         this.failOnJavaScriptErrors = failOnJavaScriptErrors;
-        this.checkOnlyIfTestFailed = checkOnlyIfTestFailed;
     }
 
     public JavaScriptErrorsRule(Supplier<? extends WebDriver> webDriver)
     {
-        this(new DefaultErrorRetriever(webDriver), webDriver, DEFAULT_LOGGER, ImmutableSet.<String>of(), false, false);
+        this(new DefaultErrorRetriever(webDriver), webDriver, DEFAULT_LOGGER, ImmutableSet.<String>of(), false);
     }
 
     public JavaScriptErrorsRule(WebDriver webDriver)
@@ -83,7 +80,7 @@ public class JavaScriptErrorsRule extends TestWatcher
     public JavaScriptErrorsRule errorRetriever(ErrorRetriever errorRetriever)
     {
         return new JavaScriptErrorsRule(errorRetriever, this.webDriver, this.logger, this.errorsToIgnore,
-                this.failOnJavaScriptErrors, this.checkOnlyIfTestFailed);
+                this.failOnJavaScriptErrors);
     }
 
     /**
@@ -95,7 +92,7 @@ public class JavaScriptErrorsRule extends TestWatcher
     public JavaScriptErrorsRule errorsToIgnore(Set<String> errorsToIgnore)
     {
         return new JavaScriptErrorsRule(this.errorRetriever, this.webDriver, this.logger, errorsToIgnore,
-                this.failOnJavaScriptErrors, this.checkOnlyIfTestFailed);
+                this.failOnJavaScriptErrors);
     }
 
     /**
@@ -106,7 +103,7 @@ public class JavaScriptErrorsRule extends TestWatcher
     public JavaScriptErrorsRule logger(Logger logger)
     {
         return new JavaScriptErrorsRule(this.errorRetriever, this.webDriver, logger, this.errorsToIgnore,
-                this.failOnJavaScriptErrors, this.checkOnlyIfTestFailed);
+                this.failOnJavaScriptErrors);
     }
 
     /**
@@ -118,39 +115,12 @@ public class JavaScriptErrorsRule extends TestWatcher
     public JavaScriptErrorsRule failOnJavaScriptErrors(boolean failOnJavaScriptErrors)
     {
         return new JavaScriptErrorsRule(this.errorRetriever, this.webDriver, this.logger, this.errorsToIgnore,
-                failOnJavaScriptErrors, this.checkOnlyIfTestFailed);
-    }
-
-    /**
-     * Returns a copy of this rule, specifying whether it should skip checking for Javascript errors on passed tests.
-     * This property is false by default.
-     * @param checkOnlyIfTestFailed  true if the rule should only check for errors on tests that have already failed
-     * @return  a new JavaScriptErrorsRule based on the current instance
-     */
-    public JavaScriptErrorsRule checkOnlyIfTestFailed(boolean checkOnlyIfTestFailed)
-    {
-        return new JavaScriptErrorsRule(this.errorRetriever, this.webDriver, this.logger, this.errorsToIgnore,
-                this.failOnJavaScriptErrors, checkOnlyIfTestFailed);
+                failOnJavaScriptErrors);
     }
 
     @Override
     @VisibleForTesting
-    public void succeeded(Description description)
-    {
-        if (!checkOnlyIfTestFailed)
-        {
-            checkErrors(description);
-        }
-    }
-
-    @Override
-    @VisibleForTesting
-    public void failed(Throwable e, Description description)
-    {
-        checkErrors(description);
-    }
-    
-    private void checkErrors(final Description description)
+    public void finished(final Description description)
     {
         if (supportsConsoleOutput())
         {
@@ -158,7 +128,7 @@ public class JavaScriptErrorsRule extends TestWatcher
             if (errors.isEmpty())
             {
                 // Use INFO level if there were no errors, so you can filter these lines out if desired in your logger configuration
-                logger.info("----- Test '{}' finished with 0 JS error(s). ", description.getMethodName());
+                logger.info("----- Test '{}' finished with 0 JS errors. ", description.getMethodName());
             }
             else
             {
