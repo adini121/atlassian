@@ -6,8 +6,8 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Joiner;
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
 import net.jsourcerer.webdriver.jserrorcollector.JavaScriptError;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
@@ -39,8 +39,6 @@ public class JavaScriptErrorsRule extends TestWatcher
     private final Logger logger;
     private final Supplier<? extends WebDriver> webDriver;
 
-    private List<String> errors = null;
-
     @Inject
     public JavaScriptErrorsRule(WebDriver webDriver, Logger logger)
     {
@@ -64,22 +62,23 @@ public class JavaScriptErrorsRule extends TestWatcher
     }
 
     @Override
-    protected void starting(final Description description)
-    {
-        errors = null;
-    }
-
-    @Override
     @VisibleForTesting
     public void finished(final Description description)
     {
         if (supportsConsoleOutput())
         {
-            logger.info("----- Test '{}' finished with {} JS error(s). ", description.getMethodName(), getErrors().size());
-            if (getErrors().size() > 0)
+            List<String> errors = getErrors();
+            if (errors.isEmpty())
             {
-                logger.info("----- START CONSOLE OUTPUT DUMP\n\n{}\n", getConsoleOutput());
-                logger.info("----- END CONSOLE OUTPUT DUMP");
+                // Use INFO level if there were no errors, so you can filter these lines out if desired in your logger configuration
+                logger.info("----- Test '{}' finished with 0 JS errors. ", description.getMethodName());
+            }
+            else
+            {
+                // Use WARN level if there were errors
+                logger.warn("----- Test '{}' finished with {} JS error(s). ", description.getMethodName(), getErrors().size());
+                logger.warn("----- START CONSOLE OUTPUT DUMP\n\n{}\n", getConsoleOutput(errors));
+                logger.warn("----- END CONSOLE OUTPUT DUMP");
                 if (shouldFailOnJavaScriptErrors())
                 {
                     throw new RuntimeException("Test failed due to javascript errors being detected: \n" + getConsoleOutput());
@@ -95,7 +94,12 @@ public class JavaScriptErrorsRule extends TestWatcher
     @VisibleForTesting
     public String getConsoleOutput()
     {
-        return Joiner.on("\n").join(getErrors());
+        return getConsoleOutput(getErrors());
+    }
+
+    private String getConsoleOutput(List<String> errors)
+    {
+        return Joiner.on("\n").join(errors);   
     }
 
     /**
@@ -106,27 +110,24 @@ public class JavaScriptErrorsRule extends TestWatcher
     @VisibleForTesting
     protected List<String> getErrors()
     {
-        if (errors == null)
+        ImmutableList.Builder<String> ret = ImmutableList.builder();
+        if (supportsConsoleOutput())
         {
-            errors = Lists.newArrayList();
-            if (supportsConsoleOutput())
+            final Collection<String> errorsToIgnore = getErrorsToIgnore();
+            final Collection<JavaScriptError> errors = JavaScriptError.readErrors(webDriver.get());
+            for (JavaScriptError error : errors)
             {
-                final Collection<String> errorsToIgnore = getErrorsToIgnore();
-                final Collection<JavaScriptError> errors = JavaScriptError.readErrors(webDriver.get());
-                for (JavaScriptError error : errors)
+                if (errorsToIgnore.contains(error.getErrorMessage()))
                 {
-                    if (errorsToIgnore.contains(error.getErrorMessage()))
-                    {
-                        logger.debug("Ignoring JS error: {}", error);
-                    }
-                    else
-                    {
-                        this.errors.add(error.toString());
-                    }
+                    logger.debug("Ignoring JS error: {}", error);
+                }
+                else
+                {
+                    ret.add(error.toString());
                 }
             }
         }
-        return errors;
+        return ret.build();
     }
 
     /**
