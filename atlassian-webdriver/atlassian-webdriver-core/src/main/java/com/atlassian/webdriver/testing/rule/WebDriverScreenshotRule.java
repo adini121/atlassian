@@ -44,6 +44,10 @@ public class WebDriverScreenshotRule extends TestWatcher
         this(new WebDriverDebug(checkNotNull(support, "support").getDriver()), artifactDir);
     }
 
+    /**
+     * @deprecated  Will be removed in version 3.0; instead, use one of the other constructors to set the driver,
+     *   then call {@link #artifactDir(File)} 
+     */
     @Deprecated
     public WebDriverScreenshotRule(@Nonnull Supplier<? extends WebDriver> driverSupplier, @Nonnull File artifactDir)
     {
