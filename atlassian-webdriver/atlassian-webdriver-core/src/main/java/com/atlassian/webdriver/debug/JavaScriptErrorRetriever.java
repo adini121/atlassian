@@ -14,9 +14,9 @@ public interface JavaScriptErrorRetriever
      */
     boolean isErrorRetrievalSupported();
     
-	/**
-	 * Attempt to retrieve Javascript errors from the current driver.  If this is not
-	 * possible, return an empty Iterable.
-	 */
+    /**
+     * Attempt to retrieve Javascript errors from the current driver.  If this is not
+     * possible, return an empty Iterable.
+     */
     Iterable<JavaScriptErrorInfo> getErrors();
 }
