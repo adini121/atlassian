@@ -1,8 +1,12 @@
 package com.atlassian.webdriver.rule;
 
+import com.atlassian.webdriver.debug.JavaScriptErrorInfo;
+import com.atlassian.webdriver.debug.JavaScriptErrorRetriever;
 import com.atlassian.webdriver.testing.rule.JavaScriptErrorsRule;
+
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.Description;
@@ -33,6 +37,7 @@ public class TestJavaScriptErrorsRule
 {
     @Mock private Logger mockLogger;
 
+    private boolean errorRetrievalSupported = true;
     private List<String> errorsFound;
 
     @Before
@@ -44,6 +49,8 @@ public class TestJavaScriptErrorsRule
     @Test
     public void testOutputsSpecialMessageWhenCannotRetrieveConsoleErrorsOnTestFailed() throws Exception
     {
+        errorRetrievalSupported = false;
+
         final WebDriver driver = mock(WebDriver.class);
         final JavaScriptErrorsRule rule = createRule(driver);
 
@@ -107,16 +114,22 @@ public class TestJavaScriptErrorsRule
                 .logger(mockLogger);
     }
 
-    private class MockErrorRetriever implements JavaScriptErrorsRule.ErrorRetriever
+    private class MockErrorRetriever implements JavaScriptErrorRetriever
     {
         @Override
-        public Iterable<JavaScriptErrorsRule.ErrorInfo> getErrors()
+        public boolean isErrorRetrievalSupported()
         {
-            return transform(errorsFound, new Function<String, JavaScriptErrorsRule.ErrorInfo>()
+            return errorRetrievalSupported;
+        }
+        
+        @Override
+        public Iterable<JavaScriptErrorInfo> getErrors()
+        {
+            return transform(errorsFound, new Function<String, JavaScriptErrorInfo>()
                 {
-                    public JavaScriptErrorsRule.ErrorInfo apply(final String message)
+                    public JavaScriptErrorInfo apply(final String message)
                     {
-                        return new JavaScriptErrorsRule.ErrorInfo()
+                        return new JavaScriptErrorInfo()
                         {
                             public String getDescription()
                             {

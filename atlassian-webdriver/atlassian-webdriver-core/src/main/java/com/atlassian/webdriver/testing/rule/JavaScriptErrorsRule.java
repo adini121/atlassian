@@ -1,9 +1,10 @@
 package com.atlassian.webdriver.testing.rule;
 
 import com.atlassian.webdriver.browsers.WebDriverBrowserAutoInstall;
-import com.atlassian.webdriver.utils.WebDriverUtil;
+import com.atlassian.webdriver.debug.DefaultJavaScriptErrorRetriever;
+import com.atlassian.webdriver.debug.JavaScriptErrorInfo;
+import com.atlassian.webdriver.debug.JavaScriptErrorRetriever;
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
@@ -13,17 +14,14 @@ import net.jsourcerer.webdriver.jserrorcollector.JavaScriptError;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.collect.Iterables.transform;
 
 /**
  * Rule to log Javascript console error messages.
@@ -41,7 +39,7 @@ public class JavaScriptErrorsRule extends TestWatcher
     private final Supplier<? extends WebDriver> webDriver;
     private final ImmutableSet<String> errorsToIgnore;
     private final boolean failOnJavaScriptErrors;
-    private final ErrorRetriever errorRetriever;
+    private final JavaScriptErrorRetriever errorRetriever;
 
     public JavaScriptErrorsRule(Supplier<? extends WebDriver> webDriver)
     {
@@ -50,7 +48,7 @@ public class JavaScriptErrorsRule extends TestWatcher
 
     public JavaScriptErrorsRule(Supplier<? extends WebDriver> webDriver, Logger logger)
     {
-        this(new DefaultErrorRetriever(webDriver), webDriver, logger, ImmutableSet.<String>of(), false);
+        this(new DefaultJavaScriptErrorRetriever(webDriver), webDriver, logger, ImmutableSet.<String>of(), false);
     }
 
     @Inject
@@ -70,7 +68,7 @@ public class JavaScriptErrorsRule extends TestWatcher
         this(WebDriverBrowserAutoInstall.driverSupplier());
     }
 
-    protected JavaScriptErrorsRule(ErrorRetriever errorRetriever,
+    protected JavaScriptErrorsRule(JavaScriptErrorRetriever errorRetriever,
             Supplier<? extends WebDriver> webDriver,
             Logger logger,
             Set<String> errorsToIgnore,
@@ -89,7 +87,7 @@ public class JavaScriptErrorsRule extends TestWatcher
      * @param errorRetriever  an implementation of {@link ErrorRetriever}
      * @return  a new JavaScriptErrorsRule based on the current instance
      */
-    public JavaScriptErrorsRule errorRetriever(ErrorRetriever errorRetriever)
+    public JavaScriptErrorsRule errorRetriever(JavaScriptErrorRetriever errorRetriever)
     {
         return new JavaScriptErrorsRule(errorRetriever, this.webDriver, this.logger, this.errorsToIgnore,
                 this.failOnJavaScriptErrors);
@@ -134,7 +132,7 @@ public class JavaScriptErrorsRule extends TestWatcher
     @VisibleForTesting
     public void finished(final Description description)
     {
-        if (supportsConsoleOutput())
+        if (errorRetriever.isErrorRetrievalSupported())
         {
             List<String> errors = getErrors();
             if (errors.isEmpty())
@@ -180,85 +178,17 @@ public class JavaScriptErrorsRule extends TestWatcher
     protected List<String> getErrors()
     {
         final ImmutableList.Builder<String> ret = ImmutableList.builder();
-        if (supportsConsoleOutput())
+        for (JavaScriptErrorInfo error : errorRetriever.getErrors())
         {
-            final Iterable<ErrorInfo> errors = errorRetriever.getErrors();
-            for (ErrorInfo error : errors)
+            if (errorsToIgnore.contains(error.getMessage()))
             {
-                if (errorsToIgnore.contains(error.getMessage()))
-                {
-                    logger.debug("Ignoring JS error: {}", error);
-                }
-                else
-                {
-                    ret.add(error.getDescription());
-                }
+                logger.debug("Ignoring JS error: {}", error);
+            }
+            else
+            {
+                ret.add(error.getDescription());
             }
         }
         return ret.build();
-    }
-
-    private boolean supportsConsoleOutput()
-    {
-        return WebDriverUtil.isInstance(webDriver.get(), FirefoxDriver.class);
-    }
-
-    /**
-     * Abstraction of an error message we have retrieved from the browser.
-     */
-    public interface ErrorInfo
-    {
-        /**
-         * Returns the full error line as it should be displayed.
-         */
-        String getDescription();
-
-        /**
-         * Returns only the message portion of the error (for comparison to errorsToIgnore).
-         */
-        String getMessage();
-    }
-
-    /**
-     * Abstraction of the underlying error retrieval mechanism.  The standard implementation is
-     * DefaultErrorRetriever; this can be overridden for unit testing of this class, or to perform
-     * custom post-processing of the results.
-     */
-    public interface ErrorRetriever
-    {
-        Iterable<ErrorInfo> getErrors();
-    }
-
-    public static class DefaultErrorRetriever implements ErrorRetriever
-    {
-        private final Supplier<? extends WebDriver> webDriver;
-
-        DefaultErrorRetriever(Supplier<? extends WebDriver> webDriver)
-        {
-            this.webDriver = webDriver;
-        }
-
-        @Override
-        public Iterable<ErrorInfo> getErrors()
-        {
-            return transform(JavaScriptError.readErrors(webDriver.get()), new Function<JavaScriptError, ErrorInfo>()
-            {
-                public ErrorInfo apply(final JavaScriptError e)
-                {
-                    return new ErrorInfo()
-                    {
-                        public String getDescription()
-                        {
-                            return e.toString();
-                        }
-
-                        public String getMessage()
-                        {
-                            return e.getErrorMessage();
-                        }
-                    };
-                }
-            });
-        }
     }
 }

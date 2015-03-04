@@ -10,13 +10,10 @@ import com.atlassian.webdriver.it.pageobjects.page.jsconsolelogging.UntypedError
 import com.atlassian.webdriver.it.pageobjects.page.jsconsolelogging.WindowErrorPage;
 import com.atlassian.webdriver.testing.rule.JavaScriptErrorsRule;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-
-import java.util.List;
-import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
@@ -85,7 +82,7 @@ public class TestCapturingJavaScriptConsoleOutput extends AbstractSimpleServerTe
     @Test
     public void testCanCaptureUntypedErrors()
     {
-        final UntypedErrorPage page = product.visit(UntypedErrorPage.class);
+        product.visit(UntypedErrorPage.class);
         final String consoleOutput = rule.getConsoleOutput();
         assertThat(consoleOutput, containsString("uncaught exception: throw string"));
     }
@@ -94,7 +91,7 @@ public class TestCapturingJavaScriptConsoleOutput extends AbstractSimpleServerTe
     public void testCanBeOverriddenToIgnoreSpecificErrors()
     {
         rule = rule.errorsToIgnore(ImmutableSet.of("uncaught exception: throw string"));
-        final UntypedErrorPage page = product.visit(UntypedErrorPage.class);
+        product.visit(UntypedErrorPage.class);
         final String consoleOutput = rule.getConsoleOutput();
         assertThat(consoleOutput, isEmptyString());
     }
