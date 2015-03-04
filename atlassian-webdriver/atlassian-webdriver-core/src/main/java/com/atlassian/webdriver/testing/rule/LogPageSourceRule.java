@@ -56,7 +56,7 @@ public final class LogPageSourceRule extends TestWatcher
      * @return  a new LogPageSourceRule based on the current instance
      * @since 2.3
      */
-    public LogPageSourceRule artifactDir(Logger logger)
+    public LogPageSourceRule logger(Logger logger)
     {
         return new LogPageSourceRule(this.webDriver, logger);
     }
