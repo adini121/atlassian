@@ -56,7 +56,6 @@ public class JavaScriptErrorsRule extends TestWatcher
         this(Suppliers.ofInstance(checkNotNull(webDriver, "webDriver")), DEFAULT_LOGGER);
     }
 
-    @Inject
     public JavaScriptErrorsRule(WebDriver webDriver, Logger logger)
     {
         this(Suppliers.ofInstance(checkNotNull(webDriver, "webDriver")));
