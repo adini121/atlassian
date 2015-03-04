@@ -174,7 +174,7 @@ public class LifecycleAwareWebDriverGrid
     }
 
 
-    private static void onQuitError(WebDriver webDriver, WebDriverException e)
+    private static void onQuitError(WebDriver webDriver, Exception e)
     {
         // there is no sense propagating the exception, and in 99 cases out of 100, the browser is already dead if an
         // exception happens
