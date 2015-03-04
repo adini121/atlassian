@@ -1,7 +1,12 @@
 package com.atlassian.webdriver.rule;
 
+import com.atlassian.webdriver.debug.JavaScriptErrorInfo;
+import com.atlassian.webdriver.debug.JavaScriptErrorRetriever;
 import com.atlassian.webdriver.testing.rule.JavaScriptErrorsRule;
+
+import com.google.common.base.Function;
 import com.google.common.collect.Lists;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.Description;
@@ -14,6 +19,7 @@ import org.slf4j.Logger;
 
 import java.util.List;
 
+import static com.google.common.collect.Iterables.transform;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -31,19 +37,20 @@ public class TestJavaScriptErrorsRule
 {
     @Mock private Logger mockLogger;
 
+    private boolean errorRetrievalSupported = true;
     private List<String> errorsFound;
-    private boolean failOnErrorsFound;
 
     @Before
     public void setUp()
     {
         errorsFound = Lists.newArrayList();
-        failOnErrorsFound = false;
     }
 
     @Test
     public void testOutputsSpecialMessageWhenCannotRetrieveConsoleErrorsOnTestFailed() throws Exception
     {
+        errorRetrievalSupported = false;
+
         final WebDriver driver = mock(WebDriver.class);
         final JavaScriptErrorsRule rule = createRule(driver);
 
@@ -69,12 +76,12 @@ public class TestJavaScriptErrorsRule
         final FirefoxDriver driver = mock(FirefoxDriver.class);
         final JavaScriptErrorsRule rule = createRule(driver);
 
-        errorsFound.add("error 1");
-        errorsFound.add("error 2");
+        errorsFound.add("first");
+        errorsFound.add("second");
 
         rule.finished(Description.createTestDescription(TestJavaScriptErrorsRule.class, "testMethod"));
         verify(mockLogger).warn("----- Test '{}' finished with {} JS error(s). ", "testMethod", 2);
-        verify(mockLogger).warn("----- START CONSOLE OUTPUT DUMP\n\n{}\n", "error 1\nerror 2");
+        verify(mockLogger).warn("----- START CONSOLE OUTPUT DUMP\n\n{}\n", "error: first\nerror: second");
         verify(mockLogger).warn("----- END CONSOLE OUTPUT DUMP");
         verifyNoMoreInteractions(mockLogger);
     }
@@ -83,10 +90,10 @@ public class TestJavaScriptErrorsRule
     public void testCanBeOverriddenToFailTestWhenErrorsFound()
     {
         final FirefoxDriver driver = mock(FirefoxDriver.class);
-        final JavaScriptErrorsRule rule = createRule(driver);
+        final JavaScriptErrorsRule rule = createRule(driver)
+                .failOnJavaScriptErrors(true);
 
         errorsFound.add("TypeError: $ is not a function");
-        failOnErrorsFound = true;
 
         try
         {
@@ -102,19 +109,40 @@ public class TestJavaScriptErrorsRule
 
     private JavaScriptErrorsRule createRule(final WebDriver driver)
     {
-        return new JavaScriptErrorsRule(driver, mockLogger)
-        {
-            @Override
-            protected boolean shouldFailOnJavaScriptErrors()
-            {
-                return failOnErrorsFound;
-            }
+        return new JavaScriptErrorsRule(driver)
+                .errorRetriever(new MockErrorRetriever())
+                .logger(mockLogger);
+    }
 
-            @Override
-            protected List<String> getErrors()
-            {
-                return errorsFound;
-            }
-        };
+    private class MockErrorRetriever implements JavaScriptErrorRetriever
+    {
+        @Override
+        public boolean isErrorRetrievalSupported()
+        {
+            return errorRetrievalSupported;
+        }
+        
+        @Override
+        public Iterable<JavaScriptErrorInfo> getErrors()
+        {
+            return transform(errorsFound, new Function<String, JavaScriptErrorInfo>()
+                {
+                    public JavaScriptErrorInfo apply(final String message)
+                    {
+                        return new JavaScriptErrorInfo()
+                        {
+                            public String getDescription()
+                            {
+                                return "error: " + message;
+                            }
+
+                            public String getMessage()
+                            {
+                                return message;
+                            }
+                        };
+                    }
+                });
+        }
     }
 }

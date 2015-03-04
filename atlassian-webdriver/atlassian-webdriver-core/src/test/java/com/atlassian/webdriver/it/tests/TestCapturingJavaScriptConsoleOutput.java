@@ -9,14 +9,11 @@ import com.atlassian.webdriver.it.pageobjects.page.jsconsolelogging.NoErrorsPage
 import com.atlassian.webdriver.it.pageobjects.page.jsconsolelogging.UntypedErrorPage;
 import com.atlassian.webdriver.it.pageobjects.page.jsconsolelogging.WindowErrorPage;
 import com.atlassian.webdriver.testing.rule.JavaScriptErrorsRule;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
+import com.google.common.collect.ImmutableSet;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-
-import java.util.List;
-import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
@@ -34,20 +31,11 @@ import static org.hamcrest.Matchers.not;
 public class TestCapturingJavaScriptConsoleOutput extends AbstractSimpleServerTest
 {
     private JavaScriptErrorsRule rule;
-    private Set<String> errorsToIgnore;
 
     @Before
     public void setUp()
     {
-        errorsToIgnore = Sets.newHashSet();
-        rule = new JavaScriptErrorsRule()
-        {
-            @Override
-            protected Set<String> getErrorsToIgnore()
-            {
-                return errorsToIgnore;
-            }
-        };
+        rule = new JavaScriptErrorsRule();
     }
 
     @Test
@@ -94,7 +82,7 @@ public class TestCapturingJavaScriptConsoleOutput extends AbstractSimpleServerTe
     @Test
     public void testCanCaptureUntypedErrors()
     {
-        final UntypedErrorPage page = product.visit(UntypedErrorPage.class);
+        product.visit(UntypedErrorPage.class);
         final String consoleOutput = rule.getConsoleOutput();
         assertThat(consoleOutput, containsString("uncaught exception: throw string"));
     }
@@ -102,8 +90,8 @@ public class TestCapturingJavaScriptConsoleOutput extends AbstractSimpleServerTe
     @Test
     public void testCanBeOverriddenToIgnoreSpecificErrors()
     {
-        errorsToIgnore.add("uncaught exception: throw string");
-        final UntypedErrorPage page = product.visit(UntypedErrorPage.class);
+        rule = rule.errorsToIgnore(ImmutableSet.of("uncaught exception: throw string"));
+        product.visit(UntypedErrorPage.class);
         final String consoleOutput = rule.getConsoleOutput();
         assertThat(consoleOutput, isEmptyString());
     }

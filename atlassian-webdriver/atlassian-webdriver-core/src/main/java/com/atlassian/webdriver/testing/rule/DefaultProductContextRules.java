@@ -43,6 +43,7 @@ public final class DefaultProductContextRules
 
         @Inject
         public ForMethod(IgnoreBrowserRule ignoreBrowserRule,
+                         JavaScriptErrorsRule javaScriptErrorsRule,
                          LogPageSourceRule logPageSourceRule,
                          SessionCleanupRule sessionCleanupRule,
                          WebDriverScreenshotRule webDriverScreenshotRule,
@@ -51,6 +52,7 @@ public final class DefaultProductContextRules
             this.chain = RuleChain.outerRule(ignoreBrowserRule)
                     .around(sessionCleanupRule)
                     .around(windowSizeRule)
+                    .around(javaScriptErrorsRule)
                     .around(webDriverScreenshotRule)
                     .around(logPageSourceRule);
         }
