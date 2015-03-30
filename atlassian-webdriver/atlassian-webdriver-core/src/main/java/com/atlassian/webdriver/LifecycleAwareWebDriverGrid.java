@@ -8,6 +8,7 @@ import com.google.common.base.Supplier;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.remote.UnreachableBrowserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -156,6 +157,12 @@ public class LifecycleAwareWebDriverGrid
                     driver.quit();
                     log.debug("Finished shutdown hook {}", this);
                 }
+                catch (NullPointerException e)
+                {
+                    // SELENIUM-247: suppress this error (but log it) since it's likely to be due to a harmless
+                    // known issue where we're trying to clean up resources that the driver already cleaned up.
+                    onQuitError(driver, e);
+                }
                 catch (WebDriverException e)
                 {
                     onQuitError(driver, e);
@@ -167,7 +174,7 @@ public class LifecycleAwareWebDriverGrid
     }
 
 
-    private static void onQuitError(WebDriver webDriver, WebDriverException e)
+    private static void onQuitError(WebDriver webDriver, Exception e)
     {
         // there is no sense propagating the exception, and in 99 cases out of 100, the browser is already dead if an
         // exception happens

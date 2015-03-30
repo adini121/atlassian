@@ -55,8 +55,7 @@ public class TestWebDriverScreenshotRule
 		final String pageSource = "<html>some source</html>";
 		when(webDriver.getPageSource()).thenReturn(pageSource);
         doThrow(new RuntimeException("failed")).when(mockTest).evaluate();
-        final WebDriverScreenshotRule rule = new WebDriverScreenshotRule(Suppliers.ofInstance(webDriver),
-                temporaryFolder.getRoot());
+        final WebDriverScreenshotRule rule = createRule();
         final Description description = Description.createTestDescription(TestWebDriverScreenshotRule.class, "someTest");
         new SafeStatementInvoker(rule.apply(mockTest, description)).invokeSafely();
         assertThat(expectedTargetDir(), isDirectory());
@@ -82,8 +81,7 @@ public class TestWebDriverScreenshotRule
 		when(webDriver.getPageSource()).thenReturn(sourceConents[0]).thenReturn(sourceConents[1]).thenReturn(sourceConents[2]);
 
 		doThrow(new RuntimeException("failed")).when(mockTest).evaluate();
-		final WebDriverScreenshotRule rule = new WebDriverScreenshotRule(Suppliers.ofInstance(webDriver),
-				temporaryFolder.getRoot());
+		final WebDriverScreenshotRule rule = createRule();
 		final Description description = Description.createTestDescription(TestWebDriverScreenshotRule.class, "someTest");
 
 		// test three failures in row
@@ -112,8 +110,7 @@ public class TestWebDriverScreenshotRule
     {
         when(webDriver.getCurrentUrl()).thenReturn("something");
         when(webDriver.getPageSource()).thenReturn("<html>some source</html>");
-        final WebDriverScreenshotRule rule = new WebDriverScreenshotRule(Suppliers.ofInstance(webDriver),
-                temporaryFolder.getRoot());
+        final WebDriverScreenshotRule rule = createRule();
         final Description description = Description.createTestDescription(TestWebDriverScreenshotRule.class, "someTest");
         new SafeStatementInvoker(rule.apply(mockTest, description)).invokeSafely();
         verifyZeroInteractions(webDriver);
@@ -137,5 +134,9 @@ public class TestWebDriverScreenshotRule
         return new File(expectedTargetDir(), name);
     }
 
-
+    private WebDriverScreenshotRule createRule()
+    {
+    	return new WebDriverScreenshotRule(Suppliers.ofInstance(webDriver))
+        		.artifactDir(temporaryFolder.getRoot());
+    }
 }

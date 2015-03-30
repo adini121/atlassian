@@ -8,16 +8,17 @@ import com.atlassian.webdriver.it.pageobjects.page.jsconsolelogging.IncludedScri
 import com.atlassian.webdriver.it.pageobjects.page.jsconsolelogging.NoErrorsPage;
 import com.atlassian.webdriver.it.pageobjects.page.jsconsolelogging.UntypedErrorPage;
 import com.atlassian.webdriver.it.pageobjects.page.jsconsolelogging.WindowErrorPage;
-import com.atlassian.webdriver.testing.rule.LogConsoleOutputRule;
+import com.atlassian.webdriver.testing.rule.JavaScriptErrorsRule;
+import com.google.common.collect.ImmutableSet;
+
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.openqa.selenium.WebDriver;
-
-import javax.inject.Inject;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
 
 /**
@@ -27,10 +28,15 @@ import static org.hamcrest.Matchers.not;
  * The tests only work in Firefox, since the rule uses a Firefox extension to get the output.
  */
 @RequireBrowser(Browser.FIREFOX)
-public class TestLogConsoleOutput extends AbstractSimpleServerTest
+public class TestCapturingJavaScriptConsoleOutput extends AbstractSimpleServerTest
 {
-    @Inject private WebDriver driver;
-    @Inject private LogConsoleOutputRule rule;
+    private JavaScriptErrorsRule rule;
+
+    @Before
+    public void setUp()
+    {
+        rule = new JavaScriptErrorsRule();
+    }
 
     @Test
     public void testPageWithNoErrors()
@@ -76,11 +82,19 @@ public class TestLogConsoleOutput extends AbstractSimpleServerTest
     @Test
     public void testCanCaptureUntypedErrors()
     {
-        final UntypedErrorPage page = product.visit(UntypedErrorPage.class);
+        product.visit(UntypedErrorPage.class);
         final String consoleOutput = rule.getConsoleOutput();
         assertThat(consoleOutput, containsString("uncaught exception: throw string"));
     }
 
+    @Test
+    public void testCanBeOverriddenToIgnoreSpecificErrors()
+    {
+        rule = rule.errorsToIgnore(ImmutableSet.of("uncaught exception: throw string"));
+        product.visit(UntypedErrorPage.class);
+        final String consoleOutput = rule.getConsoleOutput();
+        assertThat(consoleOutput, isEmptyString());
+    }
 
     @Ignore("The JSErrorCollector plugin currently cannot capture console errors")
     @Test

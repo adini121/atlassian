@@ -44,6 +44,11 @@ public class WebDriverScreenshotRule extends TestWatcher
         this(new WebDriverDebug(checkNotNull(support, "support").getDriver()), artifactDir);
     }
 
+    /**
+     * @deprecated  Will be removed in version 3.0; instead, use one of the other constructors to set the driver,
+     *   then call {@link #artifactDir(File)} 
+     */
+    @Deprecated
     public WebDriverScreenshotRule(@Nonnull Supplier<? extends WebDriver> driverSupplier, @Nonnull File artifactDir)
     {
         this(WebDriverSupport.forSupplier(driverSupplier), artifactDir);
@@ -72,7 +77,16 @@ public class WebDriverScreenshotRule extends TestWatcher
         this(WebDriverSupport.fromAutoInstall(), defaultArtifactDir());
     }
 
-
+    /**
+     * Returns a copy of this rule, specifying a different artifact directory than the default.
+     * @param artifactDir  the directory in which screenshots should be stored
+     * @return  a new WebDriverScreenshotRule based on the current instance
+     * @since 2.3
+     */
+    public WebDriverScreenshotRule artifactDir(File artifactDir)
+    {
+        return new WebDriverScreenshotRule(this.debug, artifactDir);
+    }
 
     @Override
     protected void starting(@Nonnull final Description description)
