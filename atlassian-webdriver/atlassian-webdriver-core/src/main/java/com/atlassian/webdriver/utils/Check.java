@@ -2,7 +2,11 @@ package com.atlassian.webdriver.utils;
 
 import com.atlassian.annotations.PublicApi;
 import com.atlassian.webdriver.Elements;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.SearchContext;
+import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.WebElement;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -99,6 +103,6 @@ public final class Check
     {
         checkNotNull(element, "element");
 
-        return Elements.hasCssClass(className, element.getAttribute(Elements.CLASS_ATTRIBUTE));
+        return Elements.hasCssClass(className, element.getAttribute(Elements.ATTRIBUTE_CLASS));
     }
 }

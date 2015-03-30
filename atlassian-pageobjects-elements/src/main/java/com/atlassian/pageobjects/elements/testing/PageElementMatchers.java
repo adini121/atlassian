@@ -123,6 +123,27 @@ public final class PageElementMatchers
     @Nonnull
     public static Matcher<PageElement> withIdThat(@Nonnull Matcher<String> idMatcher)
     {
-        return withAttributeThat(Elements.ID_ATTRIBUTE, idMatcher);
+        return withAttributeThat(Elements.ATTRIBUTE_ID, idMatcher);
+    }
+
+    @Nonnull
+    public static Matcher<PageElement> withText(@Nullable String expectedText)
+    {
+        return withTextThat(is(expectedText));
+    }
+
+    @Nonnull
+    public static Matcher<PageElement> withTextThat(@Nonnull Matcher<String> textMatcher)
+    {
+        checkNotNull(textMatcher, "textMatcher");
+
+        return new FeatureMatcher<PageElement, String>(textMatcher, "text", "text")
+        {
+            @Override
+            protected String featureValueOf(PageElement actual)
+            {
+                return actual.getText();
+            }
+        };
     }
 }

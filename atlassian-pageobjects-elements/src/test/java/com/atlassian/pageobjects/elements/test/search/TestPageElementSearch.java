@@ -29,10 +29,12 @@ import static com.atlassian.pageobjects.elements.testing.PageElementMatchers.wit
 import static com.atlassian.pageobjects.elements.testing.PageElementMatchers.withClass;
 import static com.atlassian.pageobjects.elements.testing.PageElementMatchers.withDataAttribute;
 import static com.atlassian.pageobjects.elements.testing.PageElementMatchers.withId;
+import static com.atlassian.pageobjects.elements.testing.PageElementMatchers.withText;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.emptyIterable;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.everyItem;
+import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
@@ -177,6 +179,25 @@ public class TestPageElementSearch extends AbstractPageElementBrowserTest
         PageElement element = findFirst(result);
         assertTrue(element.isPresent());
         assertEquals("Yes-1", element.getText());
+    }
+
+    @Test
+    public void findMergeMultipleDomBranches()
+    {
+        SearchQuery.DefaultResult result = page.search()
+                .by(id("parent-1"))
+                .by(className("parent-2-class"))
+                .by(tagName("ul"))
+                .by(tagName("li"))
+                .find();
+
+        assertResultStrict(result, Matchers.<PageElement>iterableWithSize(5));
+        assertResultStrict(result, hasItems(
+                withText("WRONG!"),
+                withText("No"),
+                withText("Yes-1"),
+                withText("Yes-2"))
+        );
     }
 
     // TODO more nested tests (incl. dynamic changing list)

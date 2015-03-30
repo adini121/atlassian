@@ -13,7 +13,7 @@ import javax.annotation.Nonnull;
 import javax.inject.Inject;
 import java.util.Set;
 
-import static com.atlassian.webdriver.Elements.ID_ATTRIBUTE;
+import static com.atlassian.webdriver.Elements.ATTRIBUTE_ID;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -70,7 +70,7 @@ public class WebDriverTimedElement implements TimedElement
     @Override
     public TimedQuery<String> getId()
     {
-        return queryFactory.getAttribute(ID_ATTRIBUTE);
+        return queryFactory.getAttribute(ATTRIBUTE_ID);
     }
 
     @Nonnull

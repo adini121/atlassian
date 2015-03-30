@@ -4,7 +4,7 @@
     <title>Test page for page element search</title>
     <script src="../js/jquery-1.4.2.min.js"></script>
     <script>
-        // TODO dynamic list
+        // TODO script to handle tostate2 and tostate3
     </script>
 </head>
 <body id="page-element-search-page">
@@ -70,6 +70,27 @@
     <input type="checkbox" id="checkbox-1" value="checkbox-1" checked />
     <input type="checkbox" id="checkbox-2" value="checkbox-2" />
     <input type="checkbox" id="checkbox-3" value="checkbox-3" />
+</div>
+
+<h2>Nested search with async update</h2>
+<div id="async-update-parent">
+    <button id="to-state-2" value="To state 2">To state 2</button>
+    <button id="to-state-3" value="To state 3">To state 3</button>
+    <div class="async-parent-level-2-class">
+        <ul>
+            <li data-state="1" class="position-one">one</li>
+            <li data-state="1" class="position-two">two</li>
+            <li data-state="1" class="position-three">three</li>
+        </ul>
+    </div>
+
+    <div class="async-parent-level-2-class">
+        <ul>
+            <li data-state="1" class="position-one">one</li>
+            <li data-state="1" class="position-two">two</li>
+            <li data-state="1" class="position-three">three</li>
+        </ul>
+    </div>
 </div>
 
 </body>

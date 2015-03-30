@@ -11,16 +11,16 @@ import javax.annotation.Nonnull;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Predicates and functions for easier usage of {@link PageElement}s.
+ * Predicates and functions for easier usage of {@link PageElement page elements}.
  *
  * @since 2.3
  */
 @PublicApi
 public final class PageElements
 {
-    public static final String BODY = Elements.BODY_TAG;
-    public static final String TR = Elements.TR_TAG;
-    public static final String TD = Elements.TD_TAG;
+    public static final String BODY = Elements.TAG_BODY;
+    public static final String TR = Elements.TAG_TR;
+    public static final String TD = Elements.TAG_TD;
 
     public static final String DATA_PREFIX = "data-";
 

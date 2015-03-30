@@ -22,8 +22,8 @@ import javax.inject.Inject;
 import java.util.List;
 import java.util.Set;
 
-import static com.atlassian.webdriver.Elements.CLASS_ATTRIBUTE;
-import static com.atlassian.webdriver.Elements.ID_ATTRIBUTE;
+import static com.atlassian.webdriver.Elements.ATTRIBUTE_CLASS;
+import static com.atlassian.webdriver.Elements.ATTRIBUTE_ID;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -178,14 +178,14 @@ public class WebDriverElement implements PageElement
     @Override
     public String getId()
     {
-        return getAttribute(ID_ATTRIBUTE);
+        return getAttribute(ATTRIBUTE_ID);
     }
 
     @Nonnull
     @Override
     public Set<String> getCssClasses()
     {
-        return Elements.getCssClasses(getAttribute(CLASS_ATTRIBUTE));
+        return Elements.getCssClasses(getAttribute(ATTRIBUTE_CLASS));
     }
 
     public boolean hasClass(@Nonnull final String className)

@@ -17,19 +17,23 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * Utilities related to manipulating/querying of web elements (of any sort).
  * <p/>
- * NOTE: this class does not directly depend on any flavour of elements (e.g. WebDriver's {@link Elements}).
+ * NOTE: this class does not directly depend on any flavour of elements (e.g. WebDriver's
+ * {@link org.openqa.selenium.WebElement}).
  *
  * @since 2.3
  */
 @PublicApi
 public final class Elements
 {
-    public static final String BODY_TAG = "body";
-    public static final String TR_TAG = "tr";
-    public static final String TD_TAG = "td";
+    public static final String TAG_BODY = "body";
+    public static final String TAG_DIV = "div";
+    public static final String TAG_TR = "tr";
+    public static final String TAG_TD = "td";
+    public static final String TAG_UL = "ul";
+    public static final String TAG_LI = "li";
 
-    public static final String CLASS_ATTRIBUTE = "class";
-    public static final String ID_ATTRIBUTE = "id";
+    public static final String ATTRIBUTE_CLASS = "class";
+    public static final String ATTRIBUTE_ID = "id";
 
     private Elements()
     {

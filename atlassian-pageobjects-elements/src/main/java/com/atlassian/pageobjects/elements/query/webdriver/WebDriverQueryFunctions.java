@@ -5,12 +5,16 @@ import com.atlassian.webdriver.Elements;
 import com.atlassian.webdriver.utils.Check;
 import com.google.common.base.Function;
 import com.google.common.base.Supplier;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.Point;
+import org.openqa.selenium.SearchContext;
+import org.openqa.selenium.WebElement;
 
 import javax.annotation.Nonnull;
 import java.util.Set;
 
-import static com.atlassian.webdriver.Elements.CLASS_ATTRIBUTE;
+import static com.atlassian.webdriver.Elements.ATTRIBUTE_CLASS;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -199,7 +203,7 @@ public final class WebDriverQueryFunctions
         {
             public Set<String> apply(WebElement from)
             {
-                return Elements.getCssClasses(from.getAttribute(CLASS_ATTRIBUTE));
+                return Elements.getCssClasses(from.getAttribute(ATTRIBUTE_CLASS));
             }
         };
     }
