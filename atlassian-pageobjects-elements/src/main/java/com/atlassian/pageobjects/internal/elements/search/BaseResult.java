@@ -78,7 +78,7 @@ abstract class BaseResult<E, R extends SearchQuery.Result<E, R>> implements Sear
     @Override
     public <F> SearchQuery.AnyResult<F> transform(@Nonnull Function<E, F> transformer)
     {
-        return new TransformingResult<>(this, transformer, timeoutType, dependencies);
+        return new TransformingResult<F, E>(this, transformer, timeoutType, dependencies);
     }
 
     @Nonnull
@@ -87,7 +87,7 @@ abstract class BaseResult<E, R extends SearchQuery.Result<E, R>> implements Sear
     {
         Function<E, PO> transformer = PageObjects.bindTo(dependencies.pageBinder, pageObjectClass, extraArgs);
 
-        return new TransformingResult<>(this, transformer, timeoutType, dependencies);
+        return new TransformingResult<PO, E>(this, transformer, timeoutType, dependencies);
     }
 
     @Nonnull

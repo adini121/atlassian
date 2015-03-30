@@ -50,21 +50,21 @@ class WebDriverElementResult<PE extends PageElement> extends BaseResult<PE, Sear
     @Override
     public SearchQuery.PageElementResult<PE> withTimeout(@Nonnull TimeoutType timeoutType)
     {
-        return new WebDriverElementResult<>(root, searchQueue, pageElementClass, timeoutType, filter, dependencies);
+        return new WebDriverElementResult<PE>(root, searchQueue, pageElementClass, timeoutType, filter, dependencies);
     }
 
     @Nonnull
     @Override
     public <PEE extends PE> SearchQuery.PageElementResult<PEE> as(@Nonnull Class<PEE> pageElementClass)
     {
-        return new WebDriverElementResult<>(root, searchQueue, pageElementClass, timeoutType, filter, dependencies);
+        return new WebDriverElementResult<PEE>(root, searchQueue, pageElementClass, timeoutType, filter, dependencies);
     }
 
     @Nonnull
     @Override
     public SearchQuery.PageElementResult<PE> filter(@Nonnull Predicate<? super PE> filter)
     {
-        return new WebDriverElementResult<>(root, searchQueue, pageElementClass, timeoutType,
+        return new WebDriverElementResult<PE>(root, searchQueue, pageElementClass, timeoutType,
                 Predicates.and(this.filter, filter), dependencies);
     }
 

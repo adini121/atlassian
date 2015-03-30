@@ -25,13 +25,13 @@ abstract class BaseAnyResult<E> extends BaseResult<E, SearchQuery.AnyResult<E>>
     @Override
     public SearchQuery.AnyResult<E> filter(@Nonnull Predicate<? super E> filter)
     {
-        return new FilteringResult<>(this, filter, timeoutType, dependencies);
+        return new FilteringResult<E>(this, filter, timeoutType, dependencies);
     }
 
     @Nonnull
     @Override
     public SearchQuery.AnyResult<E> filter(@Nonnull Matcher<? super E> filter)
     {
-        return new FilteringResult<>(this, newMatcherPredicate(filter), timeoutType, dependencies);
+        return new FilteringResult<E>(this, newMatcherPredicate(filter), timeoutType, dependencies);
     }
 }
