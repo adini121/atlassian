@@ -2,6 +2,7 @@ package com.atlassian.pageobjects.elements.test.search;
 
 import com.atlassian.pageobjects.elements.CheckboxElement;
 import com.atlassian.pageobjects.elements.PageElement;
+import com.atlassian.pageobjects.elements.PageElementFinder;
 import com.atlassian.pageobjects.elements.WebDriverElement;
 import com.atlassian.pageobjects.elements.search.PageElementSearch;
 import com.atlassian.pageobjects.elements.search.SearchQuery;
@@ -10,8 +11,10 @@ import com.atlassian.pageobjects.elements.test.pageobjects.page.PageElementSearc
 import com.atlassian.pageobjects.elements.timeout.TimeoutType;
 import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
+import org.openqa.selenium.By;
 
 import javax.inject.Inject;
 
@@ -27,6 +30,7 @@ import static com.atlassian.pageobjects.elements.testing.PageElementMatchers.wit
 import static com.atlassian.pageobjects.elements.testing.PageElementMatchers.withDataAttribute;
 import static com.atlassian.pageobjects.elements.testing.PageElementMatchers.withId;
 import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.emptyIterable;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.everyItem;
 import static org.hamcrest.Matchers.is;
@@ -45,13 +49,16 @@ public class TestPageElementSearch extends AbstractPageElementBrowserTest
     @Inject
     private PageElementSearch page;
 
+    @Inject
+    private PageElementFinder elementFinder;
+
+    private PageElementSearchPage searchPage;
+
     @Before
     public void goToElementSearchPage()
     {
-        product.visit(PageElementSearchPage.class);
+        searchPage = product.visit(PageElementSearchPage.class);
     }
-
-    // TODO test search multiple levels from non-existing element - no wait, no exception
 
     @Test
     public void shouldFindSinglePageElementById()
@@ -72,6 +79,19 @@ public class TestPageElementSearch extends AbstractPageElementBrowserTest
     }
 
     @Test
+    public void shouldReturnEmptyImmediatelyWhenSearchingFromNotExistingRoot()
+    {
+        Iterable<PageElement> result = elementFinder.find(By.id("no-such-id")).search()
+                .by(id("nested-id"))
+                .by(tagName("ul"))
+                .by(tagName("li")).filter(hasDataAttribute("pick-me"))
+                .find()
+                .all();
+
+        assertThat(result, emptyIterable());
+    }
+
+    @Test
     public void shouldFindRowsWithFilter()
     {
         SearchQuery.PageElementResult<PageElement> result = page.search()
@@ -85,6 +105,17 @@ public class TestPageElementSearch extends AbstractPageElementBrowserTest
                 withDataAttribute("name", "Even Row 2"),
                 withDataAttribute("name", "Even Row 3")
         ));
+    }
+
+    @Test
+    public void shouldFindRowsFromTableRoot()
+    {
+        Iterable<PageElement> result = searchPage.getTableRoot().search()
+                .by(id("the-table"))
+                .by(tagName("tr"))
+                .find().all();
+
+        assertThat(result, Matchers.<PageElement>iterableWithSize(7));
     }
 
     @Test

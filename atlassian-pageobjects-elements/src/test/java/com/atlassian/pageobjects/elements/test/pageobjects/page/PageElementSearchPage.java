@@ -15,6 +15,9 @@ public class PageElementSearchPage implements Page
     @ElementBy(tagName = PageElements.BODY)
     protected PageElement body;
 
+    @ElementBy(id = "table-list")
+    private PageElement tableRoot;
+
     @Override
     public String getUrl()
     {
@@ -25,5 +28,10 @@ public class PageElementSearchPage implements Page
     public void waitForPageLoad()
     {
         Poller.waitUntilTrue(body.timed().hasAttribute("id", "page-element-search-page"));
+    }
+
+    public PageElement getTableRoot()
+    {
+        return tableRoot;
     }
 }

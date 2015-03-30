@@ -2,13 +2,19 @@ package com.atlassian.pageobjects.elements;
 
 import com.atlassian.annotations.Internal;
 import com.atlassian.pageobjects.PageBinder;
+import com.atlassian.pageobjects.elements.search.SearchQuery;
 import com.atlassian.pageobjects.elements.timeout.TimeoutType;
 import com.atlassian.pageobjects.elements.timeout.Timeouts;
+import com.atlassian.pageobjects.internal.elements.search.WebDriverElementSearchQuery;
 import com.atlassian.webdriver.Elements;
 import com.atlassian.webdriver.utils.Check;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.Point;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -345,6 +351,13 @@ public class WebDriverElement implements PageElement
             return this;
         }
         return pageBinder.bind(WebDriverElement.class, locatable, checkNotNull(timeoutType));
+    }
+
+    @Nonnull
+    @Override
+    public SearchQuery search()
+    {
+        return pageBinder.bind(WebDriverElementSearchQuery.class, locatable, defaultTimeout);
     }
 
     /**

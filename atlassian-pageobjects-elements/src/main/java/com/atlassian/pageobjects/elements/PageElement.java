@@ -1,6 +1,7 @@
 package com.atlassian.pageobjects.elements;
 
 import com.atlassian.annotations.PublicApi;
+import com.atlassian.pageobjects.elements.search.PageElementSearch;
 import com.atlassian.pageobjects.elements.timeout.TimeoutType;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
@@ -17,7 +18,7 @@ import java.util.Set;
  * @since 2.0
  */
 @PublicApi
-public interface PageElement extends PageElementFinder
+public interface PageElement extends PageElementFinder, PageElementSearch
 {
     /**
      * Whether this element is currently on the DOM of the page
