@@ -37,6 +37,16 @@ public interface InjectionContext
      * Execute injection of fields on given <tt>targetInstance</tt>
      *
      * @param targetInstance instance to inject into
+     * @deprecated in 2.3 for removal in 3.0. Use {@link #inject(Object)} instead
      */
+    @Deprecated
     public void injectMembers(@Nonnull Object targetInstance);
+
+    /**
+     * Execute injection of fields on {@code targetInstance}
+     *
+     * @param target instance to inject into
+     */
+    @Nonnull
+    public <T> T inject(@Nonnull T target);
 }

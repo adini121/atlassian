@@ -72,6 +72,13 @@ public final class ClassInjectionRule<P extends TestedProduct<?>> implements Inj
     @Override
     public void injectMembers(@Nonnull Object targetInstance)
     {
-        injectionContext().injectMembers(targetInstance);
+        injectionContext().inject(targetInstance);
+    }
+
+    @Nonnull
+    @Override
+    public <T> T inject(@Nonnull T target)
+    {
+        return injectionContext().inject(target);
     }
 }

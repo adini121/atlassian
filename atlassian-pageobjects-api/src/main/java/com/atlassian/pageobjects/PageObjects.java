@@ -1,10 +1,12 @@
 package com.atlassian.pageobjects;
 
+import com.atlassian.annotations.PublicApi;
 import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.ObjectArrays;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -13,11 +15,33 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  * @since 2.3
  */
+@PublicApi
 public final class PageObjects
 {
     private PageObjects()
     {
         throw new AssertionError("Do not instantiate " + getClass().getSimpleName());
+    }
+
+    /**
+     * Version of {@link #bindTo(PageBinder, Class, Class, Object...)} for where there's no explicit input type.
+     *
+     * @param binder page binder
+     * @param pageObjectClass target page object class
+     * @param extraArguments extra arguments to use when binding each page object
+     * @param <E> input type
+     * @param <PO> wrapping object type
+     *
+     * @return page binding function
+     *
+     * @see #bindTo(PageBinder, Class, Object...)
+     */
+    @Nonnull
+    public static <E, PO> Function<E, PO> bindTo(@Nonnull final PageBinder binder,
+                                                 @Nonnull final Class<PO> pageObjectClass,
+                                                 @Nonnull final Object... extraArguments)
+    {
+        return bindTo(binder, null, pageObjectClass, extraArguments);
     }
 
     /**
@@ -29,6 +53,7 @@ public final class PageObjects
      * the extra parameters as provided by {@code extraArguments}.
      *
      * @param binder page binder
+     * @param inputType source class to use this method more conveniently
      * @param pageObjectClass target page object class
      * @param extraArguments extra arguments to use when binding each page object
      * @param <E> input type
@@ -40,6 +65,7 @@ public final class PageObjects
      */
     @Nonnull
     public static <E, PO> Function<E, PO> bindTo(@Nonnull final PageBinder binder,
+                                                 @Nullable final Class<E> inputType,
                                                  @Nonnull final Class<PO> pageObjectClass,
                                                  @Nonnull final Object... extraArguments)
     {

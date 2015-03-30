@@ -1,5 +1,7 @@
 package com.atlassian.pageobjects.elements;
 
+import com.atlassian.pageobjects.elements.search.PageElementSearch;
+import com.atlassian.pageobjects.internal.elements.search.GlobalPageElementSearch;
 import com.google.inject.Binder;
 import com.google.inject.Module;
 
@@ -12,5 +14,6 @@ public class ElementModule implements Module
     {
         binder.bind(ElementByPostInjectionProcessor.class);
         binder.bind(PageElementFinder.class).to(GlobalElementFinder.class);
+        binder.bind(PageElementSearch.class).to(GlobalPageElementSearch.class);
     }
 }

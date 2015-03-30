@@ -10,16 +10,34 @@ import com.atlassian.pageobjects.elements.test.pageobjects.page.PageElementSearc
 import com.atlassian.pageobjects.elements.timeout.TimeoutType;
 import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
+import org.junit.Before;
 import org.junit.Test;
 
 import javax.inject.Inject;
 
-import static com.atlassian.pageobjects.elements.PageElements.*;
+import static com.atlassian.pageobjects.elements.PageElements.getDataAttribute;
+import static com.atlassian.pageobjects.elements.PageElements.hasClass;
+import static com.atlassian.pageobjects.elements.PageElements.hasDataAttribute;
 import static com.atlassian.pageobjects.elements.query.Poller.waitUntil;
-import static com.atlassian.pageobjects.elements.testing.PageElementMatchers.*;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-import static org.openqa.selenium.By.*;
+import static com.atlassian.pageobjects.elements.query.Poller.waitUntilTrue;
+import static com.atlassian.pageobjects.elements.testing.PageElementMatchers.asMatcherOf;
+import static com.atlassian.pageobjects.elements.testing.PageElementMatchers.isChecked;
+import static com.atlassian.pageobjects.elements.testing.PageElementMatchers.withAttribute;
+import static com.atlassian.pageobjects.elements.testing.PageElementMatchers.withClass;
+import static com.atlassian.pageobjects.elements.testing.PageElementMatchers.withDataAttribute;
+import static com.atlassian.pageobjects.elements.testing.PageElementMatchers.withId;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.everyItem;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.openqa.selenium.By.className;
+import static org.openqa.selenium.By.id;
+import static org.openqa.selenium.By.tagName;
 
 @SuppressWarnings("unchecked")
 public class TestPageElementSearch extends AbstractPageElementBrowserTest
@@ -27,6 +45,7 @@ public class TestPageElementSearch extends AbstractPageElementBrowserTest
     @Inject
     private PageElementSearch page;
 
+    @Before
     public void goToElementSearchPage()
     {
         product.visit(PageElementSearchPage.class);
@@ -41,6 +60,7 @@ public class TestPageElementSearch extends AbstractPageElementBrowserTest
                 .by(id("single-element"))
                 .find().first();
 
+        assertNotNull(result);
         assertTrue(result.isPresent());
         assertEquals("single-element", result.getAttribute("id"));
     }
@@ -109,22 +129,23 @@ public class TestPageElementSearch extends AbstractPageElementBrowserTest
 
         assertResult(result, contains(
                 rowWithName("Even Row 1"),
-                rowWithName("Eeven Row 2"),
-                rowWithName("Eeven Row 3")));
+                rowWithName("Even Row 2"),
+                rowWithName("Even Row 3")));
     }
 
     @Test
     public void findFirstNestedElement()
     {
-        PageElement result = page.search()
+        SearchQuery.DefaultResult result = page.search()
                 .by(id("parent-1"))
                 .by(className("parent-2-class")).filter(hasDataAttribute("find-me"))
                 .by(tagName("ul"))
                 .by(tagName("li")).filter(withDataAttribute("pick-me", "yes"))
-                .find().first();
+                .find();
 
-        assertTrue(result.isPresent());
-        assertEquals("Yes-1", result.getText());
+        PageElement element = findFirst(result);
+        assertTrue(element.isPresent());
+        assertEquals("Yes-1", element.getText());
     }
 
     // TODO more nested tests (incl. dynamic changing list)
@@ -161,16 +182,23 @@ public class TestPageElementSearch extends AbstractPageElementBrowserTest
 
     private static <R> void assertResult(SearchQuery.Result<R, ?> result, Matcher<Iterable<? extends R>> matcher)
     {
+        waitUntil(result.timed(), matcher);
         assertThat(result.all(), matcher);
         assertThat(result.supplier().get(), matcher);
-        waitUntil(result.timed(), matcher);
     }
 
     private static <R> void assertResultStrict(SearchQuery.Result<R, ?> result, Matcher<Iterable<R>> matcher)
     {
+        waitUntil(result.timed(), matcher);
         assertThat(result.all(), matcher);
         assertThat(result.supplier().get(), matcher);
-        waitUntil(result.timed(), matcher);
+    }
+
+    private static PageElement findFirst(SearchQuery.DefaultResult result)
+    {
+        waitUntilTrue(result.hasResult());
+
+        return result.first();
     }
 
     private static Matcher<PageElement> hasTimeoutType(TimeoutType expectedTimeout)

@@ -18,7 +18,7 @@ public class PageElementSearchPage implements Page
     @Override
     public String getUrl()
     {
-        return "/html/elements.html";
+        return "/html/page-element-search.html";
     }
 
     @WaitUntil

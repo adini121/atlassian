@@ -2,6 +2,7 @@ package com.atlassian.pageobjects.elements.search;
 
 import com.atlassian.annotations.PublicApi;
 import com.atlassian.pageobjects.elements.PageElement;
+import com.atlassian.pageobjects.elements.query.TimedCondition;
 import com.atlassian.pageobjects.elements.query.TimedQuery;
 import com.atlassian.pageobjects.elements.timeout.TimeoutType;
 import com.google.common.base.Function;
@@ -11,6 +12,7 @@ import org.hamcrest.Matcher;
 import org.openqa.selenium.By;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Represents a hierarchical query to find one or more DOM elements on the tested page.
@@ -34,12 +36,20 @@ public interface SearchQuery
     SearchQuery filter(@Nonnull Matcher<? super PageElement> filter);
 
     @Nonnull
-    PageElementResult<PageElement> find();
+    DefaultResult find();
 
     interface Result<E, R extends Result<E, R>>
     {
-        @Nonnull
+        /**
+         * First element, or {@code null}, if no result present.
+         *
+         * @return first element found by the search query
+         */
+        @Nullable
         E first();
+
+        @Nonnull
+        TimedCondition hasResult();
 
         @Nonnull
         Iterable<E> all();
@@ -73,4 +83,6 @@ public interface SearchQuery
         @Nonnull
         <PEE extends PE> PageElementResult<PEE> as(@Nonnull Class<PEE> pageElementClass);
     }
+
+    interface DefaultResult extends PageElementResult<PageElement> {}
 }
