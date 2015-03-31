@@ -8,9 +8,6 @@ import com.atlassian.pageobjects.elements.PageElements;
 import com.atlassian.pageobjects.elements.query.Poller;
 import org.openqa.selenium.By;
 
-/**
- * Represents the elements.html
- */
 public class PageElementSearchPage implements Page
 {
     @ElementBy(tagName = PageElements.BODY)
