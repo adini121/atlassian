@@ -6,6 +6,7 @@ import com.atlassian.pageobjects.elements.ElementBy;
 import com.atlassian.pageobjects.elements.PageElement;
 import com.atlassian.pageobjects.elements.PageElements;
 import com.atlassian.pageobjects.elements.query.Poller;
+import org.openqa.selenium.By;
 
 /**
  * Represents the elements.html
@@ -17,6 +18,9 @@ public class PageElementSearchPage implements Page
 
     @ElementBy(id = "table-list")
     private PageElement tableRoot;
+
+    @ElementBy(id = "async-update-parent")
+    private PageElement asyncRoot;
 
     @Override
     public String getUrl()
@@ -33,5 +37,19 @@ public class PageElementSearchPage implements Page
     public PageElement getTableRoot()
     {
         return tableRoot;
+    }
+
+    public PageElement getAsyncRoot() {
+        return asyncRoot;
+    }
+
+    public PageElementSearchPage clickAsyncButton(int buttonNumber) {
+        findAsyncButton(buttonNumber).click();
+
+        return this;
+    }
+
+    protected PageElement findAsyncButton(int number) {
+        return asyncRoot.find(By.id("async-to-state-" + number));
     }
 }

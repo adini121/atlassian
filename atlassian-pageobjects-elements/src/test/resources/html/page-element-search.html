@@ -4,7 +4,27 @@
     <title>Test page for page element search</title>
     <script src="../js/jquery-1.4.2.min.js"></script>
     <script>
-        // TODO script to handle tostate2 and tostate3
+        $(document).ready(function() {
+            // everything back to 1
+            $('#async-to-state-1').click(function() {
+                setTimeout(function() {
+                    $('.async-parent-level-2-class li').attr('data-state', '1');
+                }, 100)
+
+            });
+            // all position-two elements to state 2
+            $('#async-to-state-2').click(function() {
+                setTimeout(function() {
+                    $('.async-parent-level-2-class .position-two').attr('data-state', '2');
+                }, 100)
+            });
+            // all position-three elements to state 3
+            $('#async-to-state-3').click(function() {
+                setTimeout(function() {
+                    $('.async-parent-level-2-class .position-three').attr('data-state', '3');
+                }, 100)
+            });
+        });
     </script>
 </head>
 <body id="page-element-search-page">
@@ -74,8 +94,9 @@
 
 <h2>Nested search with async update</h2>
 <div id="async-update-parent">
-    <button id="to-state-2" value="To state 2">To state 2</button>
-    <button id="to-state-3" value="To state 3">To state 3</button>
+    <button id="async-to-state-1" value="To state 1">To state 1</button>
+    <button id="async-to-state-2" value="To state 2">To state 2</button>
+    <button id="async-to-state-3" value="To state 3">To state 3</button>
     <div class="async-parent-level-2-class">
         <ul>
             <li data-state="1" class="position-one">one</li>

@@ -4,6 +4,7 @@ import com.atlassian.pageobjects.elements.CheckboxElement;
 import com.atlassian.pageobjects.elements.PageElement;
 import com.atlassian.pageobjects.elements.PageElementFinder;
 import com.atlassian.pageobjects.elements.WebDriverElement;
+import com.atlassian.pageobjects.elements.query.TimedQuery;
 import com.atlassian.pageobjects.elements.search.PageElementSearch;
 import com.atlassian.pageobjects.elements.search.SearchQuery;
 import com.atlassian.pageobjects.elements.test.AbstractPageElementBrowserTest;
@@ -200,7 +201,22 @@ public class TestPageElementSearch extends AbstractPageElementBrowserTest
         );
     }
 
-    // TODO more nested tests (incl. dynamic changing list)
+    @Test
+    public void shouldWaitForSearchResultsToMatch() {
+        TimedQuery<Iterable<PageElement>> result = searchPage.getAsyncRoot().search()
+                .by(className("async-parent-level-2-class"))
+                .by(tagName("li"), hasDataAttribute("state", "2"))
+                .find().timed();
+        waitUntil(result, emptyIterable());
+
+        // switch to state-2
+        searchPage.clickAsyncButton(2);
+        waitUntil(result, Matchers.<PageElement>iterableWithSize(2));
+
+        // reset back to state-1
+        searchPage.clickAsyncButton(1);
+        waitUntil(result, emptyIterable());
+    }
 
     @Test
     public void shouldAssignCustomTimeoutType()
