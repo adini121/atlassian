@@ -6,6 +6,7 @@ import com.atlassian.pageobjects.elements.WebDriverElement;
 import com.atlassian.pageobjects.elements.WebDriverLocatable;
 import com.atlassian.pageobjects.elements.WebDriverLocators;
 import com.atlassian.pageobjects.elements.search.SearchQuery;
+import com.atlassian.pageobjects.elements.search.SearchResult;
 import com.atlassian.pageobjects.elements.timeout.TimeoutType;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
@@ -90,7 +91,7 @@ public final class WebDriverElementSearchQuery implements SearchQuery
 
     @Nonnull
     @Override
-    public DefaultResult find()
+    public SearchResult find()
     {
         return new DefaultWebDriverElementResult(root, searchQueue, timeoutType, dependencies);
     }

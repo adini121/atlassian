@@ -7,6 +7,7 @@ import com.atlassian.pageobjects.elements.WebDriverElement;
 import com.atlassian.pageobjects.elements.query.TimedQuery;
 import com.atlassian.pageobjects.elements.search.PageElementSearch;
 import com.atlassian.pageobjects.elements.search.SearchQuery;
+import com.atlassian.pageobjects.elements.search.SearchResult;
 import com.atlassian.pageobjects.elements.test.AbstractPageElementBrowserTest;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.PageElementSearchPage;
 import com.atlassian.pageobjects.elements.timeout.TimeoutType;
@@ -170,7 +171,7 @@ public class TestPageElementSearch extends AbstractPageElementBrowserTest
     @Test
     public void findFirstNestedElement()
     {
-        SearchQuery.DefaultResult result = page.search()
+        SearchResult result = page.search()
                 .by(id("parent-1"))
                 .by(className("parent-2-class")).filter(hasDataAttribute("find-me"))
                 .by(tagName("ul"))
@@ -185,7 +186,7 @@ public class TestPageElementSearch extends AbstractPageElementBrowserTest
     @Test
     public void findMergeMultipleDomBranches()
     {
-        SearchQuery.DefaultResult result = page.search()
+        SearchResult result = page.search()
                 .by(id("parent-1"))
                 .by(className("parent-2-class"))
                 .by(tagName("ul"))
@@ -262,7 +263,7 @@ public class TestPageElementSearch extends AbstractPageElementBrowserTest
         assertThat(result.supplier().get(), matcher);
     }
 
-    private static PageElement findFirst(SearchQuery.DefaultResult result)
+    private static PageElement findFirst(SearchResult result)
     {
         waitUntilTrue(result.hasResult());
 
