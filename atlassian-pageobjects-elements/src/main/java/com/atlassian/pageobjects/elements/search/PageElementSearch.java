@@ -128,10 +128,10 @@ import javax.annotation.Nonnull;
  *              .by(By.tagName("li")) // can also use Elements.TAG_LI here
  *                  .filter(isVisible()) // from PageElements
  *                  .filter(hasClass("user-element")) // from PageElements
- *              .by(By.tagName("span"), hasDataAttribute("data-username")) // from PageElements
+ *              .by(By.tagName("span"), hasDataAttribute("username")) // from PageElements, check for "data-username" attribute
  *              .find()
  *              .withTimeout(TimeoutType.AJAX_ACTION)
- *              .transform(getDataAttribute("data-username")) // from PageElements
+ *              .transform(getDataAttribute("username")) // from PageElements
  *              .timed()
  * }
  *

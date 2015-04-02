@@ -4,7 +4,7 @@ import com.atlassian.annotations.PublicApi;
 import com.atlassian.pageobjects.elements.PageElement;
 
 /**
- * The default search result of {@link SearchQuery}.
+ * The default search result of {@link SearchQuery}, which returns a list of {@link PageElement page elements}.
  *
  * @since 2.3
  * @see SearchQuery

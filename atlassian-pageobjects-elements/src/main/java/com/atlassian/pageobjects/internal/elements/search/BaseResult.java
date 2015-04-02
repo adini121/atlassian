@@ -76,7 +76,7 @@ abstract class BaseResult<E, R extends SearchQuery.Result<E, R>> implements Sear
 
     @Nonnull
     @Override
-    public <F> SearchQuery.AnyResult<F> transform(@Nonnull Function<E, F> transformer)
+    public <F> SearchQuery.AnyResult<F> transform(@Nonnull Function<? super E, ? extends F> transformer)
     {
         return new TransformingResult<F, E>(this, transformer, timeoutType, dependencies);
     }

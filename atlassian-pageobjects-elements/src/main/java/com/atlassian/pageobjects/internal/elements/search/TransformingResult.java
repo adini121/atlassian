@@ -14,9 +14,9 @@ import javax.annotation.concurrent.NotThreadSafe;
 class TransformingResult<E, O> extends BaseAnyResult<E>
 {
     protected final SearchQuery.Result<O, ?> original;
-    protected final Function<O, E> transformer;
+    protected final Function<? super O, ? extends E> transformer;
 
-    TransformingResult(SearchQuery.Result<O, ?> original, Function<O, E> transformer,
+    TransformingResult(SearchQuery.Result<O, ?> original, Function<? super O, ? extends E> transformer,
                        TimeoutType timeoutType, Dependencies dependencies)
     {
         super(timeoutType, dependencies);
@@ -26,8 +26,10 @@ class TransformingResult<E, O> extends BaseAnyResult<E>
 
     @Nonnull
     @Override
+    @SuppressWarnings("unchecked")
     protected Iterable<E> executeSearch()
     {
-        return FluentIterable.from(original.all()).transform(transformer).toList();
+        // FluentIterable API fail...
+        return (Iterable) FluentIterable.from(original.all()).transform(transformer).toList();
     }
 }
