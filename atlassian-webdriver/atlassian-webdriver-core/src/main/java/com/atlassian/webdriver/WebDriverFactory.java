@@ -6,6 +6,8 @@ import com.atlassian.pageobjects.util.BrowserUtil;
 import com.atlassian.webdriver.browsers.chrome.ChromeBrowser;
 import com.atlassian.webdriver.browsers.firefox.FirefoxBrowser;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
+
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.android.AndroidDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -16,6 +18,7 @@ import org.openqa.selenium.iphone.IPhoneSimulatorDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Proxy;
 import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -181,7 +184,7 @@ public class WebDriverFactory
         }
 
         BrowserUtil.setCurrentBrowser(browserType);
-
-        return new DefaultAtlassianWebDriver(driver, browserType);
+        WebDriver driverProxy = (WebDriver) Proxy.newProxyInstance(WebDriver.class.getClassLoader(), new Class[] {WebDriver.class, JavascriptExecutor.class}, new WebDriverProxy(driver));
+        return new DefaultAtlassianWebDriver(driverProxy, browserType);
     }
 }

@@ -35,7 +35,9 @@ public final class FirefoxBrowser
     {
         FirefoxBinary firefox = new FirefoxBinary();
         setSystemProperties(firefox);
-        return new FirefoxDriver(firefox, null);
+        FirefoxProfile p = new FirefoxProfile();
+        p.setPreference("webdriver.log.file", "/tmp/firefox_console_logs");
+        return new FirefoxDriver(firefox, p);
     }
 
     /**
@@ -60,6 +62,7 @@ public final class FirefoxBrowser
 
                 addExtensionsToProfile(profile, profilePath);
                 addPreferencesToProfile(profile, profilePath);
+                profile.setPreference("webdriver.log.file", "/tmp/firefox_console_logs");
             }
 
             setSystemProperties(firefox);
@@ -137,7 +140,9 @@ public final class FirefoxBrowser
         {
             firefox = new FirefoxBinary(new File(browserPath));
             setSystemProperties(firefox);
-            return new FirefoxDriver(firefox, null);
+            FirefoxProfile p = new FirefoxProfile();
+            p.setPreference("webdriver.log.file", "/tmp/firefox_console_logs");
+            return new FirefoxDriver(firefox, p);
         }
 
         // Fall back on default firefox driver
