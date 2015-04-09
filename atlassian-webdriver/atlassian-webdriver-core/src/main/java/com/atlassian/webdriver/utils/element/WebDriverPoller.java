@@ -2,8 +2,12 @@ package com.atlassian.webdriver.utils.element;
 
 import com.atlassian.pageobjects.PageBinder;
 import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import org.hamcrest.Matcher;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import javax.annotation.Nonnull;
@@ -44,6 +48,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * </pre>
  *
  * <p/>
+ * As of 2.3, {@code WebDriverPoller} also supports waiting for {@code WebElement}-specific predicates and matchers,
+ * which require the web element to be already located.
+ * <p/>
  * This component can be injected into page objects running within a {@link PageBinder} context.
  *
  * <p/>
@@ -77,22 +84,22 @@ public final class WebDriverPoller
         this.timeUnit = checkNotNull(timeUnit, "timeUnit");
     }
 
-    public WebDriverPoller withDefaultTimeout(long timeout, TimeUnit timeUnit)
+    @Nonnull
+    public WebDriverPoller withDefaultTimeout(long timeout, @Nonnull TimeUnit timeUnit)
     {
         return new WebDriverPoller(webDriver, timeout, timeUnit);
     }
 
-
     /**
-     * Wait until {@literal condition} is {@literal true} up to the default timeout. The default timeout depends
-     * on the arguments supplied while creating an instance of this {@code WebDriverPoller}.
+     * Wait until {@literal condition} is {@literal true}, up to the default timeout. The default timeout depends
+     * on the arguments supplied while creating this {@code WebDriverPoller}.
      *
      * @param condition condition that must evaluate to {@literal true}
      * @throws TimeoutException if the condition does not come true before the timeout expires
      * @see #DEFAULT_TIMEOUT
      * @see #DEFAULT_TIMEOUT_UNIT
      */
-    public void waitUntil(Function<WebDriver,Boolean> condition)
+    public void waitUntil(@Nonnull Function<WebDriver, Boolean> condition)
     {
         waitUntil(condition, timeout, timeUnit);
     }
@@ -101,14 +108,13 @@ public final class WebDriverPoller
      * Wait until {@literal condition} up to the {@literal timeoutInSeconds}.
      *
      * @param condition condition that must evaluate to {@literal true}
-     * @param timeoutInSeconds timeout in seconds to wait for {@literal condition} to come true
+     * @param timeoutInSeconds timeout in seconds to wait for {@literal condition} to come {@code true}
      * @throws TimeoutException if the condition does not come true before the timeout expires
      */
-    public void waitUntil(Function<WebDriver,Boolean> condition, long timeoutInSeconds)
+    public void waitUntil(@Nonnull Function<WebDriver, Boolean> condition, long timeoutInSeconds)
     {
         new WebDriverWait(webDriver, timeoutInSeconds).until(condition);
     }
-
 
     /**
      * Wait until {@literal condition} up to the {@literal timeout} specified by {@literal unit}.
@@ -118,8 +124,117 @@ public final class WebDriverPoller
      * @param unit unit of the {@literal timeout}
      * @throws TimeoutException if the condition does not come true before the timeout expires
      */
-    public void waitUntil(Function<WebDriver,Boolean> condition, long timeout, TimeUnit unit)
+    public void waitUntil(@Nonnull Function<WebDriver, Boolean> condition, long timeout, @Nonnull TimeUnit unit)
     {
         waitUntil(condition, unit.toSeconds(timeout));
+    }
+
+    /**
+     * Wait until {@literal condition} is {@code true} for {@code element}, up to the default timeout. The default
+     * timeout depends on the arguments supplied while creating this {@code WebDriverPoller}.
+     *
+     * @param element the element to examine
+     * @param condition condition that must evaluate to {@literal true}, expressed by a {@link Predicate}
+     * @throws TimeoutException if the condition does not come true before the timeout expires
+     * @since 2.3
+     *
+     * @see #DEFAULT_TIMEOUT
+     * @see #DEFAULT_TIMEOUT_UNIT
+     */
+    public void waitUntil(@Nonnull WebElement element, @Nonnull Predicate<WebElement> condition)
+    {
+        waitUntil(element, condition, timeout, timeUnit);
+    }
+
+    /**
+     * Wait until {@literal condition} is {@code true} for {@code element}, up to the {@literal timeoutInSeconds}.
+     *
+     * @param element the element to examine
+     * @param condition condition that must evaluate to {@literal true}, expressed by a {@link Predicate}
+     * @param timeoutInSeconds timeout in seconds to wait for {@literal condition} to come {@code true}
+     * @throws TimeoutException if the condition does not come true before the timeout expires
+     * @since 2.3
+     */
+    public void waitUntil(@Nonnull WebElement element, @Nonnull Predicate<WebElement> condition, long timeoutInSeconds)
+    {
+        waitUntil(element, condition, timeoutInSeconds, TimeUnit.SECONDS);
+    }
+
+    /**
+     * Wait until {@literal condition} is {@code true} for {@code element}, up to the {@literal timeout} specified
+     * by {@literal unit}.
+     *
+     * @param element the element to examine
+     * @param condition condition that must evaluate to {@literal true}, expressed by a {@link Predicate}
+     * @param timeout timeout to wait for {@literal condition} to come true
+     * @param unit unit of the {@literal timeout}
+     * @throws TimeoutException if the condition does not come true before the timeout expires
+     * @since 2.3
+     */
+    public void waitUntil(@Nonnull WebElement element, @Nonnull Predicate<WebElement> condition,
+                          long timeout, TimeUnit unit)
+    {
+        new FluentWait<WebElement>(checkNotNull(element, "element")).withTimeout(timeout, unit).until(condition);
+    }
+
+    /**
+     * Wait until {@literal condition} is {@code true} for {@code element}, up to the default timeout. The default
+     * timeout depends on the arguments supplied while creating this {@code WebDriverPoller}.
+     *
+     * @param element the element to examine
+     * @param condition condition that must evaluate to {@code true}, expressed by a {@code Matcher}
+     * @throws TimeoutException if the condition does not come true before the timeout expires
+     * @since 2.3
+     *
+     * @see #DEFAULT_TIMEOUT
+     * @see #DEFAULT_TIMEOUT_UNIT
+     */
+    public void waitUntil(@Nonnull WebElement element, @Nonnull Matcher<? super WebElement> condition)
+    {
+        waitUntil(element, condition, timeout, timeUnit);
+    }
+
+    /**
+     * Wait until {@code condition} is {@code true} for {@code element}, up to the {@code timeoutInSeconds}.
+     *
+     * @param element the element to examine
+     * @param condition condition that must evaluate to {@code true}, expressed by a {@link Matcher}
+     * @param timeoutInSeconds timeout in seconds to wait for {@code condition} to come {@code true}
+     * @throws TimeoutException if the condition does not come true before the timeout expires
+     * @since 2.3
+     */
+    public void waitUntil(@Nonnull WebElement element, @Nonnull Matcher<? super WebElement> condition,
+                          long timeoutInSeconds)
+    {
+        waitUntil(element, condition, timeoutInSeconds, TimeUnit.SECONDS);
+    }
+
+    /**
+     * Wait until {@literal condition} is {@code true} for {@code element}, up to the {@code timeout} specified
+     * by {@code unit}.
+     *
+     * @param element the element to examine
+     * @param condition condition that must evaluate to {@code true}, expressed by a {@link Matcher}
+     * @param timeout timeout to wait for {@code condition} to come true
+     * @param unit unit of the {@code timeout}
+     * @throws TimeoutException if the condition does not come true before the timeout expires
+     * @since 2.3
+     */
+    public void waitUntil(@Nonnull WebElement element, @Nonnull Matcher<? super WebElement> condition,
+                          long timeout, TimeUnit unit)
+    {
+        waitUntil(element, newMatcherPredicate(condition), timeout, unit);
+    }
+
+    static <E> Predicate<E> newMatcherPredicate(final Matcher<? super E> filter)
+    {
+        return new Predicate<E>()
+        {
+            @Override
+            public boolean apply(E element)
+            {
+                return filter.matches(element);
+            }
+        };
     }
 }
