@@ -152,4 +152,7 @@ public interface PageElementSearch
      */
     @Nonnull
     SearchQuery search();
+
+    @Nonnull
+    DefaultQuery search2();
 }
