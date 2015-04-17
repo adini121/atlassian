@@ -3,7 +3,7 @@
 # Run in bamboo before running mvn release:prepare/perform
 #
 # Arguments: <name-of-build-runner> <email-of-build-runner> <version> <next_version>
-# Suggested bamboo arguments: ${bamboo.ManualBuildTriggerReason.userName} ${bamboo.ManualBuildTriggerReason.userName}@atlassian.com ${bamboo.VERSION} ${bamboo.NEXT_VERSION}
+# Suggested bamboo arguments: "Atlassian Selenium Release (${bamboo.ManualBuildTriggerReason.userName})" ${bamboo.ManualBuildTriggerReason.userName}@atlassian.com ${bamboo.VERSION} ${bamboo.NEXT_VERSION}
 #
 # * Check that the VERSION variable is set and doesn't have SNAPSHOT on it
 # * Check that NEXT_VERSION is set and has SNAPSHOT on it
