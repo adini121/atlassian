@@ -18,7 +18,7 @@
 
     <!-- Note: to release any 2.x version the following commands are needed: -->
     <!-- mvn release:prepare -Darguments="-Dskip.legacy.tests=true" -->
-    <!-- mvn release:perform -Darguments="-Dskip.legacy.tests -Dmaven.javadoc.failOnError=false" -->
+    <!-- mvn release:perform -Darguments="-Dskip.legacy.tests=true -Dmaven.javadoc.failOnError=false" -->
     <!-- This is because of legacy modules that will go away in 3.0 (see SELENIUM-211) -->
 
     <scm>
