@@ -3,13 +3,13 @@ package com.atlassian.pageobjects.elements.test.search;
 import com.atlassian.pageobjects.elements.CheckboxElement;
 import com.atlassian.pageobjects.elements.PageElement;
 import com.atlassian.pageobjects.elements.PageElementFinder;
+import com.atlassian.pageobjects.elements.PageElements;
 import com.atlassian.pageobjects.elements.WebDriverElement;
 import com.atlassian.pageobjects.elements.query.TimedQuery;
 import com.atlassian.pageobjects.elements.search.AnyQuery;
-import com.atlassian.pageobjects.elements.search.GenericQuery;
 import com.atlassian.pageobjects.elements.search.PageElementQuery;
 import com.atlassian.pageobjects.elements.search.PageElementSearch;
-import com.atlassian.pageobjects.elements.search.SearchResult;
+import com.atlassian.pageobjects.elements.search.SearchQuery;
 import com.atlassian.pageobjects.elements.test.AbstractPageElementBrowserTest;
 import com.atlassian.pageobjects.elements.test.pageobjects.page.PageElementSearchPage;
 import com.atlassian.pageobjects.elements.timeout.TimeoutType;
@@ -70,7 +70,7 @@ public class TestPageElementSearch extends AbstractPageElementBrowserTest
     @Test
     public void shouldFindSinglePageElementById()
     {
-        PageElement result = page.search2()
+        PageElement result = page.search()
                 .by(id("single-element"))
                 .first();
 
@@ -82,13 +82,13 @@ public class TestPageElementSearch extends AbstractPageElementBrowserTest
     @Test
     public void shouldFindSinglePageElementByIdAsIterable()
     {
-        assertResult(page.search2().by(id("single-element")), contains(withAttribute("id", "single-element")));
+        assertResult(page.search().by(id("single-element")), contains(withAttribute("id", "single-element")));
     }
 
     @Test
     public void shouldReturnEmptyImmediatelyWhenSearchingFromNotExistingRoot()
     {
-        Iterable<PageElement> result = elementFinder.find(By.id("no-such-id")).search2()
+        Iterable<PageElement> result = elementFinder.find(By.id("no-such-id")).search()
                 .by(id("nested-id"))
                 .by(tagName("ul"))
                 .by(tagName("li")).filter(hasDataAttribute("pick-me"))
@@ -100,7 +100,7 @@ public class TestPageElementSearch extends AbstractPageElementBrowserTest
     @Test
     public void shouldFindRowsWithFilter()
     {
-        PageElementQuery<PageElement> result = page.search2()
+        PageElementQuery<PageElement> result = page.search()
                 .by(id("table-list"))
                 .by(id("the-table"))
                 .by(tagName("tr"), hasClass("even-row"));
@@ -113,9 +113,21 @@ public class TestPageElementSearch extends AbstractPageElementBrowserTest
     }
 
     @Test
+    public void shouldApplyFlatMap()
+    {
+        AnyQuery<String> result = page.search()
+                .by(id("table-list"))
+                .by(id("the-table"))
+                .by(tagName("tr"), hasClass("even-row"))
+                .flatMap(PageElements.getCssClasses());
+
+        assertResult(result, contains("even-row", "two", "even-row", "four", "even-row", "six"));
+    }
+
+    @Test
     public void shouldFindRowsFromTableRoot()
     {
-        Iterable<PageElement> result = searchPage.getTableRoot().search2()
+        Iterable<PageElement> result = searchPage.getTableRoot().search()
                 .by(id("the-table"))
                 .by(tagName("tr"))
                 .now();
@@ -126,7 +138,7 @@ public class TestPageElementSearch extends AbstractPageElementBrowserTest
     @Test
     public void shouldFindRowsWithFilterAndTransformOnResult()
     {
-        AnyQuery<String> result = page.search2()
+        AnyQuery<String> result = page.search()
                 .by(id("table-list"))
                 .by(id("the-table"))
                 .by(tagName("tr"))
@@ -140,7 +152,7 @@ public class TestPageElementSearch extends AbstractPageElementBrowserTest
     @Test
     public void shouldFindRowsWithFilterOnResultUsingMatcher()
     {
-        AnyQuery<String> result = page.search2()
+        AnyQuery<String> result = page.search()
                 .by(id("table-list"))
                 .by(id("the-table"))
                 .by(tagName("tr"))
@@ -153,7 +165,7 @@ public class TestPageElementSearch extends AbstractPageElementBrowserTest
     @Test
     public void shouldFindRowsWithFilterAndBindOnResult()
     {
-        AnyQuery<RowWrapper> result = page.search2()
+        AnyQuery<RowWrapper> result = page.search()
                 .by(id("table-list"))
                 .by(id("the-table"))
                 .by(tagName("tr"))
@@ -169,14 +181,13 @@ public class TestPageElementSearch extends AbstractPageElementBrowserTest
     @Test
     public void findFirstNestedElement()
     {
-        SearchResult result = page.search()
+        PageElementQuery<PageElement> query = page.search()
                 .by(id("parent-1"))
                 .by(className("parent-2-class")).filter(hasDataAttribute("find-me"))
                 .by(tagName("ul"))
-                .by(tagName("li")).filter(withDataAttribute("pick-me", "yes"))
-                .find();
+                .by(tagName("li")).filter(withMatcher(withDataAttribute("pick-me", "yes")));
 
-        PageElement element = findFirst(result);
+        PageElement element = findFirst(query);
         assertTrue(element.isPresent());
         assertEquals("Yes-1", element.getText());
     }
@@ -184,7 +195,7 @@ public class TestPageElementSearch extends AbstractPageElementBrowserTest
     @Test
     public void findMergeMultipleDomBranches()
     {
-        PageElementQuery<PageElement> result = page.search2()
+        PageElementQuery<PageElement> result = page.search()
                 .by(id("parent-1"))
                 .by(className("parent-2-class"))
                 .by(tagName("ul"))
@@ -201,7 +212,7 @@ public class TestPageElementSearch extends AbstractPageElementBrowserTest
 
     @Test
     public void shouldWaitForSearchResultsToMatch() {
-        TimedQuery<Iterable<PageElement>> result = searchPage.getAsyncRoot().search2()
+        TimedQuery<Iterable<PageElement>> result = searchPage.getAsyncRoot().search()
                 .by(className("async-parent-level-2-class"))
                 .by(tagName("li"), hasDataAttribute("state", "2"))
                 .timed();
@@ -219,7 +230,7 @@ public class TestPageElementSearch extends AbstractPageElementBrowserTest
     @Test
     public void shouldAssignCustomTimeoutType()
     {
-        PageElementQuery<PageElement> result = page.search2()
+        PageElementQuery<PageElement> result = page.search()
                 .by(id("table-list"))
                 .by(id("the-table"))
                 .by(tagName("tr"), hasClass("even-row"))
@@ -231,7 +242,7 @@ public class TestPageElementSearch extends AbstractPageElementBrowserTest
     @Test
     public void shouldReturnResultAsCheckboxes()
     {
-        PageElementQuery<CheckboxElement> result = page.search2()
+        PageElementQuery<CheckboxElement> result = page.search()
                 .by(id("checkbox-parent"))
                 .by(tagName("input"))
                 .as(CheckboxElement.class)
@@ -244,25 +255,25 @@ public class TestPageElementSearch extends AbstractPageElementBrowserTest
         ));
     }
 
-    private static <R> void assertResult(GenericQuery<R, ?> result, Matcher<Iterable<? extends R>> matcher)
+    private static <R> void assertResult(SearchQuery<R, ?> result, Matcher<Iterable<? extends R>> matcher)
     {
         waitUntil(result.timed(), matcher);
         assertThat(result.get(), matcher);
         assertThat(result.now(), matcher);
     }
 
-    private static <R> void assertResultStrict(GenericQuery<R, ?> result, Matcher<Iterable<R>> matcher)
+    private static <R> void assertResultStrict(SearchQuery<R, ?> result, Matcher<Iterable<R>> matcher)
     {
         waitUntil(result.timed(), matcher);
         assertThat(result.get(), matcher);
         assertThat(result.now(), matcher);
     }
 
-    private static PageElement findFirst(SearchResult result)
+    private static PageElement findFirst(PageElementQuery<?> query)
     {
-        waitUntilTrue(result.hasResult());
+        waitUntilTrue(query.hasResult());
 
-        return result.first();
+        return query.first();
     }
 
     private static Matcher<PageElement> hasTimeoutType(TimeoutType expectedTimeout)

@@ -7,6 +7,7 @@ import com.google.common.base.Predicate;
 import org.apache.commons.lang.StringUtils;
 
 import javax.annotation.Nonnull;
+import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -71,7 +72,7 @@ public final class PageElements
     }
 
     @Nonnull
-    public static Predicate<PageElement> hasDataAttribute(@Nonnull final String attribute)
+    public static Predicate<PageElement> hasAttribute(@Nonnull final String attribute)
     {
         checkNotNull(attribute, "attribute");
 
@@ -80,13 +81,13 @@ public final class PageElements
             @Override
             public boolean apply(PageElement input)
             {
-                return input.getAttribute(DATA_PREFIX + attribute) != null;
+                return input.getAttribute(attribute) != null;
             }
         };
     }
 
     @Nonnull
-    public static Predicate<PageElement> hasDataAttribute(@Nonnull final String attribute, @Nonnull final String value)
+    public static Predicate<PageElement> hasAttribute(@Nonnull final String attribute, @Nonnull final String value)
     {
         checkNotNull(attribute, "attribute");
         checkNotNull(value, "value");
@@ -96,9 +97,25 @@ public final class PageElements
             @Override
             public boolean apply(PageElement input)
             {
-                return input.hasAttribute(DATA_PREFIX + attribute, value);
+                return input.hasAttribute(attribute, value);
             }
         };
+    }
+
+    @Nonnull
+    public static Predicate<PageElement> hasDataAttribute(@Nonnull final String attribute)
+    {
+        checkNotNull(attribute, "attribute");
+
+        return hasAttribute(DATA_PREFIX + attribute);
+    }
+
+    @Nonnull
+    public static Predicate<PageElement> hasDataAttribute(@Nonnull final String attribute, @Nonnull final String value)
+    {
+        checkNotNull(attribute, "attribute");
+
+        return hasAttribute(DATA_PREFIX + attribute, value);
     }
 
     @Nonnull
@@ -112,6 +129,19 @@ public final class PageElements
             public boolean apply(PageElement input)
             {
                 return value.equals(input.getValue());
+            }
+        };
+    }
+
+    @Nonnull
+    public static Function<PageElement, Iterable<String>> getCssClasses()
+    {
+        return new Function<PageElement, Iterable<String>>()
+        {
+            @Override
+            public Set<String> apply(PageElement input)
+            {
+                return input.getCssClasses();
             }
         };
     }

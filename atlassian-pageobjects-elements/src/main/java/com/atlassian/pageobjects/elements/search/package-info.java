@@ -4,5 +4,6 @@
  * API.
  *
  * @see com.atlassian.pageobjects.elements.search.PageElementSearch
+ * @since 2.3
  */
 package com.atlassian.pageobjects.elements.search;

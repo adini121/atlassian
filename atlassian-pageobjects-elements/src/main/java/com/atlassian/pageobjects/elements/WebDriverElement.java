@@ -2,10 +2,10 @@ package com.atlassian.pageobjects.elements;
 
 import com.atlassian.annotations.Internal;
 import com.atlassian.pageobjects.PageBinder;
-import com.atlassian.pageobjects.elements.search.SearchQuery;
+import com.atlassian.pageobjects.elements.search.DefaultQuery;
 import com.atlassian.pageobjects.elements.timeout.TimeoutType;
 import com.atlassian.pageobjects.elements.timeout.Timeouts;
-import com.atlassian.pageobjects.internal.elements.search.WebDriverElementSearchQuery;
+import com.atlassian.pageobjects.internal.elements.search.DefaultWebDriverQuery;
 import com.atlassian.webdriver.Elements;
 import com.atlassian.webdriver.utils.Check;
 import com.google.common.base.Function;
@@ -35,12 +35,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
 @Internal
 public class WebDriverElement implements PageElement
 {
-    public static Function<WebDriverElement, WebDriverLocatable> TO_LOCATABLE = new Function<WebDriverElement, WebDriverLocatable>()
+    public static Function<PageElement, WebDriverLocatable> TO_LOCATABLE = new Function<PageElement, WebDriverLocatable>()
     {
         @Override
-        public WebDriverLocatable apply(WebDriverElement element)
+        public WebDriverLocatable apply(PageElement element)
         {
-            return element.locatable;
+            return toLocatable(element);
         }
     };
 
@@ -75,13 +75,24 @@ public class WebDriverElement implements PageElement
         };
     }
 
+    @Nonnull
+    public static WebDriverLocatable toLocatable(@Nonnull PageElement pageElement)
+    {
+        return cast(pageElement).locatable;
+    }
+
     static WebElement getWebElement(PageElement element)
+    {
+        return cast(element).asWebElement();
+    }
+
+    private static WebDriverElement cast(PageElement element)
     {
         if (!WebDriverElement.class.isInstance(element))
         {
             throw new IllegalStateException("Unknown implementation of PageElement, cannot use to retrieve WebElement");
         }
-        return WebDriverElement.class.cast(element).asWebElement();
+        return WebDriverElement.class.cast(element);
     }
 
 
@@ -355,9 +366,9 @@ public class WebDriverElement implements PageElement
 
     @Nonnull
     @Override
-    public SearchQuery search()
+    public DefaultQuery search()
     {
-        return pageBinder.bind(WebDriverElementSearchQuery.class, locatable, defaultTimeout);
+        return pageBinder.bind(DefaultWebDriverQuery.class, this);
     }
 
     /**

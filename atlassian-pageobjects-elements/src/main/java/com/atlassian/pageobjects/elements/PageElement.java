@@ -53,6 +53,8 @@ public interface PageElement extends PageElementFinder, PageElementSearch
 
     /**
      * @return value of the "id" attribute of this element, or {@code null} if the "id" attribute is not defined
+     *
+     * @since 2.3
      */
     @Nullable
     String getId();

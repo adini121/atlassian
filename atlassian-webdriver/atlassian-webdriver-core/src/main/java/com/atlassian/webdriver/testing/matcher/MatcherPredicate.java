@@ -6,8 +6,11 @@ import org.hamcrest.Matcher;
 import javax.annotation.Nonnull;
 
 /**
+ * Adapter from Hamcrest {@link Matcher} to a Guava {@link Predicate}.
+ *
+ * @since 2.3
  */
-public class MatcherPredicate<T> implements Predicate<T>
+public final class MatcherPredicate<T> implements Predicate<T>
 {
     @Nonnull
     public static <T> Predicate<T> forMatcher(@Nonnull Matcher<T> matcher)
