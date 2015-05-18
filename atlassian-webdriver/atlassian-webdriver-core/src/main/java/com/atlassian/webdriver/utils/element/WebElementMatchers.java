@@ -2,9 +2,14 @@ package com.atlassian.webdriver.utils.element;
 
 import com.google.common.collect.Iterables;
 import org.hamcrest.Description;
+import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.hamcrest.TypeSafeMatcher;
 import org.openqa.selenium.WebElement;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -49,6 +54,33 @@ public final class WebElementMatchers
             {
                 description.appendText("Contains at least ").appendValue(numberOfMatchingItems)
                         .appendText(" items matching ").appendDescriptionOf(elementMatcher);
+            }
+        };
+    }
+
+    /**
+     * @param expectedText expected text
+     * @return matcher for the {@code WebElement} text
+     * @since 2.3
+     */
+    @Nonnull
+    public static Matcher<WebElement> withText(@Nullable String expectedText) {
+        return withTextThat(Matchers.is(expectedText));
+    }
+
+    /**
+     * @param textMatcher text matcher
+     * @return matcher for the {@code WebElement} text
+     * @since 2.3
+     */
+    @Nonnull
+    public static Matcher<WebElement> withTextThat(@Nonnull Matcher<String> textMatcher) {
+        return new FeatureMatcher<WebElement, String>(textMatcher, "text", "text") {
+
+            @Override
+            protected String featureValueOf(WebElement actual)
+            {
+                return actual.getText();
             }
         };
     }
