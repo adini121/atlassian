@@ -2,8 +2,8 @@ package com.atlassian.webdriver.browsers.profile;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-import com.google.common.io.Closeables;
 import com.google.common.io.LineReader;
+import org.apache.commons.io.IOUtils;
 import org.openqa.selenium.WebDriverException;
 
 import java.io.File;
@@ -37,7 +37,7 @@ public class ProfilePreferences
         } catch (IOException e) {
           throw new WebDriverException(e);
         } finally {
-          Closeables.closeQuietly(reader);
+          IOUtils.closeQuietly(reader);
         }
     }
 
