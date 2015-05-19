@@ -1,11 +1,8 @@
 package com.atlassian.pageobjects.elements.query.webdriver;
 
+import com.atlassian.annotations.Internal;
 import com.atlassian.pageobjects.elements.WebDriverLocatable;
-import com.atlassian.pageobjects.elements.query.AbstractTimedQuery;
-import com.atlassian.pageobjects.elements.query.ExpirationHandler;
-import com.atlassian.pageobjects.elements.query.PollingQuery;
-import com.atlassian.pageobjects.elements.query.TimedCondition;
-import com.atlassian.pageobjects.elements.query.TimedQuery;
+import com.atlassian.pageobjects.elements.query.*;
 import com.atlassian.pageobjects.elements.timeout.TimeoutType;
 import com.atlassian.pageobjects.elements.timeout.Timeouts;
 import com.atlassian.webdriver.AtlassianWebDriver;
@@ -15,6 +12,7 @@ import org.openqa.selenium.Point;
 
 import javax.annotation.concurrent.NotThreadSafe;
 import javax.inject.Inject;
+import java.util.Set;
 
 import static com.atlassian.pageobjects.elements.timeout.TimeoutType.DEFAULT;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -22,9 +20,9 @@ import static com.google.common.base.Preconditions.checkState;
 
 /**
  * Creates various WebDriver-based queries.
- *
  */
 @NotThreadSafe
+@Internal
 public class WebDriverQueryFactory
 {
     private final WebDriverLocatable locatable;
@@ -149,6 +147,11 @@ public class WebDriverQueryFactory
         return getAttribute(attributeName, DEFAULT);
     }
 
+    public TimedQuery<Set<String>> getCssClasses(TimeoutType timeoutType)
+    {
+        return new WebDriverLocatableBasedTimedQuery<Set<String>>(locatable, webDriver,
+                WebDriverQueryFunctions.getCssClasses(), timeouts.timeoutFor(timeoutType), interval());
+    }
 
     public TimedCondition hasClass(String className, TimeoutType timeoutType)
     {

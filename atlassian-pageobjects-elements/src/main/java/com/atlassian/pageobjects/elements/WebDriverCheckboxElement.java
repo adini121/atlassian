@@ -4,9 +4,9 @@ import com.atlassian.pageobjects.elements.timeout.TimeoutType;
 import org.openqa.selenium.By;
 
 /**
- * Implementation of (@Link CheckboxElement)
+ * WebDriver-based implementation of {@link CheckboxElement}
  */
-public class WebDriverCheckboxElement extends WebDriverElement implements  CheckboxElement
+public class WebDriverCheckboxElement extends WebDriverElement implements CheckboxElement
 {
     public WebDriverCheckboxElement(By locator)
     {
@@ -31,6 +31,12 @@ public class WebDriverCheckboxElement extends WebDriverElement implements  Check
     public WebDriverCheckboxElement(By locator, WebDriverLocatable parent, TimeoutType timeoutType)
     {
         super(locator, parent, timeoutType);
+    }
+
+    @Override
+    public boolean isChecked()
+    {
+        return isSelected();
     }
 
     public CheckboxElement check()

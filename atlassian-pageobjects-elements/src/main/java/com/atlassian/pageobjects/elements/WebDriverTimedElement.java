@@ -9,8 +9,11 @@ import com.atlassian.pageobjects.elements.timeout.TimeoutType;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;
 
+import javax.annotation.Nonnull;
 import javax.inject.Inject;
+import java.util.Set;
 
+import static com.atlassian.webdriver.Elements.ATTRIBUTE_ID;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -61,6 +64,20 @@ public class WebDriverTimedElement implements TimedElement
     public TimedCondition isSelected()
     {
         return queryFactory.isSelected(defaultTimeout);
+    }
+
+    @Nonnull
+    @Override
+    public TimedQuery<String> getId()
+    {
+        return queryFactory.getAttribute(ATTRIBUTE_ID);
+    }
+
+    @Nonnull
+    @Override
+    public TimedQuery<Set<String>> getCssClasses()
+    {
+        return queryFactory.getCssClasses(defaultTimeout);
     }
 
     public TimedCondition hasClass(final String className)

@@ -1,5 +1,7 @@
 package com.atlassian.pageobjects.elements.query.webdriver;
 
+import com.atlassian.annotations.Internal;
+import com.atlassian.webdriver.Elements;
 import com.atlassian.webdriver.utils.Check;
 import com.google.common.base.Function;
 import com.google.common.base.Supplier;
@@ -9,12 +11,16 @@ import org.openqa.selenium.Point;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.Nonnull;
+import java.util.Set;
+
+import static com.atlassian.webdriver.Elements.ATTRIBUTE_CLASS;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Collection of functions for implementing timed queries in WebDriver.
- *
  */
+@Internal
 public final class WebDriverQueryFunctions
 {
     private WebDriverQueryFunctions()
@@ -74,8 +80,6 @@ public final class WebDriverQueryFunctions
                 // if we're here, the element was found
                 return true;
             }
-
-
         };
     }
 
@@ -188,6 +192,18 @@ public final class WebDriverQueryFunctions
             public Boolean apply(WebElement from)
             {
                 return expectedValue.equals(from.getAttribute(attributeName));
+            }
+        };
+    }
+
+    @Nonnull
+    public static Function<WebElement, Set<String>> getCssClasses()
+    {
+        return new AbstractWebElementFunction<Set<String>>("getCssClasses")
+        {
+            public Set<String> apply(WebElement from)
+            {
+                return Elements.getCssClasses(from.getAttribute(ATTRIBUTE_CLASS));
             }
         };
     }

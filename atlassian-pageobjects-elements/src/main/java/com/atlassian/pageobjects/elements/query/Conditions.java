@@ -10,6 +10,9 @@ import org.hamcrest.StringDescription;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import static com.atlassian.pageobjects.elements.util.StringConcat.asString;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.hamcrest.Matchers.equalTo;
@@ -18,16 +21,16 @@ import static org.hamcrest.Matchers.equalTo;
  * Utilities to create miscellaneous {@link TimedCondition}s.
  *
  */
+@SuppressWarnings("unchecked")
 public final class Conditions
 {
     private static final Logger log = LoggerFactory.getLogger(Conditions.class);
 
     private static final int DEFAULT_TIMEOUT = 100;
 
-
     private Conditions()
     {
-        throw new AssertionError("No way");
+        throw new AssertionError(Conditions.class.getName() + " should not be instantiated");
     }
 
     /**
@@ -36,7 +39,8 @@ public final class Conditions
      * @param condition condition to be negated
      * @return negated {@link TimedCondition} instance.
      */
-    public static TimedQuery<Boolean> not(TimedQuery<Boolean> condition)
+    @Nonnull
+    public static TimedQuery<Boolean> not(@Nonnull TimedQuery<Boolean> condition)
     {
         if (condition instanceof Not)
         {
@@ -59,7 +63,8 @@ public final class Conditions
      *
      * @see TimedCondition#interval()
      */
-    public static CombinableCondition and(TimedQuery<Boolean>... conditions)
+    @Nonnull
+    public static CombinableCondition and(@Nonnull TimedQuery<Boolean>... conditions)
     {
         return new And(conditions);
     }
@@ -78,7 +83,8 @@ public final class Conditions
      *
      * @see TimedCondition#interval()
      */
-    public static CombinableCondition and(Iterable<TimedQuery<Boolean>> conditions)
+    @Nonnull
+    public static CombinableCondition and(@Nonnull Iterable<TimedQuery<Boolean>> conditions)
     {
         return and(Iterables.toArray(conditions, TimedQuery.class));
     }
@@ -97,7 +103,8 @@ public final class Conditions
      *
      * @see TimedCondition#interval()
      */
-    public static CombinableCondition or(TimedQuery<Boolean>... conditions)
+    @Nonnull
+    public static CombinableCondition or(@Nonnull TimedQuery<Boolean>... conditions)
     {
         return new Or(conditions);
     }
@@ -116,7 +123,8 @@ public final class Conditions
      *
      * @see TimedCondition#interval()
      */
-    public static CombinableCondition or(Iterable<TimedQuery<Boolean>> conditions)
+    @Nonnull
+    public static CombinableCondition or(@Nonnull Iterable<TimedQuery<Boolean>> conditions)
     {
         return or(Iterables.toArray(conditions, TimedQuery.class));
     }
@@ -140,31 +148,31 @@ public final class Conditions
      * evaluates to <code>true</code>
      * @return new dependant condition
      */
-    public static TimedCondition dependantCondition(TimedQuery<Boolean> original, Supplier<TimedQuery<Boolean>> dependant)
+    @Nonnull
+    public static TimedCondition dependantCondition(@Nonnull TimedQuery<Boolean> original,
+                                                    @Nonnull Supplier<TimedQuery<Boolean>> dependant)
     {
         return new DependantCondition(original, dependant);
     }
 
-
     /**
-     * <p>
+     * <p/>
      * Return condition that will be <code>true</code>, if given <tt>matcher</tt> will match the <tt>query</tt>. Any
      * Hamcrest matcher implementation may be used.
-     * </p>
-     * <p>
+     * <p/>
      * Example:<br>
      *
      * <code>
      *     TimedCondition textEquals = Conditions.forMatcher(element.getText(), isEqualTo("blah"));
      * </code>
-     * </p>
      *
      * @param query timed query to match
      * @param matcher matcher for the query
      * @param <T> type of the result
      * @return new matching condition
      */
-    public static <T> TimedCondition forMatcher(TimedQuery<T> query, Matcher<? super T> matcher)
+    @Nonnull
+    public static <T> TimedCondition forMatcher(@Nonnull TimedQuery<T> query, @Nonnull Matcher<? super T> matcher)
     {
         return new MatchingCondition<T>(query, matcher);
     }
@@ -178,11 +186,11 @@ public final class Conditions
      * @param <T> type of the value
      * @return timed condition for query equality to value
      */
-    public static <T> TimedCondition isEqual(T value, TimedQuery<T> query)
+    @Nonnull
+    public static <T> TimedCondition isEqual(@Nullable T value, @Nonnull TimedQuery<T> query)
     {
         return forMatcher(query, equalTo(value));
     }
-
 
     /**
      * Returns a timed condition, whose current evaluation is based on a value provided by given <tt>supplier</tt>.
@@ -190,7 +198,8 @@ public final class Conditions
      * @param supplier supplier of the current condition value
      * @return new query based on supplier
      */
-    public static TimedCondition forSupplier(final Supplier<Boolean> supplier)
+    @Nonnull
+    public static TimedCondition forSupplier(@Nonnull final Supplier<Boolean> supplier)
     {
         return forSupplier(DEFAULT_TIMEOUT, supplier);
     }
@@ -202,7 +211,8 @@ public final class Conditions
      * @param supplier supplier of the current condition value
      * @return new query based on supplier
      */
-    public static TimedCondition forSupplier(long defaultTimeout, final Supplier<Boolean> supplier)
+    @Nonnull
+    public static TimedCondition forSupplier(long defaultTimeout, @Nonnull final Supplier<Boolean> supplier)
     {
         return new AbstractTimedCondition(defaultTimeout, PollingQuery.DEFAULT_INTERVAL) {
             @Override
@@ -213,15 +223,38 @@ public final class Conditions
     }
 
     /**
-     * Returns a timed condition, whose current evaluation is based on a value provided by given <tt>supplier</tt>.
+     * Returns a timed condition, whose current evaluation is based on a value provided by the {@code supplier} and with
+     * a {@link TimeoutType#DEFAULT default timeout}.
      *
      * @param timeouts an instance of timeouts to use for the new condition
      * @param supplier supplier of the current condition value
      * @return new query based on supplier
      */
-    public static TimedCondition forSupplier(Timeouts timeouts, final Supplier<Boolean> supplier)
+    @Nonnull
+    public static TimedCondition forSupplier(@Nonnull Timeouts timeouts, @Nonnull final Supplier<Boolean> supplier)
     {
-        return new AbstractTimedCondition(timeouts.timeoutFor(TimeoutType.DEFAULT), timeouts.timeoutFor(TimeoutType.EVALUATION_INTERVAL)) {
+        return forSupplier(timeouts, supplier, TimeoutType.DEFAULT);
+    }
+
+    /**
+     * Returns a timed condition, whose current evaluation is based on a value provided by the {@code supplier}, with
+     * timeout of {@code timeoutType}.
+     *
+     * @param timeouts an instance of timeouts to use for the new condition
+     * @param supplier supplier of the current condition value
+     * @param timeoutType @param timeoutType timeout type for the condition
+     * @return new timed condition based on supplier
+     */
+    @Nonnull
+    public static TimedCondition forSupplier(@Nonnull Timeouts timeouts, @Nonnull final Supplier<Boolean> supplier,
+                                             @Nonnull TimeoutType timeoutType)
+    {
+        checkNotNull(timeouts, "timeouts");
+        checkNotNull(supplier, "supplier");
+        checkNotNull(timeoutType, "timeoutType");
+
+        return new AbstractTimedCondition(timeouts.timeoutFor(timeoutType),
+                timeouts.timeoutFor(TimeoutType.EVALUATION_INTERVAL)) {
             @Override
             protected Boolean currentValue() {
                 return supplier.get();
@@ -234,6 +267,7 @@ public final class Conditions
      *
      * @return timed condition that always returns true
      */
+    @Nonnull
     public static TimedCondition alwaysTrue()
     {
         return new StaticCondition(true);
@@ -244,6 +278,7 @@ public final class Conditions
      *
      * @return timed condition that always returns false
      */
+    @Nonnull
     public static TimedCondition alwaysFalse()
     {
         return new StaticCondition(false);
@@ -253,7 +288,6 @@ public final class Conditions
     {
         return (AbstractConditionDecorator) condition;
     }
-
 
     private static class StaticCondition extends AbstractTimedCondition
     {
@@ -271,7 +305,6 @@ public final class Conditions
             return value;
         }
     }
-
 
     /**
      * A timed condition that may be logically combined with others, by means of basic logical operations: 'and'/'or'. 
@@ -296,9 +329,7 @@ public final class Conditions
          * @return new combined 'or' condition
          */
         CombinableCondition or(TimedCondition other);
-
     }
-
 
     private abstract static class AbstractConditionDecorator extends AbstractTimedCondition
     {
@@ -375,11 +406,11 @@ public final class Conditions
             for (TimedQuery<Boolean> condition : conditions)
             {
                 // null should not really happen if TimedCondition contract is observed
-                final boolean next = condition.now() != null ? condition.now() : false;
-                result &= next;
+                result = condition.now() != null ? condition.now() : false;
                 if (!result)
                 {
-                    log.debug(asString("[And] Condition <",condition,"> returned false"));
+                    // short-circuit
+                    log.debug(asString("[And] Condition <", condition, "> returned false"));
                     break;
                 }
             }
@@ -428,13 +459,13 @@ public final class Conditions
             for (TimedQuery<Boolean> condition : conditions)
             {
                 // null should not really happen if TimedCondition contract is observed
-                final boolean next = condition.now() != null ? condition.now() : false;
-                result |= next;
+                result = condition.now() != null ? condition.now() : false;
                 if (result)
                 {
+                    // short-circuit
                     break;
                 }
-                log.debug(asString("[Or] Condition <",condition,"> returned false"));
+                log.debug(asString("[Or] Condition <", condition, "> returned false"));
             }
             return result;
         }

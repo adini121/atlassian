@@ -195,6 +195,16 @@ public final class InjectPageBinder implements PageBinder, ConfigurableInjection
 
     @Nonnull
     @Override
+    public <T> T inject(@Nonnull T target)
+    {
+        checkNotNull(target, "target");
+        injector.injectMembers(target);
+
+        return target;
+    }
+
+    @Nonnull
+    @Override
     public InjectionConfiguration configure()
     {
         return new InjectConfiguration();

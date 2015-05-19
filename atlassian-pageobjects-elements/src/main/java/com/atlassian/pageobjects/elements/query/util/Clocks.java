@@ -15,7 +15,7 @@ public final class Clocks
     {
         if (instance instanceof ClockAware)
         {
-            return ((ClockAware)instance).clock();
+            return ((ClockAware) instance).clock();
         }
         else
         {

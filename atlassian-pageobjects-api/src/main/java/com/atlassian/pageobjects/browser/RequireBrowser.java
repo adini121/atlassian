@@ -19,13 +19,12 @@ public @interface RequireBrowser
      * @return list of browsers that the current browser should match
      */
     @Nonnull
-    Browser[] value() default { Browser.ALL };
+    Browser[] value() default {Browser.ALL};
 
     /**
-     * Since 2.2.1
-     *
-     * @return reason for requiring the browser(s)
+     * @return reason for requiring the specified browser
+     * @since 2.2
      */
     @Nonnull
-    String reason() default ("No reason given");
+    String reason() default ("No reason provided");
 }

@@ -23,7 +23,6 @@ import static com.atlassian.webdriver.matchers.ErrorMatchers.specificError;
 import static com.atlassian.webdriver.matchers.ErrorMatchers.withCause;
 import static com.atlassian.webdriver.matchers.ErrorMatchers.withCauses;
 import static com.atlassian.webdriver.matchers.ErrorMatchers.withMessage;
-import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -201,6 +200,14 @@ public class TestProductContextRunner
         public void injectMembers(@Nonnull Object targetInstance)
         {
             this.injectedInstance = targetInstance;
+        }
+
+        @Nonnull
+        @Override
+        public <T> T inject(@Nonnull T target)
+        {
+            this.injectedInstance = target;
+            return target;
         }
     }
 

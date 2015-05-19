@@ -1,12 +1,16 @@
 package com.atlassian.pageobjects.elements;
 
 import com.atlassian.annotations.PublicApi;
+import com.atlassian.pageobjects.elements.search.PageElementSearch;
 import com.atlassian.pageobjects.elements.timeout.TimeoutType;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Represents an HTML element that is expected on a DOM of a page.
@@ -14,7 +18,7 @@ import java.util.List;
  * @since 2.0
  */
 @PublicApi
-public interface PageElement extends PageElementFinder
+public interface PageElement extends PageElementFinder, PageElementSearch
 {
     /**
      * Whether this element is currently on the DOM of the page
@@ -39,12 +43,30 @@ public interface PageElement extends PageElementFinder
 
     /**
      * Whether this element is selected on the page.  Useful on checkboxes and radio buttons.
-     * For checkboxes, returns true if the checkbox is checked.
-     * For radio buttons, returns true if the radio button this class represents is selected.
+     * For checkboxes, returns {@code true} if the checkbox is checked.
+     * For radio buttons, returns {@code true}
+     * if the radio button this class represents is selected.
      *
-     * @return True if this element is selected, false otheriwse.
+     * @return {@code true} if this element is selected, {@code false} otherwise.
      */
     boolean isSelected();
+
+    /**
+     * @return value of the "id" attribute of this element, or {@code null} if the "id" attribute is not defined
+     *
+     * @since 2.3
+     */
+    @Nullable
+    String getId();
+
+    /**
+     * Get a set of CSS classes associated with this element.
+     *
+     * @return CSS classes of this element, or an empty set
+     * @since 2.3
+     */
+    @Nonnull
+    Set<String> getCssClasses();
 
     /**
      * Whether this element has the given class set
@@ -52,7 +74,7 @@ public interface PageElement extends PageElementFinder
      * @param className The name of the class to check
      * @return true if this element's class attribute contains the given classname, false otherwise.
      */
-    boolean hasClass(String className);
+    boolean hasClass(@Nonnull String className);
 
     /**
      * Get the value of the given attribute of this element.
@@ -60,7 +82,8 @@ public interface PageElement extends PageElementFinder
      * @param name The name of the attribute.
      * @return The attribute's current value, or null if the value is not set
      */
-    String getAttribute(String name);
+    @Nullable
+    String getAttribute(@Nonnull String name);
 
     /**
      * Whether this element has an attribute set to a specific value
@@ -68,19 +91,21 @@ public interface PageElement extends PageElementFinder
      * @param value The expected value
      * @return true if attribute is set to the specific value, false otherwise or if attribute is not present
      */
-    boolean hasAttribute(String name, String value);
+    boolean hasAttribute(@Nonnull String name, @Nullable String value);
 
     /**
      * Get the visible innerText of this element, including sub-elements, without any leading or trailing whitespaces.
      *
      * @return The innerText of this element.
      */
+    @Nullable
     String getText();
 
     /**
      * Get the tag name of this element
      * @return The tag name
      */
+    @Nonnull
     String getTagName();
 
     /**
@@ -88,6 +113,7 @@ public interface PageElement extends PageElementFinder
      *
      * @return The value of this element's "value" attribute, or null if the value is not set.
      */
+    @Nullable
     String getValue();
 
     /**
@@ -95,21 +121,23 @@ public interface PageElement extends PageElementFinder
      *
      * @return location of the element on the page
      */
+    @Nonnull
     Point getLocation();
 
     /**
      * Dimension of this element on the page
      *
-     * @return
+     * @return size of the element on the page
      */
+    @Nonnull
     Dimension getSize();
-
 
     /**
      * Click this element
      *
      * @return The eleemnt that got clicked.
      */
+    @Nonnull
     PageElement click();
 
     /**
@@ -118,6 +146,7 @@ public interface PageElement extends PageElementFinder
      * @param keys keys to type
      * @return The Element that got typed in.
      */
+    @Nonnull
     PageElement type(CharSequence... keys);
 
     /**
@@ -125,6 +154,7 @@ public interface PageElement extends PageElementFinder
      *
      * @return The Element that got selected
      */
+    @Nonnull
     PageElement select();
 
     /**
@@ -132,6 +162,7 @@ public interface PageElement extends PageElementFinder
      * 
      * @return The Element that got toggled
      */
+    @Nonnull
     PageElement toggle();
 
     /**
@@ -139,6 +170,7 @@ public interface PageElement extends PageElementFinder
      *
      * @return The Element that got cleared.
      */
+    @Nonnull
     PageElement clear();
 
     /**
@@ -146,7 +178,8 @@ public interface PageElement extends PageElementFinder
      * @param locator The locator mecharnism
      * @return A list of elements that are located within this element.
      */
-    List<PageElement> findAll(By locator);
+    @Nonnull
+    List<PageElement> findAll(@Nonnull By locator);
 
     /**
      * <p/>
@@ -159,13 +192,15 @@ public interface PageElement extends PageElementFinder
      * @param locator The locator mechanism
      * @return An element that will be located within this element.
      */
-    PageElement find(By locator);
+    @Nonnull
+    PageElement find(@Nonnull By locator);
 
     /**
      * Creates a timed element based on this element's locator.
      *
      * @return A TimedElement that is based on this element's locator.
      */
+    @Nonnull
     TimedElement timed();
 
     /**
@@ -173,6 +208,7 @@ public interface PageElement extends PageElementFinder
      * 
      * @return API to execute javascript on this element.
      */
+    @Nonnull
     PageElementJavascript javascript();
 
     /**
@@ -181,5 +217,6 @@ public interface PageElement extends PageElementFinder
      * @param timeoutType new timeout
      * @return new element with given <tt>timeoutType</tt>
      */
-    PageElement withTimeout(TimeoutType timeoutType);
+    @Nonnull
+    PageElement withTimeout(@Nonnull TimeoutType timeoutType);
 }
