@@ -38,13 +38,6 @@
         <url>https://bamboo.extranet.atlassian.com/browse/SELENIUM</url>
     </ciManagement>
 
-    <distributionManagement>
-        <site>
-            <id>atlassian-documentation</id>
-            <url>scpexe://docs-app.internal.atlassian.com/var/www/domains/docs.atlassian.com/${project.artifactId}/${project.version}</url>
-        </site>
-    </distributionManagement>
-
     <modules>
         <module>atlassian-performance</module>
         <module>atlassian-pageobjects-api</module>
