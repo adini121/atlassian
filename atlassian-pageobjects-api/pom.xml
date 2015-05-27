@@ -59,6 +59,12 @@
             <artifactId>atlassian-annotations</artifactId>
             <version>${atlassian.annotations.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.atlassian</groupId>
+            <artifactId>atlassian-localhost</artifactId>
+            <version>1.0.3</version>
+        </dependency>
+
     </dependencies>
 
 </project>

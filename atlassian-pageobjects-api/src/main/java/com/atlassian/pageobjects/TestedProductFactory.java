@@ -1,10 +1,10 @@
 package com.atlassian.pageobjects;
 
+import com.atlassian.core.util.NetworkUtils;
 import com.google.common.base.Supplier;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 /**
@@ -174,7 +174,7 @@ public class TestedProductFactory
     {
         try
         {
-            return InetAddress.getLocalHost().getHostName();
+            return NetworkUtils.getLocalHostName();
         }
         catch (UnknownHostException e)
         {
