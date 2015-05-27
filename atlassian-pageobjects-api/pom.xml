@@ -62,7 +62,7 @@
         <dependency>
             <groupId>com.atlassian</groupId>
             <artifactId>atlassian-localhost</artifactId>
-            <version>1.0.3</version>
+            <version>1.1.1</version>
         </dependency>
 
     </dependencies>

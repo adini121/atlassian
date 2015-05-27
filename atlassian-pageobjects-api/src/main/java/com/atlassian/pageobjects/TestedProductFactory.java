@@ -1,6 +1,6 @@
 package com.atlassian.pageobjects;
 
-import com.atlassian.core.util.NetworkUtils;
+import com.atlassian.net.NetworkUtils;
 import com.google.common.base.Supplier;
 
 import java.lang.reflect.Constructor;
