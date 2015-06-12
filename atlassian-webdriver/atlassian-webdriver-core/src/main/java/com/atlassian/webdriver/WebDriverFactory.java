@@ -61,7 +61,12 @@ public class WebDriverFactory
         return Browser.typeOf(browserProperty);
     }
 
-    public static AtlassianWebDriver getDriver(BrowserConfig browserConfig)
+    public static AtlassianWebDriver getDriver(final BrowserConfig browserConfig)
+    {
+        return new BrowserMetricsAtlassianWebDriver(createDriver(browserConfig));
+    }
+
+    private static AtlassianWebDriver createDriver(final BrowserConfig browserConfig)
     {
         WebDriver driver;
         String browserPath = null;
